@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Backend.Models;
+namespace Backstage.Models;
 
 public partial class PointHistory
 {

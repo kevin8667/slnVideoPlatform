@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Models;
+namespace Backstage.Models;
 
 public partial class VideoDBContext : DbContext
 {
