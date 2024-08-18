@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Fronte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VdbAPI", "VdbAPI\VdbAPI.csproj", "{61E1E093-8545-46D8-9595-16AF877D8062}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backstage", "Backend\Backstage.csproj", "{699E36DF-392C-4236-A333-F8804756F8B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backstage", "Backstage\Backstage.csproj", "{699E36DF-392C-4236-A333-F8804756F8B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
