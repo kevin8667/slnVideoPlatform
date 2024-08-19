@@ -67,7 +67,7 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
-    public virtual DbSet<PlanList> ProductList { get; set; }
+    public virtual DbSet<PlanList> PlanLists { get; set; }
 
     public virtual DbSet<PlayList> PlayLists { get; set; }
 
