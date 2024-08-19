@@ -1,0 +1,147 @@
+﻿@model IEnumerable<Backstage.Models.VideoList>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary me-2">新增</a>
+</p>
+<div class="justify-content-start m-0">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.VideoName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Episode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RunningTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsShowing)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReleaseDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rating)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Popularity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ThumbnailId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Lang)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Summary)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Views)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AgeRating)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TrailerUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MainGenre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Season)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Series)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VideoName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Episode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RunningTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsShowing)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReleaseDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Popularity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ThumbnailId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Lang)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Summary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Views)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AgeRating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TrailerUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MainGenre.GenreName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Season.SeasonId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Series.SeriesName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type.TypeName)
+                    </td>
+                    <td>
+                        <div class="d-flex">
+                            <a asp-action="Details" asp-route-id="@item.VideoId" class="btn btn-primary me-2">詳細</a>
+                            <a asp-action="Edit" asp-route-id="@item.VideoId" class="btn btn-primary me-2">編輯</a>
+                            <a asp-action="Delete" asp-route-id="@item.VideoId" class="btn btn-primary me-2">刪除</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script>
+
+    </script>
+
+}
+
+
+
