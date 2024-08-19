@@ -1,0 +1,70 @@
+﻿@model Backstage.Models.Article
+@section Styles {
+    <style>
+        .article-content {
+            font-size: 1.25rem; /* 增加字體大小 */
+            line-height: 1.6; /* 增加行高 */
+        }
+
+        .dl-row dt {
+            font-weight: bold;
+        }
+
+        .dl-row dd {
+            margin-bottom: 1rem; /* 增加下邊距 */
+        }
+
+    </style>
+}
+
+@section Scripts {
+
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+    <script>
+        // CKEDITOR.replace('ArticleContent',{
+        //     readOnly: true
+        // });
+    </script>
+
+}
+
+<div>
+    <dl class="row dl-row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Theme)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Theme.ThemeName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Member)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Member.MemberName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Lock)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Lock)
+        <hr />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ArticleContent)
+        </dt>
+        <div id="ArticleContent" class="col-sm-10 ">
+            @Html.Raw(Model.ArticleContent)
+        </div>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ArticleId">Edit</a>
+</div>

@@ -1,0 +1,180 @@
+﻿@model IEnumerable<Backstage.Models.Article>
+
+@{
+    ViewData["Title"] = "文章編輯";
+}
+
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/forumcss/mystyle.css" rel="stylesheet" />
+    <style>
+
+
+    </style>
+}
+
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+<div class="row mb-3">
+    <div class="col-2">
+        <select class="form-select" aria-label="Default select example" onchange="changePageSize(event)">
+        </select>
+    </div>
+    <div class="col-5">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination" id="ul1">
+            </ul>
+        </nav>
+    </div>
+    <div class="col-3">
+        <input type="search" class="form-control" placeholder="請輸入關鍵字" onkeydown="inputKeyword(event)" />
+    </div>
+</div>
+<table id="articleTable" class="table">
+    <thead class="">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Theme)
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    篩選主題
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#" onclick="changeTheme(0)">顯示全部</a></li>
+
+                    @foreach(var item in ViewBag.Theme) {
+                        <li>
+                            <a class="dropdown-item" href="#"
+                               onclick="changeTheme('@item.ThemeId')">@item.ThemeName</a>
+                        </li>
+                    }
+                </ul>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticleContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReplyCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lock)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model) {
+            <tr class="">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Theme.ThemeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.MemberName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-gradient me-1 mb-2 large-btn"
+                            onclick="showDetails(@item.ArticleId)">
+                        點擊顯示
+                    </button>
+                </td>
+                <td>
+                    @item.PostDate.Value.ToString("yyyy/MM/dd HH:mm")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReplyCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lock)
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-gradient me-1 mb-2 large-btn"
+                       asp-route-id="@item.ArticleId">編輯</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- 模態框 -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">文章內容</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- 這裡將動態加載內容 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="hideDetails()">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        const artielcleDto = {
+            "categoryId": 0,
+            "keyword": "",
+            "page": 1,
+            "pageSize": 10,
+            "sortType": "asc",
+            "sortBy": "ArticleId"
+        }
+
+
+
+
+
+
+        function showDetails(articleId) {
+            // 隱藏表格
+            document.getElementById('articleTable').style.display = 'none';
+
+            // 顯示模態框
+            const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            modal.show();
+
+            // 發送 AJAX 請求獲取詳細內容
+            fetch(`/Articles/Details?id=${articleId}`)
+                .then(response => response.text())
+                .then(data => {
+                    // 將返回的內容插入到模態框中
+                    document.getElementById('modalContent').innerHTML = data;
+                });
+        }
+
+        function hideDetails() {
+            // 顯示表格
+            document.getElementById('articleTable').style.display = '';
+
+            // 隱藏模態框
+            const modal = bootstrap.Modal.getInstance(document.getElementById('detailsModal'));
+            modal.hide();
+        }
+
+        document.getElementById('detailsModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('articleTable').style.display = '';
+        });
+
+
+
+    </script>
+
+}

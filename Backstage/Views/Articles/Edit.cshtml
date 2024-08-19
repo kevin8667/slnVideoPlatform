@@ -1,0 +1,99 @@
+﻿@model Backstage.Models.Article
+
+@{
+    // ViewData["Title"] = "編輯";
+}
+
+@section Styles {
+    <link href="~/forumcss/mystyle.css" rel="stylesheet" />
+    <style>
+
+    </style>
+}
+
+<h1>文章編輯</h1>
+<hr />
+<div class="row">
+    <form asp-action="Edit">
+        <!-- 基本信息區塊 -->
+        <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="ArticleId" />
+            <input type="hidden" asp-for="UpdateDate" value="@Model.UpdateDate" />
+            <input type="hidden" asp-for="ReplyCount" value="@Model.ReplyCount" />
+            <input type="hidden" asp-for="ArticleImage" value="@Model.ArticleImage" />
+
+            <div class="form-group">
+                <label asp-for="ThemeId" class="control-label"></label>
+                <select asp-for="ThemeId" class="form-control" asp-items="ViewBag.ThemeId"></select>
+                <span asp-validation-for="ThemeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AuthorId" class="control-label"></label>
+                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
+                <span asp-validation-for="AuthorId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostDate" class="control-label"></label>
+                <input readonly asp-for="PostDate" class="form-control" />
+                <span asp-validation-for="PostDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group m-2">
+                <div class="form-check">
+                    <!-- 使用 asp-for 自動綁定布林值 -->
+                    <input class="form-check-input" type="checkbox" asp-for="Lock" />
+                    <label class="form-check-label" for="Lock">
+                        @Html.DisplayNameFor(model => model.Lock)
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 文章內容區塊 -->
+        <div class="col-md-8">
+            <div class="form-group">
+                <label asp-for="ArticleContent" class="control-label"></label>
+                <textarea asp-for="ArticleContent" class="form-control custom-textarea">@Model.ArticleContent</textarea>
+                <span asp-validation-for="ArticleContent" class="text-danger"></span>
+            </div>
+
+            <div class="form-group m-2">
+                <input type="submit" value="儲存變更" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div>
+    <a asp-action="Index">回到文章列表</a>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+    <script>
+        CKEDITOR.replace('ArticleContent',{
+            height: 500,
+        width: '100%',
+        });
+    </script>
+}
