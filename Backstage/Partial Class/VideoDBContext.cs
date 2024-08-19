@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Backstage.Models;
+namespace Backstage.Models
 {
     public partial class VideoDBContext : DbContext
     {
