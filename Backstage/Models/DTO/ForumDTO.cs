@@ -1,5 +1,5 @@
 ﻿namespace Backstage.Models.DTO {
-    public class ForumDTO {
+    public class forumDto {
         public string? keyword {
             get; set;
         }

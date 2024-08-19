@@ -29,9 +29,10 @@ table {
 }
 
 th, td {
-    padding: 8px;
-    text-align: left;
-    border: 1px solid #ddd;
+    text-align: center; /* 置中對齊 */
+    vertical-align: middle; /* 垂直置中 */
+    padding: 8px; /* 添加適當的內邊距 */
+    border: 1px solid #dddddd; /* 邊框 */
 }
 body > div > .content {
     background-color: #e3f2fd;
@@ -76,27 +77,4 @@ table.table tbody tr:hover {
     background-color: #e0e0e0; /* 滑過時的背景顏色 */
 }
 
-thead th {
-    position: relative; /* 使箭頭圖標可以絕對定位 */
-    cursor: pointer; /* 顯示指標光標 */
-    padding: 10px; /* 內邊距 */
-    background-color: #f4f4f4; /* 背景顏色 */
-}
 
-    thead th.sortable::after {
-        content: "\f0dc"; /* Font Awesome 的箭頭圖標，默認為排序箭頭 */
-        font-family: FontAwesome; /* 使用 Font Awesome 字體 */
-        position: absolute;
-        right: 10px; /* 右側邊距 */
-        top: 50%; /* 垂直居中 */
-        transform: translateY(-50%); /* 垂直居中對齊 */
-        pointer-events: none; /* 避免箭頭圖標干擾點擊事件 */
-    }
-
-    thead th.sorted-asc::after {
-        content: "\f0de"; /* Font Awesome 的升序箭頭圖標 */
-    }
-
-    thead th.sorted-desc::after {
-        content: "\f0dd"; /* Font Awesome 的降序箭頭圖標 */
-    }

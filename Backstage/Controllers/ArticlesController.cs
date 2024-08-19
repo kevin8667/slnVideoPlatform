@@ -15,57 +15,151 @@ namespace Backstage.Controllers {
         public ArticlesController(VideoDBContext context)
         {
             _dbContext = context;
+            
         }
 
-        // GET: Articles
-        public async Task<IActionResult> Index()
+        //GET: Articles
+        public IActionResult Index()
         {
 
 
             ViewBag.Theme = _dbContext.Themes;
             var videoDBContext = _dbContext.Articles.Include(a => a.Member).Include(a => a.Theme);
-            return View(await videoDBContext.ToListAsync());
+            return View(videoDBContext);
         }
 
         [HttpPost]
-        public IActionResult Index([FromBody] ForumDTO searchDTO)
+        public IActionResult LoadIndex([FromBody] forumDto searchDTO)
         {
             try {
-                var spot = searchDTO.categoryId == 0 ? _dbContext.Articles : _dbContext.Articles
-                                                                                .Where(c => c.ThemeId == searchDTO.categoryId);
-                if(!string.IsNullOrEmpty(searchDTO.keyword))
-                    spot = _dbContext.Articles.Where(c => c.Title.Contains(searchDTO.keyword) ||
-                    c.ArticleContent.Contains(searchDTO.keyword));
+                IQueryable<Article> articleQuery = _dbContext.Articles;  // 包含 Theme
+                // 初始化查詢，僅包含 Member 和 Theme
 
-                switch(searchDTO.sortBy) {
-                    case "spotTitle":
-                    spot = searchDTO.sortType == "asc" ? spot.OrderBy(s => s.Title) :
-                                                         spot.OrderByDescending(s => s.Title);
+                // 依類別篩選
+                if(searchDTO.categoryId != 0) {
+                    articleQuery = articleQuery.Where(c => c.ThemeId == searchDTO.categoryId);
+                }
+
+                // 關鍵字篩選
+                if(!string.IsNullOrEmpty(searchDTO.keyword)) {
+                    articleQuery = articleQuery.Where(c => c.Title.Contains(searchDTO.keyword) ||
+                                                           c.ArticleContent.Contains(searchDTO.keyword));
+                }
+
+                // 排序
+                switch(searchDTO.sortBy) {                    
+                    
+                    case "title":
+                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.Title) :
+                                                                articleQuery.OrderByDescending(s => s.Title);
+                    break;
+                    case "postDate":
+                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.PostDate) :
+                                                                articleQuery.OrderByDescending(s => s.PostDate);
+                    break;
+                    case "replyCount":
+                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.ReplyCount) :
+                                                                articleQuery.OrderByDescending(s => s.ReplyCount);
+                    break;
+                    case "lock":
+                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.Lock) :
+                                                                articleQuery.OrderByDescending(s => s.Lock);
                     break;
                     default:
-                    spot = searchDTO.sortType == "asc" ? spot.OrderBy(s => s.ArticleId) :
-                                                         spot.OrderByDescending(s => s.ArticleId);
+                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.ArticleId) :
+                                                                articleQuery.OrderByDescending(s => s.ArticleId);
                     break;
                 }
-                // 總筆數/一頁大小並無條件進位  
-                int dataCount = spot.Count();
 
-                int PagesSize = searchDTO.pageSize ?? 9;
+                // 計算總筆數
+                int dataCount = articleQuery.Count();
+
+                // 分頁
+                int PagesSize = searchDTO.pageSize ?? 10;
                 int Page = searchDTO.page ?? 1;
                 int TotalPages = (int)Math.Ceiling(((decimal)dataCount / PagesSize));
-                //跳過幾筆資料 意思是指定頁-1後*一頁大小
-                spot = spot.Skip((Page - 1) * PagesSize).Take(PagesSize);
-                ForumPagingDTO pagingDTO = new ForumPagingDTO();
-                pagingDTO.TotalCount = dataCount;
-                pagingDTO.TotalPages = TotalPages;
-                pagingDTO.ForumResult = spot.ToList();
+
+                // 跳過指定頁數的資料並取出當前頁面的資料
+                var articles = articleQuery.Skip((Page - 1) * PagesSize).Take(PagesSize).ToList();
+
+                // 準備回傳的 DTO
+                ForumPagingDTO pagingDTO = new ForumPagingDTO {
+                    TotalCount = dataCount,
+                    TotalPages = TotalPages,
+                    ForumResult = articles
+                };
+
                 return Json(pagingDTO);
             }
             catch(Exception ex) {
                 throw new Exception(ex.Message,ex);
             }
-
         }
+
+
+
+        //[HttpPost]
+        //public IActionResult LoadIndex([FromBody] forumDto searchDTO)
+        //{
+        //    try {
+
+        //         var article = searchDTO.categoryId == 0 ? _dbContext.Articles :
+        //            _dbContext.Articles.Where(c => c.ThemeId == searchDTO.categoryId);
+
+        //        if(!string.IsNullOrEmpty(searchDTO.keyword))
+        //            article = _dbContext.Articles.Where(c => c.Title.Contains(searchDTO.keyword) ||
+        //            c.ArticleContent.Contains(searchDTO.keyword)||
+        //            c.Member.MemberName.Contains(searchDTO.keyword));
+
+        //        switch(searchDTO.sortBy) {
+        //            case "name":
+        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Member.MemberName) :
+        //                                                 article.OrderByDescending(s => s.Member.MemberName);
+        //            break;
+        //            case "theme":
+        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Theme.ThemeName) :
+        //                                                 article.OrderByDescending(s => s.Theme.ThemeName);
+        //            break;
+        //            case "title":
+        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
+        //                                                 article.OrderByDescending(s => s.Title);
+        //            break;
+        //            case "postDate":
+        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
+        //                                                 article.OrderByDescending(s => s.PostDate);
+        //            break;
+        //            case "replyCount":
+        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
+        //                                                 article.OrderByDescending(s => s.ReplyCount);
+        //            break;
+        //            case "lock":
+        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
+        //                                                 article.OrderByDescending(s => s.Lock);
+        //            break;
+        //            default:
+        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
+        //                                                 article.OrderByDescending(s => s.ArticleId);
+        //            break;
+        //        }
+        //        // 總筆數/一頁大小並無條件進位  
+        //        int dataCount = article.Count();
+
+        //        int PagesSize = searchDTO.pageSize ?? 10;
+        //        int Page = searchDTO.page ?? 1;
+        //        int TotalPages = (int)Math.Ceiling(((decimal)dataCount / PagesSize));
+        //        //跳過幾筆資料 意思是指定頁-1後*一頁大小
+        //        article = article.Skip((Page - 1) * PagesSize).Take(PagesSize);
+        //        ForumPagingDTO pagingDTO = new ForumPagingDTO();
+        //        pagingDTO.TotalCount = dataCount;
+        //        pagingDTO.TotalPages = TotalPages;
+        //        pagingDTO.ForumResult = article.ToList();
+        //        return Json(pagingDTO);
+        //    }
+        //    catch(Exception ex) {
+        //        throw new Exception(ex.Message,ex);
+        //    }
+
+        //}
 
         // GET: Articles/Details/5
         public async Task<IActionResult> Details(int? id)
