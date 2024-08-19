@@ -17,6 +17,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<Article> Articles { get; set; }
 
+    public virtual DbSet<ArticleView> ArticleViews { get; set; }
+
     public virtual DbSet<BlackList> BlackLists { get; set; }
 
     public virtual DbSet<CastList> CastLists { get; set; }
@@ -117,8 +119,6 @@ public partial class VideoDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
-
         modelBuilder.Entity<ActorList>(entity =>
         {
             entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
@@ -153,15 +153,35 @@ public partial class VideoDBContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Member).WithMany(p => p.Articles)
-                .HasForeignKey(d => d.AuthorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Article_MemberInfo");
-
             entity.HasOne(d => d.Theme).WithMany(p => p.Articles)
                 .HasForeignKey(d => d.ThemeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Article_MemberInfo");
+
+            entity.HasOne(d => d.ThemeNavigation).WithMany(p => p.Articles)
+                .HasForeignKey(d => d.ThemeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Article_Theme");
+        });
+
+        modelBuilder.Entity<ArticleView>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("ArticleView");
+
+            entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
+            entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
+            entity.Property(e => e.MemberName)
+                .IsRequired()
+                .HasMaxLength(30);
+            entity.Property(e => e.PostDate).HasColumnType("datetime");
+            entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
+            entity.Property(e => e.ThemeName)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<BlackList>(entity =>

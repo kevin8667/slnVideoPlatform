@@ -1,11 +1,10 @@
-﻿using Backstage.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-using System.ComponentModel.DataAnnotations;
-
-namespace Backstage.Models.MetaData {
-    public class ArticleMetaData {
-
-        [Display(Name ="上架")]
+namespace Backstage.Models.MetaData
+{
+    public class ArticleViewMetaData
+    {
+        [Display(Name = "上架")]
         public bool Lock {
             get; set;
         }
@@ -29,8 +28,8 @@ namespace Backstage.Models.MetaData {
         public string? ArticleContent {
             get; set;
         }
-        [Display(Name ="主題")]
-        public virtual Theme? Theme {
+        [Display(Name = "主題")]
+        public string? ThemeName {
             get; set;
         }
 
@@ -40,7 +39,7 @@ namespace Backstage.Models.MetaData {
 
         [Display(Name = "作者")]
 
-        public virtual MemberInfo? Member {
+        public string? MemberName {
             get; set;
         }
         [Display(Name = "作者")]
@@ -53,6 +52,5 @@ namespace Backstage.Models.MetaData {
         public int ThemeId {
             get; set;
         }
-
     }
 }

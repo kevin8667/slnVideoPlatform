@@ -15,7 +15,7 @@ namespace Backstage.Controllers {
         public ArticlesController(VideoDBContext context)
         {
             _dbContext = context;
-            
+
         }
 
         //GET: Articles
@@ -24,7 +24,7 @@ namespace Backstage.Controllers {
 
 
             ViewBag.Theme = _dbContext.Themes;
-            var videoDBContext = _dbContext.Articles.Include(a => a.Member).Include(a => a.Theme);
+            var videoDBContext = _dbContext.ArticleViews;
             return View(videoDBContext);
         }
 
@@ -32,54 +32,53 @@ namespace Backstage.Controllers {
         public IActionResult LoadIndex([FromBody] forumDto searchDTO)
         {
             try {
-                IQueryable<Article> articleQuery = _dbContext.Articles;  // 包含 Theme
-                // 初始化查詢，僅包含 Member 和 Theme
-
-                // 依類別篩選
-                if(searchDTO.categoryId != 0) {
-                    articleQuery = articleQuery.Where(c => c.ThemeId == searchDTO.categoryId);
-                }
+                var article = searchDTO.categoryId == 0 ? _dbContext.ArticleViews : _dbContext.ArticleViews
+                                                                                .Where(c => c.ThemeId == searchDTO.categoryId);
+                if(!string.IsNullOrEmpty(searchDTO.keyword))
+                    article = _dbContext.ArticleViews.Where(c => c.Title.Contains(searchDTO.keyword) ||
+                    c.ArticleContent.Contains(searchDTO.keyword));
 
                 // 關鍵字篩選
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
-                    articleQuery = articleQuery.Where(c => c.Title.Contains(searchDTO.keyword) ||
-                                                           c.ArticleContent.Contains(searchDTO.keyword));
+                    article = article.Where(c => c.Title.Contains(searchDTO.keyword) ||
+                                        c.ArticleContent.Contains(searchDTO.keyword) ||
+                                        c.MemberName.Contains(searchDTO.keyword));
                 }
 
                 // 排序
                 switch(searchDTO.sortBy) {
                     case "theme":
-                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.ThemeId) :
-                                                                articleQuery.OrderByDescending(s => s.ThemeId);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ThemeId) :
+                                                                article.OrderByDescending(s => s.ThemeId);
                     break;
                     case "memberName":
-                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.AuthorId) :
-                                                                articleQuery.OrderByDescending(s => s.AuthorId);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.AuthorId) :
+                                                                article.OrderByDescending(s => s.AuthorId);
                     break;
                     case "title":
-                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.Title) :
-                                                                articleQuery.OrderByDescending(s => s.Title);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
+                                                                article.OrderByDescending(s => s.Title);
                     break;
                     case "postDate":
-                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.PostDate) :
-                                                                articleQuery.OrderByDescending(s => s.PostDate);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
+                                                                article.OrderByDescending(s => s.PostDate);
                     break;
                     case "replyCount":
-                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.ReplyCount) :
-                                                                articleQuery.OrderByDescending(s => s.ReplyCount);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
+                                                                article.OrderByDescending(s => s.ReplyCount);
                     break;
                     case "lock":
-                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.Lock) :
-                                                                articleQuery.OrderByDescending(s => s.Lock);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
+                                                                article.OrderByDescending(s => s.Lock);
                     break;
                     default:
-                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.ArticleId) :
-                                                                articleQuery.OrderByDescending(s => s.ArticleId);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
+                                                                article.OrderByDescending(s => s.ArticleId);
                     break;
                 }
 
                 // 計算總筆數
-                int dataCount = articleQuery.Count();
+                int dataCount = article.Count();
 
                 // 分頁
                 int PagesSize = searchDTO.pageSize ?? 10;
@@ -87,7 +86,7 @@ namespace Backstage.Controllers {
                 int TotalPages = (int)Math.Ceiling(((decimal)dataCount / PagesSize));
 
                 // 跳過指定頁數的資料並取出當前頁面的資料
-                var articles = articleQuery.Skip((Page - 1) * PagesSize).Take(PagesSize).ToList();
+                var articles = article.Skip((Page - 1) * PagesSize).Take(PagesSize).ToList();
 
                 // 準備回傳的 DTO
                 ForumPagingDTO pagingDTO = new ForumPagingDTO {
@@ -175,9 +174,7 @@ namespace Backstage.Controllers {
                 return NotFound();
             }
 
-            var article = await _dbContext.Articles
-                .Include(a => a.Member)
-                .Include(a => a.Theme)
+            var article = await _dbContext.ArticleViews
                 .FirstOrDefaultAsync(m => m.ArticleId == id);
             if(article == null) {
                 return NotFound();
@@ -200,7 +197,7 @@ namespace Backstage.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ArticleId,ThemeId,AuthorId," +
-            "Title,ArticleContent,PostDate,UpdateDate,ReplyCount,Lock,ArticleImage")] Article article)
+            "Title,ArticleContent,PostDate,UpdateDate,ReplyCount,Lock,ArticleImage")] ArticleView article)
         {
             if(ModelState.IsValid) {
                 _dbContext.Add(article);
@@ -271,9 +268,7 @@ namespace Backstage.Controllers {
                 return NotFound();
             }
 
-            var article = await _dbContext.Articles
-                .Include(a => a.Member)
-                .Include(a => a.Theme)
+            var article = await _dbContext.ArticleViews
                 .FirstOrDefaultAsync(m => m.ArticleId == id);
             if(article == null) {
                 return NotFound();
@@ -312,7 +307,7 @@ namespace Backstage.Controllers {
             get;
             set;
         }
-        public List<Article> ForumResult {
+        public List<ArticleView>? ForumResult {
             get;
             set;
         }

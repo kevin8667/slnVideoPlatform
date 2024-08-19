@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Article>
+﻿@model IEnumerable<Backstage.Models.ArticleView>
 
 @{
     ViewData["Title"] = "文章編輯";
@@ -41,8 +41,8 @@
             <option value="postDate">發表日期降冪</option>
             <option value="ascreplyCount" >回覆數升冪</option>
             <option value="replyCount">回覆數降冪</option>
-            <option value="asclock">上架升冪</option>
-            <option value="lock">上架降冪</option>
+            <option value="asclock">下架優先</option>
+            <option value="lock">上架優先</option>
         </select>
     </div>
     <div class="col-3">
@@ -54,24 +54,24 @@
     <thead >
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Theme)
+                @Html.DisplayNameFor(model => model.ThemeName)
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">
                     篩選主題
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="#" onclick="changeTheme(0)">顯示全部</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeTheme(0,event)">顯示全部</a></li>
 
                     @foreach(var item in ViewBag.Theme) {
                         <li>
                             <a class="dropdown-item" href="#"
-                               onclick="changeTheme('@item.ThemeId')">@item.ThemeName</a>
+                               onclick="changeTheme('@item.ThemeId',event)">@item.ThemeName</a>
                         </li>
                     }
                 </ul>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Member)
+                @Html.DisplayNameFor(model => model.MemberName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -178,7 +178,6 @@
 
                 articles.innerHTML = spots.join('')
                 judgePages(data)
-                $('h3').text(`共計有${data.totalCount}筆資料，現在是${curretPages}/${totalPages}頁`);
 
 
             } catch (error) {
@@ -193,14 +192,14 @@
         }
 
         function createSpots(spot) {
-            const { title, articleContent, authorId
-                , themeId, articleId,  lock, postDate, replyCount, updateDate } = spot
+            const { title, articleContent, memberName
+                , themeName, articleId,  lock, postDate, replyCount, updateDate } = spot
             return `<tr >
                         <td>
-                            ${themeId}
+                            ${themeName}
                         </td>
                         <td>
-                            ${authorId}
+                            ${memberName}
                         </td>
                         <td>
                             ${title}
@@ -315,11 +314,12 @@
         }
 
 
-        const changeTheme = categoryId => {
+        const changeTheme = (categoryId,event) => {
             forumDto.page = 1
-
+            // console.log(event.target.text)
             forumDto.categoryId = categoryId
             load()
+            document.getElementById('dropdownMenuButton').innerHTML = event.target.text
         }
 
         const clickPages = page => {
