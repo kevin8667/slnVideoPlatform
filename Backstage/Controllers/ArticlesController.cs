@@ -47,8 +47,15 @@ namespace Backstage.Controllers {
                 }
 
                 // 排序
-                switch(searchDTO.sortBy) {                    
-                    
+                switch(searchDTO.sortBy) {
+                    case "theme":
+                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.ThemeId) :
+                                                                articleQuery.OrderByDescending(s => s.ThemeId);
+                    break;
+                    case "memberName":
+                    articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.AuthorId) :
+                                                                articleQuery.OrderByDescending(s => s.AuthorId);
+                    break;
                     case "title":
                     articleQuery = searchDTO.sortType == "asc" ? articleQuery.OrderBy(s => s.Title) :
                                                                 articleQuery.OrderByDescending(s => s.Title);

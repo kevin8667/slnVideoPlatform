@@ -15,13 +15,14 @@
     </style>
 }
 
-
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
 <div class="row mb-3">
     <div class="col-2">
         <select class="form-select" aria-label="Default select example" onchange="changePageSize(event)">
+            <option value="1">1</option>
+            <option selected value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
         </select>
     </div>
     <div class="col-5">
@@ -30,10 +31,25 @@
             </ul>
         </nav>
     </div>
+    <div class="col-2">
+        <select class="form-select" aria-label="Default select example" onchange="changeSort(event)">
+            <option value="asctheme" selected>主題升冪</option>
+            <option value="theme">主題降冪</option>
+            <option value="ascmemberName" selected>作者升冪</option>
+            <option value="memberName">作者降冪</option>
+            <option value="ascpostDate">發表日期升冪</option>
+            <option value="postDate">發表日期降冪</option>
+            <option value="ascreplyCount" >回覆數升冪</option>
+            <option value="replyCount">回覆數降冪</option>
+            <option value="asclock">上架升冪</option>
+            <option value="lock">上架降冪</option>
+        </select>
+    </div>
     <div class="col-3">
-        <input type="search" class="form-control" placeholder="請輸入關鍵字" onkeydown="inputKeyword(event)" />
+        <input type="search" class="form-control" placeholder="請輸入關鍵字" oninput="inputKeyword(event)" />
     </div>
 </div>
+<h3></h3>
 <table id="articleTable" class="table" >
     <thead >
         <tr>
@@ -162,6 +178,7 @@
 
                 articles.innerHTML = spots.join('')
                 judgePages(data)
+                $('h3').text(`共計有${data.totalCount}筆資料，現在是${curretPages}/${totalPages}頁`);
 
 
             } catch (error) {
@@ -204,8 +221,7 @@
                             ${lock===true?'上架中':' X'}
                         </td>
                         <td>
-                            <a asp-action="Edit" class="btn btn-gradient me-1 mb-2 large-btn"
-                                asp-route-id="${articleId}">編輯</a>
+                            <a href="/Articles/Edit/${articleId}" class="btn btn-gradient me-1 mb-2 large-btn">編輯</a>
                         </td>
                     </tr>
                     `
@@ -220,19 +236,19 @@
             if (totalPages <= 10) {
                 strPageLi = allPages(1, totalPages)
 
-            } else if (curretPages <= 5) { //超過10頁就用...分隔顯示最後一頁 且當前頁小於4就不顯示...分隔
+            } else if (curretPages <= 3) { //超過10頁就用...分隔顯示最後一頁 且當前頁小於4就不顯示...分隔
 
-                strPageLi += allPages(1, 10)
+                strPageLi += allPages(1, 8)
                 strPageLi += `...
                                         <li class="page-item"><a class="page-link" onclick="clickPages(${totalPages})">${totalPages}</a></li>`
-            } else if (totalPages - curretPages >= 5) { //當前頁超過3 小於34
+            } else if (totalPages - curretPages >= 3) { //當前頁超過3 
                 strPageLi = `<li class="page-item"><a class="page-link" onclick="clickPages(1)">1</a></li>...`
-                strPageLi += allPages(curretPages - 4, curretPages + 4)
+                strPageLi += allPages(curretPages - 2, curretPages + 2)
                 strPageLi += `...
                                     <li class="page-item"><a class="page-link" onclick="clickPages(${totalPages})">${totalPages}</a></li>`
             } else {
                 strPageLi = `<li class="page-item"><a class="page-link" onclick="clickPages(1)">1</a></li>...`
-                strPageLi += allPages(totalPages - 8, totalPages)
+                strPageLi += allPages(totalPages - 4, totalPages)
             }
 
             liPages.innerHTML = strPageLi
@@ -282,8 +298,46 @@
             document.getElementById('articleTable').style.display = '';
         });
 
+        function changePageSize(event){
+            forumDto.pageSize = event.target.value
+            forumDto.page = 1
+            load()
+        }
+
+        function inputKeyword(event){
+
+            // if (event.key!=='Enter')
+            //     return
+
+            forumDto.keyword = event.target.value
+            forumDto.page = 1
+            load()
+        }
 
 
+        const changeTheme = categoryId => {
+            forumDto.page = 1
+
+            forumDto.categoryId = categoryId
+            load()
+        }
+
+        const clickPages = page => {
+            forumDto.page = page
+            load()
+        }
+
+        const changeSort = (event) => {
+            const selectValue = event.target.value
+
+            const sortType = selectValue.includes('asc') ? 'asc' : 'desc'
+            forumDto.sortType = sortType
+
+            const sortBy = selectValue.replace('asc', '')
+            forumDto.sortBy = sortBy
+
+            load()
+        }
     </script>
 
 }
