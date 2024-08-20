@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Backstage.Models;
+using Backstage.Models.DTO;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Backstage.Models;
-using Backstage.Models.DTO;
 
 namespace Backstage.Controllers {
     public class ArticlesController : Controller {
         private readonly VideoDBContext _dbContext;
-
-        public ArticlesController(VideoDBContext context)
+        private readonly IWebHostEnvironment _web;
+        public ArticlesController(VideoDBContext context,IWebHostEnvironment environment)
         {
             _dbContext = context;
-
+            _web = environment;
         }
 
         //GET: Articles
@@ -34,9 +31,6 @@ namespace Backstage.Controllers {
             try {
                 var article = searchDTO.categoryId == 0 ? _dbContext.ArticleViews : _dbContext.ArticleViews
                                                                                 .Where(c => c.ThemeId == searchDTO.categoryId);
-                if(!string.IsNullOrEmpty(searchDTO.keyword))
-                    article = _dbContext.ArticleViews.Where(c => c.Title.Contains(searchDTO.keyword) ||
-                    c.ArticleContent.Contains(searchDTO.keyword));
 
                 // 關鍵字篩選
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
@@ -52,8 +46,8 @@ namespace Backstage.Controllers {
                                                                 article.OrderByDescending(s => s.ThemeId);
                     break;
                     case "memberName":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.AuthorId) :
-                                                                article.OrderByDescending(s => s.AuthorId);
+                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.MemberName) :
+                                                                article.OrderByDescending(s => s.MemberName);
                     break;
                     case "title":
                     article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
@@ -101,73 +95,32 @@ namespace Backstage.Controllers {
                 throw new Exception(ex.Message,ex);
             }
         }
+        [HttpPost]
+        public IActionResult Register(UserInfo user)
+        {
+            if(user == null || user.UserPhoto == null || user.UserPhoto.Length == 0)
+                return BadRequest(new {
+                    error = "圖片或資料未填入"
+                });
 
+            try {
+                string rootPath = _web.WebRootPath;
+                string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(user.UserPhoto.FileName);
+                string filePath = $"/img/{newFileName}";
 
+                using(var filestream = new FileStream(rootPath + filePath,FileMode.Create)) {
+                    user.UserPhoto.CopyTo(filestream);
+                }
 
-        //[HttpPost]
-        //public IActionResult LoadIndex([FromBody] forumDto searchDTO)
-        //{
-        //    try {
+                return Json(Url.Content("~"+filePath));
+            }
+            catch(Exception ex) {
+                return NotFound(new {
+                    error = ex.Message + "發生例外的狀況",
+                });
+            }
+        }
 
-        //         var article = searchDTO.categoryId == 0 ? _dbContext.Articles :
-        //            _dbContext.Articles.Where(c => c.ThemeId == searchDTO.categoryId);
-
-        //        if(!string.IsNullOrEmpty(searchDTO.keyword))
-        //            article = _dbContext.Articles.Where(c => c.Title.Contains(searchDTO.keyword) ||
-        //            c.ArticleContent.Contains(searchDTO.keyword)||
-        //            c.Member.MemberName.Contains(searchDTO.keyword));
-
-        //        switch(searchDTO.sortBy) {
-        //            case "name":
-        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Member.MemberName) :
-        //                                                 article.OrderByDescending(s => s.Member.MemberName);
-        //            break;
-        //            case "theme":
-        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Theme.ThemeName) :
-        //                                                 article.OrderByDescending(s => s.Theme.ThemeName);
-        //            break;
-        //            case "title":
-        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
-        //                                                 article.OrderByDescending(s => s.Title);
-        //            break;
-        //            case "postDate":
-        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
-        //                                                 article.OrderByDescending(s => s.PostDate);
-        //            break;
-        //            case "replyCount":
-        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
-        //                                                 article.OrderByDescending(s => s.ReplyCount);
-        //            break;
-        //            case "lock":
-        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
-        //                                                 article.OrderByDescending(s => s.Lock);
-        //            break;
-        //            default:
-        //            article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
-        //                                                 article.OrderByDescending(s => s.ArticleId);
-        //            break;
-        //        }
-        //        // 總筆數/一頁大小並無條件進位  
-        //        int dataCount = article.Count();
-
-        //        int PagesSize = searchDTO.pageSize ?? 10;
-        //        int Page = searchDTO.page ?? 1;
-        //        int TotalPages = (int)Math.Ceiling(((decimal)dataCount / PagesSize));
-        //        //跳過幾筆資料 意思是指定頁-1後*一頁大小
-        //        article = article.Skip((Page - 1) * PagesSize).Take(PagesSize);
-        //        ForumPagingDTO pagingDTO = new ForumPagingDTO();
-        //        pagingDTO.TotalCount = dataCount;
-        //        pagingDTO.TotalPages = TotalPages;
-        //        pagingDTO.ForumResult = article.ToList();
-        //        return Json(pagingDTO);
-        //    }
-        //    catch(Exception ex) {
-        //        throw new Exception(ex.Message,ex);
-        //    }
-
-        //}
-
-        // GET: Articles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if(id == null) {
@@ -181,34 +134,6 @@ namespace Backstage.Controllers {
             }
             return PartialView("_ArticleDetailsPartial ",article);
 
-        }
-
-        // GET: Articles/Create
-        public IActionResult Create()
-        {
-            ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,"MemberId",
-                "MemberName");
-            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,"ThemeId",
-                "ThemeName");
-            return View();
-        }
-
-        // POST: Articles/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArticleId,ThemeId,AuthorId," +
-            "Title,ArticleContent,PostDate,UpdateDate,ReplyCount,Lock,ArticleImage")] ArticleView article)
-        {
-            if(ModelState.IsValid) {
-                _dbContext.Add(article);
-                await _dbContext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,"MemberId",
-                "MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,"ThemeId",
-                "ThemeName",article.ThemeId);
-            return View(article);
         }
 
         // GET: Articles/Edit/5
@@ -261,39 +186,17 @@ namespace Backstage.Controllers {
             return View(article);
         }
 
-        // GET: Articles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if(id == null) {
-                return NotFound();
-            }
-
-            var article = await _dbContext.ArticleViews
-                .FirstOrDefaultAsync(m => m.ArticleId == id);
-            if(article == null) {
-                return NotFound();
-            }
-
-            return View(article);
-        }
-
-        // POST: Articles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var article = await _dbContext.Articles.FindAsync(id);
-            if(article != null) {
-                _dbContext.Articles.Remove(article);
-            }
-
-            await _dbContext.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         private bool ArticleExists(int id)
         {
             return _dbContext.Articles.Any(e => e.ArticleId == id);
+        }
+    }
+
+    public class UserInfo {
+        public IFormFile? UserPhoto {
+            get;
+            set;
         }
     }
 

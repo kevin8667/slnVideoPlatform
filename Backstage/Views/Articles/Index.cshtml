@@ -4,7 +4,6 @@
     ViewData["Title"] = "文章編輯";
 }
 
-
 @section Styles {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -39,7 +38,7 @@
             <option value="memberName">作者降冪</option>
             <option value="ascpostDate">發表日期升冪</option>
             <option value="postDate">發表日期降冪</option>
-            <option value="ascreplyCount" >回覆數升冪</option>
+            <option value="ascreplyCount">回覆數升冪</option>
             <option value="replyCount">回覆數降冪</option>
             <option value="asclock">下架優先</option>
             <option value="lock">上架優先</option>
@@ -50,8 +49,8 @@
     </div>
 </div>
 <h3></h3>
-<table id="articleTable" class="table" >
-    <thead >
+<table id="articleTable" class="table">
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ThemeName)
@@ -92,38 +91,7 @@
         </tr>
     </thead>
     <tbody id="tableBody">
-        @* @foreach(var item in Model) {
-            <tr class="">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Theme.ThemeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.MemberName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    <button type="button" class="btn btn-gradient me-1 mb-2 large-btn"
-                            onclick="showDetails(@item.ArticleId)">
-                        點擊顯示
-                    </button>
-                </td>
-                <td>
-                    @item.PostDate.Value.ToString("yyyy/MM/dd HH:mm")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReplyCount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Lock)
-                </td>
-                <td>
-                    <a asp-action="Edit" class="btn btn-gradient me-1 mb-2 large-btn"
-                       asp-route-id="@item.ArticleId">編輯</a>
-                </td>
-            </tr>
-        } *@
+        @* 動態產生 *@
     </tbody>
 </table>
 <!-- 模態框 -->
@@ -144,6 +112,7 @@
     </div>
 </div>
 @section Scripts {
+    <script src="~/forumcss/myjs.min.js"></script>
     <script>
         const forumDto = {
             "categoryId": 0,
@@ -153,7 +122,6 @@
             "sortType": "asc",
             "sortBy": ""
         }
-
         const liPages = document.querySelector('#ul1')
         const articles = document.querySelector('#tableBody')
 
@@ -169,7 +137,7 @@
                 })
 
                 if (!response.ok) {
-                    console.log('獲取api失敗: ' , await response.statusText)
+                    console.log('獲取api失敗: ', await response.statusText)
                     return
                 }
                 const data = await response.json()
@@ -184,88 +152,7 @@
                 console.log('前端獲取api發生例外的錯誤: ' + error)
             }
         }
-
         load()
-
-        function getSpots(data) {
-            return data.forumResult.map(spot => createSpots(spot))
-        }
-
-        function createSpots(spot) {
-            const { title, articleContent, memberName
-                , themeName, articleId,  lock, postDate, replyCount, updateDate } = spot
-            return `<tr >
-                        <td>
-                            ${themeName}
-                        </td>
-                        <td>
-                            ${memberName}
-                        </td>
-                        <td>
-                            ${title}
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-gradient me-1 mb-2 large-btn"
-                                        onclick="showDetails(${articleId})">
-                                點擊顯示
-                            </button>
-                        </td>
-                        <td>
-                            ${postDate}
-                        </td>
-                        <td>
-                            ${replyCount}
-                        </td>
-                        <td>
-                            ${lock===true?'上架中':' X'}
-                        </td>
-                        <td>
-                            <a href="/Articles/Edit/${articleId}" class="btn btn-gradient me-1 mb-2 large-btn">編輯</a>
-                        </td>
-                    </tr>
-                    `
-        }
-
-
-        function judgePages(data) {
-            let strPageLi = ''
-            let totalPages = data.totalPages
-            let curretPages = forumDto.page
-            //總頁超過十 選取頁低於總頁10就全部顯示
-            if (totalPages <= 10) {
-                strPageLi = allPages(1, totalPages)
-
-            } else if (curretPages <= 3) { //超過10頁就用...分隔顯示最後一頁 且當前頁小於4就不顯示...分隔
-
-                strPageLi += allPages(1, 8)
-                strPageLi += `...
-                                        <li class="page-item"><a class="page-link" onclick="clickPages(${totalPages})">${totalPages}</a></li>`
-            } else if (totalPages - curretPages >= 3) { //當前頁超過3 
-                strPageLi = `<li class="page-item"><a class="page-link" onclick="clickPages(1)">1</a></li>...`
-                strPageLi += allPages(curretPages - 2, curretPages + 2)
-                strPageLi += `...
-                                    <li class="page-item"><a class="page-link" onclick="clickPages(${totalPages})">${totalPages}</a></li>`
-            } else {
-                strPageLi = `<li class="page-item"><a class="page-link" onclick="clickPages(1)">1</a></li>...`
-                strPageLi += allPages(totalPages - 4, totalPages)
-            }
-
-            liPages.innerHTML = strPageLi
-            $('h3').text(`共計有${data.totalCount}筆資料，現在是${curretPages}/${totalPages}頁`);
-
-        }
-
-        function allPages(start, end) {
-            let PageLi = ''
-
-            for (let i = start; i <= end; i++) {
-                PageLi += `
-                        <li class="page-item"><a class="page-link" onclick="clickPages(${i})">${i}</a></li>
-                        `
-            }
-            return PageLi
-        }
-
 
         function showDetails(articleId) {
             // 隱藏表格
@@ -297,47 +184,8 @@
             document.getElementById('articleTable').style.display = '';
         });
 
-        function changePageSize(event){
-            forumDto.pageSize = event.target.value
-            forumDto.page = 1
-            load()
-        }
 
-        function inputKeyword(event){
-
-            // if (event.key!=='Enter')
-            //     return
-
-            forumDto.keyword = event.target.value
-            forumDto.page = 1
-            load()
-        }
-
-
-        const changeTheme = (categoryId,event) => {
-            forumDto.page = 1
-            // console.log(event.target.text)
-            forumDto.categoryId = categoryId
-            load()
-            document.getElementById('dropdownMenuButton').innerHTML = event.target.text
-        }
-
-        const clickPages = page => {
-            forumDto.page = page
-            load()
-        }
-
-        const changeSort = (event) => {
-            const selectValue = event.target.value
-
-            const sortType = selectValue.includes('asc') ? 'asc' : 'desc'
-            forumDto.sortType = sortType
-
-            const sortBy = selectValue.replace('asc', '')
-            forumDto.sortBy = sortBy
-
-            load()
-        }
+       
     </script>
 
 }

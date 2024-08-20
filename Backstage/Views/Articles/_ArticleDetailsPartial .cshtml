@@ -1,5 +1,6 @@
 ﻿@model Backstage.Models.ArticleView
 @section Styles {
+    <link href="~/forumcss/mystyle.css" rel="stylesheet" />
     <style>
         .article-content {
             font-size: 1.25rem; /* 增加字體大小 */
@@ -66,5 +67,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ArticleId">Edit</a>
+    <a asp-action="Edit" class="btn btn-gradient me-1 mb-2 large-btn" asp-route-id="@Model?.ArticleId">編輯</a>
 </div>
