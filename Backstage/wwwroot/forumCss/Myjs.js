@@ -25,7 +25,7 @@ function createSpots(spot) {
                     </button>
                 </td>
                 <td>
-                    ${postDate}
+                    ${postDate.replace('T',' ').substring(0, 16) }
                 </td>
                 <td>
                     ${replyCount}

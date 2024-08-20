@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Backstage.Models.ArticleView>
 
 @{
-    ViewData["Title"] = "文章編輯";
+    ViewData["Title"] = "文章後臺管理系統";
 }
 
 @section Styles {
@@ -32,16 +32,18 @@
     </div>
     <div class="col-2">
         <select class="form-select" aria-label="Default select example" onchange="changeSort(event)">
-            <option value="asctheme" selected>主題升冪</option>
-            <option value="theme">主題降冪</option>
-            <option value="ascmemberName" selected>作者升冪</option>
-            <option value="memberName">作者降冪</option>
-            <option value="ascpostDate">發表日期升冪</option>
-            <option value="postDate">發表日期降冪</option>
-            <option value="ascreplyCount">回覆數升冪</option>
-            <option value="replyCount">回覆數降冪</option>
-            <option value="asclock">下架優先</option>
-            <option value="lock">上架優先</option>
+            <option selected>選擇排序類型</option>
+
+            <option value="asctheme" >主題</option>
+            @* <option value="theme">主題降冪</option> *@
+            <option value="ascmemberName" >作者</option>
+            @* <option value="memberName">作者降冪</option> *@
+            <option value="ascpostDate">日期(最舊)</option>
+            <option value="postDate">日期(最新)</option>
+            <option value="ascreplyCount">回覆數(最小)</option>
+            <option value="replyCount">回覆數(最大)</option>
+            <option value="asclock">下架</option>
+            <option value="lock">上架</option>
         </select>
     </div>
     <div class="col-3">
@@ -112,7 +114,7 @@
     </div>
 </div>
 @section Scripts {
-    <script src="~/forumcss/myjs.min.js"></script>
+    <script src="~/forumcss/myjs.js"></script>
     <script>
         const forumDto = {
             "categoryId": 0,
@@ -183,9 +185,5 @@
         document.getElementById('detailsModal').addEventListener('hidden.bs.modal', function () {
             document.getElementById('articleTable').style.display = '';
         });
-
-
-       
     </script>
-
 }

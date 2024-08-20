@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backstage.Models.MetaData
-{
-    public class ArticleViewMetaData
-    {
+namespace Backstage.Models.MetaData {
+    public class ArticleViewMetaData {
         [Display(Name = "上架")]
         public bool Lock {
             get; set;
@@ -14,11 +12,9 @@ namespace Backstage.Models.MetaData
             get; set;
         }
         [Display(Name = "發表日期")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}",ApplyFormatInEditMode = true)]
         public DateTime? PostDate {
             get; set;
         }
-        [Display(Name = "標題")]
 
         public string? Title {
             get; set;
@@ -48,7 +44,6 @@ namespace Backstage.Models.MetaData
             get; set;
         }
         [Display(Name = "主題")]
-
         public int ThemeId {
             get; set;
         }
