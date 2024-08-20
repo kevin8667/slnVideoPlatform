@@ -6,6 +6,21 @@
 
 <h1>Index</h1>
 
+@section Styles{
+    <style>
+        .table th {
+        min-width: 80px; /* 設置最小寬度 */
+        text-align: left; /* 設置文字對齊方式 */
+        white-space: nowrap; /* 防止文字換行 */
+        }
+        .btn{
+            min-width: 40px;
+            text-align: center; /* 設置文字對齊方式 */
+            white-space: nowrap; /* 防止文字換行 */
+        }
+    </style>
+}
+
 <p>
     <a asp-action="Create" class="btn btn-primary me-2">新增</a>
 </p>
@@ -13,16 +28,28 @@
     <table class="table">
         <thead>
             <tr>
-                <th>
+                <th style="min-width:145px">
                     @Html.DisplayNameFor(model => model.VideoName)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MainGenre)
+                </th>
+                <th style="min-width:100px">
+                    @Html.DisplayNameFor(model => model.Series)
+                </th>
+                <th style="min-width:20px">
+                    @Html.DisplayNameFor(model => model.Season)
+                </th>
+                <th style="min-width:50px">
                     @Html.DisplayNameFor(model => model.Episode)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.RunningTime)
                 </th>
-                <th>
+                <th class="w-30">
                     @Html.DisplayNameFor(model => model.IsShowing)
                 </th>
                 <th>
@@ -52,18 +79,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.TrailerUrl)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MainGenre)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Season)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Series)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>
+                
                 <th>操作</th>
             </tr>
         </thead>
@@ -73,6 +89,18 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.VideoName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type.TypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MainGenre.GenreName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Series.SeriesName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Season.SeasonId)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Episode)
@@ -99,7 +127,8 @@
                         @Html.DisplayFor(modelItem => item.Lang)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Summary)
+                        <a asp-action="EditSummary" asp-route-id="@item.VideoId" class="btn btn-primary me-2">詳細</a>
+                        @* @Html.DisplayFor(modelItem => item.Summary) *@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Views)
@@ -108,20 +137,25 @@
                         @Html.DisplayFor(modelItem => item.AgeRating)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TrailerUrl)
+                        @{
+                            bool isTrailerUrlAvailable = !string.IsNullOrEmpty(item.TrailerUrl);
+                        }
+                        @if (isTrailerUrlAvailable)
+                        {
+                            <a href="@item.TrailerUrl" class="btn btn-primary me-2" target="_blank">
+                                觀看
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary me-2" disabled>
+                                觀看
+                            </button>
+                        }
+                        @* <button class="btn btn-primary me-2" href="@item.TrailerUrl">觀看</button> *@
+                        @* @Html.DisplayFor(modelItem => item.TrailerUrl) *@
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MainGenre.GenreName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Season.SeasonId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Series.SeriesName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type.TypeName)
-                    </td>
+                    
                     <td>
                         <div class="d-flex">
                             <a asp-action="Details" asp-route-id="@item.VideoId" class="btn btn-primary me-2">詳細</a>
@@ -138,7 +172,6 @@
 @section Scripts
 {
     <script>
-
     </script>
 
 }

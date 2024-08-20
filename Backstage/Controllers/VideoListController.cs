@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Backstage.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Backstage.Controllers
 {
@@ -64,9 +65,19 @@ namespace Backstage.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VideoId,TypeId,VideoName,SeriesId,MainGenreId,SeasonId,Episode,RunningTime,IsShowing,ReleaseDate,Rating,Popularity,ThumbnailId,Lang,Summary,Views,AgeRating,TrailerUrl")] VideoList videoList)
         {
+            
+
             if (ModelState.IsValid)
             {
                 _context.Add(videoList);
+                await _context.SaveChangesAsync();
+
+                var genresForVideo = new GenresForVideoList
+                {
+                    VideoId = videoList.VideoId,
+                    GenreId = videoList.MainGenreId
+                };
+                _context.GenresForVideoLists.Add(genresForVideo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -134,6 +145,116 @@ namespace Backstage.Controllers
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName", videoList.TypeId);
             return View(videoList);
+        }
+
+        public async Task<IActionResult> EditSummary(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var videoList = await _context.VideoLists.FindAsync(id);
+            if (videoList == null)
+            {
+                return NotFound();
+            }
+            return View(videoList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSummary(int id, [Bind("VideoId,Summary")] VideoList videoList)
+        {
+            if (id != videoList.VideoId)
+            {
+                return NotFound();
+            }
+
+            var videoListFound = await _context.VideoLists.FindAsync(id);
+            if (videoListFound == null)
+            {
+                return NotFound();
+            }
+            videoListFound.Summary = videoList.Summary;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(videoListFound);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VideoListExists(videoListFound.VideoId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(videoListFound.Summary);
+        }
+
+        public async Task<IActionResult> EditThumbnail(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var videoList = await _context.VideoLists.FindAsync(id);
+            if (videoList == null)
+            {
+                return NotFound();
+            }
+            return View(videoList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditThumbnail(int id, [Bind("VideoId,ThumbnailId")] VideoList videoList)
+        {
+            if (id != videoList.VideoId)
+            {
+                return NotFound();
+            }
+
+            var videoListFound = await _context.VideoLists.FindAsync(id);
+            if (videoListFound == null)
+            {
+                return NotFound();
+            }
+            videoListFound.ThumbnailId = videoList.ThumbnailId;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(videoListFound);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VideoListExists(videoListFound.VideoId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(videoListFound.Summary);
         }
 
         // GET: VideoList/Delete/5
