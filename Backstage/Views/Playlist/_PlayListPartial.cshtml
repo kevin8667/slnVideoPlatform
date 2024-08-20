@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Backstage.Models.PlayList>
+
+<div class="bg-light p-3 shadow-sm">
+    <div id="topbar" class="d-flex justify-content-between align-items-center">
+
+        <div id="search-bar" class="d-flex">
+            <input id="search-box" type="text" placeholder="搜尋關鍵字" class="form-control me-2" style="height: 38px;" />
+            <button id="btn-search-box" class="btn btn-dark w-50" style="height: 38px;">搜尋</button>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <select class="form-select me-2" aria-label="排序方式" style="height: 38px;" onchange="changeSort(event)">
+                <option value="ascPlayListName">播放清單名稱升冪</option>
+                <option value="descPlayListName">播放清單名稱降冪</option>
+                <option value="ascCreatedAt" selected>創建日期升冪</option>
+                <option value="descCreatedAt">創建日期降冪</option>
+            </select>
+
+            <select id="page-size-select" class="form-select me-2" aria-label="每頁顯示筆數" style="height: 38px;" onchange="changePageSize(event)">
+                <option value="1">每頁1筆資料</option>
+                <option selected value="5">每頁5筆資料</option>
+                <option value="10">每頁10筆資料</option>
+                <option value="15">每頁15筆資料</option>
+                <option value="20">每頁20筆資料</option>
+            </select>
+
+            <div class="d-flex align-items-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <img src="data:image/png;base64,@(Convert.ToBase64String(item.ShowImage ?? new byte[0]))" class="card-img-top w-100" alt="@item.PlayListName" style="height: 200px; object-fit: cover; object-position: top;" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.PlayListName</h5>
+                    <p class="card-text">@item.PlayListDescription</p>
+                    <div class="d-flex">
+                        <a href="javascript:void(0);" class="btn btn-info me-2" data-id="@item.PlayListId" onclick="showDetails(@item.PlayListId)">清單</a>
+                        <a href="javascript:void(0);" class="btn btn-warning me-2" data-id="@item.PlayListId" onclick="editPlaylist(@item.PlayListId)">編輯</a>
+                        <a href="javascript:void(0);" class="btn btn-danger" data-id="@item.PlayListId" onclick="deletePlaylist(@item.PlayListId)">刪除</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+    </script>
+}

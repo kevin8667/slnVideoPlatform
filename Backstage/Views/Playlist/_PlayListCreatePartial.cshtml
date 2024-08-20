@@ -1,0 +1,63 @@
+﻿@model Backstage.Models.PlayList
+
+<form id="createPlaylistForm" asp-action="PlayListCreate" method="post" enctype="multipart/form-data">
+    <div class="modal-header">
+        <h5 class="modal-title">新增播放清單</h5>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label asp-for="PlayListName" class="control-label">播放清單名稱</label>
+            <input asp-for="PlayListName" class="form-control" />
+            <span asp-validation-for="PlayListName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PlayListDescription" class="control-label">播放清單描述</label>
+            <textarea asp-for="PlayListDescription" class="form-control"></textarea>
+            <span asp-validation-for="PlayListDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShowImage" class="control-label">上傳圖片</label>
+            <input type="file" asp-for="ShowImage" class="form-control" accept="image/*" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">新增</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#ShowImage").on("change", function () {
+                previewImage(this);
+            });
+
+            function previewImage(inputFile) {
+                if (inputFile.files && inputFile.files[0]) {
+                    var allowType = "image.*";
+                    if (inputFile.files[0].type.match(allowType)) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $("#imgPreview").attr('src', e.target.result);
+                            $("#imgPreview").attr('title', inputFile.files[0].name);
+                        };
+                        reader.readAsDataURL(inputFile.files[0]);
+                        $("#insertbtn").prop('disabled', false);
+                    } else {
+                        alert("不支援上傳檔案格式!!");
+                        $("#ShowImage").val("");
+                        $("#insertbtn").prop('disabled', true);
+                    }
+                } else {
+                    $("#imgPreview").attr('src', '~/img/NoImageOOO.jpg');
+                    $("#imgPreview").attr('title', '尚未選擇圖片');
+                }
+            }
+        });
+    </script>
+}
