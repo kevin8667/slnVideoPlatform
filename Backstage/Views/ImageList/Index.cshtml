@@ -7,9 +7,9 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">新增</a>
 </p>
-<table class="table">
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -18,18 +18,36 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody> *@
+<div class="row row-cols-1 row-cols-md-3 g-4" id="div1">
+
 @foreach (var item in Model) {
-        <tr>
+        @* <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
+                <img src="@item.ImagePath" alt="@item.ImageId" class="w-25 h-25"/>
+                @Html.DisplayFor(modelItem => item.ImagePath) 
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ImageId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ImageId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ImageId">Delete</a>
             </td>
-        </tr>
+        </tr> *@
+
+    <div class="col">
+        <div class="card w-75 h-">
+            <img src="@item.ImagePath" class="card-img-top" alt="@item.ImageId">
+            <div class="card-body">
+                <h5 class="card-title">"@item.ImageId"</h5>
+                    <a asp-action="Edit" asp-route-id="@item.ImageId" class="btn btn-primary">編輯</a> |
+                    <a asp-action="Details" asp-route-id="@item.ImageId" class="btn btn-primary">詳細</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ImageId" class="btn btn-primary">刪除</a>
+            </div>
+        </div>
+    </div>
+       
 }
-    </tbody>
-</table>
+</div>
+
+@*     </tbody>
+</table> *@

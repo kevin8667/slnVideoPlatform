@@ -9,22 +9,22 @@ using Backstage.Models;
 
 namespace Backstage.Controllers
 {
-    public class ImageListController : Controller
+    public class GenreListController : Controller
     {
         private readonly VideoDBContext _context;
 
-        public ImageListController(VideoDBContext context)
+        public GenreListController(VideoDBContext context)
         {
             _context = context;
         }
 
-        // GET: ImageList
+        // GET: GenreList
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ImageLists.ToListAsync());
+            return View(await _context.GenreLists.ToListAsync());
         }
 
-        // GET: ImageList/Details/5
+        // GET: GenreList/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,58 +32,39 @@ namespace Backstage.Controllers
                 return NotFound();
             }
 
-            var imageList = await _context.ImageLists
-                .FirstOrDefaultAsync(m => m.ImageId == id);
-            if (imageList == null)
+            var genreList = await _context.GenreLists
+                .FirstOrDefaultAsync(m => m.GenreId == id);
+            if (genreList == null)
             {
                 return NotFound();
             }
 
-            return View(imageList);
+            return View(genreList);
         }
 
-        // GET: ImageList/Create
+        // GET: GenreList/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ImageList/Create
+        // POST: GenreList/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageId")] ImageList imageList, IFormFile ImagePath)
+        public async Task<IActionResult> Create([Bind("GenreId,GenreName")] GenreList genreList)
         {
             if (ModelState.IsValid)
             {
-                // 檢查是否有上傳的檔案
-                if (ImagePath != null && ImagePath.Length > 0)
-                {
-                    // 取得檔案名稱
-                    var fileName = Path.GetFileName(ImagePath.FileName);
-
-                    // 設定檔案儲存路徑
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName);
-
-                    // 使用 FileStream 將檔案儲存到指定位置
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await ImagePath.CopyToAsync(stream);
-                    }
-
-                    // 將檔案路徑存入資料庫中
-                    imageList.ImagePath = "/img/" + fileName;
-                }
-
-                _context.Add(imageList);
+                _context.Add(genreList);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(imageList);
+            return View(genreList);
         }
 
-        // GET: ImageList/Edit/5
+        // GET: GenreList/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,22 +72,22 @@ namespace Backstage.Controllers
                 return NotFound();
             }
 
-            var imageList = await _context.ImageLists.FindAsync(id);
-            if (imageList == null)
+            var genreList = await _context.GenreLists.FindAsync(id);
+            if (genreList == null)
             {
                 return NotFound();
             }
-            return View(imageList);
+            return View(genreList);
         }
 
-        // POST: ImageList/Edit/5
+        // POST: GenreList/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ImageId,ImagePath")] ImageList imageList)
+        public async Task<IActionResult> Edit(int id, [Bind("GenreId,GenreName")] GenreList genreList)
         {
-            if (id != imageList.ImageId)
+            if (id != genreList.GenreId)
             {
                 return NotFound();
             }
@@ -115,12 +96,12 @@ namespace Backstage.Controllers
             {
                 try
                 {
-                    _context.Update(imageList);
+                    _context.Update(genreList);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ImageListExists(imageList.ImageId))
+                    if (!GenreListExists(genreList.GenreId))
                     {
                         return NotFound();
                     }
@@ -131,10 +112,10 @@ namespace Backstage.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(imageList);
+            return View(genreList);
         }
 
-        // GET: ImageList/Delete/5
+        // GET: GenreList/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,38 +123,34 @@ namespace Backstage.Controllers
                 return NotFound();
             }
 
-            var imageList = await _context.ImageLists
-                .FirstOrDefaultAsync(m => m.ImageId == id);
-            if (imageList == null)
+            var genreList = await _context.GenreLists
+                .FirstOrDefaultAsync(m => m.GenreId == id);
+            if (genreList == null)
             {
                 return NotFound();
             }
 
-            return View(imageList);
+            return View(genreList);
         }
 
-        // POST: ImageList/Delete/5
+        // POST: GenreList/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var imageList = await _context.ImageLists.FindAsync(id);
-            if (imageList != null)
+            var genreList = await _context.GenreLists.FindAsync(id);
+            if (genreList != null)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageList.ImagePath.TrimStart('/'));
-                System.IO.File.Delete(filePath);
-                _context.ImageLists.Remove(imageList);
-                
+                _context.GenreLists.Remove(genreList);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-            
         }
 
-        private bool ImageListExists(int id)
+        private bool GenreListExists(int id)
         {
-            return _context.ImageLists.Any(e => e.ImageId == id);
+            return _context.GenreLists.Any(e => e.GenreId == id);
         }
     }
 }
