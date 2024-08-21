@@ -371,7 +371,6 @@ public partial class VideoDBContext : DbContext
             entity.ToTable("GenreList");
 
             entity.Property(e => e.GenreId)
-                .ValueGeneratedNever()
                 .HasColumnName("GenreID");
             entity.Property(e => e.GenreName)
                 .IsRequired()
@@ -483,7 +482,6 @@ public partial class VideoDBContext : DbContext
             entity.ToTable("ImageList");
 
             entity.Property(e => e.ImageId)
-                .ValueGeneratedNever()
                 .HasColumnName("ImageID");
             entity.Property(e => e.ImagePath)
                 .HasMaxLength(300)

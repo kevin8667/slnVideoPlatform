@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backstage.Models;
 
@@ -9,38 +10,40 @@ public partial class VideoList
 {
     public int VideoId { get; set; }
 
+    [Display(Name = "影片形式")]
     public int TypeId { get; set; }
-
+    [Display(Name = "影片名稱")]
     public string VideoName { get; set; }
-
+    [Display(Name = "系列")]
     public int? SeriesId { get; set; }
-
+    [Display(Name = "主要內容類型")]
     public int MainGenreId { get; set; }
-
+    [Display(Name = "季")]
     public int? SeasonId { get; set; }
-
+    [Display(Name = "集")]
     public int? Episode { get; set; }
-
+    [Display(Name = "片長")]
+    [DisplayFormat(DataFormatString = "{0:hh\\:mm\\:ss}")]
     public TimeOnly? RunningTime { get; set; }
-
+    [Display(Name = "上映中")]
     public bool IsShowing { get; set; }
-
+    [Display(Name = "上映日期")]
     public DateOnly? ReleaseDate { get; set; }
-
+    [Display(Name = "評分")]
     public decimal Rating { get; set; }
-
+    [Display(Name = "熱門度")]
     public decimal Popularity { get; set; }
-
+    [Display(Name = "縮圖")]
     public int? ThumbnailId { get; set; }
-
+    [Display(Name = "語言")]
     public string Lang { get; set; }
-
+    [Display(Name = "簡介")]
     public string Summary { get; set; }
-
+    [Display(Name = "觀看數")]
     public int? Views { get; set; }
-
+    [Display(Name = "年齡分級")]
     public string AgeRating { get; set; }
-
+    [Display(Name = "預告片連結")]
     public string TrailerUrl { get; set; }
 
     public virtual ICollection<CastList> CastLists { get; set; } = new List<CastList>();
@@ -53,18 +56,21 @@ public partial class VideoList
 
     public virtual ICollection<KeywordForVideoList> KeywordForVideoLists { get; set; } = new List<KeywordForVideoList>();
 
+    [Display(Name = "主要內容類型")]
     public virtual GenreList MainGenre { get; set; }
 
     public virtual ICollection<NowShowingTheater> NowShowingTheaters { get; set; } = new List<NowShowingTheater>();
 
     public virtual ICollection<PlayListItem> PlayListItems { get; set; } = new List<PlayListItem>();
 
+    [Display(Name = "季")]
     public virtual SeasonList Season { get; set; }
-
+    [Display(Name = "系列")]
     public virtual SeriesList Series { get; set; }
 
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
 
+    [Display(Name = "影片型態")]
     public virtual TypeList Type { get; set; }
 
     public virtual ICollection<VideoStreamingLinkList> VideoStreamingLinkLists { get; set; } = new List<VideoStreamingLinkList>();

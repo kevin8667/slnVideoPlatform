@@ -1,0 +1,25 @@
+﻿@model Backstage.Models.ImageList
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>ImageList</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImagePath)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="@Model.ImagePath" alt="Image" />
+            @* @Html.DisplayFor(model => model.ImagePath) *@
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ImageId" class="btn btn-primary">編輯</a> |
+    <a asp-action="Index" class="btn btn-primary">回到列表</a>
+</div>
