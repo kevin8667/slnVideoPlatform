@@ -22,12 +22,16 @@ namespace Backstage.Controllers
 
         public IActionResult Test() 
         {
-            var videoList = _dbContext.VideoLists;
-            return View(videoList);
+            return View(_dbContext.VideoLists);
         }
 
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult PlanLists()
         {
             return View();
         }

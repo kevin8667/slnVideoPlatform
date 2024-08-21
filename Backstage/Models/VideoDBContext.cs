@@ -780,9 +780,7 @@ public partial class VideoDBContext : DbContext
         {
             entity.ToTable("OrderDetail");
 
-            entity.Property(e => e.OrderDetailId)
-                .ValueGeneratedNever()
-                .HasColumnName("OrderDetailID");
+            entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
