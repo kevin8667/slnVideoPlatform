@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Backstage.Models.Cinema>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                @* <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Ticket</a> *@
+@*                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> *@
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Halls" asp-action="index">影廳管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Seats" asp-action="index">座位管理</a>
+                        </li>
+
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+</body>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CinemaName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CinemaAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CinemaPhone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CinemaName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CinemaAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CinemaPhone)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CinemaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CinemaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CinemaId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
