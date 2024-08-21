@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wwwroot/forumCss/Myjs.min.js",
+    "inputFiles": [
+      "wwwroot/forumCss/Myjs.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/forumCss/MyStyle.min.css",
+    "inputFiles": [
+      "wwwroot/forumCss/MyStyle.css"
+    ]
+  }
+]

@@ -1,0 +1,189 @@
+﻿@model IEnumerable<Backstage.Models.ArticleView>
+
+@{
+    ViewData["Title"] = "文章後臺管理系統";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/forumcss/mystyle.css" rel="stylesheet" />
+    <style>
+
+
+    </style>
+}
+
+<div class="row mb-3">
+    <div class="col-2">
+        <select class="form-select" aria-label="Default select example" onchange="changePageSize(event)">
+            <option value="1">1</option>
+            <option selected value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+    <div class="col-5">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination" id="ul1">
+            </ul>
+        </nav>
+    </div>
+    <div class="col-2">
+        <select class="form-select" aria-label="Default select example" onchange="changeSort(event)">
+            <option selected>選擇排序類型</option>
+
+            <option value="asctheme" >主題</option>
+            @* <option value="theme">主題降冪</option> *@
+            <option value="ascmemberName" >作者</option>
+            @* <option value="memberName">作者降冪</option> *@
+            <option value="ascpostDate">日期(最舊)</option>
+            <option value="postDate">日期(最新)</option>
+            <option value="ascreplyCount">回覆數(最小)</option>
+            <option value="replyCount">回覆數(最大)</option>
+            <option value="asclock">下架</option>
+            <option value="lock">上架</option>
+        </select>
+    </div>
+    <div class="col-3">
+        <input type="search" class="form-control" placeholder="請輸入關鍵字" oninput="inputKeyword(event)" />
+    </div>
+</div>
+<h3></h3>
+<table id="articleTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ThemeName)
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    篩選主題
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#" onclick="changeTheme(0,event)">顯示全部</a></li>
+
+                    @foreach(var item in ViewBag.Theme) {
+                        <li>
+                            <a class="dropdown-item" href="#"
+                               onclick="changeTheme('@item.ThemeId',event)">@item.ThemeName</a>
+                        </li>
+                    }
+                </ul>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticleContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReplyCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lock)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+        @* 動態產生 *@
+    </tbody>
+</table>
+<!-- 模態框 -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">文章內容</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- 這裡將動態加載內容 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="hideDetails()">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/forumcss/myjs.js"></script>
+    <script>
+        const forumDto = {
+            "categoryId": 0,
+            "keyword": "",
+            "page": 1,
+            "pageSize": 10,
+            "sortType": "asc",
+            "sortBy": ""
+        }
+        const liPages = document.querySelector('#ul1')
+        const articles = document.querySelector('#tableBody')
+
+        const load = async () => {
+            try {
+                const api = `@Url.Content("~/Articles/LoadIndex")`
+                const response = await fetch(api, {
+                    method: 'post',
+                    body: JSON.stringify(forumDto),
+                    headers: {
+                        'Content-Type': 'Application/json'
+                    }
+                })
+
+                if (!response.ok) {
+                    console.log('獲取api失敗: ', await response.statusText)
+                    return
+                }
+                const data = await response.json()
+                // console.log(data)
+                const spots = getSpots(data) //將資料加工後取出
+
+                articles.innerHTML = spots.join('')
+                judgePages(data)
+
+
+            } catch (error) {
+                console.log('前端獲取api發生例外的錯誤: ' + error)
+            }
+        }
+        load()
+
+        function showDetails(articleId) {
+            // 隱藏表格
+            document.getElementById('articleTable').style.display = 'none';
+
+            // 顯示模態框
+            const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            modal.show();
+
+            // 發送 AJAX 請求獲取詳細內容
+            fetch(`/Articles/Details?id=${articleId}`)
+                .then(response => response.text())
+                .then(data => {
+                    // 將返回的內容插入到模態框中
+                    document.getElementById('modalContent').innerHTML = data;
+                });
+        }
+
+        function hideDetails() {
+            // 顯示表格
+            document.getElementById('articleTable').style.display = '';
+
+            // 隱藏模態框
+            const modal = bootstrap.Modal.getInstance(document.getElementById('detailsModal'));
+            modal.hide();
+        }
+
+        document.getElementById('detailsModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('articleTable').style.display = '';
+        });
+    </script>
+}

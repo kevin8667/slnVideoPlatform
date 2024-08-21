@@ -23,7 +23,7 @@ public partial class Article
 
     public int? ReplyCount { get; set; }
 
-    public bool? Lock { get; set; }
+    public bool Lock { get; set; }
 
     public string ArticleImage { get; set; }
 
