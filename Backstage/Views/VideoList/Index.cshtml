@@ -44,6 +44,18 @@
             width: 50%;
             height: auto;
         }
+
+        .infooverlay-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
     </style>
 }
 
@@ -54,7 +66,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="min-width:145px">
+                <th>
                     @Html.DisplayNameFor(model => model.VideoName)
                 </th>
                 <th>
@@ -62,7 +74,7 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.MainGenre)
-                </th>
+                @* </th>
                 <th style="min-width:100px">
                     @Html.DisplayNameFor(model => model.Series)
                 </th>
@@ -80,7 +92,7 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ReleaseDate)
-                </th>
+                </th> *@
                 <th>
                     @Html.DisplayNameFor(model => model.Rating)
                 </th>
@@ -90,18 +102,18 @@
                 <th>
                     @Html.DisplayNameFor(model => model.ThumbnailId)
                 </th>
-                <th>
+                @* <th>
                     @Html.DisplayNameFor(model => model.Lang)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Summary)
-                </th>
+                </th> *@
                 <th>
                     @Html.DisplayNameFor(model => model.Views)
                 </th>
-                <th>
+               @*  <th>
                     @Html.DisplayNameFor(model => model.AgeRating)
-                </th>
+                </th> *@
                 <th>
                     @Html.DisplayNameFor(model => model.TrailerUrl)
                 </th>
@@ -122,7 +134,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.MainGenre.GenreName)
                     </td>
-                    <td>
+                   @*  <td>
                         @Html.DisplayFor(modelItem => item.Series.SeriesName)
                     </td>
                     <td>
@@ -139,7 +151,7 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ReleaseDate)
-                    </td>
+                    </td> *@
                     <td>
                         @Html.DisplayFor(modelItem => item.Rating)
                     </td>
@@ -157,19 +169,19 @@
                         </div>
                         @* @Html.DisplayFor(modelItem => item.ThumbnailId) *@
                     </td>
-                    <td>
+                    @* <td>
                         @Html.DisplayFor(modelItem => item.Lang)
-                    </td>
-                    <td>
+                    </td> *@
+@*                     <td>
                         <a asp-action="EditSummary" asp-route-id="@item.VideoId" class="btn btn-primary me-2">詳細</a>
-                        @* @Html.DisplayFor(modelItem => item.Summary) *@
-                    </td>
+                        @Html.DisplayFor(modelItem => item.Summary)
+                    </td> *@
                     <td>
                         @Html.DisplayFor(modelItem => item.Views)
                     </td>
-                    <td>
+                   @*  <td>
                         @Html.DisplayFor(modelItem => item.AgeRating)
-                    </td>
+                    </td> *@
                     <td>
                         @{
                             bool isTrailerUrlAvailable = !string.IsNullOrEmpty(item.TrailerUrl);
@@ -192,7 +204,8 @@
                     
                     <td>
                         <div class="d-flex">
-                            <a asp-action="Details" asp-route-id="@item.VideoId" class="btn btn-primary me-2">詳細</a>
+                            <a href="#" onclick="showInfoOverlay(@item.VideoId); return false;" class="btn btn-primary me-2">查看詳情</a>
+                            @* <a asp-action="Details" asp-route-id="@item.VideoId" class="btn btn-primary me-2">詳細</a> *@
                             <a asp-action="Edit" asp-route-id="@item.VideoId" class="btn btn-primary me-2">編輯</a>
                             <a asp-action="Delete" asp-route-id="@item.VideoId" class="btn btn-primary me-2">刪除</a>
                         </div>
@@ -202,7 +215,57 @@
         </tbody>
     </table>
 </div>
-
+<div id="infoOverlay" class="overlay">
+    <div class="infooverlay-content">
+        <h3>影片資訊</h3>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>系列:</th>
+                    <td id="overlaySeries"></td>
+                </tr>
+                <tr>
+                    <th>季:</th>
+                    <td id="overlaySeason"></td>
+                </tr>
+                <tr>
+                    <th>集:</th>
+                    <td id="overlayEpisode"></td>
+                </tr>
+                <tr>
+                    <th>主要內容類型:</th>
+                    <td id="overlayMainGenre"></td>
+                </tr>
+                <tr>
+                    <th>片長:</th>
+                    <td id="overlayRunTime"></td>
+                </tr>
+                <tr>
+                    <th>是否上映中:</th>
+                    <td id="overlayIsShowing"></td>
+                </tr>
+                <tr>
+                    <th>上映日期:</th>
+                    <td id="overlayReleaseDate"></td>
+                </tr>
+                <tr>
+                    <th>語言:</th>
+                    <td id="overlayLang"></td>
+                </tr>
+                <tr>
+                    <th>年齡分級:</th>
+                    <td id="overlayAgeRating"></td>
+                </tr>
+                <tr>
+                    <th>簡介:</th>
+                    <td id="overlaySummary"></td>
+                </tr>
+                <!-- 加入其他需要顯示的資料 -->
+            </tbody>
+        </table>
+        <button class="btn btn-secondary" onclick="closeInfoOverlay()">關閉</button>
+    </div>
+</div>
 
 @section Scripts
 {
@@ -234,9 +297,36 @@
             document.getElementById('imageOverlay').style.display = 'none';
         }
 
+        function showInfoOverlay(videoId) {
+            // 根據 videoId 查詢相關的資料（可以透過 AJAX 從後端獲取）
+            fetch(`/VideoList/GetVideoDetails?videoId=${videoId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    document.getElementById('overlaySeries').innerText = data.series ||"無或者未提供";
+                    document.getElementById('overlaySeason').innerText = data.season || "無或者未提供";
+                    document.getElementById('overlayEpisode').innerText = data.episode || "無或者未提供";
+                    document.getElementById('overlayMainGenre').innerText = data.mainGenre;
+                    document.getElementById('overlayRunTime').innerText = data.runningTime;
+                    document.getElementById('overlayIsShowing').innerText = data.isShowing;
+                    document.getElementById('overlayReleaseDate').innerText = data.releaseDate || "無或者未提供";
+                    document.getElementById('overlayLang').innerText = data.lang;
+                    document.getElementById('overlayAgeRating').innerText = data.ageRating || "無或者未提供";
+                    document.getElementById('overlaySummary').innerText = data.summary;
+
+                    document.getElementById('infoOverlay').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching video details:', error);
+                });
+        }
+
+        function closeInfoOverlay() {
+            document.getElementById('infoOverlay').style.display = 'none';
+        }
+
     </script>
 
 }
-
-
 

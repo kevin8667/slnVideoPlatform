@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Backstage.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
+
+// TODO: 將部分欄位統一至Overlay
 namespace Backstage.Controllers
 {
     public class VideoListController : Controller
@@ -46,6 +48,31 @@ namespace Backstage.Controllers
             }
 
             return View(videoList);
+        }
+
+        public async Task<IActionResult> GetVideoDetails(int videoId)
+        {
+            var video = await _context.VideoLists
+                .Where(v => v.VideoId == videoId)
+                .Select(v => new {
+                    Series = v.Series != null ? v.Series.ToString() : string.Empty,
+                    Season = v.Season != null ? v.Season.ToString() : string.Empty,
+                    Episode = v.Episode != null ? v.Episode.ToString() : string.Empty,
+                    MainGenre = v.MainGenre.GenreName,
+                    RunningTime = v.RunningTime != null ? v.RunningTime.ToString() : string.Empty,
+                    IsShowing = v.IsShowing ? "上映中" : "已下檔",
+                    ReleaseDate = v.ReleaseDate != null ? v.ReleaseDate.ToString() : string.Empty,
+                    Lang = v.Lang != null ? v.Lang.ToString() : string.Empty,
+                    AgeRating = v.AgeRating != null ? v.AgeRating.ToString() : string.Empty,
+                    Summary = !string.IsNullOrEmpty(v.Summary) ? v.Summary : string.Empty,
+                }).FirstOrDefaultAsync();
+
+            if (video == null)
+            {
+                return NotFound();
+            }
+
+            return Json(video);
         }
 
         // GET: VideoList/Create
