@@ -48,7 +48,14 @@ namespace Backstage.Controllers
         // GET: ImageForVideoList/Create
         public IActionResult Create()
         {
-            ViewData["ImageId"] = new SelectList(_context.ImageLists, "ImageId", "ImageId");
+            var images = _context.ImageLists.Select(i => new SelectListItem
+            {
+                Value = i.ImageId.ToString(),
+                Text = Path.GetFileName(i.ImagePath) // 顯示檔案名稱而不是 ID
+            }).ToList();
+
+            ViewBag.ImageId = images;
+            //ViewData["ImageId"] = new SelectList(_context.ImageLists, "ImageId", "ImageId");
             ViewData["VideoId"] = new SelectList(_context.VideoLists, "VideoId", "VideoName");
             return View();
         }
@@ -58,7 +65,7 @@ namespace Backstage.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ImageId,VideoId")] ImageForVideoList imageForVideoList)
+        public async Task<IActionResult> Create([Bind("ImageId,VideoId")] ImageForVideoList imageForVideoList)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +101,7 @@ namespace Backstage.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ImageId,VideoId")] ImageForVideoList imageForVideoList)
+        public async Task<IActionResult> Edit(int id, [Bind("ImageId,VideoId")] ImageForVideoList imageForVideoList)
         {
             if (id != imageForVideoList.Id)
             {
@@ -159,6 +166,34 @@ namespace Backstage.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult GetImage(int videoId)
+        {
+            // 查找所有與 VideoID 關聯的 ImageID
+            var imageIds = _context.ImageForVideoLists
+                .Where(iv => iv.VideoId == videoId)
+                .Select(iv => iv.ImageId)
+                .ToList();
+
+            if (imageIds.Count == 0)
+            {
+                return NotFound();
+            }
+
+            // 查找第一個 ImageID 對應的 ImagePath
+            var imagePath = _context.ImageLists
+                .Where(i => imageIds.Contains(i.ImageId))
+                .Select(i => i.ImagePath)
+                .FirstOrDefault();
+
+            if (string.IsNullOrEmpty(imagePath))
+            {
+                return NotFound();
+            }
+
+            var fullImagePath = Url.Content(imagePath);
+            return Json(new { success = true, imageUrl = fullImagePath });
         }
 
         private bool ImageForVideoListExists(int id)

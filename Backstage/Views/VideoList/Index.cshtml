@@ -18,6 +18,32 @@
             text-align: center; /* 設置文字對齊方式 */
             white-space: nowrap; /* 防止文字換行 */
         }
+        /* Overlay styles */
+        .overlay {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+        }
+
+        .overlay-content {
+            position: absolute;
+            top: 50%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            max-width: 800px;
+        }
+
+        .overlay img {
+            width: 50%;
+            height: auto;
+        }
     </style>
 }
 
@@ -121,7 +147,14 @@
                         @Html.DisplayFor(modelItem => item.Popularity)
                     </td>
                     <td>
-                        <a asp-controller="ImageForVideoList" asp-action="Create" asp-route-id="@item.VideoId" class="btn btn-primary me-2">編輯</a>
+                        <a href="#" onclick="showOverlay(@item.VideoId); return false;" class="btn btn-primary me-2">觀看</a>
+                        <div id="imageOverlay" class="overlay" >
+                            <div class="overlay-content">
+                                <img id="overlayImage" src="" alt="Image" />
+                                <br />
+                                <button class="btn btn-secondary" onclick="closeOverlay()">關閉</button>
+                            </div>
+                        </div>
                         @* @Html.DisplayFor(modelItem => item.ThumbnailId) *@
                     </td>
                     <td>
@@ -170,9 +203,37 @@
     </table>
 </div>
 
+
 @section Scripts
 {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    
     <script>
+        function showOverlay(videoId) {
+            fetch(`/ImageForVideoList/GetImage?videoId=${videoId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('overlayImage').src = data.imageUrl;
+                        document.getElementById('imageOverlay').style.display = 'flex';
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function closeOverlay() {
+            document.getElementById('imageOverlay').style.display = 'none';
+        }
+
     </script>
 
 }
