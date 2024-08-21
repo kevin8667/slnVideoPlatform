@@ -27,6 +27,43 @@ namespace Backstage.Controllers
             return View(viewModel);
         }
 
+        public IActionResult LoadPagedPlayLists(int page = 1, int pageSize = 5, string sortBy = "PlayListId", string sortOrder = "asc")
+        {
+            var query = _context.PlayLists.AsQueryable();
+
+            // 排序邏輯
+            switch (sortBy)
+            {
+                case "PlayListName":
+                    query = sortOrder == "asc" ? query.OrderBy(p => p.PlayListName) : query.OrderByDescending(p => p.PlayListName);
+                    break;
+                case "PlayListCreatedAt":
+                    query = sortOrder == "asc" ? query.OrderBy(p => p.PlayListCreatedAt) : query.OrderByDescending(p => p.PlayListCreatedAt);
+                    break;
+                case "PlayListId":
+                default:
+                    query = sortOrder == "asc" ? query.OrderBy(p => p.PlayListId) : query.OrderByDescending(p => p.PlayListId);
+                    break;
+            }
+
+            // 計算總項目數並進行分頁
+            var totalItems = query.Count();
+            var playlists = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            // 構建視圖模型
+            var viewModel = new PlaylistViewModel
+            {
+                PlayLists = playlists,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize),
+                SortOrder = sortOrder,
+                SortBy = sortBy,
+                PageSize = pageSize
+            };
+
+            return PartialView("_PlayListPartial", viewModel.PlayLists); // 傳遞 PlayLists 屬性
+        }
+
         [HttpGet]
         public PartialViewResult FilterPlayLists(string searchTerm)
         {
