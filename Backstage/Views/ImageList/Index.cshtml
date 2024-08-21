@@ -38,7 +38,7 @@
         <div class="card w-75 h-">
             <img src="@item.ImagePath" class="card-img-top" alt="@item.ImageId">
             <div class="card-body">
-                <h5 class="card-title">"@item.ImageId"</h5>
+                    <h5 class="card-title">"@item.ImagePath"</h5>
                     <a asp-action="Edit" asp-route-id="@item.ImageId" class="btn btn-primary">編輯</a> |
                     <a asp-action="Details" asp-route-id="@item.ImageId" class="btn btn-primary">詳細</a> |
                     <a asp-action="Delete" asp-route-id="@item.ImageId" class="btn btn-primary">刪除</a>

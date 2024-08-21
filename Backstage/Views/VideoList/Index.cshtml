@@ -121,7 +121,8 @@
                         @Html.DisplayFor(modelItem => item.Popularity)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ThumbnailId)
+                        <a asp-controller="ImageForVideoList" asp-action="Create" asp-route-id="@item.VideoId" class="btn btn-primary me-2">編輯</a>
+                        @* @Html.DisplayFor(modelItem => item.ThumbnailId) *@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Lang)

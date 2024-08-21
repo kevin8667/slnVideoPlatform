@@ -53,15 +53,19 @@ namespace Backstage.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageId")] ImageList imageList, IFormFile ImagePath)
+        public async Task<IActionResult> Create([Bind("ImageId")] ImageList imageList, IFormFile ImagePath, string CustomFileName)
         {
             if (ModelState.IsValid)
             {
                 // 檢查是否有上傳的檔案
                 if (ImagePath != null && ImagePath.Length > 0)
                 {
-                    // 取得檔案名稱
-                    var fileName = Path.GetFileName(ImagePath.FileName);
+                    // 如果使用者提供了自訂檔案名稱，使用它；否則使用原始檔案名稱
+                    var fileName = !string.IsNullOrEmpty(CustomFileName) ? CustomFileName : Path.GetFileNameWithoutExtension(ImagePath.FileName);
+
+                    // 加上副檔名
+                    var fileExtension = Path.GetExtension(ImagePath.FileName);
+                    fileName = fileName + fileExtension;
 
                     // 設定檔案儲存路徑
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName);
