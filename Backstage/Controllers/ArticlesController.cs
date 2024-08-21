@@ -9,19 +9,21 @@ namespace Backstage.Controllers {
     public class ArticlesController : Controller {
         private readonly VideoDBContext _dbContext;
         private readonly IWebHostEnvironment _web;
+        private readonly List<Theme>? _theme;
         public ArticlesController(VideoDBContext context,IWebHostEnvironment environment)
         {
             _dbContext = context;
             _web = environment;
+            _theme = _dbContext.Themes.ToList();
+
         }
 
         //GET: Articles
         public IActionResult Index()
         {
 
-
-            ViewBag.Theme = _dbContext.Themes;
-            var videoDBContext = _dbContext.ArticleViews;
+            ViewBag.Theme = _theme;
+            var videoDBContext = _dbContext.ArticleViews.Take(1);
             return View(videoDBContext);
         }
 
@@ -29,8 +31,12 @@ namespace Backstage.Controllers {
         public IActionResult LoadIndex([FromBody] forumDto searchDTO)
         {
             try {
-                var article = searchDTO.categoryId == 0 ? _dbContext.ArticleViews : _dbContext.ArticleViews
-                                                                                .Where(c => c.ThemeId == searchDTO.categoryId);
+                var article = _dbContext.ArticleViews.AsQueryable();
+
+                // 篩選條件
+                if(searchDTO.categoryId != 0) {
+                    article = article.Where(c => c.ThemeId == searchDTO.categoryId);
+                }
 
                 // 關鍵字篩選
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
@@ -40,36 +46,7 @@ namespace Backstage.Controllers {
                 }
 
                 // 排序
-                switch(searchDTO.sortBy) {
-                    case "theme":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ThemeId) :
-                                                                article.OrderByDescending(s => s.ThemeId);
-                    break;
-                    case "memberName":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.MemberName) :
-                                                                article.OrderByDescending(s => s.MemberName);
-                    break;
-                    case "title":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
-                                                                article.OrderByDescending(s => s.Title);
-                    break;
-                    case "postDate":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
-                                                                article.OrderByDescending(s => s.PostDate);
-                    break;
-                    case "replyCount":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
-                                                                article.OrderByDescending(s => s.ReplyCount);
-                    break;
-                    case "lock":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
-                                                                article.OrderByDescending(s => s.Lock);
-                    break;
-                    default:
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
-                                                                article.OrderByDescending(s => s.ArticleId);
-                    break;
-                }
+                article = sortArticle(searchDTO,article);
 
                 // 計算總筆數
                 int dataCount = article.Count();
@@ -95,6 +72,43 @@ namespace Backstage.Controllers {
                 throw new Exception(ex.Message,ex);
             }
         }
+
+        private static IQueryable<ArticleView> sortArticle(forumDto searchDTO,IQueryable<ArticleView> article)
+        {
+            switch(searchDTO.sortBy) {
+                case "theme":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ThemeId) :
+                                                            article.OrderByDescending(s => s.ThemeId);
+                break;
+                case "memberName":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.MemberName) :
+                                                            article.OrderByDescending(s => s.MemberName);
+                break;
+                case "title":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
+                                                            article.OrderByDescending(s => s.Title);
+                break;
+                case "postDate":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
+                                                            article.OrderByDescending(s => s.PostDate);
+                break;
+                case "replyCount":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
+                                                            article.OrderByDescending(s => s.ReplyCount);
+                break;
+                case "lock":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
+                                                            article.OrderByDescending(s => s.Lock);
+                break;
+                default:
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
+                                                            article.OrderByDescending(s => s.ArticleId);
+                break;
+            }
+
+            return article;
+        }
+
         [HttpPost]
         public IActionResult Register(UserInfo user)
         {
@@ -112,7 +126,7 @@ namespace Backstage.Controllers {
                     user.UserPhoto.CopyTo(filestream);
                 }
 
-                return Json(Url.Content("~"+filePath));
+                return Json(Url.Content("~" + filePath));
             }
             catch(Exception ex) {
                 return NotFound(new {
@@ -149,7 +163,7 @@ namespace Backstage.Controllers {
             }
             ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
+            ViewData["ThemeId"] = new SelectList(_theme,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }
@@ -181,7 +195,7 @@ namespace Backstage.Controllers {
             }
             ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
+            ViewData["ThemeId"] = new SelectList(_theme,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }
