@@ -19,8 +19,9 @@ namespace Backstage.Controllers {
         }
 
         //GET: Articles
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.Theme = _cachedThemes;
 
             ViewBag.Theme = _theme;
             var videoDBContext = _dbContext.ArticleViews.Take(1);
@@ -28,7 +29,7 @@ namespace Backstage.Controllers {
         }
 
         [HttpPost]
-        public IActionResult LoadIndex([FromBody] forumDto searchDTO)
+        public async Task<IActionResult> LoadIndex([FromBody] forumDto searchDTO)
         {
             try {
                 var article = _dbContext.ArticleViews.AsQueryable();
@@ -41,8 +42,8 @@ namespace Backstage.Controllers {
                 // 關鍵字篩選
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
                     article = article.Where(c => c.Title.Contains(searchDTO.keyword) ||
-                                        c.ArticleContent.Contains(searchDTO.keyword) ||
-                                        c.MemberName.Contains(searchDTO.keyword));
+                                                c.ArticleContent.Contains(searchDTO.keyword) ||
+                                                c.MemberName.Contains(searchDTO.keyword));
                 }
 
                 // 排序
@@ -161,7 +162,7 @@ namespace Backstage.Controllers {
             if(article == null) {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,
+            ViewData["AuthorId"] = new SelectList( _dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
             ViewData["ThemeId"] = new SelectList(_theme,
                 "ThemeId","ThemeName",article.ThemeId);
