@@ -27,6 +27,16 @@ namespace Backstage.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public PartialViewResult FilterPlayLists(string searchTerm)
+        {
+            var filteredPlaylists = _context.PlayLists
+                                            .Where(p => p.PlayListDescription.Contains(searchTerm))
+                                            .ToList();
+
+            return PartialView("_PlayListPartial", filteredPlaylists);
+        }
+
         // GET: PlayList/Details/5
         public async Task<IActionResult> PlayListDetails(int? id)
         {
