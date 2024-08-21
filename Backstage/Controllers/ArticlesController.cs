@@ -9,21 +9,19 @@ namespace Backstage.Controllers {
     public class ArticlesController : Controller {
         private readonly VideoDBContext _dbContext;
         private readonly IWebHostEnvironment _web;
-        private readonly List<Theme>? _theme;
         public ArticlesController(VideoDBContext context,IWebHostEnvironment environment)
         {
             _dbContext = context;
             _web = environment;
-            _theme = _dbContext.Themes.ToList();
+           
 
         }
 
         //GET: Articles
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-            ViewBag.Theme = _cachedThemes;
 
-            ViewBag.Theme = _theme;
+            ViewBag.Theme = _dbContext.Themes;
             var videoDBContext = _dbContext.ArticleViews.Take(1);
             return View(videoDBContext);
         }
@@ -32,7 +30,7 @@ namespace Backstage.Controllers {
         public async Task<IActionResult> LoadIndex([FromBody] forumDto searchDTO)
         {
             try {
-                var article = _dbContext.ArticleViews.AsQueryable();
+                var article =  _dbContext.ArticleViews.AsQueryable();
 
                 // 篩選條件
                 if(searchDTO.categoryId != 0) {
@@ -50,7 +48,7 @@ namespace Backstage.Controllers {
                 article = sortArticle(searchDTO,article);
 
                 // 計算總筆數
-                int dataCount = article.Count();
+                int dataCount = await article.CountAsync();
 
                 // 分頁
                 int PagesSize = searchDTO.pageSize ?? 10;
@@ -58,10 +56,10 @@ namespace Backstage.Controllers {
                 int TotalPages = (int)Math.Ceiling(((decimal)dataCount / PagesSize));
 
                 // 跳過指定頁數的資料並取出當前頁面的資料
-                var articles = article.Skip((Page - 1) * PagesSize).Take(PagesSize).ToList();
+                var articles = await article.Skip((Page - 1) * PagesSize).Take(PagesSize).ToListAsync();
 
                 // 準備回傳的 DTO
-                ForumPagingDTO pagingDTO = new ForumPagingDTO {
+                ForumPagingDTO pagingDTO = new() {
                     TotalCount = dataCount,
                     TotalPages = TotalPages,
                     ForumResult = articles
@@ -164,7 +162,7 @@ namespace Backstage.Controllers {
             }
             ViewData["AuthorId"] = new SelectList( _dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_theme,
+            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }
@@ -178,25 +176,32 @@ namespace Backstage.Controllers {
             if(id != article.ArticleId) {
                 return NotFound();
             }
-
-            if(ModelState.IsValid) {
-                try {
-                    _dbContext.Update(article);
-                    await _dbContext.SaveChangesAsync();
-                }
-                catch(DbUpdateConcurrencyException) {
-                    if(!ArticleExists(article.ArticleId)) {
-                        return NotFound();
+            try {
+                if(ModelState.IsValid) {
+                    try {
+                        _dbContext.Update(article);
+                        await _dbContext.SaveChangesAsync();
                     }
-                    else {
-                        throw;
+                    catch(DbUpdateConcurrencyException) {
+                        if(!ArticleExists(article.ArticleId)) {
+                            return NotFound();
+                        }
+                        else {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
+            catch(DbUpdateConcurrencyException ex) {
+                return NotFound(new {
+                    error = ex.Message,
+                });
+            }
+
             ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_theme,
+            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }

@@ -153,12 +153,12 @@ public partial class VideoDBContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Theme).WithMany(p => p.Articles)
-                .HasForeignKey(d => d.ThemeId)
+            entity.HasOne(d => d.Member).WithMany(p => p.Articles)
+                .HasForeignKey(d => d.AuthorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Article_MemberInfo");
 
-            entity.HasOne(d => d.ThemeNavigation).WithMany(p => p.Articles)
+            entity.HasOne(d => d.Theme).WithMany(p => p.Articles)
                 .HasForeignKey(d => d.ThemeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Article_Theme");
