@@ -23,6 +23,31 @@
         </div>
     </div>
 
+    <div class="bg-light p-3 shadow-sm">
+        <div id="topbar" class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <select id="page-size-select" class="form-select me-2" aria-label="每頁顯示筆數" style="height: 38px;" onchange="changePageSize(event)">
+                    <option value="1">每頁1筆資料</option>
+                    <option selected value="5">每頁5筆資料</option>
+                    <option value="10">每頁10筆資料</option>
+                    <option value="15">每頁15筆資料</option>
+                    <option value="20">每頁20筆資料</option>
+                    <option value="25">每頁25筆資料</option>
+                </select>                
+            </div>
+            <div class="d-flex align-items-center">
+                <select class="form-select me-2" aria-label="排序方式" style="height: 38px;" onchange="changeSort(event)">
+                    <option value="ascPlayListId">播放ID升冪</option>
+                    <option value="descPlayListId">播放ID降冪</option>
+                    <option value="ascPlayListName">播放清單名稱升冪</option>
+                    <option value="descPlayListName">播放清單名稱降冪</option>
+                    <option value="ascCreatedAt" selected>創建日期升冪</option>
+                    <option value="descCreatedAt">創建日期降冪</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div class="row-content">
         <div id="content" class="col-12">
             <div id="playlists" class="content-panel">
@@ -130,7 +155,7 @@
                     url: '/Playlist/PlayListDeleteConfirmed/' + id,
                     type: 'POST',
                     success: function (data) {
-                        $('#playlists').html(data);
+                        $('#content').html(data);
                     },
                     error: function (xhr, status, error) {
                         alert('刪除失敗: ' + xhr.responseText);
@@ -155,5 +180,87 @@
                 });
             });
         });
+
+        var currentPage = 1;
+        var pageSize = 25;
+        var sortOrder = "asc";
+        var sortBy = "PlayListId";
+
+        function loadPlaylists() {
+            $.ajax({
+                url: '@Url.Action("LoadPagedPlayLists", "Playlist")',
+                type: 'GET',
+                data: {
+                    page: currentPage,
+                    pageSize: pageSize,
+                    sortBy: sortBy,
+                    sortOrder: sortOrder
+                },
+                success: function (result) {
+                    $('#content').html(result);
+                    updatePagination(result.totalPages);
+                },
+                error: function () {
+                    alert('Failed to load data.');
+                }
+            });
+        }
+
+        function changePageSize(event) {
+            pageSize = $(event.target).val();
+            currentPage = 1;
+            loadPlaylists();
+        }
+
+        function changeSort(event) {
+            var value = $(event.target).val();
+            sortOrder = value.includes("asc") ? "asc" : "desc";
+
+            if (value.includes("PlayListId")) {
+                sortBy = "PlayListId";
+            } else if (value.includes("PlayListName")) {
+                sortBy = "PlayListName";
+            } else {
+                sortBy = "PlayListCreatedAt";
+            }
+
+            currentPage = 1;
+            loadPlaylists();
+        }
+
+        function updatePagination(totalPages) {
+            var pagination = $('.pagination');
+            pagination.empty();
+
+            if (totalPages === 0) {
+                pagination.hide();
+                return;
+            }
+
+            pagination.show();
+
+            if (currentPage > 1) {
+                pagination.append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(' + (currentPage - 1) + ')">&laquo;</a></li>');
+            }
+
+            for (var i = 1; i <= totalPages; i++) {
+                var activeClass = i === currentPage ? ' active' : '';
+                pagination.append('<li class="page-item' + activeClass + '"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>');
+            }
+
+            if (currentPage < totalPages) {
+                pagination.append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(' + (currentPage + 1) + ')">&raquo;</a></li>');
+            }
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            loadPlaylists();
+        }
+
+        $(document).ready(function () {
+            loadPlaylists();
+        });
+
     </script>
 }
