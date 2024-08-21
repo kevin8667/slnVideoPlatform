@@ -75,7 +75,10 @@
             <div class="form-group">
                 <label asp-for="ThumbnailId" class="control-label"></label>
                 <br />
-                <a asp-controller="ImageForVideoList" asp-action="Create" asp-route-id="@Model.VideoId" class="btn btn-primary me-2">編輯</a>
+                <img id="imagePreview" src="@Url.Content("~/img/NoImage.png")"
+                     class="w-50 h-50" title="尚無內容" />
+                <br />
+                <a asp-controller="ImageForVideoList" asp-action="EditThumbnail" asp-route-videoId="@Model.VideoId" class="btn btn-primary me-2">編輯</a>
                 @* 
                 <input asp-for="ThumbnailId" class="form-control" />
                 <span asp-validation-for="ThumbnailId" class="text-danger"></span> *@
@@ -118,4 +121,36 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function showThumbnail(videoId) {
+            fetch(`/VideoList/GetImage?videoId=${videoId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log('成功')
+                        var previewImage = document.getElementById('imagePreview');
+
+                        if (data.imageUrl) {
+                            // 假設你的圖片路徑是按照 ImageId 命名的，更新這裡的路徑格式
+                            previewImage.src = data.imageUrl;
+                        } else {
+                            // 若沒有選擇任何圖片，顯示預設圖片
+                            previewImage.src = '@Url.Content("~/img/NoImage.png")';
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        showThumbnail(@ViewBag.VideoId);
+
+    </script>
 }

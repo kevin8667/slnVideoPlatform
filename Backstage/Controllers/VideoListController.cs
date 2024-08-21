@@ -74,6 +74,35 @@ namespace Backstage.Controllers
 
             return Json(video);
         }
+        public async Task<IActionResult> GetImage(int videoId)
+        {
+            // 根據 videoId 查找 VideoList 中的 ThumbnailId
+            var video = await _context.VideoLists
+                .Where(v => v.VideoId == videoId)
+                .Select(v => new { v.ThumbnailId })
+                .FirstOrDefaultAsync();
+
+            if (video == null || video.ThumbnailId == null)
+            {
+                return Json(new { success = false, message = "找不到對應的影片或縮圖。" });
+            }
+
+            // 根據 ThumbnailId 查找 ImageList 中的 ImagePath
+            var image = await _context.ImageLists
+                .Where(i => i.ImageId == video.ThumbnailId)
+                .Select(i => new { i.ImagePath })
+                .FirstOrDefaultAsync();
+
+            if (image == null)
+            {
+                return Json(new { success = false, message = "找不到對應的圖片。" });
+            }
+
+            // 組合圖片的完整 URL (假設圖片儲存在 wwwroot/img 下)
+            var imageUrl = Url.Content(image.ImagePath);
+
+            return Json(new { success = true, imageUrl });
+        }
 
         // GET: VideoList/Create
         public IActionResult Create()
@@ -128,6 +157,9 @@ namespace Backstage.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.VideoId = videoList.VideoId;
+
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName", videoList.MainGenreId);
             ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId", videoList.SeasonId);
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
@@ -229,60 +261,7 @@ namespace Backstage.Controllers
             return View(videoListFound.Summary);
         }
 
-        public async Task<IActionResult> EditThumbnail(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var videoList = await _context.VideoLists.FindAsync(id);
-            if (videoList == null)
-            {
-                return NotFound();
-            }
-            return View(videoList);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditThumbnail(int id, [Bind("VideoId,ThumbnailId")] VideoList videoList)
-        {
-            if (id != videoList.VideoId)
-            {
-                return NotFound();
-            }
-
-            var videoListFound = await _context.VideoLists.FindAsync(id);
-            if (videoListFound == null)
-            {
-                return NotFound();
-            }
-            videoListFound.ThumbnailId = videoList.ThumbnailId;
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(videoListFound);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VideoListExists(videoListFound.VideoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(videoListFound.Summary);
-        }
+        
 
         // GET: VideoList/Delete/5
         public async Task<IActionResult> Delete(int? id)
