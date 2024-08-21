@@ -8,35 +8,42 @@ using Microsoft.EntityFrameworkCore;
 namespace Backstage.Controllers {
     public class ArticlesController : Controller {
         private readonly VideoDBContext _dbContext;
-        private readonly IWebHostEnvironment _web;
+        private readonly IWebHostEnvironment _web; 
+        private static List<Theme>? _cachedThemes;
         public ArticlesController(VideoDBContext context,IWebHostEnvironment environment)
         {
             _dbContext = context;
             _web = environment;
+            if(_cachedThemes == null) {
+                _cachedThemes = _dbContext.Themes.ToList();
+            }
         }
 
         //GET: Articles
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.Theme = _cachedThemes;
 
+            var articles = await _dbContext.ArticleViews
+                .OrderBy(a => a.PostDate) // 可以根據需要進行排序
+                .Take(1) // 加載初始顯示的資料量
+                .ToListAsync();
 
-            ViewBag.Theme = _dbContext.Themes;
-            var videoDBContext = _dbContext.ArticleViews;
-            return View(videoDBContext);
+            return View(articles);
         }
 
         [HttpPost]
-        public IActionResult LoadIndex([FromBody] forumDto searchDTO)
+        public async Task<IActionResult> LoadIndex([FromBody] forumDto searchDTO)
         {
             try {
-                var article = searchDTO.categoryId == 0 ? _dbContext.ArticleViews : _dbContext.ArticleViews
-                                                                                .Where(c => c.ThemeId == searchDTO.categoryId);
+                IQueryable<ArticleView> article = searchDTO.categoryId == 0 ? _dbContext.ArticleViews :
+                    _dbContext.ArticleViews.Where(c => c.ThemeId == searchDTO.categoryId);
 
                 // 關鍵字篩選
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
                     article = article.Where(c => c.Title.Contains(searchDTO.keyword) ||
-                                        c.ArticleContent.Contains(searchDTO.keyword) ||
-                                        c.MemberName.Contains(searchDTO.keyword));
+                                                c.ArticleContent.Contains(searchDTO.keyword) ||
+                                                c.MemberName.Contains(searchDTO.keyword));
                 }
 
                 // 排序
@@ -72,7 +79,7 @@ namespace Backstage.Controllers {
                 }
 
                 // 計算總筆數
-                int dataCount = article.Count();
+                int dataCount = await article.CountAsync();
 
                 // 分頁
                 int PagesSize = searchDTO.pageSize ?? 10;
@@ -80,7 +87,7 @@ namespace Backstage.Controllers {
                 int TotalPages = (int)Math.Ceiling(((decimal)dataCount / PagesSize));
 
                 // 跳過指定頁數的資料並取出當前頁面的資料
-                var articles = article.Skip((Page - 1) * PagesSize).Take(PagesSize).ToList();
+                var articles = await article.Skip((Page - 1) * PagesSize).Take(PagesSize).ToListAsync();
 
                 // 準備回傳的 DTO
                 ForumPagingDTO pagingDTO = new ForumPagingDTO {
@@ -95,6 +102,7 @@ namespace Backstage.Controllers {
                 throw new Exception(ex.Message,ex);
             }
         }
+
         [HttpPost]
         public IActionResult Register(UserInfo user)
         {
@@ -147,9 +155,9 @@ namespace Backstage.Controllers {
             if(article == null) {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,
+            ViewData["AuthorId"] = new SelectList( _dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
+            ViewData["ThemeId"] = new SelectList(_cachedThemes,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }
@@ -181,7 +189,7 @@ namespace Backstage.Controllers {
             }
             ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
+            ViewData["ThemeId"] = new SelectList(_cachedThemes,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }
