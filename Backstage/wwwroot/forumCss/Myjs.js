@@ -64,7 +64,7 @@ function judgePages(data) {
     }
 
     liPages.innerHTML = strPageLi
-    $('h3').text(`共計有${data.totalCount}筆資料，現在是${curretPages}/${totalPages}頁`);
+    $('#h3').text(`共計有${data.totalCount}筆資料，現在是${curretPages}/${totalPages}頁`);
 
 }
 
