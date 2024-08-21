@@ -1,0 +1,63 @@
+﻿@model Backstage.Models.PlayList
+
+<form asp-action="PlayListEdit" method="post" enctype="multipart/form-data">
+    <div class="modal-header">
+        <h5 class="modal-title">編輯播放清單</h5>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label asp-for="PlayListId" class="control-label">播放清單編號</label>
+            <input asp-for="PlayListId" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="PlayListName" class="control-label">播放清單名稱</label>
+            <input asp-for="PlayListName" class="form-control" />
+            <span asp-validation-for="PlayListName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PlayListDescription" class="control-label">播放清單描述</label>
+            <textarea asp-for="PlayListDescription" class="form-control"></textarea>
+            <span asp-validation-for="PlayListDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShowImage" class="control-label">更換播放清單封面圖</label>
+            <img id="imgPreview"
+                 src="@(Model.ShowImage != null ? Url.Action("GetPicture", "Playlist", new { id = Model.PlayListId }) : "~/img/noimageooo.jpg")"
+                 title="現有圖片" style="width: 100%; height: auto; object-fit: cover; object-position: top;">
+            <input type="file" id="ShowImage" name="ShowImage" asp-for="ShowImage" class="form-control-file" />
+            <span asp-validation-for="ShowImage" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">保存更改</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function previewImage(inputFile) {
+            if (inputFile.files && inputFile.files[0]) {
+                var allowType = "image.*";
+                if (inputFile.files[0].type.match(allowType)) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#imgPreview").attr('src', e.target.result);
+                        $("#imgPreview").attr('title', inputFile.files[0].name);
+                    };
+                    reader.readAsDataURL(inputFile.files[0]);
+                } else {
+                    alert("不支援上傳檔案格式!!");
+                    $("#ShowImage").val("");
+                }
+            }
+        }
+        $("#ShowImage").on("change", function () {
+            previewImage(this);
+        });
+    </script>
+}

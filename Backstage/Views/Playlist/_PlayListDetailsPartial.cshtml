@@ -1,0 +1,39 @@
+﻿@model Backstage.Models.PlayList
+
+<div class="modal-header">
+    <h5 class="modal-title">播放清單詳細資料</h5>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label asp-for="PlayListId" class="control-label">播放清單編號</label>
+        <input asp-for="PlayListId" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="PlayListName" class="control-label">播放清單名稱</label>
+        <input asp-for="PlayListName" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="PlayListDescription" class="control-label">播放清單描述</label>
+        <textarea asp-for="PlayListDescription" class="form-control" readonly></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="ViewCount" class="control-label">瀏覽次數</label>
+        <input asp-for="ViewCount" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="LikeCount" class="control-label">喜歡次數</label>
+        <input asp-for="LikeCount" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="AddedCount" class="control-label">新增次數</label>
+        <input asp-for="AddedCount" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="SharedCount" class="control-label">分享次數</label>
+        <input asp-for="SharedCount" class="form-control" readonly />
+    </div>
+    <div class="form-group" style="position: relative; display: inline-block;">
+        <label asp-for="ShowImage" class="control-label">播放清單圖片</label>
+        <img src="data:image/png;base64,@(Convert.ToBase64String(Model.ShowImage ?? new byte[0]))" class="img-fluid" alt="@Model.PlayListName" style="width: 100%; height: auto; object-fit: cover; object-position: top;" />
+    </div>
+</div>

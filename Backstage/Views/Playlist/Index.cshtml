@@ -1,0 +1,138 @@
+﻿@model PlaylistViewModel
+
+<div class="container-fluid">
+    <div class="row-top">
+        <div class="col-12 d-flex justify-content-between align-items-center my-3">
+
+            <div class="d-flex">
+                <a href="javascript:void(0);" class="btn btn-success" onclick="createPlaylist()">新增</a>
+            </div>
+
+            <div class="d-flex justify-content-center" style="flex-grow: 1;">
+                <div id="table-selector" class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary" id="btn-playlists">播放清單</button>
+                    <button type="button" class="btn btn-outline-secondary" id="btn-items">播放清單內容</button>
+                    <button type="button" class="btn btn-outline-success" id="btn-memberPlaylists">會員播放清單</button>
+                    <button type="button" class="btn btn-outline-info" id="btn-collaborators">片單協作者</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-content">
+        <div id="content" class="col-12">
+            <div id="playlists" class="content-panel">
+                @await Html.PartialAsync("_PlayListPartial", Model.PlayLists)
+            </div>
+            <div id="items" class="content-panel d-none">
+                @await Html.PartialAsync("_PlayListItemPartial", Model.PlayListItems)
+            </div>
+            <div id="memberPlaylists" class="content-panel d-none">
+                @await Html.PartialAsync("_MemberPlayListPartial", Model.MemberPlayLists)
+            </div>
+            <div id="collaborators" class="content-panel d-none">
+                @await Html.PartialAsync("_PlayListCollaboratorPartial", Model.PlayListCollaborators)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popup-window" class="position-fixed bg-white shadow-lg rounded" style="width: 400px; height: 400px; display: none; bottom: 0; right: 120px;">
+    <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+        <h5 id="popup-title" class="m-0">Title</h5>
+        <button type="button" class="btn-close" aria-label="Close" onclick="closePopup()"></button>
+    </div>
+    <div id="popup-content" class="p-3 overflow-auto" style="height: calc(100% - 60px);">
+        <!-- 右下角視窗預計顯示的地方 -->
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table-selector button').on('click', function () {
+                var targetUrl = '';
+
+                switch (this.id) {
+                    case 'btn-playlists':
+                        targetUrl = '@Url.Action("LoadPlayListPartial", "Playlist")';
+                        break;
+                    case 'btn-items':
+                        targetUrl = '@Url.Action("LoadPlayListItemPartial", "Playlist")';
+                        break;
+                    case 'btn-memberPlaylists':
+                        targetUrl = '@Url.Action("LoadMemberPlayListPartial", "Playlist")';
+                        break;
+                    case 'btn-collaborators':
+                        targetUrl = '@Url.Action("LoadPlayListCollaboratorPartial", "Playlist")';
+                        break;
+                }
+
+                if (targetUrl !== '') {
+                    $.ajax({
+                        url: targetUrl,
+                        type: 'GET',
+                        success: function (data) {
+                            $('#content').html(data);
+                        },
+                        error: function () {
+                            alert('Failed to load data.');
+                        }
+                    });
+                }
+            });
+        });
+
+        function showPopup(title, contentUrl) {
+            $('#popup-title').text(title);
+            $.ajax({
+                url: contentUrl,
+                type: 'GET',
+                success: function (data) {
+                    $('#popup-content').html(data);
+                    $('#popup-window').show();
+                },
+                error: function () {
+                    alert('Failed to load content.');
+                }
+            });
+        }
+
+        function closePopup() {
+            $('#popup-window').hide();
+        }
+
+        function showDetails(id) {
+            var url = '/Playlist/PlayListDetails/' + id;
+            showPopup('清單', url);
+        }
+
+        function editPlaylist(id) {
+            var url = '/Playlist/PlayListEdit/' + id;
+            showPopup('編輯', url);
+        }
+
+        function createPlaylist() {
+            var url = '/Playlist/PlayListCreate';
+            showPopup('新增', url);
+        }
+
+        function deletePlaylist(id) {
+            if (confirm('確定要刪除嗎？')) {
+                $.ajax({
+                    url: '/Playlist/PlayListDeleteConfirmed/' + id,
+                    type: 'POST',
+                    success: function (data) {
+                        $('#playlists').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        alert('刪除失敗: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}
