@@ -1,0 +1,41 @@
+﻿@model List<prjFilmMember.Model.GiftListInfo>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.js"></script>
+<div class="text-center">
+    <h3 class="display-4">贈品清單維護</h3>
+
+
+</div>
+
+<button type="button" onclick="window.location.href='@Url.Action("GiftListDetail","GiftManage")'">新增清單</button>
+
+<table class="table" id="GiftList">
+    <thead>
+        <tr>
+            <th>贈品清單編號</th>
+            <th>贈品清單</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.GiftListID </td>
+                <td>@item.GiftName</td>
+                <td>
+                    <button type="button" onclick="window.location.href='@Url.Action("GiftListDetail","GiftManage",new {giftlistId=item.GiftListID})'">編輯清單</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+
+    new DataTable('#GiftList');
+
+</script>
+

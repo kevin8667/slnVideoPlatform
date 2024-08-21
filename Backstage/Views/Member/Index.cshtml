@@ -1,0 +1,70 @@
+﻿@model List<prjFilmMember.Model.MemberInfo>
+@using prjFilmMember.Description
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.js"></script>
+<div class="text-center">
+    <h3 class="display-4">會員管理</h3>
+</div>
+<table class="table" id="MemberList">
+    <thead>
+        <tr>
+            <th>會員編號</th>
+            <th>Email</th>
+            <th>姓名</th>
+            <th>性別</th>
+            <th>生日</th>
+            <th>等級</th>
+            <th>積分</th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><a href="#">@item.MemberID</a> </td>
+                <td>@item.Email</td>
+                <td>@item.MemberName</td>
+                <td>@MemberMappingDesc.Gender.GetDesc(item.Gender)</td>
+                <td>@item.Birth.Date</td>
+                <td>@item.Grade</td>
+                <td>@item.Point</td>
+                <td>
+                    <button type="button" onclick="ModifyStatus('@item.MemberID',this)"> @MemberMappingDesc.Status.GetButtonText(item.Status) </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    new DataTable('#MemberList');
+
+    function ModifyStatus(memberId, obj) {
+        debugger;
+        var url = "@Url.Action("ModifyStatus", "Member")";
+        fetch(`${url}?memberId=${memberId}`, {
+            method: 'POST', // 假設是用POST，根據你的需要
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.isSuccess) {
+                    // 這裡可以根據需要更新按鈕文字或頁面
+                    obj.textContent = result.btnText;
+                }
+                swal.fire(result.msg);
+
+            })
+            .catch(error => {
+                console.error('錯誤:', error);
+                swal.fire('請求失敗，請稍後再試！');
+            });
+    }
+
+
+</script>

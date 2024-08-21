@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VdbAPI", "VdbAPI\VdbAPI.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backstage", "Backstage\Backstage.csproj", "{699E36DF-392C-4236-A333-F8804756F8B4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "prjFilmMember", "..\Users\Jolin Chan\Downloads\prjFilmMember-20240821T045134Z-001\prjFilmMember\prjFilmMember.csproj", "{418443CC-3F56-471C-9BBA-C367E62CF11E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{699E36DF-392C-4236-A333-F8804756F8B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{699E36DF-392C-4236-A333-F8804756F8B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{699E36DF-392C-4236-A333-F8804756F8B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{418443CC-3F56-471C-9BBA-C367E62CF11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{418443CC-3F56-471C-9BBA-C367E62CF11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{418443CC-3F56-471C-9BBA-C367E62CF11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{418443CC-3F56-471C-9BBA-C367E62CF11E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

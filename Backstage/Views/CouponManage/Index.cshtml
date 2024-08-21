@@ -1,0 +1,44 @@
+﻿@model List<prjFilmMember.Model.CouponInfo>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.js"></script>
+<div class="text-center">
+    <h3 class="display-4">優惠券管理</h3>
+</div>
+<button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("CouponDetail","CouponManage")'">新增優惠券</button>
+<table class="table" id="CouponList">
+    <thead>
+        <tr>
+            <th>優惠券編號</th>
+            <th>優惠券名稱</th>
+            <th>優惠券說明</th>
+            <th>折扣類型</th>
+            <th>折扣公式</th>
+            <th>備註</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CouponID</td>
+                <td>@item.CouponName</td>
+                <td>@item.CouponDesc</td>
+                <td>@prjFilmMember.Description.CouponInfoMappingDesc.Type.GetDesc(item.Type)</td>
+                <td>@item.DiscountFormula</td>
+                <td>@item.Remark</td>
+                <td>
+                    <button type="button" onclick="window.location.href='@Url.Action("CouponDetail","CouponManage",new {CouponId=item.CouponID})'">編輯</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    new DataTable('#CouponList');
+
+   
+
+</script>

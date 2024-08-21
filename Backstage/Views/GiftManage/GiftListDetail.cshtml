@@ -1,0 +1,193 @@
+﻿@model List<Backstage.ViewModels.GiftListMaintainViewModel.GiftList>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<div class="container mt-5">
+    <!-- 頁面標題與清單編號 -->
+    <div class="text-center mb-4">
+        <h3 class="display-5 fw-bold">贈品清單維護</h3>
+        <label class="h5">
+            清單編號 : <span class="badge bg-secondary">@ViewBag.giftListId</span>
+        </label>
+    </div>
+
+    <!-- 操作按鈕 -->
+    <div class="text-center mb-4">
+        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addGiftModal" onclick="prepareAddGift()">新增贈品</button> &nbsp;
+        <button class="btn btn-primary" onclick="SaveGiftList()">儲存清單</button>
+    </div>
+
+    <!-- 贈品列表 -->
+    <div class="list-group">
+        @foreach (var item in Model)
+        {
+            <div class="list-group-item d-flex align-items-center justify-content-between">
+                <!-- Checkbox 和贈品選項 -->
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="GiftId" id="@item.GiftId" value="@item.GiftId" @(item.IsSelected ? "checked" : "") />
+                    <label class="form-check-label" for="@item.GiftId">[數量 : <span style="color:red;font-weight:900">@item.Qty</span>] @item.GiftName</label>
+                </div>
+
+                <!-- 編輯按鈕，靠右 -->
+                <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"   data-bs-toggle="modal" data-bs-target="#addGiftModal" onclick="prepareEditGift('@item.GiftId')"><i class="bi bi-pencil-fill"></i></a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Bootstrap Modal for Adding and Editing Gift -->
+<div class="modal fade" id="addGiftModal" tabindex="-1" aria-labelledby="addGiftModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal 標題 -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="addGiftModalLabel">新增/編輯贈品</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Modal 內容 -->
+            <div class="modal-body">
+                <form id="addGiftForm">
+                    <div class="mb-3">
+                        <label for="giftId" class="form-label">Gift ID</label>
+                        <input type="text" class="form-control" id="giftId" name="giftId" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="giftName" class="form-label">Gift Name</label>
+                        <input type="text" class="form-control" id="giftName" name="giftName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="giftDesc" class="form-label">Gift Description</label>
+                        <textarea class="form-control" id="giftDesc" name="giftDesc" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="giftQty" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="giftQty" name="Qty">
+                    </div>
+                    <div class="mb-3">
+                        <label for="giftPic" class="form-label">Picture</label>
+                        <input type="file" class="form-control" id="giftPic" name="giftPic" accept="image/*" onchange="previewImage()">
+                        <img id="giftPicPreview" src="" alt="Gift Image" class="img-fluid mt-2" style="display:none;">
+                    </div>
+                </form>
+            </div>
+            <!-- Modal 按鈕 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="submitGift()">儲存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentGiftId = '';
+    let currentImageUrl = '';
+
+    function prepareAddGift() {
+        currentGiftId = '';
+        currentImageUrl = '';
+        document.getElementById('addGiftForm').reset();
+        document.getElementById('giftId').value = '';
+        document.querySelector('#giftPicPreview').style.display = 'none';
+        document.querySelector('#addGiftModal .modal-title').textContent = '新增贈品';
+    }
+
+    function prepareEditGift(giftId) {
+        currentGiftId = giftId;
+        fetch(`@Url.Action("GetGiftDetails", "GiftManage")?id=${giftId}`)
+            .then(response => response.json())
+            .then(data => {
+                debugger;
+                document.getElementById('giftId').value = data.giftID;
+                document.getElementById('giftName').value = data.giftName;
+                document.getElementById('giftDesc').value = data.giftDesc;
+                document.getElementById('giftQty').value = data.qty;
+
+                if (data.pic) {
+                    document.getElementById('giftPicPreview').src = data.pic;
+                    document.getElementById('giftPicPreview').style.display = 'block';
+                } else {
+                    document.getElementById('giftPicPreview').style.display = 'none';
+                }
+
+                document.querySelector('#addGiftModal .modal-title').textContent = '編輯贈品';
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function previewImage() {
+        const file = document.getElementById('giftPic').files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('giftPicPreview').src = e.target.result;
+            document.getElementById('giftPicPreview').style.display = 'block';
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('giftPicPreview').style.display = 'none';
+        }
+    }
+
+    function submitGift() {
+        let formData = new FormData(document.getElementById('addGiftForm'));
+        formData.append('giftId', currentGiftId);
+
+        fetch('@Url.Action("SaveGift", "GiftManage")', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(result => {
+                let myModalEl = document.getElementById('addGiftModal');
+                let modal = bootstrap.Modal.getInstance(myModalEl);
+                modal.hide();
+                document.getElementById('addGiftForm').reset();
+                document.querySelector('#giftPicPreview').style.display = 'none';
+                Swal.fire({
+                    title: result.msg,
+                    timer: 2000, // 設定提示框顯示的時間，單位為毫秒
+                    timerProgressBar: true, // 顯示進度條
+                    willClose: () => {
+                        // 提示框關閉後重整頁面
+                        location.reload();
+                    }
+                });
+
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("儲存失敗");
+            });
+    }
+
+    function SaveGiftList() {
+        let selectedGifts = [];
+        document.querySelectorAll('input[name="GiftId"]:checked').forEach(checkbox => {
+            selectedGifts.push(checkbox.value);
+        });
+
+        let data = {
+            selectedGifts: selectedGifts,
+            giftListId: '@ViewBag.giftListId'
+        };
+
+        fetch('@Url.Action("SaveGiftList", "GiftManage")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                swal.fire(result.msg);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("儲存失敗");
+            });
+    }
+</script>

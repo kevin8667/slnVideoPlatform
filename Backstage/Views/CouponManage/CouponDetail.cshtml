@@ -1,0 +1,104 @@
+﻿@model Backstage.ViewModels.CouponDetailViewModel
+@using prjFilmMember.Description
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.js"></script>
+<div class="text-center">
+    <h3 class="display-4">優惠券管理</h3>
+</div>
+<div class="container mt-5">
+    <h2>@(Model.IsNew ? "新增優惠券" : "編輯優惠券")</h2>
+    <form id="couponForm" action="@Url.Action("SaveCouponDetail")"  method="post">
+        <div class="mb-3">
+            <label for="CouponID" class="form-label">Coupon ID</label>
+            <input type="hidden" value="@Model.IsNew" name="IsNew"/>
+            @if (Model.IsNew)
+            {
+                <input type="text" class="form-control" id="CouponID" placeholder="Enter Coupon ID">
+            }
+            else
+            {
+                <span>@Model.Detail.CouponID</span>
+                <input type="hidden" name="CouponID"/>
+            }
+
+        </div>
+
+        <div class="mb-3">
+            <label for="CouponName" class="form-label">Coupon Name</label>
+            <input type="text" class="form-control" id="CouponName" name="CouponName" value="@Model.Detail.CouponName" placeholder="Enter Coupon Name">
+        </div>
+
+        <div class="mb-3">
+            <label for="CouponDesc" class="form-label">Coupon Description</label>
+            <textarea class="form-control" id="CouponDesc" rows="3" placeholder="Enter Coupon Description">@Model.Detail.CouponDesc</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="Type" class="form-label">Type</label>
+            <select class="form-select" id="Type" onchange="TypeChange()">
+                <option value="@CouponInfoMappingDesc.Type.SearchDiscount">@CouponInfoMappingDesc.Type.GetDesc(CouponInfoMappingDesc.Type.SearchDiscount)</option>
+                <option value="@CouponInfoMappingDesc.Type.SearchGift">@CouponInfoMappingDesc.Type.GetDesc(CouponInfoMappingDesc.Type.SearchGift)</option>
+                <option value="@CouponInfoMappingDesc.Type.BothDiscount_Gift">@CouponInfoMappingDesc.Type.GetDesc(CouponInfoMappingDesc.Type.BothDiscount_Gift)</option>
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+            <label for="DiscountFormula" class="form-label">Discount Formula</label>
+            <input type="text" class="form-control" id="DiscountFormula" value="@Model.Detail.DiscountFormula" placeholder="Enter Discount Formula">
+        </div>
+
+        <div class="mb-3" id="GiftListDiv">
+            <label for="GiftListID" class="form-label">Gift List ID</label>
+            <select class="form-select" id="GiftListID">
+                @foreach (var item in Model.GiftList)
+                {
+                    <option value="@item.GiftListID">@item.GiftName</option>
+                }
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+            <label for="ExpireDate" class="form-label">Expire Date</label>
+            <input type="text" class="form-control" id="ExpireDate" value="@Model.Detail.ExpireDate">
+        </div>
+
+        <div class="mb-3">
+            <label for="Remark" class="form-label">Remark</label>
+            <textarea class="form-control" id="Remark" rows="2" placeholder="Enter Remarks">@Model.Detail.Remark</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" onclick="clearForm()">Cancel</button>
+    </form>
+</div>
+<script>
+    document.getElementById('GiftListID').value = '@Model.Detail.GiftListID';
+        document.getElementById('Type').value = '@Model.Detail.Type';
+        if (document.getElementById('Type').value != '@CouponInfoMappingDesc.Type.SearchDiscount') {
+        document.getElementById('GiftListDiv').style.display = 'block';
+        }else{
+        document.getElementById('GiftListDiv').style.display = 'none';
+
+        }
+
+    function TypeChange() {
+        if (document.getElementById('Type').value != '@CouponInfoMappingDesc.Type.SearchDiscount') {
+            document.getElementById('GiftListDiv').style.display = 'block';
+        } else {
+            document.getElementById('GiftListDiv').style.display = 'none';
+
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (ViewBag.AlertMsg!=null)
+{
+    <script>
+        Swal.fire("@Html.Raw(ViewBag.AlertMsg)");
+
+    </script>
+}

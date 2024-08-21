@@ -14,15 +14,23 @@
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <None Include="efpt.config.json.user" />
+    <None Include="Views\CouponManage\CouponDetail.cshtml" />
+    <None Include="Views\CouponManage\Index.cshtml" />
+    <None Include="Views\GiftManage\GiftListDetail.cshtml" />
+    <None Include="Views\GiftManage\Index.cshtml" />
+    <None Include="Views\Login\Index.cshtml" />
+    <None Include="Views\Member\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +39,12 @@
 
   <ItemGroup>
     <None Include="efpt.config.json.user" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="prjFilmMember">
+      <HintPath>..\..\prjFilmMember.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
