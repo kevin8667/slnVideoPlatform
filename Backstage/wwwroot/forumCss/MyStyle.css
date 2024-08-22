@@ -39,9 +39,7 @@ body > div > .content {
     background-image: url("https://www.transparenttextures.com/patterns/diagonal-striped-brick.png");
 }
 
-?.large-btn {
-    font-size: 1.2rem; /* 調整這個值來變更字體大小 */
-    padding: 1.2rem 1.2rem /* 調整這個值來變更內邊距 */
+.large-btn {
 }
 
 .btn-gradient {
@@ -53,14 +51,16 @@ body > div > .content {
 table.table thead {
     background-color: #4a4a4a; /* 深灰色背景 */
     color: #e0e0e0; /* 淺灰色文字 */
+    
 }
 
-    table.table thead th {
-        padding: 12px; /* 內邊距 */
-        text-align: left; /* 文字左對齊 */
-        font-family: Arial, sans-serif; /* 字體 */
-        border-bottom: 2px solid #e0e0e0; /* 淺灰色底部邊框 */
-    }
+table.table thead th {
+    padding: 12px; /* 內邊距 */
+    text-align: center; /* 文字水平置中 */
+    vertical-align: middle; /* 垂直置中 */
+    font-family: Arial, sans-serif; /* 字體 */
+    border-bottom: 2px solid #e0e0e0; /* 淺灰色底部邊框 */
+}
 
 /* 偶數行背景色 */
 table.table tbody tr:nth-child(even) {

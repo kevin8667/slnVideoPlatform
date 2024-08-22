@@ -8,36 +8,34 @@ using Microsoft.EntityFrameworkCore;
 namespace Backstage.Controllers {
     public class ArticlesController : Controller {
         private readonly VideoDBContext _dbContext;
-        private readonly IWebHostEnvironment _web; 
-        private static List<Theme>? _cachedThemes;
+        private readonly IWebHostEnvironment _web;
         public ArticlesController(VideoDBContext context,IWebHostEnvironment environment)
         {
             _dbContext = context;
             _web = environment;
-            if(_cachedThemes == null) {
-                _cachedThemes = _dbContext.Themes.ToList();
-            }
+           
+
         }
 
         //GET: Articles
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-            ViewBag.Theme = _cachedThemes;
 
-            var articles = await _dbContext.ArticleViews
-                .OrderBy(a => a.PostDate) // 可以根據需要進行排序
-                .Take(1) // 加載初始顯示的資料量
-                .ToListAsync();
-
-            return View(articles);
+            ViewBag.Theme = _dbContext.Themes;
+            var videoDBContext = _dbContext.ArticleViews.Take(1);
+            return View(videoDBContext);
         }
 
         [HttpPost]
         public async Task<IActionResult> LoadIndex([FromBody] forumDto searchDTO)
         {
             try {
-                IQueryable<ArticleView> article = searchDTO.categoryId == 0 ? _dbContext.ArticleViews :
-                    _dbContext.ArticleViews.Where(c => c.ThemeId == searchDTO.categoryId);
+                var article =  _dbContext.ArticleViews.AsQueryable();
+
+                // 篩選條件
+                if(searchDTO.categoryId != 0) {
+                    article = article.Where(c => c.ThemeId == searchDTO.categoryId);
+                }
 
                 // 關鍵字篩選
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
@@ -47,36 +45,7 @@ namespace Backstage.Controllers {
                 }
 
                 // 排序
-                switch(searchDTO.sortBy) {
-                    case "theme":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ThemeId) :
-                                                                article.OrderByDescending(s => s.ThemeId);
-                    break;
-                    case "memberName":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.MemberName) :
-                                                                article.OrderByDescending(s => s.MemberName);
-                    break;
-                    case "title":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
-                                                                article.OrderByDescending(s => s.Title);
-                    break;
-                    case "postDate":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
-                                                                article.OrderByDescending(s => s.PostDate);
-                    break;
-                    case "replyCount":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
-                                                                article.OrderByDescending(s => s.ReplyCount);
-                    break;
-                    case "lock":
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
-                                                                article.OrderByDescending(s => s.Lock);
-                    break;
-                    default:
-                    article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
-                                                                article.OrderByDescending(s => s.ArticleId);
-                    break;
-                }
+                article = sortArticle(searchDTO,article);
 
                 // 計算總筆數
                 int dataCount = await article.CountAsync();
@@ -90,7 +59,7 @@ namespace Backstage.Controllers {
                 var articles = await article.Skip((Page - 1) * PagesSize).Take(PagesSize).ToListAsync();
 
                 // 準備回傳的 DTO
-                ForumPagingDTO pagingDTO = new ForumPagingDTO {
+                ForumPagingDTO pagingDTO = new() {
                     TotalCount = dataCount,
                     TotalPages = TotalPages,
                     ForumResult = articles
@@ -101,6 +70,42 @@ namespace Backstage.Controllers {
             catch(Exception ex) {
                 throw new Exception(ex.Message,ex);
             }
+        }
+
+        private static IQueryable<ArticleView> sortArticle(forumDto searchDTO,IQueryable<ArticleView> article)
+        {
+            switch(searchDTO.sortBy) {
+                case "theme":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ThemeId) :
+                                                            article.OrderByDescending(s => s.ThemeId);
+                break;
+                case "memberName":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.MemberName) :
+                                                            article.OrderByDescending(s => s.MemberName);
+                break;
+                case "title":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
+                                                            article.OrderByDescending(s => s.Title);
+                break;
+                case "postDate":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
+                                                            article.OrderByDescending(s => s.PostDate);
+                break;
+                case "replyCount":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
+                                                            article.OrderByDescending(s => s.ReplyCount);
+                break;
+                case "lock":
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
+                                                            article.OrderByDescending(s => s.Lock);
+                break;
+                default:
+                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
+                                                            article.OrderByDescending(s => s.ArticleId);
+                break;
+            }
+
+            return article;
         }
 
         [HttpPost]
@@ -120,7 +125,7 @@ namespace Backstage.Controllers {
                     user.UserPhoto.CopyTo(filestream);
                 }
 
-                return Json(Url.Content("~"+filePath));
+                return Json(Url.Content("~" + filePath));
             }
             catch(Exception ex) {
                 return NotFound(new {
@@ -157,7 +162,7 @@ namespace Backstage.Controllers {
             }
             ViewData["AuthorId"] = new SelectList( _dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_cachedThemes,
+            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }
@@ -171,25 +176,32 @@ namespace Backstage.Controllers {
             if(id != article.ArticleId) {
                 return NotFound();
             }
-
-            if(ModelState.IsValid) {
-                try {
-                    _dbContext.Update(article);
-                    await _dbContext.SaveChangesAsync();
-                }
-                catch(DbUpdateConcurrencyException) {
-                    if(!ArticleExists(article.ArticleId)) {
-                        return NotFound();
+            try {
+                if(ModelState.IsValid) {
+                    try {
+                        _dbContext.Update(article);
+                        await _dbContext.SaveChangesAsync();
                     }
-                    else {
-                        throw;
+                    catch(DbUpdateConcurrencyException) {
+                        if(!ArticleExists(article.ArticleId)) {
+                            return NotFound();
+                        }
+                        else {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
+            catch(DbUpdateConcurrencyException ex) {
+                return NotFound(new {
+                    error = ex.Message,
+                });
+            }
+
             ViewData["AuthorId"] = new SelectList(_dbContext.MemberInfos,
                 "MemberId","MemberName",article.AuthorId);
-            ViewData["ThemeId"] = new SelectList(_cachedThemes,
+            ViewData["ThemeId"] = new SelectList(_dbContext.Themes,
                 "ThemeId","ThemeName",article.ThemeId);
             return View(article);
         }

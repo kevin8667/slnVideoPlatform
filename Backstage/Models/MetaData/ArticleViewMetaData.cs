@@ -15,6 +15,7 @@ namespace Backstage.Models.MetaData {
         public DateTime? PostDate {
             get; set;
         }
+        [Display(Name = "標題")]
 
         public string? Title {
             get; set;
