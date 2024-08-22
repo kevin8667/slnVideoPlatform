@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Backstage.Models.SeasonList>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary me-2">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Series.SeriesName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeasonName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeasonNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EpisodeCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Summary)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Series.SeriesName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeasonName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeasonNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EpisodeCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Summary)
+            </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">編輯</a> |
+                    <a asp-action="Detail" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">詳細</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">刪除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

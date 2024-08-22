@@ -7,7 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Backstage.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System.Linq.Dynamic.Core;
 
+
+// TODO: 將部分欄位統一至Overlay
 namespace Backstage.Controllers
 {
     public class VideoListController : Controller
@@ -23,8 +27,15 @@ namespace Backstage.Controllers
         public async Task<IActionResult> Index()
         {
             var videoDBContext = _context.VideoLists.Include(v => v.MainGenre).Include(v => v.Season).Include(v => v.Series).Include(v => v.Type);
+
+            var typeList = _context.TypeLists.Select(t => new { t.TypeId, t.TypeName }).ToList();
+
+            ViewBag.TypeFilter = new SelectList(typeList, "TypeId", "TypeName");
+
             return View(await videoDBContext.ToListAsync());
         }
+
+        
 
         // GET: VideoList/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,13 +59,68 @@ namespace Backstage.Controllers
             return View(videoList);
         }
 
+        public async Task<IActionResult> GetVideoDetails(int videoId)
+        {
+            var video = await _context.VideoLists
+                .Where(v => v.VideoId == videoId)
+                .Select(v => new {
+                    Series = v.Series.SeriesName != null ? v.Series.SeriesName.ToString() : string.Empty,
+                    Season = v.Season.SeasonNumber != null ? v.Season.SeasonNumber.ToString() : string.Empty,
+                    Episode = v.Episode != null ? v.Episode.ToString() : string.Empty,
+                    MainGenre = v.MainGenre.GenreName,
+                    RunningTime = v.RunningTime != null ? v.RunningTime.ToString() : string.Empty,
+                    IsShowing = v.IsShowing ? "上映中" : "已下檔",
+                    ReleaseDate = v.ReleaseDate != null ? v.ReleaseDate.ToString() : string.Empty,
+                    Lang = v.Lang != null ? v.Lang.ToString() : string.Empty,
+                    AgeRating = v.AgeRating != null ? v.AgeRating.ToString() : string.Empty,
+                    Summary = !string.IsNullOrEmpty(v.Summary) ? v.Summary : string.Empty,
+                }).FirstOrDefaultAsync();
+
+            if (video == null)
+            {
+                return NotFound();
+            }
+
+            return Json(video);
+        }
+        public async Task<IActionResult> GetImage(int videoId)
+        {
+            // 根據 videoId 查找 VideoList 中的 ThumbnailId
+            var video = await _context.VideoLists
+                .Where(v => v.VideoId == videoId)
+                .Select(v => new { v.ThumbnailId })
+                .FirstOrDefaultAsync();
+
+            if (video == null || video.ThumbnailId == null)
+            {
+                return Json(new { success = false, message = "找不到對應的影片或縮圖。" });
+            }
+
+            // 根據 ThumbnailId 查找 ImageList 中的 ImagePath
+            var image = await _context.ImageLists
+                .Where(i => i.ImageId == video.ThumbnailId)
+                .Select(i => new { i.ImagePath })
+                .FirstOrDefaultAsync();
+
+            if (image == null)
+            {
+                return Json(new { success = false, message = "找不到對應的圖片。" });
+            }
+
+            // 組合圖片的完整 URL (假設圖片儲存在 wwwroot/img 下)
+            var imageUrl = Url.Content(image.ImagePath);
+
+            return Json(new { success = true, imageUrl });
+        }
+
         // GET: VideoList/Create
         public IActionResult Create()
         {
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName");
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId");
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName");
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName");
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View();
         }
 
@@ -82,9 +148,10 @@ namespace Backstage.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName", videoList.MainGenreId);
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId", videoList.SeasonId);
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName", videoList.SeasonId);
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName", videoList.TypeId);
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View(videoList);
         }
 
@@ -101,10 +168,14 @@ namespace Backstage.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.VideoId = videoList.VideoId;
+
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName", videoList.MainGenreId);
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId", videoList.SeasonId);
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName", videoList.SeasonId);
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName", videoList.TypeId);
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View(videoList);
         }
 
@@ -141,9 +212,10 @@ namespace Backstage.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName", videoList.MainGenreId);
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId", videoList.SeasonId);
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName", videoList.SeasonId);
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName", videoList.TypeId);
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View(videoList);
         }
 
@@ -202,60 +274,7 @@ namespace Backstage.Controllers
             return View(videoListFound.Summary);
         }
 
-        public async Task<IActionResult> EditThumbnail(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var videoList = await _context.VideoLists.FindAsync(id);
-            if (videoList == null)
-            {
-                return NotFound();
-            }
-            return View(videoList);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditThumbnail(int id, [Bind("VideoId,ThumbnailId")] VideoList videoList)
-        {
-            if (id != videoList.VideoId)
-            {
-                return NotFound();
-            }
-
-            var videoListFound = await _context.VideoLists.FindAsync(id);
-            if (videoListFound == null)
-            {
-                return NotFound();
-            }
-            videoListFound.ThumbnailId = videoList.ThumbnailId;
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(videoListFound);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VideoListExists(videoListFound.VideoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(videoListFound.Summary);
-        }
+        
 
         // GET: VideoList/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -275,6 +294,7 @@ namespace Backstage.Controllers
             {
                 return NotFound();
             }
+            ViewBag.VideoId = videoList.VideoId;
 
             return View(videoList);
         }

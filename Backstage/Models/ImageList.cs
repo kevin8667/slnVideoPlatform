@@ -9,7 +9,7 @@ namespace Backstage.Models;
 public partial class ImageList
 {
     public int ImageId { get; set; }
-    [Display(Name="上傳檔案路徑")]
+    [Display(Name ="圖片路徑")]
     public string ImagePath { get; set; }
 
     public virtual ICollection<ImageForVideoList> ImageForVideoLists { get; set; } = new List<ImageForVideoList>();

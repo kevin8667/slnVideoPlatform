@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary me-2">為作品新增圖片</a>
 </p>
 <table class="table">
     <thead>
@@ -25,7 +25,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Image.ImageId)
+                @Html.DisplayFor(modelItem => item.Image.ImagePath)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Video.VideoName)

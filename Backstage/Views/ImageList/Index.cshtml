@@ -8,6 +8,7 @@
 
 <p>
     <a asp-action="Create" class="btn btn-primary">新增</a>
+    <a asp-controller="ImageForVideoLIst" asp-action="Index" class="btn btn-primary me-2">管理作品圖片</a>
 </p>
 @* <table class="table">
     <thead>
@@ -38,7 +39,7 @@
         <div class="card w-75 h-">
             <img src="@item.ImagePath" class="card-img-top" alt="@item.ImageId">
             <div class="card-body">
-                    <h5 class="card-title">"@item.ImagePath"</h5>
+                    <h5 class="card-title">@System.IO.Path.GetFileNameWithoutExtension(item.ImagePath)</h5>
                     <a asp-action="Edit" asp-route-id="@item.ImageId" class="btn btn-primary">編輯</a> |
                     <a asp-action="Details" asp-route-id="@item.ImageId" class="btn btn-primary">詳細</a> |
                     <a asp-action="Delete" asp-route-id="@item.ImageId" class="btn btn-primary">刪除</a>
