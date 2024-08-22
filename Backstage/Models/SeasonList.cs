@@ -11,18 +11,18 @@ public partial class SeasonList
     public int SeasonId { get; set; }
     [Display(Name ="系列名稱")]
     public int? SeriesId { get; set; }
-
-    [Display(Name = "季名稱")]
+    [Display(Name ="季名稱")]
     public string SeasonName { get; set; }
-    [Display(Name = "季數")]
+    [Display(Name ="季數")]
     public int? SeasonNumber { get; set; }
-    [Display(Name = "集數")]
+    [Display(Name ="集數")]
     public int? EpisodeCount { get; set; }
-    [Display(Name = "推出日期")]
+    [Display(Name ="上映日期")]
     public DateOnly? ReleaseDate { get; set; }
-    [Display(Name = "簡介")]
+    [Display(Name ="簡介")]
     public string Summary { get; set; }
 
-    public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
+    public virtual SeriesList Series { get; set; }
 
+    public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }

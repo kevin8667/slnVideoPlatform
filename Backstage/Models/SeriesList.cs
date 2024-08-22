@@ -12,5 +12,7 @@ public partial class SeriesList
     [Display(Name ="系列名稱")]
     public string SeriesName { get; set; }
 
+    public virtual ICollection<SeasonList> SeasonLists { get; set; } = new List<SeasonList>();
+
     public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }

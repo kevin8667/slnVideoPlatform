@@ -9,10 +9,9 @@ namespace Backstage.Models;
 public partial class ImageForVideoList
 {
     public int Id { get; set; }
-    [Display(Name = "圖片ID")]
+    [Display(Name ="圖片路徑")]
     public int? ImageId { get; set; }
-
-    [Display(Name = "影片名稱")]
+    [Display(Name ="影片名稱")]
     public int? VideoId { get; set; }
 
     public virtual ImageList Image { get; set; }

@@ -117,8 +117,6 @@ public partial class VideoDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
-
         modelBuilder.Entity<ActorList>(entity =>
         {
             entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
@@ -350,8 +348,7 @@ public partial class VideoDBContext : DbContext
 
             entity.ToTable("GenreList");
 
-            entity.Property(e => e.GenreId)
-                .HasColumnName("GenreID");
+            entity.Property(e => e.GenreId).HasColumnName("GenreID");
             entity.Property(e => e.GenreName)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -461,8 +458,7 @@ public partial class VideoDBContext : DbContext
 
             entity.ToTable("ImageList");
 
-            entity.Property(e => e.ImageId)
-                .HasColumnName("ImageID");
+            entity.Property(e => e.ImageId).HasColumnName("ImageID");
             entity.Property(e => e.ImagePath)
                 .HasMaxLength(300)
                 .HasColumnName("imagePath");
@@ -941,6 +937,10 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.SeasonId).HasColumnName("SeasonID");
             entity.Property(e => e.SeasonName).HasMaxLength(50);
             entity.Property(e => e.SeriesId).HasColumnName("SeriesID");
+
+            entity.HasOne(d => d.Series).WithMany(p => p.SeasonLists)
+                .HasForeignKey(d => d.SeriesId)
+                .HasConstraintName("FK_SeasonList_SeriesList");
         });
 
         modelBuilder.Entity<Seat>(entity =>
