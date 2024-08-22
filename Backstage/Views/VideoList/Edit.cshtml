@@ -4,9 +4,8 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>編輯影片資訊</h1>
 
-<h4>VideoList</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,14 +13,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="VideoId" />
             <div class="form-group">
+                <label asp-for="VideoName" class="control-label"></label>
+                <input asp-for="VideoName" class="form-control" />
+                <span asp-validation-for="VideoName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="TypeId" class="control-label"></label>
                 <select asp-for="TypeId" class="form-control" asp-items="ViewBag.TypeId"></select>
                 <span asp-validation-for="TypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VideoName" class="control-label"></label>
-                <input asp-for="VideoName" class="form-control" />
-                <span asp-validation-for="VideoName" class="text-danger"></span>
+                <label asp-for="MainGenreId" class="control-label"></label>
+                <select asp-for="MainGenreId" class="form-control" asp-items="ViewBag.MainGenreId"></select>
+                <span asp-validation-for="MainGenreId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SeriesId" class="control-label"></label>
@@ -29,11 +33,6 @@
                     <option value="">無</option>
                 </select>
                 <span asp-validation-for="SeriesId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MainGenreId" class="control-label"></label>
-                <select asp-for="MainGenreId" class="form-control" asp-items="ViewBag.MainGenreId"></select>
-                <span asp-validation-for="MainGenreId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SeasonId" class="control-label"></label>

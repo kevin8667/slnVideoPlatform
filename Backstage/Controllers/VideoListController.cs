@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Backstage.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System.Linq.Dynamic.Core;
 
 
 // TODO: 將部分欄位統一至Overlay
@@ -25,8 +27,15 @@ namespace Backstage.Controllers
         public async Task<IActionResult> Index()
         {
             var videoDBContext = _context.VideoLists.Include(v => v.MainGenre).Include(v => v.Season).Include(v => v.Series).Include(v => v.Type);
+
+            var typeList = _context.TypeLists.Select(t => new { t.TypeId, t.TypeName }).ToList();
+
+            ViewBag.TypeFilter = new SelectList(typeList, "TypeId", "TypeName");
+
             return View(await videoDBContext.ToListAsync());
         }
+
+        
 
         // GET: VideoList/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -55,8 +64,8 @@ namespace Backstage.Controllers
             var video = await _context.VideoLists
                 .Where(v => v.VideoId == videoId)
                 .Select(v => new {
-                    Series = v.Series != null ? v.Series.ToString() : string.Empty,
-                    Season = v.Season != null ? v.Season.ToString() : string.Empty,
+                    Series = v.Series.SeriesName != null ? v.Series.SeriesName.ToString() : string.Empty,
+                    Season = v.Season.SeasonNumber != null ? v.Season.SeasonNumber.ToString() : string.Empty,
                     Episode = v.Episode != null ? v.Episode.ToString() : string.Empty,
                     MainGenre = v.MainGenre.GenreName,
                     RunningTime = v.RunningTime != null ? v.RunningTime.ToString() : string.Empty,
@@ -281,6 +290,7 @@ namespace Backstage.Controllers
             {
                 return NotFound();
             }
+            ViewBag.VideoId = videoList.VideoId;
 
             return View(videoList);
         }
