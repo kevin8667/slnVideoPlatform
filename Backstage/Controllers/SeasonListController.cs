@@ -21,7 +21,12 @@ namespace Backstage.Controllers
         // GET: SeasonList
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SeasonLists.ToListAsync());
+            var seasonLists = await _context.SeasonLists
+            .Include(s => s.Series)  // 包含 SeriesList 的資料
+            .ToListAsync();
+
+            return View(seasonLists);
+            //return View(await _context.SeasonLists.ToListAsync());
         }
 
         // GET: SeasonList/Details/5
@@ -43,9 +48,25 @@ namespace Backstage.Controllers
         }
 
         // GET: SeasonList/Create
-        public IActionResult Create()
+        //public IActionResult Create()
+        //{
+        //    // 獲取所有的 Series 資料
+        //    ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName");
+
+        //    return View();
+        //}
+        public IActionResult Create(int? seriesId)
         {
-            return View();
+            // 獲取所有的 Series 資料
+            ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName");
+
+            // 如果有 seriesId，設定為預設值
+            var model = new SeasonList
+            {
+                SeriesId = seriesId ?? 0 // 如果 seriesId 是 null，則設為 0
+            };
+
+            return View(model);
         }
 
         // POST: SeasonList/Create

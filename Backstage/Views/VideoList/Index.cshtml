@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>影片清單</h1>
+
 
 <link href="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.css" rel="stylesheet">
 <script src="https://cdn.datatables.net/v/dt/dt-2.1.4/datatables.min.js"></script>
@@ -60,13 +60,53 @@
             max-width: 600px;
         }
 
+        .table-container {
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            padding: 20px; /* 內邊距 */
+        }
+
+        #videoTable {
+            width: 100%; /* 使表格寬度充滿容器 */
+            max-width: 1200px; /* 設定最大寬度 */
+            border-collapse: collapse; /* 合併邊框 */
+        }
+
+            #videoTable thead th {
+                background-color: #f8f9fa; /* 標題背景顏色 */
+                color: #495057; /* 標題文字顏色 */
+                border: 1px solid #dee2e6; /* 標題邊框顏色 */
+                padding: 10px; /* 內邊距 */
+                text-align: left; /* 文字靠左對齊 */
+            }
+
+            #videoTable tbody td {
+                border: 1px solid #dee2e6; /* 單元格邊框顏色 */
+                padding: 10px; /* 內邊距 */
+            }
+
+            #videoTable tbody tr:nth-child(even) {
+                background-color: #f2f2f2; /* 隔行變色 */
+            }
+
+            #videoTable tbody tr:hover {
+                background-color: #e9ecef; /* 懸停背景顏色 */
+            }
+
+        .container {
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+        }
     </style>
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary me-2">新增</a>
-</p>
+
 <div class="justify-content-start m-0">
+    <h1>影片清單</h1>
+    <p>
+        <a asp-action="Create" class="btn btn-primary me-2">新增</a>
+    </p>
     <table id="videoTable" class="table display">
         <thead>
             <tr>

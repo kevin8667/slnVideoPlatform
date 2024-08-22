@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SeriesId)
+                @Html.DisplayNameFor(model => model.Series.SeriesName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SeasonName)
@@ -36,8 +36,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            
             <td>
-                @Html.DisplayFor(modelItem => item.SeriesId)
+                @Html.DisplayFor(modelItem => item.Series.SeriesName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SeasonName)
@@ -55,8 +56,8 @@
                 @Html.DisplayFor(modelItem => item.Summary)
             </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">詳細</a> |
-                    <a asp-action="Detail" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">編輯</a> |
+                    <a asp-action="Edit" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">編輯</a> |
+                    <a asp-action="Detail" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">詳細</a> |
                     <a asp-action="Delete" asp-route-id="@item.SeasonId" class="btn btn-primary me-2">刪除</a>
             </td>
         </tr>

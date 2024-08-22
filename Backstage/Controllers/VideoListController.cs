@@ -117,9 +117,10 @@ namespace Backstage.Controllers
         public IActionResult Create()
         {
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName");
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId");
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName");
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName");
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View();
         }
 
@@ -147,9 +148,10 @@ namespace Backstage.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName", videoList.MainGenreId);
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId", videoList.SeasonId);
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName", videoList.SeasonId);
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName", videoList.TypeId);
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View(videoList);
         }
 
@@ -170,9 +172,10 @@ namespace Backstage.Controllers
             ViewBag.VideoId = videoList.VideoId;
 
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName", videoList.MainGenreId);
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId", videoList.SeasonId);
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName", videoList.SeasonId);
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName", videoList.TypeId);
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View(videoList);
         }
 
@@ -209,9 +212,10 @@ namespace Backstage.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MainGenreId"] = new SelectList(_context.GenreLists, "GenreId", "GenreName", videoList.MainGenreId);
-            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonId", videoList.SeasonId);
+            ViewData["SeasonId"] = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName", videoList.SeasonId);
             ViewData["SeriesId"] = new SelectList(_context.SeriesLists, "SeriesId", "SeriesName", videoList.SeriesId);
             ViewData["TypeId"] = new SelectList(_context.TypeLists, "TypeId", "TypeName", videoList.TypeId);
+            ViewBag.SeasonList = new SelectList(_context.SeasonLists, "SeasonId", "SeasonName");
             return View(videoList);
         }
 
