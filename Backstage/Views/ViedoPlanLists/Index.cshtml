@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Plan)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Viedo)
+                @Html.DisplayNameFor(model => model.Video)
             </th>
             <th></th>
         </tr>
@@ -28,12 +28,12 @@
                 @Html.DisplayFor(modelItem => item.Plan.PlanName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Viedo.VideoName)
+                @Html.DisplayFor(modelItem => item.Video.VideoName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ViedoPlanId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ViedoPlanId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ViedoPlanId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.videoPlanId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.videoPlanId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.videoPlanId">Delete</a>
             </td>
         </tr>
 }

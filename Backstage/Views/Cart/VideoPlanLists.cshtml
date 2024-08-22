@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewData["Title"] = "VideoPlanLists";
+}
+
+<h1>VideoPlanLists</h1>
+<select id="selPlanList" class="item">
+    <option value="0">請選擇</option>
+</select>
+<div id="div1"></div>
+<div id="div2"></div>
+<br />
+<button id="create1" class="btn btn-primary mb-3 item" data-bs-toggle="modal" data-bs-target="#addModal">新增</button>
+
+<table id="planTable">
+    <thead>
+        <tr>
+            <th>影片名稱</th>
+            <th>方案名稱</th>
+            <th>其他</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+</table>
+
+@* <!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">新增條目</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addForm">
+                    <div class="mb-3">
+                        <label for="planName" class="form-label">Plan Name:</label>
+                        <input type="text" class="form-control" id="planName" name="planName" required>
+                        
+                    </div>
+                    <div class="mb-3">
+                        <label for="videoName" class="form-label">Video Name:</label>
+                        <input type="text" class="form-control" id="videoName" name="videoName" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">新增</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+<!-- 引入 jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 引入 Popper.js（Bootstrap 的依賴） -->
+@* <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script> *@
+<!-- 引入 Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+<script>
+    
+
+    const selPlanList = document.querySelector('#selPlanList')
+    const div1 = document.querySelector('#div1')
+    const div2 = document.querySelector('#div2')
+    const create1 = document.querySelector('#create1')
+
+
+    //測試select功能
+    selPlanList.addEventListener('change', () => {
+        const i = selPlanList.selectedIndex
+        // div1.textContent = selPlanList.options[i].value
+        div2.textContent = selPlanList.options[i].text
+        searchData.keyword = selPlanList.options[i].text
+        loadVP();
+    })
+
+
+    function creatSpots(spot) {
+        const { videoName, planName } = spot
+        //console.log(videoName)
+
+        return `
+            <tr>
+                <td>${videoName}</td >
+                <td>${planName}</td>
+                <td><button id='delete'>刪除</button></td>
+            </tr>
+            `
+    }
+
+    const searchData = {"keyword": "3日方案"}
+    
+    const loadVP = async () => {
+        const api = '@Url.Content("~/Cart/searchVideoPlans")'
+        const response = await fetch(api, {
+            method: 'POST',
+            body: JSON.stringify(searchData),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        const data = await response.json()
+        // console.log(data)
+        
+        const tableBody = document.getElementById('planTable').getElementsByTagName('tbody')[0];
+        // console.log(data.viedoPlanList)
+        const mapjson = data.viedoPlanList.map(item => {
+           return `<tr>
+           <td>${item.VideoPlan.videoName}</td >
+               <td>${item.VideoPlan.planName}</td>
+           <td><button id='delete'>刪除</button></td>
+           </tr>`
+        })
+        console.log(mapjson);
+        // tableBody.innerHTML = mapjson;
+        
+        //     console.log(row)
+        // tableBody.appendChild()
+
+        // const spots = data.csVideoPlanLists.map(spot => creatSpots(spot))
+        
+        // const tableBody = document.querySelector('#tableBody');
+        // tableBody.innerHTML = spots.join("")
+
+    }
+
+
+    var testV = async () => {
+        //select loading
+        const apiPlanLists = '@Url.Content("~/Cart/showPlanLists")'
+        const responsePlanLists = await fetch(apiPlanLists)
+        const PlanLists = await responsePlanLists.json()
+        //console.log(PlanLists); // 添加這行來檢查 API 返回的數據結構，注意回傳欄位大小寫
+        const elePlanLists = PlanLists.map(plan => {
+            return (
+                `<option value='${plan.planId}'>${plan.planName}</option>`
+            )
+        })
+        console.log();
+        //selPlanList.innerHTML = elePlanLists.join("")
+        selPlanList.insertAdjacentHTML('beforeend', elePlanLists.join(""))
+
+        // //Table loading
+        // const apiVideoPlanLists = '@Url.Content("~/Cart/showVideoPlanLists")'
+        // const responseVideoPlanLists = await fetch(apiVideoPlanLists);
+        // const VideoPlanLists = await responseVideoPlanLists.json();
+        // //console.log(VideoPlanLists)
+
+        // const tableBody = document.getElementById('planTable').getElementsByTagName('tbody')[0];
+        // //console.log(tableBody)
+
+        // VideoPlanLists.forEach(VideoPlan => {
+        //     const row = document.createElement('tr');
+        //     row.innerHTML = `<td>${VideoPlan.videoName}</td > <td>${VideoPlan.planName}</td> <td><button id='delete'>刪除</button></td>`;
+        //     tableBody.appendChild(row);
+        // });
+        loadVP();
+    };
+
+    testV();
+
+
+</script>
+

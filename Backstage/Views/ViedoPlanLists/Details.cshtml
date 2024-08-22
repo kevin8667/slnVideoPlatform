@@ -17,14 +17,14 @@
             @Html.DisplayFor(model => model.Plan.PlanName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Viedo)
+            @Html.DisplayNameFor(model => model.Video)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Viedo.VideoName)
+            @Html.DisplayFor(model => model.Video.VideoName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ViedoPlanId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.videoPlanId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -21,7 +21,7 @@ namespace Backstage.Controllers
         // GET: ViedoPlanLists
         public async Task<IActionResult> Index()
         {
-            var videoDBContext = _context.ViedoPlanLists.Include(v => v.Plan).Include(v => v.Viedo);
+            var videoDBContext = _context.ViedoPlanLists.Include(v => v.Plan).Include(v => v.Video);
             return View(await videoDBContext.ToListAsync());
         }
 
@@ -35,8 +35,8 @@ namespace Backstage.Controllers
 
             var viedoPlanList = await _context.ViedoPlanLists
                 .Include(v => v.Plan)
-                .Include(v => v.Viedo)
-                .FirstOrDefaultAsync(m => m.ViedoPlanId == id);
+                .Include(v => v.Video)
+                .FirstOrDefaultAsync(m => m.videoPlanId == id);
             if (viedoPlanList == null)
             {
                 return NotFound();
@@ -66,8 +66,8 @@ namespace Backstage.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PlanId"] = new SelectList(_context.PlanLists, "PlanId", "PlanName", viedoPlanList.PlanId);
-            ViewData["ViedoId"] = new SelectList(_context.VideoLists, "VideoId", "VideoName", viedoPlanList.ViedoId);
+            ViewData["PlanId"] = new SelectList(_context.PlanLists, "PlanId", "PlanName", viedoPlanList.planId);
+            ViewData["ViedoId"] = new SelectList(_context.VideoLists, "VideoId", "VideoName", viedoPlanList.videoId);
             return View(viedoPlanList);
         }
 
@@ -84,8 +84,8 @@ namespace Backstage.Controllers
             {
                 return NotFound();
             }
-            ViewData["PlanId"] = new SelectList(_context.PlanLists, "PlanId", "PlanName", viedoPlanList.PlanId);
-            ViewData["ViedoId"] = new SelectList(_context.VideoLists, "VideoId", "VideoName", viedoPlanList.ViedoId);
+            ViewData["PlanId"] = new SelectList(_context.PlanLists, "PlanId", "PlanName", viedoPlanList.planId);
+            ViewData["ViedoId"] = new SelectList(_context.VideoLists, "VideoId", "VideoName", viedoPlanList.videoId);
             return View(viedoPlanList);
         }
 
@@ -96,7 +96,7 @@ namespace Backstage.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ViedoPlanId,PlanId,ViedoId")] ViedoPlanList viedoPlanList)
         {
-            if (id != viedoPlanList.ViedoPlanId)
+            if (id != viedoPlanList.videoPlanId)
             {
                 return NotFound();
             }
@@ -110,7 +110,7 @@ namespace Backstage.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ViedoPlanListExists(viedoPlanList.ViedoPlanId))
+                    if (!ViedoPlanListExists(viedoPlanList.videoPlanId))
                     {
                         return NotFound();
                     }
@@ -121,8 +121,8 @@ namespace Backstage.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PlanId"] = new SelectList(_context.PlanLists, "PlanId", "PlanName", viedoPlanList.PlanId);
-            ViewData["ViedoId"] = new SelectList(_context.VideoLists, "VideoId", "VideoName", viedoPlanList.ViedoId);
+            ViewData["PlanId"] = new SelectList(_context.PlanLists, "PlanId", "PlanName", viedoPlanList.planId);
+            ViewData["ViedoId"] = new SelectList(_context.VideoLists, "VideoId", "VideoName", viedoPlanList.videoId);
             return View(viedoPlanList);
         }
 
@@ -136,8 +136,8 @@ namespace Backstage.Controllers
 
             var viedoPlanList = await _context.ViedoPlanLists
                 .Include(v => v.Plan)
-                .Include(v => v.Viedo)
-                .FirstOrDefaultAsync(m => m.ViedoPlanId == id);
+                .Include(v => v.Video)
+                .FirstOrDefaultAsync(m => m.videoPlanId == id);
             if (viedoPlanList == null)
             {
                 return NotFound();
@@ -163,7 +163,7 @@ namespace Backstage.Controllers
 
         private bool ViedoPlanListExists(int id)
         {
-            return _context.ViedoPlanLists.Any(e => e.ViedoPlanId == id);
+            return _context.ViedoPlanLists.Any(e => e.videoPlanId == id);
         }
     }
 }

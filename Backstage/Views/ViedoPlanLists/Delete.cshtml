@@ -18,15 +18,15 @@
             @Html.DisplayFor(model => model.Plan.PlanName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Viedo)
+            @Html.DisplayNameFor(model => model.Video)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Viedo.VideoName)
+            @Html.DisplayFor(model => model.Video.VideoName)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="ViedoPlanId" />
+        <input type="hidden" asp-for="videoPlanId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
