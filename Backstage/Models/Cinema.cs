@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Backstage.Models;
 
@@ -9,10 +10,13 @@ public partial class Cinema
 {
     public int CinemaId { get; set; }
 
+    [DisplayName("影院名稱")]
     public string CinemaName { get; set; }
 
+    [DisplayName("影院地址")]
     public string CinemaAddress { get; set; }
 
+    [DisplayName("影院電話")]
     public string CinemaPhone { get; set; }
 
     public virtual ICollection<Hall> Halls { get; set; } = new List<Hall>();
