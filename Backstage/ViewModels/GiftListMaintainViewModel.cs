@@ -9,13 +9,13 @@
             public string Qty { get; set; }
             public bool IsSelected { get; set; }
         }
-        public class SaveInputData
+        public class SaveInputData // for 禮物清單使用 
         {
             public List<string> selectedGifts { get; set; }
             public string giftListId { get; set; }
         }
 
-        public class GiftViewModel
+        public class GiftInputViewModel // for 禮物明細使用
         {
             public int GiftID { get; set; }
             public string GiftName { get; set; }

@@ -1,7 +1,6 @@
 ﻿@{
     Layout=null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,21 +14,21 @@
 
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow-sm" style="width: 20rem;">
-            <h3 class="text-center mb-4">Login</h3>
+            <h3 class="text-center mb-4">登入入口</h3>
             <form action="@Url.Action("Login","Login")" method="post">
                 <!-- Username input -->
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter email" value="example8@example.com">
+                    <label for="email" class="form-label">電子信箱:</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="輸入電子信箱" value="example8@example.com">
                 </div>
                 <!-- Password input -->
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" value="password8">
+                    <label for="password" class="form-label">密碼:</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="輸入密碼" value="password8">
                 </div>
                 <!-- Login button -->
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-primary">登入</button>
                 </div>
             </form>
         </div>

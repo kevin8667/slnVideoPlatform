@@ -47,23 +47,23 @@
             <div class="modal-body">
                 <form id="addGiftForm">
                     <div class="mb-3">
-                        <label for="giftId" class="form-label">Gift ID</label>
+                        <label for="giftId" class="form-label">贈品編號</label>
                         <input type="text" class="form-control" id="giftId" name="giftId" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="giftName" class="form-label">Gift Name</label>
+                        <label for="giftName" class="form-label">贈品名稱</label>
                         <input type="text" class="form-control" id="giftName" name="giftName">
                     </div>
                     <div class="mb-3">
-                        <label for="giftDesc" class="form-label">Gift Description</label>
+                        <label for="giftDesc" class="form-label">贈品敘述</label>
                         <textarea class="form-control" id="giftDesc" name="giftDesc" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="giftQty" class="form-label">Quantity</label>
+                        <label for="giftQty" class="form-label">贈品數量</label>
                         <input type="number" class="form-control" id="giftQty" name="Qty">
                     </div>
                     <div class="mb-3">
-                        <label for="giftPic" class="form-label">Picture</label>
+                        <label for="giftPic" class="form-label">贈品照片</label>
                         <input type="file" class="form-control" id="giftPic" name="giftPic" accept="image/*" onchange="previewImage()">
                         <img id="giftPicPreview" src="" alt="Gift Image" class="img-fluid mt-2" style="display:none;">
                     </div>
@@ -78,6 +78,8 @@
     </div>
 </div>
 
+@section Scripts
+{
 <script>
     let currentGiftId = '';
     let currentImageUrl = '';
@@ -191,3 +193,4 @@
             });
     }
 </script>
+}

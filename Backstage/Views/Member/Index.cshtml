@@ -24,11 +24,11 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td><a href="#">@item.MemberID</a> </td>
+                <td><a href="@Url.Action("MemberDetail","Member",new {MemberID=item.MemberID})">@item.MemberID</a> </td>
                 <td>@item.Email</td>
                 <td>@item.MemberName</td>
                 <td>@MemberMappingDesc.Gender.GetDesc(item.Gender)</td>
-                <td>@item.Birth.Date</td>
+                <td>@item.Birth.ToString("yyyy/MM/dd")</td>
                 <td>@item.Grade</td>
                 <td>@item.Point</td>
                 <td>

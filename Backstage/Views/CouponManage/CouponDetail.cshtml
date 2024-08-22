@@ -25,12 +25,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="CouponName" class="form-label">Coupon Name</label>
+            <label for="CouponName" class="form-label">優惠券名稱</label>
             <input type="text" class="form-control" id="CouponName" name="CouponName" value="@Model.Detail.CouponName" placeholder="Enter Coupon Name">
         </div>
 
         <div class="mb-3">
-            <label for="CouponDesc" class="form-label">Coupon Description</label>
+            <label for="CouponDesc" class="form-label">優惠券描述</label>
             <textarea class="form-control" id="CouponDesc" rows="3" placeholder="Enter Coupon Description">@Model.Detail.CouponDesc</textarea>
         </div>
 
@@ -45,12 +45,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="DiscountFormula" class="form-label">Discount Formula</label>
+            <label for="DiscountFormula" class="form-label">算式</label>
             <input type="text" class="form-control" id="DiscountFormula" value="@Model.Detail.DiscountFormula" placeholder="Enter Discount Formula">
         </div>
 
         <div class="mb-3" id="GiftListDiv">
-            <label for="GiftListID" class="form-label">Gift List ID</label>
+            <label for="GiftListID" class="form-label">贈品清單編號</label>
             <select class="form-select" id="GiftListID">
                 @foreach (var item in Model.GiftList)
                 {
@@ -61,17 +61,17 @@
         </div>
 
         <div class="mb-3">
-            <label for="ExpireDate" class="form-label">Expire Date</label>
+            <label for="ExpireDate" class="form-label">有效期限</label>
             <input type="text" class="form-control" id="ExpireDate" value="@Model.Detail.ExpireDate">
         </div>
 
         <div class="mb-3">
-            <label for="Remark" class="form-label">Remark</label>
+            <label for="Remark" class="form-label">備註</label>
             <textarea class="form-control" id="Remark" rows="2" placeholder="Enter Remarks">@Model.Detail.Remark</textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="button" class="btn btn-secondary" onclick="clearForm()">Cancel</button>
+        <button type="submit" class="btn btn-primary">儲存</button>
+        <button type="button" class="btn btn-secondary" onclick="clearForm()">清除</button>
     </form>
 </div>
 <script>

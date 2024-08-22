@@ -20,6 +20,7 @@
     <None Include="Views\GiftManage\Index.cshtml" />
     <None Include="Views\Login\Index.cshtml" />
     <None Include="Views\Member\Index.cshtml" />
+    <None Include="Views\Member\MemberDetail.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +32,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
   <ItemGroup>

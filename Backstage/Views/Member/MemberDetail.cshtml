@@ -1,0 +1,100 @@
+﻿@model prjFilmMember.Model.MemberInfo
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<div class="container mt-5">
+    <!-- 頁面標題與清單編號 -->
+    <div class="text-center mb-4">
+        <h3 class="display-5 fw-bold">會員資料維護</h3>
+        <label class="h5">
+            會員編號 : <span class="badge bg-secondary">@ViewBag.MemberId</span>
+        </label>
+    </div>
+</div>
+<form id="MemberForm">
+    <div class="form-group">
+        <label for="email">電子信箱:</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="@Model.Email">
+    </div>
+    <div class="form-group">
+        <label for="nickName">暱稱:</label>
+        <input type="text" class="form-control" id="nickName" name="nickName" placeholder="Nick Name" value="@Model.NickName">
+    </div>
+    <div class="form-group">
+        <label for="memberName">會員姓名:</label>
+        <input type="text" class="form-control" id="memberName" name="memberName" placeholder="Member Name" value="@Model.MemberName">
+    </div>
+    <div class="form-group">
+        <label for="birth">生日:</label>
+        <input type="date" class="form-control" id="birth" name="birth" value="@Model.Birth.ToString("yyyy-MM-dd")">
+    </div>
+    <div class="form-group">
+        <label for="phone">手機:</label>
+        <input type="tel" class="form-control" id="phone" name="Phone" placeholder="Phone" value="@Model.Phone">
+    </div>
+    <div class="form-group">
+        <label for="address">地址:</label>
+        <textarea class="form-control" id="address" rows="3" name="address" placeholder="Address">@Model.Address</textarea>
+    </div>
+    <div class="form-group">
+        <label for="gender">性別:</label>
+        <select class="form-control" name="gender" id="gender" va>
+            <option value="M">男性</option>
+            <option value="F">女性</option>
+        </select>
+        <script>
+
+            document.getElementById('gender').value = '@Model.Gender';
+
+        </script>
+    </div>
+    <div class="form-group">
+        <label for="photoPath">會員圖片:</label>
+        <input type="file" class="form-control" id="MemberPic" name="MemberPic" accept="image/*" onchange="previewImage()">
+        <img id="MemberPicPreview" src="@Model.PhotoPath" alt="Member Image" class="img-fluid mt-2" />
+        <input type="hidden" name="photoPath" value="@Model.PhotoPath" />
+    </div>
+    <button type="button" class="btn btn-primary" onclick="submitMember()">儲存變更</button>
+    <button type="reset" class="btn btn-secondary" onclick="backMemberIndex()">返回上一頁</button>
+</form>
+<script>
+    function previewImage() {
+        const file = document.getElementById('MemberPic').files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('MemberPicPreview').src = e.target.result;
+            document.getElementById('MemberPicPreview').style.display = 'block';
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('MemberPicPreview').style.display = 'none';
+        }
+    }
+
+    function backMemberIndex(){
+        window.location.href='@Url.Action("Index","Member")'
+    }
+
+    function submitMember() {
+        let formData = new FormData(document.getElementById('MemberForm'));
+        formData.append('MemberId', '@ViewBag.MemberId');
+
+        fetch('@Url.Action("SaveMember", "Member")', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(result => {
+                Swal.fire(result.msg);
+
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("儲存失敗");
+            });
+    }
+
+</script>

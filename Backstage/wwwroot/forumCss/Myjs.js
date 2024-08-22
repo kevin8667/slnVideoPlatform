@@ -16,7 +16,7 @@ function createSpots(spot) {
                     ${memberName}
                 </td>
                 <td>
-                    ${title}
+                    ${title.length>20? title.substring(0,20)+'...':title.length}
                 </td>
                 <td>
                     <button type="button" class="btn btn-gradient me-1 mb-2 large-btn"

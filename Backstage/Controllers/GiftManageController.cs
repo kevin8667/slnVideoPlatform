@@ -64,7 +64,7 @@ namespace Backstage.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveGift(GiftViewModel model)
+        public ActionResult SaveGift(GiftInputViewModel model)
         {
             GiftInfo gInfo = new GiftInfo();
             string uploadsFolder = @"/img/Gift/";
