@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="prjFilmMember.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
+
   <ItemGroup>
     <Reference Include="prjFilmMember">
-      <HintPath>..\prjFilmMember.dll</HintPath>
+      <HintPath>prjFilmMember.dll</HintPath>
     </Reference>
   </ItemGroup>
 
