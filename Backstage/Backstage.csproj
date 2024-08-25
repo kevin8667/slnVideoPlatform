@@ -39,13 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="prjFilmMember">
-      <HintPath>..\..\prjFilmMember.dll</HintPath>
-    </Reference>
+    <None Include="efpt.config.json.user" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="efpt.config.json.user" />
+    <ProjectReference Include="..\prjFilmMember\prjFilmMember.csproj" />
   </ItemGroup>
 
 </Project>
