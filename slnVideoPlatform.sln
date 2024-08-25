@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backstage", "Backstage\Back
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "prjFilmMember", "prjFilmMember\prjFilmMember.csproj", "{3BB4060D-1547-4EA3-9D1F-7B402482ECD2}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "AngularFront", "AngularFront\AngularFront.esproj", "{79E9BF35-D033-4385-A35B-95326F4F183E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,12 @@ Global
 		{3BB4060D-1547-4EA3-9D1F-7B402482ECD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BB4060D-1547-4EA3-9D1F-7B402482ECD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BB4060D-1547-4EA3-9D1F-7B402482ECD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79E9BF35-D033-4385-A35B-95326F4F183E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E9BF35-D033-4385-A35B-95326F4F183E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E9BF35-D033-4385-A35B-95326F4F183E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{79E9BF35-D033-4385-A35B-95326F4F183E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E9BF35-D033-4385-A35B-95326F4F183E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79E9BF35-D033-4385-A35B-95326F4F183E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
