@@ -1,12 +1,12 @@
 import { Component,AfterViewInit } from '@angular/core';
 
 @Component({
-  selector: 'app-test',
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.css']
+  selector: 'app-video-dbfront-page',
+  templateUrl: './video-dbfront-page.component.html',
+  styleUrls: ['./video-dbfront-page.component.css']
 })
-export class TestComponent implements AfterViewInit{
-  
+export class VideoDBFrontPageComponent implements AfterViewInit{
+
   ngAfterViewInit(): void {
     $('.owl-carousel').owlCarousel({
       loop: true,
@@ -25,4 +25,5 @@ export class TestComponent implements AfterViewInit{
       }
     });
   }
+
 }
