@@ -63,6 +63,23 @@
 </div>
 <!-- Carousel End -->
 
+
+<div class="card">
+    <p-carousel [value]="videos" [numVisible]="3" [numScroll]="3" [circular]="true" [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
+        <ng-template let-product pTemplate="item">
+            <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+                <div class="mb-3">
+                    <img src="/assets/img/vendor-1.png" [alt]="product.name" class="w-6 shadow-2" />
+                </div>
+                <div>
+                    <h4 class="mb-1">{{ product.name }}</h4>
+                    <h6 class="mt-0 mb-3">{{ '$' + product.price }}</h6>
+                </div>
+            </div>
+        </ng-template>
+    </p-carousel>
+</div>
+
 <!-- Categories Start -->
 <div class="container-fluid pt-5">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
@@ -705,38 +722,3 @@
 </div>
 <!-- Products End -->
 
-
-<!-- Vendor Start -->
-<div class="container-fluid py-5">
-    <div class="row px-xl-5">
-        <div class="col">
-            <div class="owl-carousel vendor-carousel">
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-1.png" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-2.png" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-3.png" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-4.png" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-5.png" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-6.png" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-7.png" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="/assets/img/vendor-8.png" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Vendor End -->
