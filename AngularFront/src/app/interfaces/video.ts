@@ -1,6 +1,7 @@
 
 export interface Video
 {
+    videoID:number;
     videoName:string;
     typeID:number;
     seriesID:number;
@@ -12,7 +13,7 @@ export interface Video
     releaseDate:Date;
     rating:number;
     popularity:number;
-    thumbnailID:number;
+    thumbnailID:number;//
     lang:string;
     summary:string;
     views:number;

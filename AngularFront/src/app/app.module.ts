@@ -8,6 +8,10 @@ import { CarouselModule } from 'primeng/carousel';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { VideoDetailComponent } from './video-detail/video-detail.component';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,11 @@ import { VideoDetailComponent } from './video-detail/video-detail.component';
     NgbModule,
     CarouselModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    CardModule,
+    ButtonModule,
+    RippleModule,
+    SelectButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

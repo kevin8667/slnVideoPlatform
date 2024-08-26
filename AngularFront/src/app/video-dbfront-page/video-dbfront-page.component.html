@@ -63,17 +63,21 @@
 </div>
 <!-- Carousel End -->
 
+<h3 style="color: black;">推薦影片</h3>
+<div class="card flex justify-content-center" style="width: fit-content;">
+    <p-selectButton [options]="videoTypes" [multiple]="false" optionLabel="name"
+    (onChange)="onSelect($event)"></p-selectButton>
+</div>
 
 <div class="card">
     <p-carousel [value]="videos" [numVisible]="3" [numScroll]="3" [circular]="true" [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
-        <ng-template let-product pTemplate="item">
+        <ng-template let-video pTemplate="item">
             <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
                 <div class="mb-3">
-                    <img src="/assets/img/vendor-1.png" [alt]="product.name" class="w-6 shadow-2" />
+                    <a [routerLink]="['/details',video.videoId]"><img src="/assets/img/NoClue.jpg" [alt]="video.name" class="w-6 shadow-2" style="width: 200px;"/></a>
                 </div>
                 <div>
-                    <h4 class="mb-1">{{ product.name }}</h4>
-                    <h6 class="mt-0 mb-3">{{ '$' + product.price }}</h6>
+                    <h4 style="color: black;" class="mb-1">{{ video.videoName }}</h4>
                 </div>
             </div>
         </ng-template>

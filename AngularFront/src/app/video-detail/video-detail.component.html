@@ -1,1 +1,65 @@
-<p>video-detail works!</p>
+<p-card header="{{ video.videoName }}" class="p-mb-3">
+  <ng-template pTemplate="header">
+    <div class="text-center">
+      <img
+        [src]="'/assets/img/video-thumbnails/' + video.thumbnailID + '.png'"
+        alt="{{ video.videoName }}"
+        class="p-mb-2"
+        style="max-width: 100%; height: auto"
+      />
+    </div>
+  </ng-template>
+  <div class="p-d-flex p-jc-between p-ai-center">
+    <div>
+      <p><strong>Running Time:</strong> {{ video.runningTime }}</p>
+      <p><strong>Release Date:</strong> {{ video.releaseDate | date }}</p>
+      <p><strong>Rating:</strong> {{ video.rating }} / 5</p>
+      <p><strong>Views:</strong> {{ video.views }}</p>
+      <p><strong>Summary:</strong> {{ video.summary }}</p>
+      <p><strong>Language:</strong> {{ video.lang }}</p>
+      <p><strong>Age Rating:</strong> {{ video.ageRating }}</p>
+    </div>
+    <div>
+      <a
+        class="button"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-play"
+        label="Watch Trailer"
+        >預告片</a
+      >
+    </div>
+  </div>
+</p-card>
+<h3 style="color: black">推薦影片</h3>
+<div class="card">
+  <p-carousel
+    [value]="videos"
+    [numVisible]="3"
+    [numScroll]="3"
+    [circular]="true"
+    [responsiveOptions]="responsiveOptions"
+    [autoplayInterval]="3000"
+  >
+    <ng-template let-video pTemplate="item">
+      <div
+        class="border-1 surface-border border-round m-2 text-center py-5 px-3"
+      >
+        <div class="mb-3">
+          <a [routerLink]="['/details', video.videoId]"
+            ><img
+              src="/assets/img/NoClue.jpg"
+              [alt]="video.name"
+              class="w-6 shadow-2"
+              style="width: 200px"
+          /></a>
+        </div>
+        <div>
+          <h4 style="color: black" class="mb-1">{{ video.videoName }}</h4>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>

@@ -40,6 +40,20 @@ namespace VdbAPI.Controllers
 
             return videoList;
         }
+        [HttpGet("type:{typeID}")]
+        public async Task<ActionResult<VideoList>> GetVideoListByType(int typeID)
+        {
+            var videoList = await _context.VideoLists
+                .Where(v => v.TypeId == typeID)
+                .ToListAsync();
+
+            if (videoList == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(videoList);
+        }
 
         // PUT: api/VideoList/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

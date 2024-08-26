@@ -153,7 +153,7 @@
           <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav mr-auto py-0">
               <a asp-area="Frontend" asp-controller="Member" asp-action="Index" class="nav-item nav-link">會員</a>
-              <a asp-area="Frontend" asp-controller="VideoDB" asp-action="Index" class="nav-item nav-link">影視</a>
+              <a routerLink="VDB" class="nav-item nav-link">影視</a>
               <a asp-area="Frontend" asp-controller="Cart" asp-action="Index" class="nav-item nav-link">交易</a>
               <a asp-area="Frontend" asp-controller="Ticket" asp-action="Index" class="nav-item nav-link">票務</a>
               <a asp-area="Frontend" asp-controller="Forum" asp-action="Index" class="nav-item nav-link">社群</a>
@@ -175,8 +175,6 @@
     </div>
   </div>
   <!-- Navbar End -->
-
-  <a routerLink="/VDB">TEST</a>
 
   <router-outlet></router-outlet>
   

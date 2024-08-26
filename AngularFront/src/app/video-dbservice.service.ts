@@ -19,4 +19,31 @@ export class VideoDBServiceService {
 
     return this.httpClient.get<Video[]>('https://localhost:7193/api/VideoList')
   }
+  getVideoApiWithID(id:string){
+    
+    const url = `https://localhost:7193/api/VideoList/${id}`;
+    
+    this.httpClient.get<Video>(url)
+    .subscribe(video => {
+      console.log(video); // 输出获取的数据，检查是否返回了预期的数据
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<Video>(url)
+  }
+
+  getVideoApiWithTypeID(id:string){
+    
+    const url = `https://localhost:7193/api/VideoList/type:${id}`;
+    
+    this.httpClient.get<Video[]>(url)
+    .subscribe(videos => {
+      console.log(videos); // 输出获取的数据，检查是否返回了预期的数据
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<Video[]>(url)
+  }
 }

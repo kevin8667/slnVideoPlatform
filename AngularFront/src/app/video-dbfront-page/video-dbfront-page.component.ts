@@ -12,14 +12,40 @@ export class VideoDBFrontPageComponent implements OnInit{
 
   videos:Video[] =[];
 
+  name!: string;
+
+  typeID:any;
+
+  videoTypes:any[] = [
+
+    {name: '電影', typeID:'1'},
+    {name: '影集', typeID:'2'},
+    {name: '其他', typeID:'3'}
+  ];
+
   responsiveOptions: any[] | undefined;
 
   constructor(private videoDbService:VideoDBServiceService){
 
   }
 
+  onSelect(event:any){
+    if (event.value !== null && event.value !== undefined) {
+      this.typeID = event.value.typeID;  // 更新選中的值
+      this.videoDbService.getVideoApiWithTypeID(this.typeID.toString())
+    .subscribe((videos)=>{this.videos = videos});
+    } else {
+      // 處理取消選擇的情況，可能是將 selectedValue 設置為 null
+      this.typeID = null;
+      this.videoDbService.getVideoApi().subscribe((videos) => {
+        this.videos = videos;
+    });
+      console.log('Selection cleared');
+    }
+    
+  }
+
   ngOnInit() {
-    console.log(this.videos.length)
     this.videoDbService.getVideoApi().subscribe((videos) => {
         this.videos = videos;
     });
