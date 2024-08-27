@@ -6,8 +6,6 @@
   <meta content="Free HTML Templates" name="keywords">
   <meta content="Free HTML Templates" name="description">
 
-  <!-- Favicon -->
-  <!-- <link href="~/frontend/img/favicon.ico" rel="icon"> -->
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -18,16 +16,7 @@
   <!-- Libraries Stylesheet -->
   <link href="/assets/animate/animate.min.css" rel="stylesheet" />
   <link href="/assets/owlcarousel/assets/owl.carousel.min.css" rel="stylesnheet">
-  <!-- <link rel="stylesheet" href="/assets/css/bootstrap.min.css"> -->
-  <!-- <link rel="stylesheet" href="/assets/css/style.css"> -->
 
-  <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script> -->
-
-  <!-- Customized Bootstrap Stylesheet -->
-  <!-- <link href="/assets/css/style.css" rel="stylesheet"> -->
-  <!-- @RenderSection("Styles", required: false)   -->
 </head>
 <body>
   <!-- Topbar Start -->
@@ -152,7 +141,7 @@
           <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav mr-auto py-0">
               <a asp-area="Frontend" asp-controller="Member" asp-action="Index" class="nav-item nav-link">會員</a>
-              <a routerLink="VDB" class="nav-item nav-link">影視</a>
+              <a routerLink="videos" class="nav-item nav-link">影視</a>
               <a asp-area="Frontend" asp-controller="Cart" asp-action="Index" class="nav-item nav-link">交易</a>
               <a asp-area="Frontend" asp-controller="Ticket" asp-action="Index" class="nav-item nav-link">票務</a>
               <a asp-area="Frontend" asp-controller="Forum" asp-action="Index" class="nav-item nav-link">社群</a>
@@ -176,10 +165,6 @@
   <!-- Navbar End -->
 
   <router-outlet></router-outlet>
-
-  <!-- <main role="main" class="container"> -->
-    <!-- @RenderBody() -->
-  <!-- </main> -->
 
   <!-- Footer Start -->
   <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
@@ -254,19 +239,7 @@
   <!-- Back to Top -->
   <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
-  <!-- External CDN resources -->
-  <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script> -->
-
-  <!-- Local resources -->
-  <!-- <script src="/assets/easing/easing.min.js"></script> -->
-  <!-- <link href="/assets/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet"> -->
   <link href="/assets/easing/easing.min.js" rel="stylesheet">
-  <!-- Contact Javascript File -->
-  <!-- <script src="~/frontend/mail/jqBootstrapValidation.min.js"></script>
-  <script src="~/frontend/mail/contact.js"></script> -->
-  <!-- Template Javascript -->
-  <!-- <script src="~/assets/js/main.js"></script> -->
-  <!-- @RenderSection("Scripts", required: false) -->
+
 </body>
 </html>
