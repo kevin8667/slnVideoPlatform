@@ -1,19 +1,19 @@
 
 export interface Video
 {
-    videoID:number;
+    videoId:number;
     videoName:string;
-    typeID:number;
-    seriesID:number;
-    mainGenreID:number;
-    seasonID:number;
+    typeId:number;
+    seriesId:number;
+    mainGenreId:number;
+    seasonId:number;
     episode:number;
     runningTime:string;
     isShowing:boolean;
     releaseDate:Date;
     rating:number;
     popularity:number;
-    thumbnailID:number;//
+    thumbnailId:number;//
     lang:string;
     summary:string;
     views:number;

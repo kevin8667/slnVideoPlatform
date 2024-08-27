@@ -1,3 +1,4 @@
+import { Season } from './../interfaces/season';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoDBServiceService } from '../video-dbservice.service';
@@ -12,6 +13,8 @@ export class VideoDetailComponent implements OnInit{
 
   video:Video;
 
+  season: Season | undefined;
+
   videos:Video[] = [];
 
   responsiveOptions: any[] | undefined;
@@ -19,19 +22,19 @@ export class VideoDetailComponent implements OnInit{
 
   constructor(private route: ActivatedRoute, private videoService: VideoDBServiceService) {
     this.video = {
-      videoID: 1,
+      videoId: 1,
       videoName: 'Sample Video',
-      typeID: 2,
-      seriesID: 3,
-      mainGenreID: 4,
-      seasonID: 1,
+      typeId: 2,
+      seriesId: 3,
+      mainGenreId: 4,
+      seasonId: 1,
       episode: 1,
       runningTime: '01:30:00',
       isShowing: true,
       releaseDate: new Date('2024-01-01'),
       rating: 4.5,
       popularity: 100,
-      thumbnailID: 5,
+      thumbnailId: 5,
       lang: 'English',
       summary: 'This is a sample video summary.',
       views: 1000,
@@ -41,14 +44,23 @@ export class VideoDetailComponent implements OnInit{
   }
 
   ngOnInit() {
-    const vidoeID :string| null = this.route.snapshot.paramMap.get('id');
-    this.videoService.getVideoApiWithID(vidoeID!).subscribe((data)=>{
-      this.video = data
-    })
+    var videoID: string | null
+      this.route.paramMap.subscribe(params => {
+        videoID = params.get('id');
+
+      if (videoID) {
+        this.videoService.getVideoApiWithID(videoID).subscribe(data => {
+          this.video = data;
+          console.log(data);
+          if(this.video.seasonId){
+            this.videoService.getSeasonWithID(data.seasonId.toString()).subscribe((data)=>{this.season = data})
+          }
+        });
+      }
+    });
+
 
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
-
-    console.log(vidoeID);
 
     this.responsiveOptions = [
       {
