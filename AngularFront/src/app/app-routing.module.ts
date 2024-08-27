@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VideoDBFrontPageComponent } from './video-dbfront-page/video-dbfront-page.component';
+import { VideoDBFrontPageComponent } from './video-db/video-dbfront-page/video-dbfront-page.component';
 import { AppComponent } from './app.component';
 
 

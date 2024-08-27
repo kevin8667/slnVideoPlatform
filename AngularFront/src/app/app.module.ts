@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { TestComponent } from './test/test.component';
+import { TestComponent } from './video-db/test/test.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { VideoDBFrontPageComponent } from './video-dbfront-page/video-dbfront-page.component';
+import { VideoDBFrontPageComponent } from './video-db/video-dbfront-page/video-dbfront-page.component';
 import { CarouselModule } from 'primeng/carousel';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { VideoDetailComponent } from './video-detail/video-detail.component';
+import { VideoDetailComponent } from './video-db/video-detail/video-detail.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';

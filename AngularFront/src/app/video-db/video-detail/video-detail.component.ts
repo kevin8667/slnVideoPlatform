@@ -1,8 +1,8 @@
-import { Season } from './../interfaces/season';
+import { Season } from '../../interfaces/season';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { VideoDBServiceService } from '../video-dbservice.service';
-import { Video } from '../interfaces/video';
+import { VideoDBServiceService } from '../../video-dbservice.service';
+import { Video } from '../../interfaces/video';
 
 @Component({
   selector: 'app-video-detail',
