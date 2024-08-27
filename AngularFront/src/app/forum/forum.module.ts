@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { ArticleListComponent } from './article-list/article-list.component';
 import { ArticleComponent } from './article/article.component';
+import { NotFoundError } from 'rxjs';
 
 const routes: Routes = [
-  { path: '', component: ArticleListComponent }, // 當訪問 /article 時，載入 ArticleComponent
-  { path: 'article/:id', component: ArticleComponent }, // 當訪問 /article/post/:id 時，載入 PostComponent
-  { path: '**', component: ArticleListComponent }, // 當訪問 /article 時，載入 ArticleComponent
+  { path: '', component: ArticleListComponent },
+  { path: 'article/:id?', component: ArticleComponent },
+  {path:'**',component:ArticleListComponent} // 使用路由參數
 ];
 
 @NgModule({
-  declarations: [],
   imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
 export class ForumModule {}
