@@ -29,7 +29,7 @@ public partial class Article
 
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
-    public virtual MemberInfo Theme { get; set; }
+    public virtual MemberInfo Member { get; set; }
 
-    public virtual Theme ThemeNavigation { get; set; }
+    public virtual Theme Theme { get; set; }
 }
