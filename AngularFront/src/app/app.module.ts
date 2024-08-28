@@ -12,13 +12,15 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { VideoDbSearchComponent } from './video-db-search/video-db-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestComponent,
     VideoDBFrontPageComponent,
-    VideoDetailComponent
+    VideoDetailComponent,
+    VideoDbSearchComponent
   ],
   imports: [
     BrowserModule,

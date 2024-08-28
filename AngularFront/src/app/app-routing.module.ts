@@ -4,14 +4,15 @@ import { VideoDBFrontPageComponent } from './video-dbfront-page/video-dbfront-pa
 import { TestComponent } from './test/test.component';
 import { AppComponent } from './app.component';
 import { VideoDetailComponent } from './video-detail/video-detail.component';
+import { VideoDbSearchComponent } from './video-db-search/video-db-search.component';
 
 const routes: Routes = [
-    { path: 'VDB', component: VideoDBFrontPageComponent },
-    { path: 'test', component: TestComponent },
+    { path: 'video', component: VideoDBFrontPageComponent },
     { path:'details/:id', component: VideoDetailComponent},
+    { path: 'search', component: VideoDbSearchComponent },
     { path:"**", component: AppComponent}
   ];
-  
+
   @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]

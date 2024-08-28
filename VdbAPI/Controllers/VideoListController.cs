@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VdbAPI.Models;
 
 namespace VdbAPI.Controllers
@@ -40,7 +41,7 @@ namespace VdbAPI.Controllers
 
             return videoList;
         }
-        [HttpGet("type:{typeID}")]
+        [HttpGet("type={typeID}")]
         public async Task<ActionResult<VideoList>> GetVideoListByType(int typeID)
         {
             var videoList = await _context.VideoLists
@@ -53,6 +54,70 @@ namespace VdbAPI.Controllers
             }
 
             return Ok(videoList);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<VideoListDTO>>> SearchVideos(
+            string? videoName,
+            int? typeId,
+            string? summary,
+            string? genreName,
+            string? seriesName,
+            string? seasonName)
+        {
+            var query = _context.VideoLists
+                .Include(v => v.MainGenre)
+                .Include(v => v.Series)
+                .Include(v => v.Season)
+                .Include(v => v.Type) // 如果需要 Type 名稱
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(videoName))
+            {
+                query = query.Where(v => v.VideoName.Contains(videoName));
+            }
+
+            if (typeId.HasValue)
+            {
+                query = query.Where(v => v.TypeId == typeId);
+            }
+
+            if (!string.IsNullOrEmpty(summary))
+            {
+                query = query.Where(v => v.Summary.Contains(summary));
+            }
+
+            if (!string.IsNullOrEmpty(genreName))
+            {
+                query = query.Where(v => v.MainGenre.GenreName.Contains(genreName));
+            }
+
+            if (!string.IsNullOrEmpty(seriesName))
+            {
+                query = query.Where(v => v.Series.SeriesName.Contains(seriesName));
+            }
+
+            if (!string.IsNullOrEmpty(seasonName))
+            {
+                query = query.Where(v => v.Season.SeasonName.Contains(seasonName));
+            }
+
+            var videoListDTOs = await query.Select(v => new VideoListDTO
+            {
+                VideoId = v.VideoId,
+                VideoName = v.VideoName,
+                TypeId = v.TypeId,
+                TypeName = v.Type.TypeName, // 假設 Type 有 TypeName 屬性
+                Summary = v.Summary,
+                SeriesId = v.SeriesId,
+                SeriesName = v.Series.SeriesName,
+                SeasonId = v.SeasonId,
+                SeasonName = v.Season.SeasonName,
+                MainGenreId = v.MainGenreId,
+                MainGenreName = v.MainGenre.GenreName
+            }).ToListAsync();
+
+            return Ok(videoListDTOs);
         }
 
         // PUT: api/VideoList/5

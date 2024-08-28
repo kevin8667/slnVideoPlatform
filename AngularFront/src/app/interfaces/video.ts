@@ -19,4 +19,6 @@ export interface Video
     views:number;
     ageRating:string;
     trailerUrl:string;
+    mainGenreName:string;
+    seasonName:string;
 }

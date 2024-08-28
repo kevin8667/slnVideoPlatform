@@ -1,7 +1,7 @@
 import { Season } from './../interfaces/season';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { VideoDBServiceService } from '../video-dbservice.service';
+import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
 
 @Component({
@@ -20,7 +20,7 @@ export class VideoDetailComponent implements OnInit{
   responsiveOptions: any[] | undefined;
 
 
-  constructor(private route: ActivatedRoute, private videoService: VideoDBServiceService) {
+  constructor(private route: ActivatedRoute, private videoService: VideoDBService) {
     this.video = {
       videoId: 1,
       videoName: 'Sample Video',
@@ -39,7 +39,9 @@ export class VideoDetailComponent implements OnInit{
       summary: 'This is a sample video summary.',
       views: 1000,
       ageRating: 'PG',
-      trailerUrl: 'https://example.com/trailer'
+      trailerUrl: 'https://example.com/trailer',
+      mainGenreName:' ',
+      seasonName: ' '
   };
   }
 

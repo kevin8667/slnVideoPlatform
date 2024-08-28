@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Video } from '../interfaces/video';
-import { VideoDBServiceService } from '../video-dbservice.service';
+import { VideoDBService } from '../video-db.service';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class VideoDBFrontPageComponent implements OnInit{
 
   responsiveOptions: any[] | undefined;
 
-  constructor(private videoDbService:VideoDBServiceService){
+  constructor(private videoDbService:VideoDBService){
 
   }
 
@@ -42,7 +42,7 @@ export class VideoDBFrontPageComponent implements OnInit{
     });
       console.log('Selection cleared');
     }
-    
+
   }
 
   ngOnInit() {

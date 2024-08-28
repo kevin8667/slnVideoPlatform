@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Backstage.Models;
 
@@ -14,6 +15,6 @@ public partial class GenreList
     public string GenreName { get; set; }
 
     public virtual ICollection<GenresForVideoList> GenresForVideoLists { get; set; } = new List<GenresForVideoList>();
-
+    [JsonIgnore]
     public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }
