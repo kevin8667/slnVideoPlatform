@@ -91,13 +91,13 @@ export class VideoDBService {
       params = params.set('seasonName', seasonName);
     }
 
-    this.httpClient.get<Video>(url, { params })
+    this.httpClient.get<Video[]>(url, { params })
     .subscribe(video => {
       //console.log(video);
     }, error => {
       console.error('Error fetching videos:', error);
     });
 
-    return this.httpClient.get<Video>(url, { params })
+    return this.httpClient.get<Video[]>(url, { params })
   }
 }

@@ -40,7 +40,8 @@ export class VideoDbSearchComponent {
   searchVideos(): void {
     this.videoDbService.getSearchVideoApi(this.videoName, this.typeId, this.summary, this.genreName, this.seriesName, this.seasonName)
       .subscribe((response) => {
-        this.video=response;
+        console.log(response);
+        this.video=response[2];
         console.log(this.video);
       });
   }
