@@ -1,1 +1,27 @@
-<p *ngIf="video" style="color: black;">{{ video.videoName }}</p>
+<p *ngIf="video" style="color: black">{{ video.videoName }}</p>
+
+<div class="p-inputgroup" style="width: fit-content;">
+    <input type="text" pInputText placeholder="Keyword" [(ngModel)]="inputName"/>
+    <button type="button" pButton label="Search"></button>
+</div>
+<p style="color: black;">{{inputName}}</p>
+<div
+  class="card flex justify-content-center"
+  style="width: auto; height: 500px"
+>
+  <p-card
+    *ngIf="video"
+    header="{{ video.videoName }}"
+    subheader="Card Subheader"
+    [style]="{ width: '360px', height:'400px'}"
+  >
+    <ng-template pTemplate="header">
+      <img
+        alt="Card"
+        src="https://primefaces.org/cdn/primeng/images/usercard.png"
+      />
+    </ng-template>
+    <ng-template pTemplate="footer">
+    </ng-template>
+  </p-card>
+</div>

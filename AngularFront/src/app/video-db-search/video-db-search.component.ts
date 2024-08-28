@@ -3,13 +3,14 @@ import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-video-db-search',
   templateUrl: './video-db-search.component.html',
   styleUrls: ['./video-db-search.component.css']
 })
 export class VideoDbSearchComponent {
+
+  inputName:string ='';
 
   videoName: string | null = null;
   typeId: number | null = null;
@@ -21,7 +22,6 @@ export class VideoDbSearchComponent {
   video!: Video;
 
   constructor(private route: ActivatedRoute,private videoDbService:VideoDBService){}
-
 
 
   ngOnInit() {

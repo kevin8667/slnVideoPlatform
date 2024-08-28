@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { TestComponent } from './test/test.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 import { VideoDBFrontPageComponent } from './video-dbfront-page/video-dbfront-page.component';
 import { CarouselModule } from 'primeng/carousel';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { VideoDbSearchComponent } from './video-db-search/video-db-search.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -24,14 +25,15 @@ import { VideoDbSearchComponent } from './video-db-search/video-db-search.compon
   ],
   imports: [
     BrowserModule,
-    NgbModule,
     CarouselModule,
     AppRoutingModule,
     HttpClientModule,
     CardModule,
     ButtonModule,
     RippleModule,
-    SelectButtonModule
+    SelectButtonModule,
+    FormsModule,
+    InputTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]
