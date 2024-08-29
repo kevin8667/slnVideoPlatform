@@ -1,0 +1,28 @@
+
+
+.forumFlex {
+  display: flex;
+  width: 100%;
+}
+.buttonFlex {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 設置按鈕之間的間隔 */
+}
+
+.d2 {
+  flex: 70%;
+}
+.d1 {
+  flex: 10%;
+}
+.d3 {
+  flex: 20%;
+}
+/* 引入 Google Fonts */
+
+.text-label {
+  font-size: 1.5rem; /* 调整字体大小 */
+  color: #333; /* 字体颜色 */
+  font-weight: bold; /* 加粗字体 */
+}

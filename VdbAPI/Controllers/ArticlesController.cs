@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using VdbAPI.DTO;
 using VdbAPI.Models;
 
-namespace VdbAPI.Controllers
-{
+namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArticlesController : ControllerBase
-    {
+    public class ArticlesController : ControllerBase {
         private readonly VideoDBContext _context;
 
         public ArticlesController(VideoDBContext context)
@@ -24,9 +17,9 @@ namespace VdbAPI.Controllers
 
         // GET: api/Articles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Article>>> GetArticles()
+        public async Task<ActionResult<IEnumerable<Theme>>> GetThemes()
         {
-            return await _context.Articles.ToListAsync();
+            return await _context.Themes.ToListAsync();
 
         }
 
@@ -36,8 +29,7 @@ namespace VdbAPI.Controllers
         {
             var article = await _context.Articles.FindAsync(id);
 
-            if (article == null)
-            {
+            if(article == null) {
                 return NotFound();
             }
 
@@ -45,29 +37,23 @@ namespace VdbAPI.Controllers
         }
 
         // PUT: api/Articles/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutArticle(int id, Article article)
+        public async Task<IActionResult> PutArticle(int id,Article article)
         {
-            if (id != article.ArticleId)
-            {
+            if(id != article.ArticleId) {
                 return BadRequest();
             }
 
             _context.Entry(article).State = EntityState.Modified;
 
-            try
-            {
+            try {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ArticleExists(id))
-                {
+            catch(DbUpdateConcurrencyException) {
+                if(!ArticleExists(id)) {
                     return NotFound();
                 }
-                else
-                {
+                else {
                     throw;
                 }
             }
@@ -80,8 +66,7 @@ namespace VdbAPI.Controllers
         public async Task<IActionResult> DeleteArticle(int id)
         {
             var article = await _context.Articles.FindAsync(id);
-            if (article == null)
-            {
+            if(article == null) {
                 return NotFound();
             }
 
@@ -91,8 +76,8 @@ namespace VdbAPI.Controllers
             return NoContent();
         }
 
-        [HttpPost()]
-        public async Task<ActionResult<forumDto>> LoadIndex( forumDto searchDTO)
+        [HttpPost]
+        public async Task<ActionResult<forumDto>> LoadIndex(forumDto searchDTO)
         {
             try {
                 var article = _context.ArticleViews.AsQueryable();
@@ -113,7 +98,7 @@ namespace VdbAPI.Controllers
                 article = sortArticle(searchDTO,article);
 
                 // 計算總筆數
-                int dataCount = await article.CountAsync();
+                int dataCount = article.Count();
 
                 // 分頁
                 int pageSize = searchDTO.pageSize ?? 10;
@@ -166,8 +151,8 @@ namespace VdbAPI.Controllers
                                                             article.OrderByDescending(s => s.Lock);
                 break;
                 default:
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
-                                                            article.OrderByDescending(s => s.ArticleId);
+                article = searchDTO.sortType == "asc" ? article.OrderByDescending(s => s.UpdateDate) :
+                                                            article.OrderBy(s => s.UpdateDate);
                 break;
             }
 

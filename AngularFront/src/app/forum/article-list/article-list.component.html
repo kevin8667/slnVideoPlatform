@@ -1,25 +1,85 @@
-<div class="card">
-  <p-table [value]="articles" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>主題</th>
-        <th>作者</th>
-        <th>標題</th>
-        <th>發表時間</th>
-        <th>更新時間</th>
-        <th>回覆數</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-article>
-      <tr>
-        <td>{{ article.themeName }}</td>
-        <td>{{ article.memberName }}</td>
-        <td>{{ article.title }}</td>
-        <td>{{ article.postDate | forumDate }}</td>
-        <td>{{ article.updateDate | forumDate}}</td>
-        <td>{{ article.replyCount }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+  <div class="card flex justify-content-end">
+    <p-autoComplete
+      [(ngModel)]="forumDto.keyword"
+      (completeMethod)="search($event)"
+    ></p-autoComplete>
+  </div>
+<div>
 
+  <div class="card flex flex-column gap-3">
+    <div class="flex align-items-center justify-content-center">
+      <div class="flex justify-content-center align-items-center gap-3">
+        <span class="text-label">每頁文章筆數:</span>
+        <p-slider
+          [(ngModel)]="pages.rows3"
+          (ngModelChange)="onSliderChange()"
+          [style]="{ width: '10rem' }"
+          [min]="10"
+          [max]="100"
+          [step]="10"
+        ></p-slider>
+      </div>
+      <div></div>
+      <p-paginator
+        (onPageChange)="changePage($event)"
+        [first]="pages.first3"
+        [rows]="pages.rows3"
+        [totalRecords]="pages.totalRecords"
+        [showFirstLastIcon]="true"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="第{first}筆 - 第{last}筆 總共 {totalRecords}"
+      ></p-paginator>
+    </div>
+  </div>
+
+  <!-- 主題篩選開始 -->
+  <div class="buttonFlex">
+    <div class="d1">1</div>
+    <div>
+      <p-button
+        (onClick)="loadTheme(0)"
+        label="全部主題"
+        severity="secondary"
+      ></p-button>
+    </div>
+    <div *ngFor="let item of themeTag">
+      <p-button
+        (onClick)="loadTheme(item.themeId)"
+        label="{{ item.themeName }}"
+        severity="secondary"
+      ></p-button>
+    </div>
+    <div class="d3"></div>
+  </div>
+  <!-- 主題篩選結束 -->
+  <!-- 文章列表開始 -->
+  <div class="forumFlex">
+    <div class="d1"></div>
+    <div class="card d2">
+      <p-table [value]="articles" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>主題</th>
+            <th>作者</th>
+            <th>標題</th>
+            <!-- <th>發表時間</th> -->
+            <th>更新時間</th>
+            <th>回覆數</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-article>
+          <tr>
+            <!-- 改用ngFor -->
+            <td>{{ article.themeName }}</td>
+            <td>{{ article.memberName }}</td>
+            <td>{{ article.title }}</td>
+            <!-- <td>{{ article.postDate | forumDate }}</td> -->
+            <td>{{ article.updateDate | forumDate }}</td>
+            <td>{{ article.replyCount }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div class="d3"></div>
+  </div>
+</div>
