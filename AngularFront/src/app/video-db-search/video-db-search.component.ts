@@ -66,7 +66,7 @@ export class VideoDbSearchComponent implements OnInit {
   searchName()
   {
     this.videoName = this.inputName;
-    const pageNumber = 0;  // 預設為第1頁
+    const pageNumber = 1;  // 預設為第1頁
     const pageSize = this.pageSize || 10;  // 預設每頁顯示10條記錄
     //this.searchVideos();
     this.loadVideos({ page: pageNumber, rows: pageSize });
@@ -81,7 +81,7 @@ export class VideoDbSearchComponent implements OnInit {
 
   loadVideos(event: any) {
     console.log('Event:', event);
-    const pageNumber = event.page + 1; // PrimeNG page index starts from 0
+    const pageNumber = event.page; // PrimeNG page index starts from 0
     const pageSize = event.rows || this.pageSize;
     console.log(pageNumber);
     this.videoDbService.getSearchVideoApi(this.videoName, this.typeId, this.summary, this.genreName, this.seriesName, this.seasonName, pageNumber, pageSize)
