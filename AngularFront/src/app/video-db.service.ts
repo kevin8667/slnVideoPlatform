@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Video } from './interfaces/video';
 import { HttpParams } from '@angular/common/http';
+import { PagedResult } from './interfaces/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +68,7 @@ export class VideoDBService {
 
     return this.httpClient.get<Video[]>(url)
   }
-  getSearchVideoApi(videoName: string | null, typeId: number | null, summary: string | null, genreName: string | null, seriesName: string | null, seasonName: string | null){
+  getSearchVideoApi(videoName: string | null, typeId: number | null, summary: string | null, genreName: string | null, seriesName: string | null, seasonName: string | null , pageNumber: number, pageSize: number){
 
     const url = `https://localhost:7193/api/VideoList/search`
 
@@ -90,14 +91,16 @@ export class VideoDBService {
     if (seasonName) {
       params = params.set('seasonName', seasonName);
     }
+    params = params.set('pageNumber', pageNumber);
+    params = params.set('pageSize', pageSize);
 
-    this.httpClient.get<Video[]>(url, { params })
+    this.httpClient.get<PagedResult<Video>>(url, { params })
     .subscribe(video => {
-      //console.log(video);
+      console.log(video);
     }, error => {
       console.error('Error fetching videos:', error);
     });
 
-    return this.httpClient.get<Video[]>(url, { params })
+    return this.httpClient.get<PagedResult<Video>>(url, { params })
   }
 }

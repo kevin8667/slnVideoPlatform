@@ -14,6 +14,13 @@ import { RippleModule } from 'primeng/ripple';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { VideoDbSearchComponent } from './video-db-search/video-db-search.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { ChipsModule } from 'primeng/chips';
+import { DropdownModule } from 'primeng/dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
+import { DataViewModule } from 'primeng/dataview';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +40,13 @@ import { InputTextModule } from 'primeng/inputtext';
     RippleModule,
     SelectButtonModule,
     FormsModule,
-    InputTextModule
+    InputTextModule,
+    ChipsModule,
+    DropdownModule,
+    BrowserAnimationsModule,
+    PaginatorModule,
+    TableModule,
+    DataViewModule
   ],
   providers: [],
   bootstrap: [AppComponent]
