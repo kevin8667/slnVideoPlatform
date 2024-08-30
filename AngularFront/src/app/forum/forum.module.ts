@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { ArticleListComponent } from './article-list/article-list.component';
 import { ArticleComponent } from './article/article.component';
 import { TableModule } from 'primeng/table';
@@ -12,17 +11,21 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SliderModule } from 'primeng/slider';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DataViewModule } from 'primeng/dataview';
-
-const routes: Routes = [
-  { path: '', component: ArticleListComponent },
-  { path: ':id', component: ArticleComponent },
-  { path: '**', component: ArticleListComponent }, // 使用路由參數
-];
+import { NewArticleComponent } from './new-article/new-article.component';
+import { NewPostComponent } from './new-post/new-post.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ForumRoutingModule } from './forum-routing.module';
 
 @NgModule({
-  declarations: [ArticleListComponent, ArticleComponent, forumDatePipe],
+  declarations: [
+    ArticleListComponent,
+    ArticleComponent,
+    forumDatePipe,
+    NewArticleComponent,
+    NewPostComponent,
+  ],
   imports: [
-    RouterModule.forChild(routes),
     TableModule,
     HttpClientModule,
     ButtonModule,
@@ -31,8 +34,12 @@ const routes: Routes = [
     SliderModule,
     AutoCompleteModule,
     DataViewModule,
+    ReactiveFormsModule,
+    MultiSelectModule,
+    FormsModule,
+    ForumRoutingModule,
   ],
-  exports: [RouterModule],
+  exports: [],
   providers: [ForumServiceService],
 })
 export class ForumModule {}

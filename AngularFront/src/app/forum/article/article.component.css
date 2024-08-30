@@ -112,3 +112,19 @@ body {
 .reply-actions .action-btn {
   font-size: 0.875rem;
 }
+
+.reply-button {
+  background-color: #007bff; /* 按鈕背景色 */
+  color: white; /* 按鈕文字顏色 */
+  border: none; /* 取消邊框 */
+  border-radius: 4px; /* 邊框圓角 */
+  padding: 10px 20px; /* 內邊距 */
+  font-size: 14px; /* 字體大小 */
+  cursor: pointer; /* 鼠標指針 */
+  display: flex; /* 使圖標和文字對齊 */
+  align-items: center; /* 垂直對齊 */
+}
+
+.reply-button i {
+  margin-right: 8px; /* 圖標與文字間距 */
+}

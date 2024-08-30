@@ -1,0 +1,11 @@
+.create-article-container {
+  display: flex;
+}
+
+.d20 {
+  flex: 20%;
+  background-color: saddlebrown;
+}
+.d60 {
+  flex: 60%;
+}

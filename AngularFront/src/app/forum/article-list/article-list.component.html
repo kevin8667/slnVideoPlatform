@@ -6,7 +6,7 @@
     <div class="flex align-items-center gap-3">
       <span class="text-label">每頁文章筆數:</span>
       <p-slider
-        [(ngModel)]="pages.rows3"
+        [(ngModel)]="pages.rows"
         (ngModelChange)="onSliderChange()"
         [style]="{ width: '10rem' }"
         [min]="10"
@@ -15,8 +15,8 @@
       ></p-slider>
       <p-paginator
         (onPageChange)="changePage($event)"
-        [first]="pages.first3"
-        [rows]="pages.rows3"
+        [first]="pages.first"
+        [rows]="forumDto.pageSize"
         [totalRecords]="pages.totalRecords"
         [showFirstLastIcon]="true"
         [showCurrentPageReport]="true"
@@ -75,7 +75,7 @@
         [value]="articles"
         layout="grid"
         [paginator]="false"
-        [rows]="pages.rows3"
+        [rows]="pages.rows"
         [totalRecords]="pages.totalRecords"
       >
         <!-- Grid Item 模板 -->

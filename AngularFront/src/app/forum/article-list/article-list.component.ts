@@ -10,9 +10,6 @@ import { ForumServiceService } from 'src/app/service/forum-service.service';
   styleUrls: ['./article-list.component.css'],
 })
 export class ArticleListComponent implements OnInit {
-openCreateArticleDialog() {
-
-}
   articles: ArticleView[] = [];
 
   forumPagingDTO: ForumPagingDTO | undefined;
@@ -28,8 +25,8 @@ openCreateArticleDialog() {
     sortBy: '',
   };
   pages = {
-    first3: 1,
-    rows3: 10,
+    first: 0,
+    rows: 10,
     totalRecords: 0,
   };
   constructor(private route: Router, private service: ForumServiceService) {}
@@ -55,18 +52,18 @@ openCreateArticleDialog() {
   }
 
   changePage(event: any) {
-    this.pages.first3 = event.first ?? 0;
-    this.pages.rows3 = event.rows ?? 10;
-    this.forumDto.pageSize = this.pages.rows3;
-    this.forumDto.page = Math.floor(this.pages.first3 / this.pages.rows3) + 1;
+    this.pages.first = event.first ?? 1;
+    this.pages.rows = event.rows ?? 10;
+    this.forumDto.pageSize = this.pages.rows;
+    this.forumDto.page = Math.floor(this.pages.first / this.pages.rows) + 1;
 
     this.load();
   }
 
   onSliderChange() {
     // 設置頁面大小並重設起始位置
-    this.forumDto.pageSize = this.pages.rows3;
-    this.pages.first3 = 1; // 重設為起始位置
+    this.forumDto.pageSize = this.pages.rows;
+    this.pages.first = 1; // 重設為起始位置
     this.forumDto.page = 1; // 設置為第1頁
 
     // 重新加載文章
@@ -76,10 +73,7 @@ openCreateArticleDialog() {
   search(event: any) {
     console.log(event);
   }
-  navto() {
-    // this.route.navigateByUrl('forum/article/12512');
+  openCreateArticleDialog() {
+    this.route.navigateByUrl('forum/newA');
   }
-
-
-
 }
