@@ -10,6 +10,9 @@ import { ForumServiceService } from 'src/app/service/forum-service.service';
   styleUrls: ['./article-list.component.css'],
 })
 export class ArticleListComponent implements OnInit {
+openCreateArticleDialog() {
+
+}
   articles: ArticleView[] = [];
 
   forumPagingDTO: ForumPagingDTO | undefined;
@@ -52,8 +55,8 @@ export class ArticleListComponent implements OnInit {
   }
 
   changePage(event: any) {
-    this.pages.first3 = event.first ?? 0; // 使用 ?? 來處理 undefined
-    this.pages.rows3 = event.rows ?? 10; // 使用 ?? 來處理 undefined
+    this.pages.first3 = event.first ?? 0;
+    this.pages.rows3 = event.rows ?? 10;
     this.forumDto.pageSize = this.pages.rows3;
     this.forumDto.page = Math.floor(this.pages.first3 / this.pages.rows3) + 1;
 
@@ -76,4 +79,7 @@ export class ArticleListComponent implements OnInit {
   navto() {
     // this.route.navigateByUrl('forum/article/12512');
   }
+
+
+
 }

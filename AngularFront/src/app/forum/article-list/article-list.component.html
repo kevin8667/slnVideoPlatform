@@ -1,25 +1,18 @@
-  <div class="card flex justify-content-end">
-    <p-autoComplete
-      [(ngModel)]="forumDto.keyword"
-      (completeMethod)="search($event)"
-    ></p-autoComplete>
-  </div>
-<div>
 
-  <div class="card flex flex-column gap-3">
-    <div class="flex align-items-center justify-content-center">
-      <div class="flex justify-content-center align-items-center gap-3">
-        <span class="text-label">每頁文章筆數:</span>
-        <p-slider
-          [(ngModel)]="pages.rows3"
-          (ngModelChange)="onSliderChange()"
-          [style]="{ width: '10rem' }"
-          [min]="10"
-          [max]="100"
-          [step]="10"
-        ></p-slider>
-      </div>
-      <div></div>
+<div class="card flex  gap-3">
+  <!-- 搜尋和換頁功能放在同一個區塊 -->
+  <div class="flex justify-content-between">
+    <!-- 換頁功能 -->
+    <div class="flex align-items-center gap-3">
+      <span class="text-label">每頁文章筆數:</span>
+      <p-slider
+        [(ngModel)]="pages.rows3"
+        (ngModelChange)="onSliderChange()"
+        [style]="{ width: '10rem' }"
+        [min]="10"
+        [max]="100"
+        [step]="10"
+      ></p-slider>
       <p-paginator
         (onPageChange)="changePage($event)"
         [first]="pages.first3"
@@ -30,56 +23,117 @@
         currentPageReportTemplate="第{first}筆 - 第{last}筆 總共 {totalRecords}"
       ></p-paginator>
     </div>
-  </div>
-
-  <!-- 主題篩選開始 -->
-  <div class="buttonFlex">
-    <div class="d1">1</div>
+    <!-- 搜尋功能 -->
     <div>
+      <p-autoComplete
+        [(ngModel)]="forumDto.keyword"
+        (completeMethod)="search($event)"
+        placeholder="搜尋此討論區"
+      ></p-autoComplete>
+    </div>
+  </div>
+</div>
+
+<!-- 文章列表開始 -->
+<div class="flex mt-3">
+  <!-- 左側發表文章 -->
+  <div class="d1">
+    <div class="fixed-button">
+      <p-button
+        label="發表文章"
+        icon="pi pi-plus"
+        severity="primary"
+        (onClick)="openCreateArticleDialog()"
+      ></p-button>
+    </div>
+  </div>
+  <!-- 中間上方篩選主題 -->
+  <div class="d2">
+    <div class="buttonFlex gap-3">
       <p-button
         (onClick)="loadTheme(0)"
         label="全部主題"
-        severity="secondary"
+        severity="primary"
+        class="p-button-outlined"
       ></p-button>
-    </div>
-    <div *ngFor="let item of themeTag">
       <p-button
+        (onClick)="loadTheme(0)"
+        label="我的收藏"
+        severity="success"
+        class="p-button-outlined"
+      ></p-button>
+      <p-button
+        *ngFor="let item of themeTag"
         (onClick)="loadTheme(item.themeId)"
         label="{{ item.themeName }}"
         severity="secondary"
+        class="p-button-outlined"
       ></p-button>
     </div>
-    <div class="d3"></div>
-  </div>
-  <!-- 主題篩選結束 -->
-  <!-- 文章列表開始 -->
-  <div class="forumFlex">
-    <div class="d1"></div>
-    <div class="card d2">
-      <p-table [value]="articles" [tableStyle]="{ 'min-width': '50rem' }">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>主題</th>
-            <th>作者</th>
-            <th>標題</th>
-            <!-- <th>發表時間</th> -->
-            <th>更新時間</th>
-            <th>回覆數</th>
-          </tr>
+    <div class="mt-3">
+      <p-dataView
+        [value]="articles"
+        layout="grid"
+        [paginator]="false"
+        [rows]="pages.rows3"
+        [totalRecords]="pages.totalRecords"
+      >
+        <!-- Grid Item 模板 -->
+        <ng-template pTemplate="gridItem" let-article>
+          <div class="p-card p-component grid-item">
+            <div class="card-content">
+              <div class="card-image">
+                <a routerLink="{{ article.authorId }}"
+                  ><img
+                    [src]="article.coverImageUrl || 'assets/images/avantar.jpg'"
+                    alt="Article Cover"
+                    class="article-cover"
+                /></a>
+              </div>
+              <div class="card-body">
+                <div class="p-card-title">{{ article.title }}</div>
+                <div class="p-card-subtitle">
+                  {{ article.themeName }} - {{ article.memberName }}
+                </div>
+                <div class="p-card-body-content">
+                  <p>
+                    <i class="pi pi-calendar"></i> 更新時間:
+                    {{ article.updateDate | forumDate }}
+                  </p>
+                  <p>
+                    <i class="pi pi-comments"></i> 回覆數:
+                    {{ article.replyCount }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </ng-template>
-        <ng-template pTemplate="body" let-article>
-          <tr>
-            <!-- 改用ngFor -->
-            <td>{{ article.themeName }}</td>
-            <td>{{ article.memberName }}</td>
-            <td>{{ article.title }}</td>
-            <!-- <td>{{ article.postDate | forumDate }}</td> -->
-            <td>{{ article.updateDate | forumDate }}</td>
-            <td>{{ article.replyCount }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+      </p-dataView>
     </div>
-    <div class="d3"></div>
+  </div>
+  <!-- 右側聊天室 -->
+  <div class="d3">
+    <!-- 聊天室區域 -->
+    <div class="chat-section">
+      <div class="chat-header">
+        <h1>聊天室</h1>
+      </div>
+      <div class="chat-messages">
+        <div class="message">
+          <div class="message-user">用戶1:</div>
+          <div class="message-text">你好！</div>
+        </div>
+        <div class="message">
+          <div class="message-user">用戶2:</div>
+          <div class="message-text">嗨，你好！</div>
+        </div>
+        <!-- 更多消息可以添加在這裡 -->
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="輸入消息..." />
+        <button>發送</button>
+      </div>
+    </div>
   </div>
 </div>

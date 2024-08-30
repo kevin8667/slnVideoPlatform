@@ -1,17 +1,15 @@
-
-
-.forumFlex {
+.p-forumFlex {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* 卡片之間的間距 */
+  justify-content: center;
   width: 100%;
 }
-.buttonFlex {
+.flex {
   display: flex;
-  align-items: center;
-  gap: 10px; /* 設置按鈕之間的間隔 */
 }
-
 .d2 {
-  flex: 70%;
+  flex: 950px;
 }
 .d1 {
   flex: 10%;
@@ -19,10 +17,270 @@
 .d3 {
   flex: 20%;
 }
-/* 引入 Google Fonts */
+.mt-3 {
+  margin-top: 3%;
+}
+/* 篩選按鈕 */
+.buttonFlex {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap-reverse;
+}
+/* 固定按鈕樣式 */
+
 
 .text-label {
   font-size: 1.5rem; /* 调整字体大小 */
   color: #333; /* 字体颜色 */
   font-weight: bold; /* 加粗字体 */
+}
+
+
+
+.gap-3 {
+  gap: 1rem; /* 調整為你需要的間距 */
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+
+.text-label {
+  margin-right: 0.5rem;
+}
+.card {
+  background: #ffffff31; /* 背景顏色 */
+  border-radius: 8px; /* 邊角圓角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+  padding: 1.5rem; /* 內邊距 */
+  margin: 1rem; /* 外邊距 */
+  overflow: hidden; /* 隱藏超出邊界的內容 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* 鼠標懸停時的位移效果 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 鼠標懸停時的陰影效果 */
+}
+
+.card-title {
+  font-size: 1.25rem; /* 標題字體大小 */
+  font-weight: bold; /* 標題字體粗細 */
+  margin-bottom: 0.5rem; /* 標題下方外邊距 */
+}
+
+.card-subtitle {
+  font-size: 1rem; /* 副標題字體大小 */
+  color: #666; /* 副標題顏色 */
+  margin-bottom: 1rem; /* 副標題下方外邊距 */
+}
+
+.card-body-content {
+  font-size: 0.875rem; /* 內容字體大小 */
+  color: #333; /* 內容顏色 */
+}
+
+.card img {
+  width: 100%; /* 圖片寬度 */
+  height: auto; /* 圖片高度自動調整 */
+  border-bottom: 1px solid #131111; /* 圖片下方邊框 */
+  margin-bottom: 1rem; /* 圖片下方外邊距 */
+}
+
+.grid-item {
+  flex: 1 1 calc(33.333% - 1rem); /* 三列佈局，減去間距 */
+  box-sizing: border-box;
+}
+
+.p-card {
+  background: #f9f9f956; /* 淺灰背景色 */
+  border-radius: 8px; /* 邊角圓角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+  overflow: hidden; /* 隱藏超出邊界的內容 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
+  flex-direction: row; /* 使圖片和內容水平排列 */
+  max-width: 1100px; /* 設定最大寬度 */
+  min-width: 800px; /* 設定最小寬度 */
+  margin: 0 auto; /* 使卡片水平居中 */
+}
+
+.p-card:hover {
+  transform: translateY(-5px); /* 鼠標懸停時的位移效果 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 鼠標懸停時的陰影效果 */
+}
+
+.p-card-body {
+  padding: 1.5rem; /* 內邊距 */
+  color: #333; /* 文字顏色 */
+}
+
+.p-card-title {
+  font-size: 1.25rem; /* 標題字體大小 */
+  font-weight: bold; /* 標題字體粗細 */
+  margin-bottom: 0.5rem; /* 標題下方外邊距 */
+  color: #007bff; /* 藍色標題 */
+}
+
+.p-card-subtitle {
+  font-size: 1rem; /* 副標題字體大小 */
+  color: #6c757d; /* 淺灰色副標題 */
+  margin-bottom: 1rem; /* 副標題下方外邊距 */
+}
+
+.p-card-body-content {
+  font-size: 0.875rem; /* 內容字體大小 */
+  color: #495057; /* 深灰色內容 */
+}
+
+.p-card-body-content i {
+  margin-right: 0.5rem; /* 圖標和文字間的間距 */
+  color: #28a745; /* 綠色圖標 */
+}
+
+.grid-item {
+  background-color: #ffffff3d; /* 白色背景 */
+  border: 1px solid #dee2e6; /* 淺灰色邊框 */
+}
+
+.p-card-body {
+  background-color: #f8f9fa2a; /* 淺灰背景色 */
+}
+
+.p-card-title {
+  color: #007bff; /* 藍色標題 */
+  overflow: hidden; /* 避免標題超出卡片範圍 */
+  text-overflow: ellipsis; /* 使用省略號表示超出內容 */
+  white-space: nowrap; /* 防止換行 */
+}
+
+.p-card-body-content p {
+  color: #6c757d; /* 淺灰色文字 */
+}
+.card-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* 調整圖片和內容之間的間距 */
+}
+
+.card-image {
+  flex: 30%; /* 圖片區域擁有的空間 */
+}
+
+.article-cover {
+  width: 100%; /* 使圖片適應容器寬度 */
+  height: auto; /* 保持圖片高度自適應 */
+  object-fit: cover; /* 確保圖片不變形地填滿容器 */
+}
+
+.card-body {
+  flex: 70%; /* 內容區域擁有的空間 */
+}
+
+/* 聊天室 */
+.container {
+  display: flex;
+  gap: 1rem; /* 設定文章和聊天區域之間的間距 */
+  padding: 1rem;
+  margin: 0;
+}
+
+.discussion-section {
+  flex: 3; /* 討論區域佔據的比例 */
+  background-color: #6b2424;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-section {
+  flex: 1; /* 聊天區域佔據的比例 */
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 500px; /* 設定固定高度，方便顯示 */
+}
+
+.chat-header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  border-bottom: 1px solid #ddd;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #d5e3e9;
+}
+
+.message {
+  margin-bottom: 1rem;
+}
+
+.message-user {
+  font-weight: bold;
+}
+
+.message-text {
+  margin-top: 0.5rem;
+}
+
+.chat-input {
+  display: flex;
+  padding: 1rem;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 8px 8px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.chat-input button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #007bff;
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.chat-input button:hover {
+  background-color: #0056b3;
+}
+
+/* 按鈕樣式 */
+
+/* 使按鈕固定在頁面右下角 */
+.fixed-button {
+  position: fixed;
+  left: 15rem;
+  top: 22rem;
+  display: flex;
+  flex-direction: column; /* 按鈕垂直排列 */
+  align-items: center;
+  gap: 1rem; /* 按鈕間隔 */
+  z-index: 1000; /* 確保按鈕在最上層 */
+}
+
+/* 按鈕樣式 */
+.fixed-button .p-button {
+  display: block;
 }
