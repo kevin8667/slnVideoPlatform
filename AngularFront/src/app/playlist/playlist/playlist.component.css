@@ -5,63 +5,61 @@
 }
 
 .grid-view .playlist-card {
-  flex: 1 1 calc(20% - 10px); /* 每行顯示五張卡片，並留出間隙 */
+  flex: 1 1 calc(20% - 10px);
   margin: 5px;
   box-sizing: border-box;
-  min-width: 200px; /* 確保卡片最小寬度 */
+  min-width: 100px;
 }
 
 .custom-card {
   width: 100%;
-  height: 350px; /* 固定卡片高度，確保所有卡片一致 */
+  height: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  background-color: #FFFFFF; /* 使用 light 色作為卡片背景色 */
+  background-color: #FFFFFF;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 卡片陰影 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   padding: 10px;
   box-sizing: border-box;
   position: relative;
-  border: 2px solid #17A2B8; /* 使用 primary 色作為卡片邊框 */
+  border: 2px solid #17A2B8;
 }
 
 .custom-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 滑鼠懸浮時的陰影效果 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .playlist-image {
   width: 100%;
-  height: 150px; /* 固定圖片高度，確保一致 */
-  object-fit: cover; /* 確保圖片填充整個區域 */
-  object-position: top; /* 確保圖片從頂部開始顯示 */
+  height: 150px;
+  object-fit: cover;
+  object-position: top;
 }
 
-/* 按讚圖示的樣式 */
 .like-item {
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin-left: auto; /* 確保愛心圖示在最右邊 */
+  margin-left: auto;
   transition: color 0.3s ease;
 }
 
 .like-item i.pi-heart {
   font-size: 20px;
   margin-right: 5px;
-  color: #17A2B8; /* 使用 primary 色作為愛心圖示的顏色 */
+  color: #17A2B8;
 }
 
 .like-item i.pi-heart.liked {
-  color: #FF0000; /* 使用紅色作為已按讚的愛心圖示顏色 */
+  color: #FF0000;
 }
 
-/* 動畫效果的樣式 */
 .increment-effect {
-  color: #FF0000; /* 使用紅色作為 "+1" 的顏色 */
+  color: #FF0000;
   font-size: 12px;
   animation: fade-out 1s forwards;
   margin-left: 5px;
@@ -78,17 +76,16 @@
   }
 }
 
-/* 內容區域：居中對齊，統一寬度 */
 .playlist-info {
   text-align: center;
-  margin-top: 10px;
-  padding: 0 10px;
-  width: 100%; /* 確保內容區和卡片寬度一致 */
+  margin-top: 0px;
+  padding: 0px 10px;
+  width: 100%;
 }
 
 .info-row {
   display: flex;
-  justify-content: space-between; /* 圖示和愛心圖示橫向排列 */
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -96,29 +93,10 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-  color: #6C757D; /* 使用 secondary 色作為資訊文字的顏色 */
+  color: #6C757D;
 }
 
 .info-item i {
   margin-right: 5px;
-  color: #17A2B8; /* 使用 primary 色作為圖示的顏色 */
+  color: #17A2B8;
 }
-
-/* 分頁器樣式 */
-.p-paginator {
-  background-color: #6C757D; /* 修改背景色 */
-  border: 1px solid #17A2B8; /* 修改邊框色 */
-  color: #17A2B8; /* 修改文字顏色 */
-}
-
-.p-paginator .p-paginator-pages .p-paginator-page {
-  background-color: #FFFFFF; /* 修改頁碼按鈕的背景色 */
-  color: #17A2B8; /* 修改頁碼按鈕的文字顏色 */
-  border-color: #17A2B8; /* 修改頁碼按鈕的邊框顏色 */
-}
-
-.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-  background-color: #17A2B8; /* 當前頁碼按鈕背景色 */
-  color: #FFFFFF; /* 當前頁碼按鈕文字顏色 */
-}
-

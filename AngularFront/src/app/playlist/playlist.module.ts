@@ -4,9 +4,8 @@ import { CommonModule } from '@angular/common';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { PlaylistmemberComponent } from './playlistmember/playlistmember.component';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
 import { HttpClientModule } from '@angular/common/http';
-import { CardModule } from 'primeng/card'; // 导入 CardModule
+import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { PlaylistitemComponent } from './playlistitem/playlistitem.component';
 
@@ -26,10 +25,9 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     ButtonModule,
-    TableModule,
     HttpClientModule,
-    CardModule, // 确保导入 CardModule
-    PaginatorModule // 确保导入 PaginatorModule
+    CardModule,
+    PaginatorModule
   ],
   exports: [RouterModule],
 })
