@@ -1,9 +1,4 @@
 /* styles.css */
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f6f9;
-}
 
 .container {
   max-width: 800px;
@@ -38,6 +33,7 @@ body {
 
 .article-content {
   font-size: 1rem;
+  min-height: 72px;
   color: #333;
 }
 
@@ -65,7 +61,8 @@ body {
   color: #ffffff;
 }
 
-.like-btn:hover, .dislike-btn:hover {
+.like-btn:hover,
+.dislike-btn:hover {
   opacity: 0.8;
 }
 
@@ -101,6 +98,7 @@ body {
 .reply-content {
   font-size: 1rem;
   color: #333;
+  min-height: 72px;
 }
 
 .reply-actions {
@@ -123,6 +121,9 @@ body {
   cursor: pointer; /* 鼠標指針 */
   display: flex; /* 使圖標和文字對齊 */
   align-items: center; /* 垂直對齊 */
+  position: fixed;
+  top: 25vh;
+  right: 15vh;
 }
 
 .reply-button i {

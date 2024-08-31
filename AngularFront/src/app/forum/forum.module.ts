@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { ArticleListComponent } from './article-list/article-list.component';
+
 import { ArticleComponent } from './article/article.component';
 import { TableModule } from 'primeng/table';
 import { HttpClientModule } from '@angular/common/http';
-import { ForumServiceService } from '../service/forum-service.service';
+import { ForumService } from '../service/forum.service';
 import { forumDatePipe } from '../pipe/pipes/my-date.pipe';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -16,14 +16,15 @@ import { NewPostComponent } from './new-post/new-post.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ForumRoutingModule } from './forum-routing.module';
-
+import { ArticleListComponent } from './article-list/article-list.component';
+import { KnobModule } from 'primeng/knob';
 @NgModule({
   declarations: [
-    ArticleListComponent,
     ArticleComponent,
     forumDatePipe,
     NewArticleComponent,
     NewPostComponent,
+    ArticleListComponent,
   ],
   imports: [
     TableModule,
@@ -38,8 +39,9 @@ import { ForumRoutingModule } from './forum-routing.module';
     MultiSelectModule,
     FormsModule,
     ForumRoutingModule,
+    KnobModule
   ],
   exports: [],
-  providers: [ForumServiceService],
+  providers: [ForumService],
 })
 export class ForumModule {}

@@ -1,33 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Theme } from 'src/app/interface/Theme';
+import { ForumService } from 'src/app/service/forum.service';
 
 @Component({
   selector: 'app-new-article',
   templateUrl: './new-article.component.html',
   styleUrls: ['./new-article.component.css'],
 })
-export class NewArticleComponent implements OnInit {
+export class NewArticleComponent implements OnInit, AfterViewInit {
   articleForm: any;
+  themeTag: Theme[] = [];
+  private adScriptLoaded = false;
+  constructor(private fb: FormBuilder, private forumService: ForumService) {}
+
+  ngAfterViewInit() {
+    // if (!this.adScriptLoaded) {
+    //   const script = document.createElement('script');
+    //   script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+    //   script.async = true;
+    //   document.body.appendChild(script);
+
+    //   script.onload = () => {
+    //     (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+    //     (window as any).adsbygoogle.push({});
+    //     this.adScriptLoaded = true;
+    //   };
+    // } else {
+    //   (window as any).adsbygoogle.push({});
+    // }
+  }
+
   ngOnInit(): void {
     this.articleForm = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
-      category: [null, Validators.required],
-      tags: [[], Validators.required],
+      themeTag: [null, Validators.required],
+    });
+    this.forumService.themeTag$.subscribe((data) => {
+      this.themeTag = data;
     });
   }
-  categories = [
-    { id: 1, name: '技術' },
-    { id: 2, name: '生活' },
-    { id: 3, name: '娛樂' },
-  ];
-  tagOptions = [
-    { label: 'Angular', value: 'Angular' },
-    { label: 'TypeScript', value: 'TypeScript' },
-    { label: 'JavaScript', value: 'JavaScript' },
-  ];
-
-  constructor(private fb: FormBuilder) {}
 
   onSubmit(): void {
     if (this.articleForm.valid) {

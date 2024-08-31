@@ -1,12 +1,11 @@
-
-<div class="card flex  gap-3">
+<div class="card flex gap-3">
   <!-- 搜尋和換頁功能放在同一個區塊 -->
   <div class="flex justify-content-between">
     <!-- 換頁功能 -->
     <div class="flex align-items-center gap-3">
       <span class="text-label">每頁文章筆數:</span>
       <p-slider
-        [(ngModel)]="pages.rows"
+        [(ngModel)]="forumDto.pageSize"
         (ngModelChange)="onSliderChange()"
         [style]="{ width: '10rem' }"
         [min]="10"
@@ -27,7 +26,7 @@
     <div>
       <p-autoComplete
         [(ngModel)]="forumDto.keyword"
-        (completeMethod)="search($event)"
+        (keydown.enter)="search()"
         placeholder="搜尋此討論區"
       ></p-autoComplete>
     </div>
@@ -75,7 +74,7 @@
         [value]="articles"
         layout="grid"
         [paginator]="false"
-        [rows]="pages.rows"
+        [rows]="forumDto.pageSize"
         [totalRecords]="pages.totalRecords"
       >
         <!-- Grid Item 模板 -->

@@ -1,11 +1,43 @@
 .create-article-container {
-  display: flex;
+  width: 800px;
+  margin: auto;
+  padding: 1rem;
 }
 
 .d20 {
-  flex: 20%;
+  width: 20%;
   background-color: saddlebrown;
 }
 .d60 {
   flex: 60%;
+}
+.error-message {
+  background-color: #f8d7da; /* 淡紅色背景 */
+  color: #721c24; /* 深紅色文字 */
+  border: 1px solid #f5c6cb; /* 邊框顏色略深 */
+  border-radius: 5px; /* 圓角 */
+  padding: 0.75rem 1rem; /* 內邊距 */
+  margin-top: 0.5rem; /* 與上方元素保持距離 */
+  font-size: 0.875rem; /* 字體大小 */
+  display: flex;
+  align-items: center;
+  width: 30%;
+}
+
+.error-message::before {
+  content: "⚠️"; /* 錯誤圖示 */
+  margin-right: 0.5rem; /* 圖示與文字間的距離 */
+}
+
+.form-tag{
+  width: 15%;
+}
+.ad-placeholder {
+  width: 300px;
+  height: 250px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  text-align: center;
+  line-height: 250px;
+  font-size: 16px;
 }

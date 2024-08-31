@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ForumPagingDTO } from 'src/app/interface/ForumPagingDTO';
 import { Theme } from 'src/app/interface/Theme';
-import { ForumServiceService } from 'src/app/service/forum-service.service';
+import { ForumService } from 'src/app/service/forum.service';
+
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
@@ -26,52 +27,52 @@ export class ArticleListComponent implements OnInit {
   };
   pages = {
     first: 0,
-    rows: 10,
     totalRecords: 0,
   };
-  constructor(private route: Router, private service: ForumServiceService) {}
+  constructor(private route: Router, private forumService: ForumService) {}
 
   ngOnInit(): void {
     this.load();
 
-    this.service.getTheme().subscribe((data) => {
-      return (this.themeTag = data);
+    this.forumService.themeTag$.subscribe((data) => {
+      this.themeTag = data;
     });
   }
 
   private load() {
-    this.service.getArticleView(this.forumDto).subscribe((data) => {
-      this.articles = data.forumResult;
-      this.pages.totalRecords = data.totalCount;
-    });
+    this.forumService
+      .getArticleView(this.forumDto)
+      .subscribe((data: { forumResult: ArticleView[]; totalCount: number }) => {
+        this.articles = data.forumResult;
+        this.pages.totalRecords = data.totalCount;
+      });
   }
 
   loadTheme(id: number) {
     this.forumDto.categoryId = id;
+    this.pages.first = 0; // 重設為起始位置
+    this.forumDto.page = 1; // 設置為第1頁
     this.load();
   }
 
   changePage(event: any) {
     this.pages.first = event.first ?? 1;
-    this.pages.rows = event.rows ?? 10;
-    this.forumDto.pageSize = this.pages.rows;
-    this.forumDto.page = Math.floor(this.pages.first / this.pages.rows) + 1;
+    this.forumDto.page = event.page + 1;
 
     this.load();
   }
 
   onSliderChange() {
     // 設置頁面大小並重設起始位置
-    this.forumDto.pageSize = this.pages.rows;
-    this.pages.first = 1; // 重設為起始位置
     this.forumDto.page = 1; // 設置為第1頁
 
     // 重新加載文章
     this.load();
   }
 
-  search(event: any) {
-    console.log(event);
+  search() {
+    this.load();
+    this.forumDto.keyword = '';
   }
   openCreateArticleDialog() {
     this.route.navigateByUrl('forum/newA');

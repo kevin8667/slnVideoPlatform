@@ -28,14 +28,11 @@
 }
 /* 固定按鈕樣式 */
 
-
 .text-label {
   font-size: 1.5rem; /* 调整字体大小 */
   color: #333; /* 字体颜色 */
   font-weight: bold; /* 加粗字体 */
 }
-
-
 
 .gap-3 {
   gap: 1rem; /* 調整為你需要的間距 */
@@ -44,7 +41,6 @@
 .align-items-center {
   align-items: center;
 }
-
 
 .text-label {
   margin-right: 0.5rem;
@@ -266,18 +262,13 @@
   background-color: #0056b3;
 }
 
-/* 按鈕樣式 */
-
-/* 使按鈕固定在頁面右下角 */
+/* 使按鈕固定在頁面左上角 */
 .fixed-button {
   position: fixed;
-  left: 15rem;
-  top: 22rem;
-  display: flex;
-  flex-direction: column; /* 按鈕垂直排列 */
+  left: 1vh;
+  top: 37vh; /* 使用 viewport 單位，按鈕會在視窗高度的 50% 處 */
   align-items: center;
   gap: 1rem; /* 按鈕間隔 */
-  z-index: 1000; /* 確保按鈕在最上層 */
 }
 
 /* 按鈕樣式 */

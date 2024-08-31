@@ -1,1 +1,42 @@
-<p>new-post works!</p>
+<div class="create-container">
+  <div class="d20"></div>
+  <form class="d60" [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+    <!-- 標題 -->
+    <h2>回覆文章</h2>
+    <div class="form-group">
+      <label for="title">RE: </label>
+    </div>
+    <!-- 內文 -->
+    <div class="form-group">
+      <label for="content">文章內文</label>
+      <textarea
+        id="content"
+        formControlName="content"
+        rows="5"
+        class="form-control"
+        placeholder="請輸入文章內文"
+      ></textarea>
+      <div
+        *ngIf="
+          articleForm.get('content').invalid &&
+          articleForm.get('content').touched
+        "
+        class="error-message"
+      >
+        請填入您的內文
+      </div>
+    </div>
+
+    <!-- 提交按鈕 -->
+    <div class="form-group">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="articleForm.invalid"
+      >
+        發表回覆
+      </button>
+    </div>
+  </form>
+  <div class="d20"></div>
+</div>

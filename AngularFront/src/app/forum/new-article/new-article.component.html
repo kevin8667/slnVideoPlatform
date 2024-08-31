@@ -1,18 +1,38 @@
 <div class="create-article-container">
-  <div class="d20"></div>
   <form class="d60" [formGroup]="articleForm" (ngSubmit)="onSubmit()">
     <!-- 標題 -->
     <h2>發表新文章</h2>
+
+
+    <!-- 分類 -->
+
     <div class="form-group">
-      <label for="title">文章標題</label>
+      <p-dropdown
+        formControlName="themeTag"
+        [options]="themeTag"
+        optionLabel="themeName"
+        placeholder="請選擇主題"
+        [showClear]="true"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="label" for="title">文章標題</label><br />
       <input
         id="title"
         formControlName="title"
         type="text"
-        class="form-control"
+        class="form-title"
         placeholder="輸入文章標題"
       />
-      <div>標題為必填項目</div>
+      <div
+        *ngIf="
+          articleForm.get('title').invalid && articleForm.get('title').touched
+        "
+        class="error-message"
+      >
+        請填入您的標題
+      </div>
     </div>
 
     <!-- 內文 -->
@@ -21,7 +41,7 @@
       <textarea
         id="content"
         formControlName="content"
-        rows="5"
+        rows="13"
         class="form-control"
         placeholder="輸入文章內文"
       ></textarea>
@@ -32,28 +52,8 @@
         "
         class="error-message"
       >
-        內文為必填項目
+        請填入您的內文
       </div>
-    </div>
-
-    <!-- 分類 -->
-    <div class="form-group">
-      <label for="category">文章分類</label>
-      <select id="category" formControlName="category" class="form-control">
-        <option *ngFor="let category of categories" [value]="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
-
-    <!-- 標籤 -->
-    <div class="form-group">
-      <label for="tags">文章標籤</label>
-      <p-multiSelect
-        formControlName="tags"
-        [options]="tagOptions"
-        defaultLabel="選擇標籤"
-      ></p-multiSelect>
     </div>
 
     <!-- 提交按鈕 -->
@@ -67,5 +67,5 @@
       </button>
     </div>
   </form>
-  <div class="d20"></div>
 </div>
+

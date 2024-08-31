@@ -1,5 +1,7 @@
 <div class="container">
-  <button class="reply-button"><i class="pi pi-reply"></i> 回覆</button>
+  <button (click)="navToReply()" class="reply-button">
+    <i class="pi pi-reply"></i> 回覆
+  </button>
 
   <!-- 文章內容 -->
   <div class="article">
@@ -7,10 +9,10 @@
       <h1 class="article-title">文章標題</h1>
       <div class="article-info">
         <span class="article-author">作者: 張三</span> |
-        <span class="article-date">2024年8月30日</span>
+        <span class="article-date">2024年8月30日| </span>
       </div>
     </div>
-    <div class="article-content">
+    <div class="article-content" contenteditable="true">
       <p>
         這裡是文章內容。你可以在這裡撰寫詳細的文章內容，包括文字、圖片、鏈接等。
       </p>
@@ -37,7 +39,5 @@
         <button class="action-btn dislike-btn">踩 (1)</button>
       </div>
     </div>
-
-    <!-- 更多回覆可以在這裡添加 -->
   </div>
 </div>
