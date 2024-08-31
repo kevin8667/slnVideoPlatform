@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/test', pathMatch: 'full' }, // 預設路徑，重定向到 TestComponent
+  { path: '', redirectTo: '/test', pathMatch: 'full' },
   { path: 'test', component: TestComponent },
   {
     path: 'playlist',
