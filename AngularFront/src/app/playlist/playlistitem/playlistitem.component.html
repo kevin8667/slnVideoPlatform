@@ -1,5 +1,4 @@
-<div class="playlist-item">
-
+<div class="playlist-item" [attr.data-id]="item.videoId" cdkDrag>
   <img [src]="getThumbnailUrl(item.thumbnailId)" alt="{{ item.videoName }}" class="playlist-thumbnail">
 
   <div class="playlist-item-info">
@@ -8,8 +7,8 @@
   </div>
 
   <div class="playlist-item-actions">
-    <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="removeItem(item)"></button>
-    <i class="pi pi-arrows-alt draggable-handle" pDraggable></i>
+    <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="removeItem()"></button>
+    <i class="pi pi-arrows-alt draggable-handle" cdkDragHandle></i>
   </div>
 </div>
 

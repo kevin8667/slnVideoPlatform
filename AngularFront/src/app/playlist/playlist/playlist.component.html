@@ -40,6 +40,12 @@
 </div>
 
 <p-dialog [(visible)]="displayModal" [modal]="true" header="播放清單內容" (onHide)="closeModal()">
-  <app-playlistitem *ngFor="let item of selectedPlaylistItems" [item]="item"></app-playlistitem>
+  <div cdkDropList (cdkDropListDropped)="drop($event)">
+    <app-playlistitem *ngFor="let item of selectedPlaylistItems; let i = index"
+                      [item]="item"
+                      (remove)="removeItem(item)"
+                      cdkDrag>
+    </app-playlistitem>
+  </div>
 </p-dialog>
 

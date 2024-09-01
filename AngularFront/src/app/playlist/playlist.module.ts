@@ -9,6 +9,7 @@ import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { PlaylistitemComponent } from './playlistitem/playlistitem.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const routes: Routes = [
   { path: '', component: PlaylistComponent },
@@ -29,7 +30,8 @@ const routes: Routes = [
     HttpClientModule,
     CardModule,
     PaginatorModule,
-    DialogModule
+    DialogModule,
+    DragDropModule
   ],
   exports: [RouterModule],
 })

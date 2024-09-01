@@ -11,13 +11,20 @@ export class PlaylistitemComponent {
   item!: PlaylistitemDTO;
 
   @Output()
-  remove: EventEmitter<PlaylistitemDTO> = new EventEmitter<PlaylistitemDTO>();
+  remove: EventEmitter<void> = new EventEmitter<void>();
 
   getThumbnailUrl(thumbnailId: number | null): string {
     return thumbnailId ? `https://path-to-your-thumbnails/${thumbnailId}.jpg` : 'assets/img/movie.png';
   }
 
-  removeItem(item: PlaylistitemDTO): void {
-    this.remove.emit(item);
+  removeItem(): void {
+    const element = document.querySelector(`[data-id="${this.item.videoId}"]`);
+    if (element) {
+      element.classList.add('removing');
+    }
+
+    setTimeout(() => {
+      this.remove.emit();
+    }, 700);
   }
 }

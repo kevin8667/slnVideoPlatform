@@ -70,3 +70,27 @@
 .draggable-handle:active {
   cursor: grabbing;
 }
+
+@keyframes fly-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(300px) translateY(-100px);
+  }
+}
+
+.removing {
+  animation: fly-out 0.7s forwards;
+}
+
+.cdk-drag-preview {
+  z-index: 10000 !important;
+}
+
+.cdk-overlay-container, .ui-dialog {
+  z-index: 1050 !important;
+}
+

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlaylistService } from '../../services/playlist.service';
 import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-playlist',
@@ -52,6 +53,17 @@ export class PlaylistComponent implements OnInit {
 
   closeModal(): void {
     this.displayModal = false;
+  }
+
+  drop(event: CdkDragDrop<PlaylistitemDTO[]>): void {
+    moveItemInArray(this.selectedPlaylistItems, event.previousIndex, event.currentIndex);
+    const movedItem = this.selectedPlaylistItems[event.currentIndex];
+    this.playlistService.updateVideoPosition(movedItem.playListId, movedItem.videoId, event.currentIndex).subscribe();
+  }
+
+  removeItem(item: PlaylistitemDTO): void {
+    this.selectedPlaylistItems = this.selectedPlaylistItems.filter(i => i !== item);
+    this.playlistService.removePlaylistItem(item.playListId, item.videoId).subscribe();
   }
 }
 
