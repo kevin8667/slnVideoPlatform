@@ -5,10 +5,10 @@
   (onPageChange)="paginate($event)">
 </p-paginator>
 
-<a routerLink="member">會員頁面</a>&nbsp;<a routerLink="item">清單頁面</a>
+<a routerLink="member">會員頁面</a>&nbsp;<a routerLink="item">清單內容</a>
 
 <div class="grid-view">
-  <div *ngFor="let playlist of paginatedPlaylists" class="playlist-card" [attr.data-id]="playlist.playListName">
+  <div *ngFor="let playlist of paginatedPlaylists" class="playlist-card" [attr.data-id]="playlist.playListId" (click)="onCardClick(playlist.playListId)">
     <p-card
       [header]="playlist.playListName"
       [subheader]="playlist.playListDescription"
@@ -29,7 +29,7 @@
           <span class="info-item">
             <i class="pi pi-share-alt"></i> {{ playlist.sharedCount }}
           </span>
-          <span class="info-item like-item" (click)="incrementLike(playlist)">
+          <span class="info-item like-item" (click)="incrementLike(playlist); $event.stopPropagation()">
             <i class="pi pi-heart"></i> {{ playlist.likeCount }}
             <span *ngIf="playlist.showLikeEffect" class="increment-effect">+1</span>
           </span>
@@ -38,4 +38,8 @@
     </p-card>
   </div>
 </div>
+
+<p-dialog [(visible)]="displayModal" [modal]="true" header="播放清單內容" (onHide)="closeModal()">
+  <app-playlistitem *ngFor="let item of selectedPlaylistItems" [item]="item"></app-playlistitem>
+</p-dialog>
 

@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { HttpClientModule } from '@angular/common/http';
 import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
+import { DialogModule } from 'primeng/dialog';
 import { PlaylistitemComponent } from './playlistitem/playlistitem.component';
 
 const routes: Routes = [
@@ -27,7 +28,8 @@ const routes: Routes = [
     ButtonModule,
     HttpClientModule,
     CardModule,
-    PaginatorModule
+    PaginatorModule,
+    DialogModule
   ],
   exports: [RouterModule],
 })

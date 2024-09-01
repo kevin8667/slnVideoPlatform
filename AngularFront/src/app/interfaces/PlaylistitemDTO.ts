@@ -4,4 +4,5 @@ export interface PlaylistitemDTO {
   videoPosition: number;
   videoName: string;
   thumbnailId: number | null;
+  episode: number | null;
 }

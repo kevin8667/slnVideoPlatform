@@ -20,13 +20,13 @@ namespace VdbAPI.Controllers
             _context = context;
         }
 
-        // GET: api/PlayList
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
         {
             var playlists = await _context.PlayLists
                 .Select(pl => new PlaylistDTO
                 {
+                    PlayListId = pl.PlayListId,
                     PlayListName = pl.PlayListName,
                     PlayListDescription = pl.PlayListDescription,
                     ViewCount = pl.ViewCount,
@@ -40,7 +40,6 @@ namespace VdbAPI.Controllers
             return Ok(playlists);
         }
 
-        // GET: api/PlayList/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PlaylistDTO>> GetPlayList(int id)
         {
@@ -48,6 +47,7 @@ namespace VdbAPI.Controllers
                 .Where(pl => pl.PlayListId == id)
                 .Select(pl => new PlaylistDTO
                 {
+                    PlayListId = pl.PlayListId,
                     PlayListName = pl.PlayListName,
                     PlayListDescription = pl.PlayListDescription,
                     ViewCount = pl.ViewCount,
@@ -66,7 +66,6 @@ namespace VdbAPI.Controllers
             return Ok(playlist);
         }
 
-        // POST: api/PlayList
         [HttpPost]
         public async Task<ActionResult<PlaylistDTO>> PostPlayList(PlaylistDTO playlistDto)
         {
@@ -86,6 +85,8 @@ namespace VdbAPI.Controllers
 
             _context.PlayLists.Add(playList);
             await _context.SaveChangesAsync();
+
+            playlistDto.PlayListId = playList.PlayListId;
 
             return CreatedAtAction(nameof(GetPlayList), new { id = playList.PlayListId }, playlistDto);
         }
@@ -146,7 +147,6 @@ namespace VdbAPI.Controllers
 
             return NoContent();
         }
-
         private bool PlayListExists(int id)
         {
             return _context.PlayLists.Any(e => e.PlayListId == id);

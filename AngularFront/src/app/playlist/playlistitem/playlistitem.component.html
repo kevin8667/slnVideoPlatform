@@ -1,2 +1,15 @@
-<p>playlistitem works!</p>
-<a routerLink="../">back to playlist</a>
+<div class="playlist-item">
+
+  <img [src]="getThumbnailUrl(item.thumbnailId)" alt="{{ item.videoName }}" class="playlist-thumbnail">
+
+  <div class="playlist-item-info">
+    <h4>{{ item.videoName }}</h4>
+    <p *ngIf="item.episode">集數: {{ item.episode }}</p>
+  </div>
+
+  <div class="playlist-item-actions">
+    <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="removeItem(item)"></button>
+    <i class="pi pi-arrows-alt draggable-handle" pDraggable></i>
+  </div>
+</div>
+

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlaylistService } from '../../services/playlist.service';
 import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
+import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
 
 @Component({
   selector: 'app-playlist',
@@ -10,6 +11,8 @@ import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 export class PlaylistComponent implements OnInit {
   playlists: PlaylistDTO[] = [];
   paginatedPlaylists: PlaylistDTO[] = [];
+  selectedPlaylistItems: PlaylistitemDTO[] = [];
+  displayModal: boolean = false;
   rows: number = 20;
   first: number = 0;
 
@@ -38,6 +41,17 @@ export class PlaylistComponent implements OnInit {
     setTimeout(() => {
       playlist.showLikeEffect = false;
     }, 1000);
+  }
+
+  onCardClick(playlistId: number): void {
+    this.playlistService.getPlaylistItems(playlistId).subscribe(items => {
+      this.selectedPlaylistItems = items;
+      this.displayModal = true;
+    });
+  }
+
+  closeModal(): void {
+    this.displayModal = false;
   }
 }
 

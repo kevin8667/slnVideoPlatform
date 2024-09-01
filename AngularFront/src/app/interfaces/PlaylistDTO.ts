@@ -1,4 +1,5 @@
 export interface PlaylistDTO {
+  playListId: number;
   playListName: string;
   playListDescription: string;
   viewCount: number;

@@ -2,6 +2,7 @@
 {
     public class PlaylistDTO
     {
+        public int PlayListId { get; set; }
         public string PlayListName { get; set; }
         public string PlayListDescription { get; set; }
         public int ViewCount { get; set; }
