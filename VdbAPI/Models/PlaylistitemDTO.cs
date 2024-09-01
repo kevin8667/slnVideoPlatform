@@ -7,5 +7,6 @@
         public int VideoPosition { get; set; }
         public string VideoName { get; set; }
         public int? ThumbnailId { get; set; }
+        public int? Episode { get; set; }
     }
 }

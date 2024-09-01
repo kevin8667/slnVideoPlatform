@@ -163,7 +163,8 @@ namespace VdbAPI.Controllers
                     VideoId = p.VideoId,
                     VideoPosition = p.VideoPosition,
                     VideoName = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).VideoName,
-                    ThumbnailId = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).ThumbnailId
+                    ThumbnailId = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).ThumbnailId,
+                    Episode = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).Episode // 添加這行以包括Episode
                 }).ToListAsync();
 
             if (playListItems == null || !playListItems.Any())
