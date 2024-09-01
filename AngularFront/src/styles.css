@@ -6,6 +6,8 @@
  * Copyright 2011-2020 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+ @import "../node_modules/quill/dist/quill.core.css";
+ @import "../node_modules/quill/dist/quill.snow.css";
 
 :root {
   --blue: #007bff;
@@ -3731,7 +3733,7 @@ input[type="button"].btn-block {
   display: block;
   min-height: 1.5rem;
   padding-left: 1.5rem;
-  color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .custom-control-inline {

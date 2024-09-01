@@ -3,48 +3,51 @@
     <!-- 標題 -->
     <h2>發表新文章</h2>
 
-
     <!-- 分類 -->
 
     <div class="form-group">
-      <p-dropdown
-        formControlName="themeTag"
-        [options]="themeTag"
-        optionLabel="themeName"
-        placeholder="請選擇主題"
-        [showClear]="true"
-      />
-    </div>
-
-    <div class="form-group">
-      <label class="label" for="title">文章標題</label><br />
-      <input
-        id="title"
-        formControlName="title"
-        type="text"
-        class="form-title"
-        placeholder="輸入文章標題"
-      />
-      <div
-        *ngIf="
-          articleForm.get('title').invalid && articleForm.get('title').touched
-        "
-        class="error-message"
-      >
-        請填入您的標題
+      <div class="p-fluid">
+        <div class="p-field">
+          <input
+            id="title"
+            pInputText
+            formControlName="title"
+            placeholder="輸入文章標題"
+          />
+          <p-message
+            *ngIf="
+              articleForm.get('title').invalid &&
+              articleForm.get('title').touched
+            "
+            severity="error"
+            text="文章標題請勿空白"
+          ></p-message>
+        </div>
       </div>
     </div>
 
     <!-- 內文 -->
     <div class="form-group">
-      <label for="content">文章內文</label>
-      <textarea
+      <quill-editor
         id="content"
         formControlName="content"
-        rows="13"
-        class="form-control"
         placeholder="輸入文章內文"
-      ></textarea>
+        [modules]="{
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ header: 1 }, { header: 2 }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ size: ['small', false, 'large', 'huge'] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ['link', 'video'],
+            [{ color: [] }, { background: [] }],
+            ['clean']
+          ]
+        }"
+        [theme]="'snow'"
+        class="quill-editor"
+      ></quill-editor>
       <div
         *ngIf="
           articleForm.get('content').invalid &&
@@ -68,4 +71,3 @@
     </div>
   </form>
 </div>
-

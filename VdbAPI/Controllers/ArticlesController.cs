@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 using VdbAPI.DTO;
@@ -9,10 +12,11 @@ namespace VdbAPI.Controllers {
     [ApiController]
     public class ArticlesController : ControllerBase {
         private readonly VideoDBContext _context;
-
-        public ArticlesController(VideoDBContext context)
+        private readonly string? _connection;
+        public ArticlesController(VideoDBContext context,IConfiguration configuration)
         {
             _context = context;
+            _connection = configuration.GetConnectionString("VideoDB");
         }
 
         // GET: api/Articles
@@ -25,15 +29,18 @@ namespace VdbAPI.Controllers {
 
         // GET: api/Articles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Article>> GetArticle(int id)
+        public async Task<ActionResult<ArticleView>> GetArticle(int id)
         {
-            var article = await _context.Articles.FindAsync(id);
+            const string sql = "SELECT * FROM ArticleView WHERE ArticleId = @Id";
 
+            using var connection = new SqlConnection(_connection);
+            var article = await connection.QueryFirstOrDefaultAsync<ArticleView>(sql,new {
+                Id = id
+            });
             if(article == null) {
                 return NotFound();
             }
-
-            return article;
+            return Ok(article);
         }
 
         // PUT: api/Articles/5

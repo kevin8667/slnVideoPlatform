@@ -1,3 +1,4 @@
+import { QuillModule } from 'ngx-quill';
 import { NgModule } from '@angular/core';
 
 import { ArticleComponent } from './article/article.component';
@@ -17,7 +18,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ForumRoutingModule } from './forum-routing.module';
 import { ArticleListComponent } from './article-list/article-list.component';
-import { KnobModule } from 'primeng/knob';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { ToastModule } from 'primeng/toast'; // 確保引入 ToastModule
 @NgModule({
   declarations: [
     ArticleComponent,
@@ -39,7 +43,11 @@ import { KnobModule } from 'primeng/knob';
     MultiSelectModule,
     FormsModule,
     ForumRoutingModule,
-    KnobModule
+    QuillModule,
+    InputTextModule,
+    MessageModule,
+    SplitButtonModule,
+    ToastModule,
   ],
   exports: [],
   providers: [ForumService],

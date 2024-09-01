@@ -5,6 +5,9 @@
   justify-content: center;
   width: 100%;
 }
+.card .pageBar {
+  justify-content: space-around;
+}
 .flex {
   display: flex;
 }

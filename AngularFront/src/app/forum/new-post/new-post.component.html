@@ -9,13 +9,26 @@
     <!-- 內文 -->
     <div class="form-group">
       <label for="content">文章內文</label>
-      <textarea
+      <quill-editor
         id="content"
         formControlName="content"
-        rows="5"
-        class="form-control"
-        placeholder="請輸入文章內文"
-      ></textarea>
+        placeholder="輸入文章內文"
+        [modules]="{
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ header: 1 }, { header: 2 }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ size: ['small', false, 'large', 'huge'] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ['link', 'video'],
+            [{ color: [] }, { background: [] }],
+            ['clean']
+          ]
+        }"
+        [theme]="'snow'"
+        class="quill-editor"
+      ></quill-editor>
       <div
         *ngIf="
           articleForm.get('content').invalid &&

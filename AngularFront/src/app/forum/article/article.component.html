@@ -6,21 +6,31 @@
   <!-- 文章內容 -->
   <div class="article">
     <div class="article-header">
-      <h1 class="article-title">文章標題</h1>
+      <h1 class="article-title">{{ article.title }}</h1>
       <div class="article-info">
-        <span class="article-author">作者: 張三</span> |
-        <span class="article-date">2024年8月30日| </span>
+        <span class="article-author">作者: {{ article.memberName }}</span>
+        <span class="article-date"
+          >發表時間：{{ article.postDate | forumDate }}
+        </span>
       </div>
     </div>
-    <div class="article-content" contenteditable="true">
-      <p>
-        這裡是文章內容。你可以在這裡撰寫詳細的文章內容，包括文字、圖片、鏈接等。
-      </p>
-      <p>文章的目的是分享有價值的信息，讓讀者能夠獲得有用的知識或見解。</p>
-    </div>
+    <div class="article-content" [innerHTML]="safeContent"></div>
     <div class="article-actions">
-      <button class="action-btn like-btn">讚 (10)</button>
-      <button class="action-btn dislike-btn">踩 (2)</button>
+      <p-button
+        label="讚(10)"
+        (onClick)="like()"
+        styleClass="p-button-outlined p-button-success mr-2 mb-2"
+        [raised]="true"
+        severity="success"
+      ></p-button>
+      <p-button
+        label="踩(2)"
+        (onClick)="dislike()"
+        styleClass="p-button-outlined p-button-danger mr-2 mb-2"
+        [raised]="true"
+        severity="Warn"
+      ></p-button>
+      <p-toast></p-toast>
     </div>
   </div>
 
@@ -35,8 +45,20 @@
         <p>這是回覆內容。你可以在這裡對文章進行回應，提出你的觀點或意見。</p>
       </div>
       <div class="reply-actions">
-        <button class="action-btn like-btn">讚 (5)</button>
-        <button class="action-btn dislike-btn">踩 (1)</button>
+        <p-button
+          label="讚(10)"
+          (onClick)="like()"
+          styleClass="p-button-outlined p-button-success mr-2 mb-2"
+          [raised]="true"
+          severity="success"
+        ></p-button>
+        <p-button
+          label="踩(2)"
+          (onClick)="dislike()"
+          styleClass="p-button-outlined p-button-danger mr-2 mb-2"
+          [raised]="true"
+          severity="Warn"
+        ></p-button>
       </div>
     </div>
   </div>
