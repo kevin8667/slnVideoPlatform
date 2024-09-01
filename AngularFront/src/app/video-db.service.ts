@@ -19,6 +19,8 @@ export class VideoDBService {
   // seriesName:string | null = null;
   // seasonName:string | null = null;
 
+    
+
   getVideoApi(){
     this.httpClient.get<Video[]>('https://localhost:7193/api/VideoList')
     .subscribe(videos => {
@@ -68,7 +70,7 @@ export class VideoDBService {
 
     return this.httpClient.get<Video[]>(url)
   }
-  getSearchVideoApi(videoName: string | null, typeId: number | null, summary: string | null, genreName: string | null, seriesName: string | null, seasonName: string | null , pageNumber: number, pageSize: number){
+  getSearchVideoApi(videoName: string | null, typeId: number | null, summary: string | null, genreName: string | null, seriesName: string | null, seasonName: string | null ){
 
     const url = `https://localhost:7193/api/VideoList/search`
 
@@ -91,16 +93,16 @@ export class VideoDBService {
     if (seasonName) {
       params = params.set('seasonName', seasonName);
     }
-    params = params.set('pageNumber', pageNumber);
-    params = params.set('pageSize', pageSize);
+    // params = params.set('pageNumber', pageNumber);
+    // params = params.set('pageSize', pageSize);
 
-    this.httpClient.get<PagedResult<Video>>(url, { params })
+    this.httpClient.get<Video[]>(url, { params })
     .subscribe(video => {
       console.log(video);
     }, error => {
       console.error('Error fetching videos:', error);
     });
 
-    return this.httpClient.get<PagedResult<Video>>(url, { params })
+    return this.httpClient.get<Video[]>(url, { params })
   }
 }

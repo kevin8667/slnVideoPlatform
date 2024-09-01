@@ -10,9 +10,19 @@
   gap: 1rem;
 }
 
-.p-col-12.p-md-4 {
-  flex: 1 1 calc(33.333% - 1rem); /* 三欄顯示 */
+app-db-search .p-dataView .p-col-12.p-md-4 {
+  flex: 1 1 calc(33.333% - 1rem) !important;
 }
-p{
-  color: black;
+
+
+/* .p-dataview .p-dataview-grid .p-col-12, 
+.p-dataview .p-dataview-grid .p-md-4 {
+    display: inline-block ;
+    width: 100%; 
 }
+
+@media (min-width: 300px) {
+    .p-dataview .p-dataview-grid .p-md-4 {
+        width: 33.3333%;
+    }
+} */

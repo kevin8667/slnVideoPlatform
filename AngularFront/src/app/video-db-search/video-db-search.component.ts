@@ -1,10 +1,8 @@
-import { event } from 'jquery';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
 import { ActivatedRoute } from '@angular/router';
-import { PagedResult } from '../interfaces/PagedResult';
-
+import { SearchStateService } from '../search-state.service';
 
 interface VideoType
 {
@@ -15,15 +13,16 @@ interface VideoType
 @Component({
   selector: 'app-video-db-search',
   templateUrl: './video-db-search.component.html',
-  styleUrls: ['./video-db-search.component.css']
+  styleUrls: ['./video-db-search.component.css'],
+  encapsulation:ViewEncapsulation.None
 })
 
 export class VideoDbSearchComponent implements OnInit {
 
-  inputName:string ='';
-  keyword:string[]|undefined;
-  types:VideoType[]|undefined;
-  selectedType:VideoType|undefined;
+  inputName: string = '';
+  keyword: string[] | undefined;
+  types: VideoType[] | undefined;
+  selectedType: VideoType | undefined;
 
   videoName: string | null = null;
   typeId: number | null = null;
@@ -31,77 +30,72 @@ export class VideoDbSearchComponent implements OnInit {
   genreName: string | null = null;
   seriesName: string | null = null;
   seasonName: string | null = null;
-  totalResults: number = 0;
-  pageSize: number = 10;
-  currentPage:number =1;
-  first:number = 0;
+  pageSize: number = 15;
 
   videos!: Video[];
 
-  constructor(private route: ActivatedRoute,private videoDbService:VideoDBService){}
-
+  constructor(
+    private route: ActivatedRoute,
+    private videoDbService: VideoDBService,
+    private searchStateService: SearchStateService
+  ) {}
 
   ngOnInit() {
-    this.types=
-    [
-      {typeName:'電影', typeId:1},
-      {typeName:'影集', typeId:2},
-      {typeName:'其他', typeId:3}
+    this.types = [
+      { typeName: '電影', typeId: 1 },
+      { typeName: '影集', typeId: 2 },
+      { typeName: '其他', typeId: 3 }
     ];
 
+    // const savedParams = this.searchStateService.getSearchParams();
+    // const savedResults = this.searchStateService.getSearchResults();
 
-    // this.route.queryParams.subscribe(params => {
-    //   this.videoName = params['videoName'] || null;
-    //   this.typeId = params['typeId'] ? +params['typeId'] : null;
-    //   this.summary = params['summary'] || null;
-    //   this.genreName = params['genreName'] || null;
-    //   this.seriesName = params['seriesName'] || null;
-    //   this.seasonName = params['seasonName'] || null;})
+    // if (savedParams && savedResults) {
+    //   this.videoName = savedParams.videoName;
+    //   this.typeId = savedParams.typeId;
+    //   this.summary = savedParams.summary;
+    //   this.genreName = savedParams.genreName;
+    //   this.seriesName = savedParams.seriesName;
+    //   this.seasonName = savedParams.seasonName;
 
-    // this.searchVideos();
-
+    //   this.videos = savedResults;
+    // } else {
+    //   this.searchVideoByFilters();
+    // }
   }
 
-
-  searchName()
-  {
+  searchVideoByFilters() {
     this.videoName = this.inputName;
-    const pageNumber = 1;  // 預設為第1頁
-    const pageSize = this.pageSize || 10;  // 預設每頁顯示10條記錄
-    //this.searchVideos();
-    this.loadVideos({ page: pageNumber, rows: pageSize });
+    if (this.selectedType != undefined) {
+      this.typeId = this.selectedType.typeId;
+    }else
+    {
+      this.typeId = null;
+    }
+    this.searchVideos();
   }
 
-  onPageChange(event: any) {
-    const pageNumber = event.page + 1;
-    const pageSize = event.rows;
-    this.totalResults = 30;
-    this.loadVideos({pageNumber, pageSize});
+  searchVideos(): void {
+    this.videoDbService.getSearchVideoApi(
+      this.videoName,
+      this.typeId,
+      this.summary,
+      this.genreName,
+      this.seriesName,
+      this.seasonName
+    ).subscribe((response) => {
+      console.log(this.typeId);
+      this.videos = response;
+
+    //   this.searchStateService.saveSearchParams({
+    //     videoName: this.videoName,
+    //     typeId: this.typeId,
+    //     summary: this.summary,
+    //     genreName: this.genreName,
+    //     seriesName: this.seriesName,
+    //     seasonName: this.seasonName
+    //   });
+    //   this.searchStateService.saveSearchResults(this.videos);
+      });
   }
-
-  loadVideos(event: any) {
-    console.log('Event:', event);
-    const pageNumber = event.page; // PrimeNG page index starts from 0
-    const pageSize = event.rows || this.pageSize;
-    console.log(pageNumber);
-    this.videoDbService.getSearchVideoApi(this.videoName, this.typeId, this.summary, this.genreName, this.seriesName, this.seasonName, pageNumber, pageSize)
-        .subscribe((result: PagedResult<Video>) => {
-            this.videos = result.items;
-            this.totalResults = result.totalResults;
-        });
-  }
-
-  test(event:any){
-    console.log('Event:', event);
-  }
-
-
-  // searchVideos(): void {
-  //   this.videoDbService.getSearchVideoApi(this.videoName, this.typeId, this.summary, this.genreName, this.seriesName, this.seasonName,pageNumber, this.pageSize)
-  //     .subscribe((response) => {
-  //       console.log(response)
-  //       this.videos=response;
-  //       console.log(this.videos);
-  //     });
-  // }
 }

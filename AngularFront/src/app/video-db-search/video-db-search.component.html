@@ -1,18 +1,39 @@
 <div class="card flex flex-row md:flex-row gap-3" >
   <div class="p-inputgroup" >
     <input type="text" pInputText placeholder="Title" [(ngModel)]="inputName"/>
-    <button type="button" pButton label="Search" (click)="searchName()"></button>
+    <button type="button" pButton label="Search" (click)="searchVideoByFilters()"></button>
   </div>
   <div>
     <p-chips [(ngModel)]="keyword" placeholder="keyword"></p-chips>
   </div>
   <div class="card flex justify-content-center">
-    <p-dropdown [options]="types" [(ngModel)]="selectedType" optionLabel="typeName" [showClear]="true" placeholder="Select a Type"></p-dropdown>
+    <p-dropdown [options]="types" [(ngModel)]="selectedType" optionLabel="typeName" [showClear]="true" placeholder="Select a Type" (onChange)="searchVideoByFilters()"></p-dropdown>
   </div>
 </div>
-
-<!-- <p-dataView #dv [value]="videos" [rows]="10" [paginator]="true">
-  <ng-template let-video pTemplate="listItem">
+<p-dataView #dv [value]="videos" [rows]="pageSize" [paginator]="true" layout="grid">
+  <ng-template let-video pTemplate="gridItem">
+    <div class="p-col-12 p-md-4"> <!-- 改用 p-col-12 和 p-md-4 -->
+      <div class="p-card">
+        <img class="w-full shadow-2 block mx-auto border-round" 
+              style="width: 200px; height: 200px;" 
+              src="/assets/img/NoClue.jpg" 
+              [alt]="video.videoName" />
+        <div class="p-card-body">
+          <div class="text-2xl font-bold text-900">{{ video.videoName }}</div>
+          <div class="flex align-items-center gap-2 mt-2">
+            <i class="pi pi-tag"></i>
+            <span class="font-semibold">{{ video.mainGenreName }}</span>
+          </div>
+          <div class="text-md font-semibold mt-2">
+            {{ video.summary }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dataView>
+<!-- <p-dataView #dv [value]="videos" [rows]="pageSize" [paginator]="true" layout="grid">
+  <ng-template let-video pTemplate="gridItem">
       <div class="col-12">
           <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
               <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src="/assets/img/NoClue.jpg" [alt]="video.videoName" />
@@ -35,51 +56,3 @@
       </div>
   </ng-template>
 </p-dataView> -->
-<p-dataView #dv [value]="videos">
-  <ng-template let-video pTemplate="listItem">
-      <div class="col-12">
-          <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-              <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src="/assets/img/NoClue.jpg" [alt]="video.videoName" />
-              <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                  <div class="flex flex-column align-items-center sm:align-items-start gap-3">
-                      <div class="text-2xl font-bold text-900">{{ video.videoName }}</div>
-                      <div class="flex align-items-center gap-3">
-                          <span class="flex align-items-center gap-2">
-                              <i class="pi pi-tag"></i>
-                              <span class="font-semibold">{{ video.mainGenreName }}</span>
-                          </span>
-                      </div>
-                  </div>
-                  <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                      <span class="text-2xl font-semibold">{{ video.summary}}</span>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </ng-template>
-</p-dataView>
-
-<p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="pageSize" [totalRecords]="totalResults" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
-
-<!-- <p style="color: black;">{{inputName}}</p>
-<div
-  class="card flex justify-content-center"
-  style="width: auto; height: 500px"
->
-  <ng-container *ngFor="let video of videos">
-    <p-card
-      header="{{ video.videoName }}"
-      subheader="Card Subheader"
-      [style]="{ width: '360px', height:'400px'}"
-    >
-      <ng-template pTemplate="header">
-        <img
-          alt="Card"
-          src="https://primefaces.org/cdn/primeng/images/usercard.png"
-        />
-      </ng-template>
-      <ng-template pTemplate="footer">
-      </ng-template>
-    </p-card>
-  </ng-container>
-</div> -->

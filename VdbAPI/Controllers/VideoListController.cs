@@ -63,9 +63,9 @@ namespace VdbAPI.Controllers
             string? summary,
             string? genreName,
             string? seriesName,
-            string? seasonName,
-            int pageNumber = 1,
-            int pageSize = 10)
+            string? seasonName)
+            //int pageNumber = 1,
+            //int pageSize = 10)
         {
             var query = _context.VideoLists
                 .Include(v => v.MainGenre)
@@ -109,8 +109,6 @@ namespace VdbAPI.Controllers
 
             // 應用分頁
             var videoListDTOs = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
                 .Select(v => new VideoListDTO
                 {
                     VideoId = v.VideoId,
@@ -127,15 +125,15 @@ namespace VdbAPI.Controllers
                 }).ToListAsync();
 
             // 返回分頁結果
-            var response = new PaginatedResponse<VideoListDTO>
-            {
-                Items = videoListDTOs,
-                TotalRecords = totalRecords,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
+            //var response = new PaginatedResponse<VideoListDTO>
+            //{
+            //    Items = videoListDTOs,
+            //    TotalRecords = totalRecords,
+            //    PageNumber = pageNumber,
+            //    PageSize = pageSize
+            //};
 
-            return Ok(response);
+            return Ok(videoListDTOs);
         }
 
         // PUT: api/VideoList/5
