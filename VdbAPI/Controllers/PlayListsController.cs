@@ -151,5 +151,81 @@ namespace VdbAPI.Controllers
         {
             return _context.PlayLists.Any(e => e.PlayListId == id);
         }
+
+        [HttpGet("{id}/items")]
+        public async Task<ActionResult<IEnumerable<PlaylistitemDTO>>> GetPlayListItems(int id)
+        {
+            var playListItems = await _context.PlayListItems
+                .Where(p => p.PlayListId == id)
+                .Select(p => new PlaylistitemDTO
+                {
+                    PlayListId = p.PlayListId,
+                    VideoId = p.VideoId,
+                    VideoPosition = p.VideoPosition,
+                    VideoName = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).VideoName,
+                    ThumbnailId = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).ThumbnailId
+                }).ToListAsync();
+
+            if (playListItems == null || !playListItems.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(playListItems);
+        }
+
+        [HttpDelete("{id}/items/{videoId}")]
+        public async Task<IActionResult> RemoveVideoFromPlayList(int id, int videoId)
+        {
+            var playListItem = await _context.PlayListItems
+                .FirstOrDefaultAsync(p => p.PlayListId == id && p.VideoId == videoId);
+
+            if (playListItem == null)
+            {
+                return NotFound();
+            }
+
+            _context.PlayListItems.Remove(playListItem);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}/items/{videoId}/position")]
+        public async Task<IActionResult> UpdateVideoPosition(int id, int videoId, [FromBody] int newPosition)
+        {
+            var playListItem = await _context.PlayListItems
+                .FirstOrDefaultAsync(p => p.PlayListId == id && p.VideoId == videoId);
+
+            if (playListItem == null)
+            {
+                return NotFound();
+            }
+
+            playListItem.VideoPosition = newPosition;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PlayListItemExists(id, videoId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool PlayListItemExists(int playListId, int videoId)
+        {
+            return _context.PlayListItems.Any(p => p.PlayListId == playListId && p.VideoId == videoId);
+        }
     }
 }
