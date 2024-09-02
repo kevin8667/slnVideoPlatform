@@ -1,22 +1,22 @@
-<p-card header="{{ video.videoName }}" class="p-mb-3">
+<!-- <p-card header="{{ video.videoName }}" class="p-mb-3 video-card">
   <ng-template pTemplate="header">
-    <div class="text-center">
-      <img
-        [src]="'/assets/img/video-thumbnails/' + video.thumbnailId + '.png'"
-        alt="{{ video.videoName }}"
+    <div class="text-center header-img">
+      <p-image
+        src="/assets/img/NoImage.jpg"
         class="p-mb-2"
-        style="max-width: 100%; height: auto"
-      />
+        width="400px"
+        height="600px"
+        [preview]="true"
+      ></p-image>
     </div>
   </ng-template>
-  <div class="p-d-flex p-jc-between p-ai-center">
-    <div>
+  <div class="p-d-flex p-jc-between p-ai-start video-info">
+    <div class="p-mr-3">
       <p><strong>Season:</strong> {{ season?.seasonName }}</p>
       <p><strong>Episode:</strong> {{ video.episode }}</p>
       <p><strong>Running Time:</strong> {{ video.runningTime }}</p>
       <p><strong>Release Date:</strong> {{ video.releaseDate | date }}</p>
       <p><strong>Rating:</strong> {{ video.rating }} / 5</p>
-      <p><strong>Views:</strong> {{ video.views }}</p>
       <p><strong>Summary:</strong> {{ video.summary }}</p>
       <p><strong>Language:</strong> {{ video.lang }}</p>
       <p><strong>Age Rating:</strong> {{ video.ageRating }}</p>
@@ -34,20 +34,57 @@
       >
     </div>
   </div>
-</p-card>
-<h3 style="color: black">推薦影片</h3>
-<div class="card">
+</p-card> -->
+
+<div class="custom-card">
+  <div class="card-body">
+    <div class="image-container">
+      <p-image
+        src="/assets/img/NoImage.jpg"
+        alt="{{ video.videoName }}"
+        class="video-image"
+       [preview]="true"
+       width="300px"
+       height="450px"
+      ></p-image>
+    </div>
+    <div class="text-content">
+      <h1 style="color: black;">{{ video.videoName }}</h1>
+      <p><strong>Season:</strong> {{ season?.seasonName }}</p>
+      <p><strong>Episode:</strong> {{ video.episode }}</p>
+      <p><strong>Running Time:</strong> {{ video.runningTime }}</p>
+      <p><strong>Release Date:</strong> {{ video.releaseDate | date }}</p>
+      <p><strong>Rating:</strong> {{ video.rating }} / 5</p>
+      <p><strong>Summary:</strong> {{ video.summary }}</p>
+      <p><strong>Language:</strong> {{ video.lang }}</p>
+      <p><strong>Age Rating:</strong> {{ video.ageRating }}</p>
+      <a
+        class="button"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-play"
+        label="Watch Trailer"
+        >預告片</a
+      >
+    </div>
+  </div>
+</div>
+
+<h3 style="color: black; margin-top: 2rem;">推薦影片</h3>
+<div class="card recommended-videos">
   <p-carousel
     [value]="videos"
-    [numVisible]="3"
-    [numScroll]="3"
+    [numVisible]="5"
+    [numScroll]="2"
     [circular]="true"
     [responsiveOptions]="responsiveOptions"
     [autoplayInterval]="3000"
   >
     <ng-template let-video pTemplate="item">
       <div
-        class="border-1 surface-border border-round m-2 text-center py-5 px-3"
+        class="video-carousel-item border-1 surface-border border-round m-2 text-center py-5 px-3"
       >
         <div class="mb-3">
           <a [routerLink]="['/details', video.videoId]"
@@ -55,7 +92,7 @@
               src="/assets/img/NoClue.jpg"
               [alt]="video.name"
               class="w-6 shadow-2"
-              style="width: 200px"
+              style="width: 200px; border-radius: 10px;"
           /></a>
         </div>
         <div>

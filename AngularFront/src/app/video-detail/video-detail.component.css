@@ -1,4 +1,66 @@
-p
-{
+p {
     color: black;
+}
+
+.custom-card {
+    width: 100%; /* 讓卡片寬度占滿父容器 */
+    height: 500px; /* 設定卡片的高度 */
+    max-height: 700px; /* 設定卡片的最大高度 */
+    border-top: 1px solid #ddd; /* 上邊框 */
+    border-bottom: 1px solid #ddd; /* 下邊框 */
+    border-left: none; /* 隱藏左邊框 */
+    border-right: none; /* 隱藏右邊框 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 16px; /* 增加內部填充 */
+    box-sizing: border-box; /* 確保 padding 不會影響卡片的寬度 */
+    position: relative;
+  }
+  
+  .card-header {
+    background-color: #f5f5f5;
+    padding: 16px;
+    text-align: center;
+  }
+  
+  .card-body {
+    display: flex;
+    justify-content: space-between; /* 保持圖片和文字在一行 */
+    align-items: center;
+    padding: 0 400px; /* 調整左右邊距，使內容更集中 */
+  }
+  
+  .image-container {
+    flex: 0 0 auto;
+    margin-right: 16px; /* 圖片與文字之間的間距 */
+  }
+  
+  .video-image {
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .text-content {
+    flex: 1; /* 讓文字內容占據剩餘的空間 */
+  }
+
+.button {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recommended-videos .video-carousel-item {
+    transition: transform 0.3s ease-in-out;
+}
+
+.recommended-videos .video-carousel-item:hover {
+    transform: scale(1.05);
 }

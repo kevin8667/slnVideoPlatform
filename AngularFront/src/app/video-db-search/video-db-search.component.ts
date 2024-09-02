@@ -3,6 +3,7 @@ import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
 import { ActivatedRoute } from '@angular/router';
 import { SearchStateService } from '../search-state.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 interface VideoType
 {
@@ -14,7 +15,20 @@ interface VideoType
   selector: 'app-video-db-search',
   templateUrl: './video-db-search.component.html',
   styleUrls: ['./video-db-search.component.css'],
-  encapsulation:ViewEncapsulation.None
+  encapsulation:ViewEncapsulation.None,
+  animations: [
+    trigger('listAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('0.5s ease-in-out', 
+                style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('0.5s ease-in-out', 
+                style({ opacity: 0, transform: 'translateY(20px)' }))
+      ])
+    ])
+  ]
 })
 
 export class VideoDbSearchComponent implements OnInit {
@@ -30,6 +44,8 @@ export class VideoDbSearchComponent implements OnInit {
   genreName: string | null = null;
   seriesName: string | null = null;
   seasonName: string | null = null;
+
+  pageSizeOptions:number[]=[5,10,15];
   pageSize: number = 15;
 
   videos!: Video[];

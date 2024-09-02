@@ -20,6 +20,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
+import { ImageModule } from 'primeng/image';
+import { SeasonListComponent } from './season-list/season-list.component';
+import { EpisodeListComponent } from './episode-list/episode-list.component';
 
 
 @NgModule({
@@ -28,7 +31,9 @@ import { DataViewModule } from 'primeng/dataview';
     TestComponent,
     VideoDBFrontPageComponent,
     VideoDetailComponent,
-    VideoDbSearchComponent
+    VideoDbSearchComponent,
+    SeasonListComponent,
+    EpisodeListComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,8 @@ import { DataViewModule } from 'primeng/dataview';
     BrowserAnimationsModule,
     PaginatorModule,
     TableModule,
-    DataViewModule
+    DataViewModule,
+    ImageModule
   ],
   providers: [],
   bootstrap: [AppComponent]

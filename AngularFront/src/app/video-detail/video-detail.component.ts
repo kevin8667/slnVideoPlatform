@@ -1,5 +1,5 @@
 import { Season } from './../interfaces/season';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
@@ -8,6 +8,7 @@ import { Video } from '../interfaces/video';
   selector: 'app-video-detail',
   templateUrl: './video-detail.component.html',
   styleUrls: ['./video-detail.component.css']
+
 })
 export class VideoDetailComponent implements OnInit{
 
