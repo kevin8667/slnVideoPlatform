@@ -9,7 +9,6 @@ import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { PlaylistitemComponent } from './playlistitem/playlistitem.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TabViewModule } from 'primeng/tabview';
 import { PanelModule } from 'primeng/panel';
 import { PlaylistMemberComponent } from './playlistmember/playlistmember.component';
 
@@ -34,7 +33,6 @@ const routes: Routes = [
     PaginatorModule,
     DialogModule,
     DragDropModule,
-    TabViewModule ,
     PanelModule
   ],
   exports: [RouterModule],

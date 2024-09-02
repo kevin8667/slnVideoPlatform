@@ -35,4 +35,8 @@ export class PlaylistService {
   getMemberAddedPlaylists(memberId: number): Observable<PlaylistDTO[]> {
     return this.http.get<PlaylistDTO[]>(`${this.apiUrl}/added/${memberId}`);
   }
+
+  getMemberCollaboratorPlaylists(memberId: number): Observable<PlaylistDTO[]> {
+    return this.http.get<PlaylistDTO[]>(`${this.apiUrl}/collaborator/${memberId}`);
+  }
 }

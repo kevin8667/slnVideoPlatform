@@ -1,30 +1,91 @@
-.playlist-cards {
+::ng-deep .playlist-container {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 20px;
 }
 
-.custom-card {
-  width: 300px;
+::ng-deep .playlist-section {
+  flex: 1;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+::ng-deep .playlist-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+::ng-deep .custom-card {
+  width: 85%;
+  box-sizing: border-box;
+  padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #ffffff;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+::ng-deep .custom-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  margin-bottom: 15px;
+}
+
+::ng-deep .custom-card p {
+  margin: 15px 0;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+
+::ng-deep .button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+::ng-deep .p-button {
+  flex: 1;
+  margin-top: 10px;
+  background-color: transparent;
+  color: #17A2B8;
+  border: none;
+  font-size: 20px;
   padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.custom-card img {
-  width: 100%;
-  height: auto;
+::ng-deep .p-button:hover {
+  background-color: #e0e0e0;
+  color: #6C757D;
 }
 
-.custom-card p {
-  margin: 10px 0;
+::ng-deep .p-button:focus {
+  outline: none;
+  box-shadow: none;
 }
 
-.p-button {
-  margin-right: 10px;
+::ng-deep .playlist-section h2 {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 20px;
 }
 
-.playlist-image {
-  width: 100%;
-  height: auto;
-  max-height: 200px;
-}
+@media (max-width: 1024px) {
+  ::ng-deep .playlist-container {
+    flex-direction: column;
+  }
 
+  ::ng-deep .playlist-section {
+    margin-bottom: 20px;
+  }
+}

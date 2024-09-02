@@ -10,6 +10,7 @@ import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 export class PlaylistMemberComponent implements OnInit {
   createdPlaylists: PlaylistDTO[] = [];
   addedPlaylists: PlaylistDTO[] = [];
+  collaboratorPlaylists: PlaylistDTO[] = [];
   memberId: number = 5;
 
   constructor(private playlistService: PlaylistService) { }
@@ -17,6 +18,7 @@ export class PlaylistMemberComponent implements OnInit {
   ngOnInit(): void {
     this.loadCreatedPlaylists();
     this.loadAddedPlaylists();
+    this.loadCollaboratorPlaylists();
   }
 
   loadCreatedPlaylists(): void {
@@ -37,6 +39,17 @@ export class PlaylistMemberComponent implements OnInit {
       },
       (error) => {
         console.error('Error loading added playlists', error);
+      }
+    );
+  }
+
+  loadCollaboratorPlaylists(): void {
+    this.playlistService.getMemberCollaboratorPlaylists(this.memberId).subscribe(
+      (data: PlaylistDTO[]) => {
+        this.collaboratorPlaylists = data;
+      },
+      (error) => {
+        console.error('Error loading collaborator playlists', error);
       }
     );
   }
