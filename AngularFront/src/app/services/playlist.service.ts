@@ -27,4 +27,12 @@ export class PlaylistService {
   updateVideoPosition(playlistId: number, videoId: number, newPosition: number): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${playlistId}/items/${videoId}/position`, { newPosition });
   }
+
+  getMemberCreatedPlaylists(memberId: number): Observable<PlaylistDTO[]> {
+    return this.http.get<PlaylistDTO[]>(`${this.apiUrl}/created/${memberId}`);
+  }
+
+  getMemberAddedPlaylists(memberId: number): Observable<PlaylistDTO[]> {
+    return this.http.get<PlaylistDTO[]>(`${this.apiUrl}/added/${memberId}`);
+  }
 }

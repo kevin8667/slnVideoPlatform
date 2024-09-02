@@ -1,0 +1,30 @@
+.playlist-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.custom-card {
+  width: 300px;
+  padding: 10px;
+}
+
+.custom-card img {
+  width: 100%;
+  height: auto;
+}
+
+.custom-card p {
+  margin: 10px 0;
+}
+
+.p-button {
+  margin-right: 10px;
+}
+
+.playlist-image {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+}
+

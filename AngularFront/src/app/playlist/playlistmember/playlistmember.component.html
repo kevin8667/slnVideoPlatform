@@ -1,3 +1,28 @@
-<p>playlistmember works!</p>
-<a routerLink="../">Back to Playlist</a>
-<button (click)="backToPlaylist()">返回到播放列表</button>
+<p-tabView>
+  <p-tabPanel header="創立的播放清單">
+    <div class="playlist-cards">
+      <ng-container *ngFor="let playlist of createdPlaylists">
+        <p-panel header="{{ playlist.playListName }}" styleClass="custom-card">
+          <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
+          <p>{{ playlist.playListDescription }}</p>
+          <p>觀看次數: {{ playlist.viewCount }}</p>
+          <button pButton type="button" icon="pi pi-pencil" (click)="editPlaylist(playlist.playListId)">編輯</button>
+          <button pButton type="button" icon="pi pi-trash" (click)="deletePlaylist(playlist.playListId)">刪除</button>
+        </p-panel>
+      </ng-container>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="添加的播放清單">
+    <div class="playlist-cards">
+      <ng-container *ngFor="let playlist of addedPlaylists">
+        <p-panel header="{{ playlist.playListName }}" styleClass="custom-card">
+          <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
+          <p>{{ playlist.playListDescription }}</p>
+          <p>觀看次數: {{ playlist.viewCount }}</p>
+          <button pButton type="button" icon="pi pi-pencil" (click)="editPlaylist(playlist.playListId)">編輯</button>
+          <button pButton type="button" icon="pi pi-trash" (click)="deletePlaylist(playlist.playListId)">刪除</button>
+        </p-panel>
+      </ng-container>
+    </div>
+  </p-tabPanel>
+</p-tabView>
