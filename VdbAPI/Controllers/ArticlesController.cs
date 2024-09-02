@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
+using System.Linq;
+using System.Text;
+
 using VdbAPI.DTO;
 using VdbAPI.Models;
 
@@ -21,17 +24,16 @@ namespace VdbAPI.Controllers {
 
         // GET: api/Articles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Theme>>> GetThemes()
+        public ActionResult<IEnumerable<Theme>> GetThemes()
         {
-            return await _context.Themes.ToListAsync();
-
+            return _context.Themes;
         }
 
         // GET: api/Articles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ArticleView>> GetArticle(int id)
         {
-            const string sql = "SELECT * FROM ArticleView WHERE ArticleId = @Id";
+            const string sql = "SELECT * FROM ArticleView WHERE ArticleId = @Id ";
 
             using var connection = new SqlConnection(_connection);
             var article = await connection.QueryFirstOrDefaultAsync<ArticleView>(sql,new {
@@ -87,39 +89,52 @@ namespace VdbAPI.Controllers {
         public async Task<ActionResult<forumDto>> LoadIndex(forumDto searchDTO)
         {
             try {
-                var article = _context.ArticleViews.AsQueryable();
-
+                //var article = _context.ArticleViews.AsQueryable();
+                using var connection = new SqlConnection(_connection);
+                var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and  lock = 1");
                 // 篩選條件
                 if(searchDTO.categoryId != 0) {
-                    article = article.Where(c => c.ThemeId == searchDTO.categoryId);
+                    sql.Append(" AND ThemeId = @CategoryId");
                 }
-
                 // 關鍵字篩選
-                if(!string.IsNullOrEmpty(searchDTO.keyword)) {
-                    article = article.Where(c => c.Title.Contains(searchDTO.keyword) ||
-                                                 c.ArticleContent.Contains(searchDTO.keyword) ||
-                                                 c.MemberName.Contains(searchDTO.keyword));
-                }
 
+                if(!string.IsNullOrEmpty(searchDTO.keyword)) {
+                    sql.Append(" AND (Title LIKE @Keyword OR ArticleContent LIKE @Keyword OR MemberName LIKE @Keyword)");
+                }
                 // 排序
-                article = sortArticle(searchDTO,article);
 
                 // 計算總筆數
-                int dataCount = article.Count();
+                var countSql = $"SELECT COUNT(1) FROM ({sql.ToString()}) AS CountQuery";
+                var dataCount = await connection.ExecuteScalarAsync<int>(countSql,new {
+                    CategoryId = searchDTO.categoryId,
+                    Keyword = $"%{searchDTO.keyword}%"
+                });
+
+                // 排序條件
+                sql.Append(" Order By UpdateDate Desc"); // 根據你的排序需求修改
 
                 // 分頁
                 int pageSize = searchDTO.pageSize ?? 10;
                 int page = searchDTO.page ?? 1;
                 int totalPages = (int)Math.Ceiling((decimal)dataCount / pageSize);
 
+                sql.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");
+
+
+                var articles = await connection.QueryAsync<ArticleView>(sql.ToString(),new {
+                    CategoryId = searchDTO.categoryId,
+                    Keyword = $"%{searchDTO.keyword}%",
+                    Offset = (page - 1) * pageSize,
+                    PageSize = pageSize
+                });
+
                 // 跳過指定頁數的資料並取出當前頁面的資料
-                var articles = await article.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
                 // 準備回傳的 DTO
                 var pagingDTO = new ForumPagingDTO {
                     TotalCount = dataCount,
                     TotalPages = totalPages,
-                    ForumResult = articles
+                    ForumResult = articles.Take(pageSize).ToList(),
                 };
 
                 return Ok(pagingDTO); // 返回 OK 和 DTO
@@ -129,43 +144,7 @@ namespace VdbAPI.Controllers {
                 return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
             }
         }
-
-        private static IQueryable<ArticleView> sortArticle(forumDto searchDTO,IQueryable<ArticleView> article)
-        {
-            switch(searchDTO.sortBy) {
-                case "theme":
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ThemeId) :
-                                                            article.OrderByDescending(s => s.ThemeId);
-                break;
-                case "memberName":
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.MemberName) :
-                                                            article.OrderByDescending(s => s.MemberName);
-                break;
-                case "title":
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
-                                                            article.OrderByDescending(s => s.Title);
-                break;
-                case "postDate":
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
-                                                            article.OrderByDescending(s => s.PostDate);
-                break;
-                case "replyCount":
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
-                                                            article.OrderByDescending(s => s.ReplyCount);
-                break;
-                case "lock":
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Lock) :
-                                                            article.OrderByDescending(s => s.Lock);
-                break;
-                default:
-                article = searchDTO.sortType == "asc" ? article.OrderByDescending(s => s.UpdateDate) :
-                                                            article.OrderBy(s => s.UpdateDate);
-                break;
-            }
-
-            return article;
-        }
-
+       
         private bool ArticleExists(int id)
         {
             return _context.Articles.Any(e => e.ArticleId == id);

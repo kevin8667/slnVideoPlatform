@@ -15,13 +15,14 @@ import { DataViewModule } from 'primeng/dataview';
 import { NewArticleComponent } from './new-article/new-article.component';
 import { NewPostComponent } from './new-post/new-post.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { ForumRoutingModule } from './forum-routing.module';
 import { ArticleListComponent } from './article-list/article-list.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast'; // 確保引入 ToastModule
+import { ToastModule } from 'primeng/toast';
+import { AutoFocusModule } from 'primeng/autofocus';
+import { GalleriaModule } from 'primeng/galleria';
 @NgModule({
   declarations: [
     ArticleComponent,
@@ -40,7 +41,6 @@ import { ToastModule } from 'primeng/toast'; // 確保引入 ToastModule
     AutoCompleteModule,
     DataViewModule,
     ReactiveFormsModule,
-    MultiSelectModule,
     FormsModule,
     ForumRoutingModule,
     QuillModule,
@@ -48,6 +48,8 @@ import { ToastModule } from 'primeng/toast'; // 確保引入 ToastModule
     MessageModule,
     SplitButtonModule,
     ToastModule,
+    AutoFocusModule,
+    GalleriaModule,
   ],
   exports: [],
   providers: [ForumService],

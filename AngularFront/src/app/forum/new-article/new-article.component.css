@@ -1,20 +1,25 @@
-.create-article-container {
-  width: 800px;
-  margin: auto;
-  border: 2px solid #007bff; /* 设置蓝色边框 */
-  border-radius: 5px; /* 圆角边框 */
-  padding: 10px; /* 内边距，确保内容与边框不贴边 */
+.newContainer {
+  display: flex;
+  justify-content: center; /* 使整個內容區域在頁面中置中 */
+  align-items: flex-start; /* 使側邊欄和內容區域的頂部對齊 */
+  padding: 20px;
+}
+.mainSection {
+  max-width: 800px; /* 設定最大寬度以保證內容區域不會太寬 */
+  width: 100%;
+  padding: 10px; /* 內邊距，確保內容與邊框不貼邊 */
   background-color: #ffffff; /* 白色背景 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影，提升立体感 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
+}
+.aside {
+  display: flex;
+  flex-direction: column;
+  width: 165px;
+  background-color: #343a40; /* 深灰色背景 */
+  margin-right: 20px; /* 讓側邊欄與文章內容有20px間距 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
 }
 
-.d20 {
-  width: 20%;
-  background-color: saddlebrown;
-}
-.d60 {
-  flex: 60%;
-}
 .error-message {
   background-color: #f8d7da; /* 淡紅色背景 */
   color: #721c24; /* 深紅色文字 */
@@ -33,10 +38,6 @@
   margin-right: 0.5rem; /* 圖示與文字間的距離 */
 }
 
-.form-tag {
-  width: 15%;
-}
-
 .quill-editor {
   height: 400px; /* 调整编辑器高度 */
 }
@@ -52,15 +53,6 @@
   padding: 10px;
   box-sizing: border-box;
 }
-.p-field label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.p-message {
-  margin-top: 5px;
-  color: #dc3545; /* Bootstrap's danger color */
-}
 
 input[pInputText] {
   padding: 10px;
@@ -73,6 +65,43 @@ h2 {
   border-bottom: 2px solid #007bff; /* 增加下划线 */
   padding-bottom: 10px; /* 增加标题底部内边距，使下划线不贴边 */
 }
-.p-field label {
-  font-weight: 600; /* 半粗体，突出显示 */
+
+.themeTag1 {
+  margin: 10px 0; /* 上下邊距 */
+}
+
+.imgBtn {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: 1px solid #aaabac;
+  font-size: 14px;
+  color: #343a40;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.5s ease-out, box-shadow 0.5s ease;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.imgBtn .icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  background-image: url("https://via.placeholder.com/2"); /* 圖案的 URL */
+  background-size: cover;
+}
+
+.imgBtn:hover {
+  background-color: #c1cdd6;
+  color: #0056b3; /* 懸停時的文字顏色 */
+  box-shadow: 0 4px 8px rgba(218, 210, 210, 0.007);
+}
+
+.imgBtn:not(:first-child) {
+  border-top: 0; /* 移除第二個及之後按鈕的上邊框 */
+}
+
+.imgBtn:not(:last-child) {
+  border-bottom: 0;
 }

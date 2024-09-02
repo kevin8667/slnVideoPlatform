@@ -6,6 +6,8 @@ import { catchError, map } from 'rxjs/operators';
 import { Theme } from '../interface/Theme';
 import { ForumPagingDTO } from '../interface/ForumPagingDTO';
 import { ArticleView } from '../interface/ArticleView';
+import { Router } from '@angular/router';
+import { Post } from '../interface/Post';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,7 @@ export class ForumService {
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
 
-  constructor(private client: HttpClient) {
+  constructor(private client: HttpClient, private route: Router) {
     this.loadThemeTags();
   }
 
@@ -22,14 +24,19 @@ export class ForumService {
     return this.client
       .get<ArticleView>(`https://localhost:7193/api/Articles/${id}`)
       .pipe(
-        catchError((error) => {
+        catchError(() => {
           // 處理錯誤
-          console.error('Error fetching article:', error);
-          return throwError(() => new Error('Failed to fetch article'));
+          history.back();
+          return throwError(() => new Error('服務異常：Failed to fetch article'));
         })
       );
   }
-
+  getPosts(id:number):Observable<Post[]>{
+    return this.client.get<Post[]>(`https://localhost:7193/api/Posts/${id}`)
+    .pipe(catchError(()=>{
+      return throwError(() => new Error('服務異常：Failed to fetch post'));
+    }))
+  }
   private loadThemeTags(): void {
     this.client.get<Theme[]>('https://localhost:7193/api/Articles').subscribe({
       next: (data: Theme[]) => this.themeTagSubject.next(data),

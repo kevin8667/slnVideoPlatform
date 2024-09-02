@@ -29,6 +29,29 @@ export class ArticleListComponent implements OnInit {
     first: 0,
     totalRecords: 0,
   };
+  images: any[] = [
+    {
+      pic: '/assets/images/forumAd.png',
+    },
+    {
+      pic: '/assets/images/forumAd2.png',
+    },
+  ];
+
+  responsiveOptions: any[] = [
+    {
+      breakpoint: '1024px',
+      numVisible: 5,
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 3,
+    },
+    {
+      breakpoint: '560px',
+      numVisible: 1,
+    },
+  ];
   constructor(private route: Router, private forumService: ForumService) {}
 
   ngOnInit(): void {
@@ -77,4 +100,5 @@ export class ArticleListComponent implements OnInit {
   openCreateArticleDialog() {
     this.route.navigateByUrl('forum/newA');
   }
+
 }

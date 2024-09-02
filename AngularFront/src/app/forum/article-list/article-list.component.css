@@ -1,12 +1,5 @@
-.p-forumFlex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem; /* 卡片之間的間距 */
-  justify-content: center;
-  width: 100%;
-}
 .card .pageBar {
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .flex {
   display: flex;
@@ -24,12 +17,19 @@
   margin-top: 3%;
 }
 /* 篩選按鈕 */
-.buttonFlex {
+.button-container {
   display: flex;
-  justify-content: flex-start;
   flex-wrap: wrap-reverse;
+  justify-content: space-between; /* 平均分配按鈕之間的空間 */
+  background-color: #f8f9fa; /* 背景色 */
+  border-radius: 8px; /* 圓角邊框 */
+  gap: 3px; /* 按鈕之間的間距 */
 }
-/* 固定按鈕樣式 */
+
+.button-container .ui-button {
+  font-size: 13px; /* 調整字體大小 */
+  text-align: center; /* 文字居中 */
+}
 
 .text-label {
   font-size: 1.5rem; /* 调整字体大小 */
@@ -38,7 +38,7 @@
 }
 
 .gap-3 {
-  gap: 1rem; /* 調整為你需要的間距 */
+  gap: 4px; /* 調整為你需要的間距 */
 }
 
 .align-items-center {
@@ -100,7 +100,7 @@
   transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
   flex-direction: row; /* 使圖片和內容水平排列 */
   max-width: 1100px; /* 設定最大寬度 */
-  min-width: 800px; /* 設定最小寬度 */
+  width: 100%;
   margin: 0 auto; /* 使卡片水平居中 */
 }
 
@@ -200,7 +200,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  height: 500px; /* 設定固定高度，方便顯示 */
+  height: 700px; /* 設定固定高度，方便顯示 */
 }
 
 .chat-header {
@@ -265,16 +265,7 @@
   background-color: #0056b3;
 }
 
-/* 使按鈕固定在頁面左上角 */
 .fixed-button {
-  position: fixed;
-  left: 1vh;
-  top: 37vh; /* 使用 viewport 單位，按鈕會在視窗高度的 50% 處 */
   align-items: center;
-  gap: 1rem; /* 按鈕間隔 */
-}
-
-/* 按鈕樣式 */
-.fixed-button .p-button {
-  display: block;
+  margin-left:200px;
 }

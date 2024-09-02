@@ -30,19 +30,25 @@
         [raised]="true"
         severity="Warn"
       ></p-button>
-      <p-toast></p-toast>
+      <p-toast
+        [showTransformOptions]="'translateY(100%)'"
+        [showTransitionOptions]="'1000ms'"
+        [hideTransitionOptions]="'500ms'"
+        [showTransformOptions]="'translateX(100%)'"
+        position="top-center"
+      ></p-toast>
     </div>
   </div>
 
   <!-- 回覆內容 -->
   <div class="replies">
-    <div class="reply">
+    <div class="reply" *ngFor="let post of posts">
       <div class="reply-header">
-        <span class="reply-author">用戶A</span>
-        <span class="reply-date">2024年8月30日</span>
+        <span class="reply-author">{{post.nickName}}</span>
+        <span class="reply-date">{{post.postDate|forumDate}}</span>
       </div>
       <div class="reply-content">
-        <p>這是回覆內容。你可以在這裡對文章進行回應，提出你的觀點或意見。</p>
+        {{post.postContent}}
       </div>
       <div class="reply-actions">
         <p-button
