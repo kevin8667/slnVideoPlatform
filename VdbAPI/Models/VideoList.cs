@@ -27,9 +27,9 @@ public partial class VideoList
 
     public DateOnly? ReleaseDate { get; set; }
 
-    public decimal Rating { get; set; }
+    public decimal? Rating { get; set; }
 
-    public decimal Popularity { get; set; }
+    public decimal? Popularity { get; set; }
 
     public int? ThumbnailId { get; set; }
 

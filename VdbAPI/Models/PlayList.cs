@@ -25,11 +25,13 @@ public partial class PlayList
 
     public byte[] ShowImage { get; set; }
 
-    public DateTime PlayListCreatedAt { get; set; }
+    public DateTime? PlayListCreatedAt { get; set; }
 
-    public DateTime PlayListUpdatedAt { get; set; }
+    public DateTime? PlayListUpdatedAt { get; set; }
 
-    public DateTime AnalysisTimestamp { get; set; }
+    public DateTime? AnalysisTimestamp { get; set; }
+
+    public virtual ICollection<MemberCreatedPlayList> MemberCreatedPlayLists { get; set; } = new List<MemberCreatedPlayList>();
 
     public virtual ICollection<MemberPlayList> MemberPlayLists { get; set; } = new List<MemberPlayList>();
 

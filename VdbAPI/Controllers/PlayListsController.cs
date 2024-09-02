@@ -164,7 +164,7 @@ namespace VdbAPI.Controllers
                     VideoPosition = p.VideoPosition,
                     VideoName = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).VideoName,
                     ThumbnailId = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).ThumbnailId,
-                    Episode = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).Episode // 添加這行以包括Episode
+                    Episode = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).Episode
                 }).ToListAsync();
 
             if (playListItems == null || !playListItems.Any())
@@ -227,6 +227,48 @@ namespace VdbAPI.Controllers
         private bool PlayListItemExists(int playListId, int videoId)
         {
             return _context.PlayListItems.Any(p => p.PlayListId == playListId && p.VideoId == videoId);
+        }
+
+        [HttpGet("created/{memberId}")]
+        public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetMemberCreatedPlaylists(int memberId)
+        {
+            var playlists = await _context.MemberCreatedPlayLists
+                .Where(mcp => mcp.MemberId == memberId)
+                .Select(mcp => new PlaylistDTO
+                {
+                    PlayListId = mcp.PlayListId,
+                    PlayListName = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mcp.PlayListId).PlayListName,
+                    PlayListDescription = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mcp.PlayListId).PlayListDescription,
+                    ViewCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mcp.PlayListId).ViewCount,
+                    LikeCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mcp.PlayListId).LikeCount,
+                    AddedCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mcp.PlayListId).AddedCount,
+                    SharedCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mcp.PlayListId).SharedCount,
+                    ShowImage = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mcp.PlayListId).ShowImage
+                })
+                .ToListAsync();
+
+            return Ok(playlists);
+        }
+
+        [HttpGet("added/{memberId}")]
+        public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetMemberAddedPlaylists(int memberId)
+        {
+            var playlists = await _context.MemberPlayLists
+                .Where(mp => mp.MemberId == memberId)
+                .Select(mp => new PlaylistDTO
+                {
+                    PlayListId = mp.PlayListId,
+                    PlayListName = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mp.PlayListId).PlayListName,
+                    PlayListDescription = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mp.PlayListId).PlayListDescription,
+                    ViewCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mp.PlayListId).ViewCount,
+                    LikeCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mp.PlayListId).LikeCount,
+                    AddedCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mp.PlayListId).AddedCount,
+                    SharedCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mp.PlayListId).SharedCount,
+                    ShowImage = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == mp.PlayListId).ShowImage
+                })
+                .ToListAsync();
+
+            return Ok(playlists);
         }
     }
 }
