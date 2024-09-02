@@ -270,5 +270,26 @@ namespace VdbAPI.Controllers
 
             return Ok(playlists);
         }
+
+        [HttpGet("collaborator/{memberId}")]
+        public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetMemberCollaboratorPlaylists(int memberId)
+        {
+            var playlists = await _context.PlayListCollaborators
+                .Where(pc => pc.MemberId == memberId)
+                .Select(pc => new PlaylistDTO
+                {
+                    PlayListId = pc.PlayListId,
+                    PlayListName = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == pc.PlayListId).PlayListName,
+                    PlayListDescription = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == pc.PlayListId).PlayListDescription,
+                    ViewCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == pc.PlayListId).ViewCount,
+                    LikeCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == pc.PlayListId).LikeCount,
+                    AddedCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == pc.PlayListId).AddedCount,
+                    SharedCount = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == pc.PlayListId).SharedCount,
+                    ShowImage = _context.PlayLists.FirstOrDefault(pl => pl.PlayListId == pc.PlayListId).ShowImage
+                })
+                .ToListAsync();
+
+            return Ok(playlists);
+        }
     }
 }
