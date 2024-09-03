@@ -8,15 +8,17 @@ import { ForumPagingDTO } from '../interface/ForumPagingDTO';
 import { ArticleView } from '../interface/ArticleView';
 import { Router } from '@angular/router';
 import { Post } from '../interface/Post';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ForumService {
+export default class ForumService {
+  [x: string]: any;
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
 
-  constructor(private client: HttpClient, private route: Router) {
+  constructor(private client: HttpClient, private route: Router,private sanitizer: DomSanitizer,) {
     this.loadThemeTags();
   }
 
@@ -49,5 +51,10 @@ export class ForumService {
       'https://localhost:7193/api/Articles',
       data
     );
+  }
+  getSafe(data: string): SafeHtml {
+    if (!data) return '此文章並無內容，請盡速修改!';
+
+    return this.sanitizer.bypassSecurityTrustHtml(data);
   }
 }

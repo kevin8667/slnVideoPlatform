@@ -8,13 +8,16 @@
     <div class="article-header">
       <h1 class="article-title">{{ article.title }}</h1>
       <div class="article-info">
-        <span class="article-author">作者: {{ article.memberName }}</span>
+        <span class="article-author">作者: {{ article.nickName }}</span>
         <span class="article-date"
           >發表時間：{{ article.postDate | forumDate }}
         </span>
       </div>
     </div>
-    <div class="article-content" [innerHTML]="safeContent"></div>
+    <div
+      class="article-content"
+      [innerHTML]="getSafe(article.articleContent)"
+    ></div>
     <div class="article-actions">
       <p-button
         label="讚(10)"
@@ -44,11 +47,11 @@
   <div class="replies">
     <div class="reply" *ngFor="let post of posts">
       <div class="reply-header">
-        <span class="reply-author">{{post.nickName}}</span>
-        <span class="reply-date">{{post.postDate|forumDate}}</span>
+        <span class="reply-author">{{ post.nickName }}</span>
+        <span class="reply-date">{{ post.postDate | forumDate }}</span>
       </div>
       <div class="reply-content">
-        {{post.postContent}}
+        {{ post.postContent }}
       </div>
       <div class="reply-actions">
         <p-button

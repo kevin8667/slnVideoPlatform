@@ -60,7 +60,6 @@
         [autoPlay]="true"
         [circular]="true"
         [responsiveOptions]="responsiveOptions"
-        [numVisible]="2"
       >
         <ng-template pTemplate="item" let-item>
           <img [src]="item.pic" />
@@ -117,9 +116,10 @@
               <div class="card-body">
                 <div class="p-card-title">{{ article.title }}</div>
                 <div class="p-card-subtitle">
-                  {{ article.themeName }} - {{ article.memberName }}
+                  {{ article.themeName }} - {{ article.nickName }}
                 </div>
                 <div class="p-card-body-content">
+                  <p [innerHTML]="truncateText(article.articleContent, 45)"></p>
                   <p>
                     <i class="pi pi-calendar"></i> 更新時間:
                     {{ article.updateDate | forumDate }}

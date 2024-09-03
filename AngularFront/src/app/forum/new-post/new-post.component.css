@@ -79,7 +79,8 @@ h2 {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-image: url("https://via.placeholder.com/2"); /* 圖案的 URL */
+  background-image: url("/assets/images/forumImg.png"); /* 圖案 */
+
   background-size: cover;
 }
 

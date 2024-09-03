@@ -1,9 +1,10 @@
+import { SafeHtml } from '@angular/platform-browser';
 import { ArticleView } from './../../interface/ArticleView';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ForumPagingDTO } from 'src/app/interface/ForumPagingDTO';
 import { Theme } from 'src/app/interface/Theme';
-import { ForumService } from 'src/app/service/forum.service';
+import ForumService from 'src/app/service/forum.service';
 
 @Component({
   selector: 'app-article-list',
@@ -11,6 +12,7 @@ import { ForumService } from 'src/app/service/forum.service';
   styleUrls: ['./article-list.component.css'],
 })
 export class ArticleListComponent implements OnInit {
+  getSafe = (data: string) => this.forumService.getSafe(data);
   articles: ArticleView[] = [];
 
   forumPagingDTO: ForumPagingDTO | undefined;
@@ -100,5 +102,16 @@ export class ArticleListComponent implements OnInit {
   openCreateArticleDialog() {
     this.route.navigateByUrl('forum/newA');
   }
+  truncateText(articleContent: string, maxLength: number) {
+    if (!articleContent) {
+      return '並無內容，請盡速修改'; // 或者其他預設值，例如 '無內容'
+    }
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(articleContent, 'text/html');
+    const text = doc.body.innerText;
 
+    const truncatedText =
+      text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
+    return this.getSafe(truncatedText);
+  }
 }

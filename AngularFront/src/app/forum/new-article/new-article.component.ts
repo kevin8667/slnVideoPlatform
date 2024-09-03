@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Theme } from 'src/app/interface/Theme';
-import { ForumService } from 'src/app/service/forum.service';
+import ForumService from 'src/app/service/forum.service';
 
 @Component({
   selector: 'app-new-article',

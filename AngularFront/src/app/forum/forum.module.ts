@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { ArticleComponent } from './article/article.component';
 import { TableModule } from 'primeng/table';
 import { HttpClientModule } from '@angular/common/http';
-import { ForumService } from '../service/forum.service';
+import ForumService from '../service/forum.service';
 import { forumDatePipe } from '../pipe/pipes/my-date.pipe';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -23,6 +23,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { ToastModule } from 'primeng/toast';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { GalleriaModule } from 'primeng/galleria';
+import { EditComponent } from './edit/edit.component';
 @NgModule({
   declarations: [
     ArticleComponent,
@@ -30,6 +31,7 @@ import { GalleriaModule } from 'primeng/galleria';
     NewArticleComponent,
     NewPostComponent,
     ArticleListComponent,
+    EditComponent,
   ],
   imports: [
     TableModule,

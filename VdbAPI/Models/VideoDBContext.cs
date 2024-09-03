@@ -172,7 +172,7 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
-            entity.Property(e => e.MemberName)
+            entity.Property(e => e.NickName)
                 .IsRequired()
                 .HasMaxLength(30);
             entity.Property(e => e.PostDate).HasColumnType("datetime");

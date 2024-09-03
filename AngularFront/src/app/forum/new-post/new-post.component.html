@@ -1,14 +1,8 @@
 <div class="newContainer">
   <aside class="aside">
-    <div>
-      <button class="imgBtn" id="insertImage">插入圖片</button>
-    </div>
-    <div>
-      <button class="imgBtn" id="insertImage">插入表情</button>
-    </div>
-    <div>
-      <button class="imgBtn" id="insertImage">插入貼圖</button>
-    </div>
+    <button class="imgBtn"><span class="icon"></span>插入圖片</button>
+    <button class="imgBtn"><span class="icon"></span>插入貼圖</button>
+    <button class="imgBtn"><span class="icon"></span>插入表情</button>
   </aside>
   <main class="mainSection">
     <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
@@ -19,7 +13,6 @@
       </div>
       <!-- 內文 -->
       <div class="form-group">
-        <label for="content">文章內文</label>
         <quill-editor
           id="content"
           formControlName="content"

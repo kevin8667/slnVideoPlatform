@@ -89,9 +89,8 @@ namespace VdbAPI.Controllers {
         public async Task<ActionResult<forumDto>> LoadIndex(forumDto searchDTO)
         {
             try {
-                //var article = _context.ArticleViews.AsQueryable();
                 using var connection = new SqlConnection(_connection);
-                var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and  lock = 1");
+                var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and lock = 1");
                 // 篩選條件
                 if(searchDTO.categoryId != 0) {
                     sql.Append(" AND ThemeId = @CategoryId");
@@ -99,7 +98,7 @@ namespace VdbAPI.Controllers {
                 // 關鍵字篩選
 
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
-                    sql.Append(" AND (Title LIKE @Keyword OR ArticleContent LIKE @Keyword OR MemberName LIKE @Keyword)");
+                    sql.Append(" AND (Title LIKE @Keyword OR ArticleContent LIKE @Keyword OR NickName LIKE @Keyword)");
                 }
                 // 排序
 
