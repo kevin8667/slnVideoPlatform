@@ -54,11 +54,46 @@ export class PlaylistMemberComponent implements OnInit {
     );
   }
 
-  editPlaylist(playlistId: number): void {
-    console.log('Editing playlist with ID:', playlistId);
+  triggerDeleteAnimation(playlistId: number): void {
+    const element = document.getElementById(`playlist-${playlistId}`);
+    const trashIcon = document.getElementById('trashIcon');
+
+    if (element && trashIcon) {
+      trashIcon.classList.add('trash-spin');
+
+      const trashIconRect = trashIcon.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+
+      const xOffset = trashIconRect.left - elementRect.left;
+      const yOffset = trashIconRect.top - elementRect.top;
+
+      element.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(0)`;
+      element.style.transition = 'transform 1s ease-in-out';
+
+      setTimeout(() => {
+        this.deletePlaylist(playlistId);
+        trashIcon.classList.remove('trash-spin');
+      }, 1000);
+    }
   }
 
   deletePlaylist(playlistId: number): void {
-    console.log('Deleting playlist with ID:', playlistId);
+    this.playlistService.deletePlaylist(playlistId).subscribe(
+      () => {
+        console.log(`Playlist with ID ${playlistId} deleted`);
+        this.loadCreatedPlaylists();
+      },
+      (error) => {
+        console.error('Error deleting playlist', error);
+      }
+    );
+  }
+
+  addNewPlaylist(){
+
+  }
+
+  editPlaylist(playlistId: number): void {
+    console.log('Editing playlist with ID:', playlistId);
   }
 }

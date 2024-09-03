@@ -1,3 +1,47 @@
+::ng-deep .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+::ng-deep .topbar .add-icon {
+  font-size: 2rem;
+  color: #17A2B8;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+::ng-deep .topbar .add-icon:hover {
+  color: #138496;
+  transform: rotate(360deg);
+}
+
+::ng-deep .topbar .trash-icon {
+  font-size: 2rem;
+  color: #17A2B8;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+::ng-deep .trash-spin {
+  animation: trashRotate 1s infinite linear;
+}
+
+@keyframes trashRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 ::ng-deep .playlist-container {
   display: flex;
   justify-content: space-between;
@@ -19,8 +63,9 @@
 }
 
 ::ng-deep .custom-card {
-  width: 85%;
+  width: 100%;
   box-sizing: border-box;
+  font-size: 14px;
   padding: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -39,7 +84,7 @@
 }
 
 ::ng-deep .custom-card p {
-  margin: 15px 0;
+  margin: 10px 0;
   font-size: 16px;
   color: #333;
   text-align: center;
@@ -76,7 +121,7 @@
 
 ::ng-deep .playlist-section h2 {
   color: #333;
-  font-size: 20px;
+  font-size: 16px;
   margin-bottom: 20px;
 }
 
@@ -87,5 +132,14 @@
 
   ::ng-deep .playlist-section {
     margin-bottom: 20px;
+  }
+
+  ::ng-deep .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  ::ng-deep .topbar .add-icon {
+    margin-bottom: 10px;
   }
 }

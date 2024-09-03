@@ -1,15 +1,20 @@
+<div class="topbar">
+  <i class="pi pi-plus-circle add-icon"></i>
+  <i class="pi pi-trash trash-icon" id="trashIcon"></i>
+</div>
+
 <div class="playlist-container">
   <div class="playlist-section">
     <h2>創立的播放清單</h2>
     <div class="playlist-cards">
       <ng-container *ngFor="let playlist of createdPlaylists">
-        <p-panel header="{{ playlist.playListName }}" styleClass="custom-card">
+        <p-panel [id]="'playlist-' + playlist.playListId" header="{{ playlist.playListName }}" styleClass="custom-card">
           <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
           <p>{{ playlist.playListDescription }}</p>
           <p>瀏覽次數: {{ playlist.viewCount }}</p>
           <div class="button-group">
             <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" (click)="editPlaylist(playlist.playListId)"></button>
-            <button pButton type="button" icon="pi pi-trash" class="icon-only-button" (click)="deletePlaylist(playlist.playListId)"></button>
+            <button pButton type="button" icon="pi pi-trash" class="icon-only-button" (click)="triggerDeleteAnimation(playlist.playListId)"></button>
           </div>
         </p-panel>
       </ng-container>
@@ -25,8 +30,8 @@
           <p>{{ playlist.playListDescription }}</p>
           <p>瀏覽次數: {{ playlist.viewCount }}</p>
           <div class="button-group">
-            <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" (click)="editPlaylist(playlist.playListId)"></button>
-            <button pButton type="button" icon="pi pi-trash" class="icon-only-button" (click)="deletePlaylist(playlist.playListId)"></button>
+            <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" disabled></button>
+            <button pButton type="button" icon="pi pi-trash" class="icon-only-button" disabled></button>
           </div>
         </p-panel>
       </ng-container>
@@ -42,8 +47,8 @@
           <p>{{ playlist.playListDescription }}</p>
           <p>瀏覽次數: {{ playlist.viewCount }}</p>
           <div class="button-group">
-            <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" (click)="editPlaylist(playlist.playListId)"></button>
-            <button pButton type="button" icon="pi pi-trash" class="icon-only-button" (click)="deletePlaylist(playlist.playListId)"></button>
+            <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" disabled></button>
+            <button pButton type="button" icon="pi pi-trash" class="icon-only-button" disabled></button>
           </div>
         </p-panel>
       </ng-container>

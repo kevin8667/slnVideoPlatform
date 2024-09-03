@@ -39,4 +39,9 @@ export class PlaylistService {
   getMemberCollaboratorPlaylists(memberId: number): Observable<PlaylistDTO[]> {
     return this.http.get<PlaylistDTO[]>(`${this.apiUrl}/collaborator/${memberId}`);
   }
+
+  deletePlaylist(id: number): Observable<void> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete<void>(url);
+  }
 }
