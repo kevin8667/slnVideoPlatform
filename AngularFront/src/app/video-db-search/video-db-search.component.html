@@ -47,30 +47,30 @@
                 [showClear]="true" placeholder="Select a Type" 
                 (onChange)="searchVideoByFilters()"></p-dropdown>
   </div>
+
 </div>
 
-<p-dataView #dv [value]="videos" [rows]="pageSize" [paginator]="true"
+<p-dataView *ngIf="videos" #dv [value]="videos" [rows]="pageSize" [paginator]="true"
             [rowsPerPageOptions]="pageSizeOptions" paginatorDropdownAppendTo="body" 
             layout="grid" class="video-grid" 
             [style]="{ 'transition': 'all 0.5s ease' }">
   <ng-template let-video pTemplate="gridItem">
     <div class="video-item" @listAnimation>
-      <div class="p-card p-card-shadow">
-        <img class="w-full shadow-2 block mx-auto border-round transition-transform hover:scale-105" 
-              style="width: 200px; height: 200px;" 
-              src="/assets/img/NoClue.jpg" 
-              [alt]="video.videoName" />
-        <div class="p-card-body">
-          <div class="text-2xl font-bold text-900">{{ video.videoName }}</div>
-          <div class="flex align-items-center gap-2 mt-2">
-            <i class="pi pi-tag"></i>
-            <span class="font-semibold">{{ video.mainGenreName }}</span>
-          </div>
-          <div class="text-md font-semibold mt-2">
-            {{ video.summary }}
+      <a [routerLink]="'/details/'+video.videoId" style="text-decoration: none;">
+        <div class="p-card p-card-shadow">
+          <img class="w-full shadow-2 block mx-auto border-round transition-transform hover:scale-105" 
+               style="width: 200px; height: 200px;" 
+               src="/assets/img/NoClue.jpg" 
+               [alt]="video.videoName" />
+          <div class="p-card-body">
+            <div class="text-2xl font-bold text-900">{{ video.videoName }}</div>
+            <div class="flex align-items-center gap-2 mt-2">
+              <i class="pi pi-tag"></i>
+              <span class="font-semibold">{{ video.mainGenreName }}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
     </div>
   </ng-template>
 </p-dataView>

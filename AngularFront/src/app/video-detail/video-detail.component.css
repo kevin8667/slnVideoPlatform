@@ -4,7 +4,7 @@ p {
 
 .custom-card {
     width: 100%; /* 讓卡片寬度占滿父容器 */
-    height: 500px; /* 設定卡片的高度 */
+    height: 600px; /* 設定卡片的高度 */
     max-height: 700px; /* 設定卡片的最大高度 */
     border-top: 1px solid #ddd; /* 上邊框 */
     border-bottom: 1px solid #ddd; /* 下邊框 */
@@ -50,6 +50,7 @@ p {
     border-color: #007bff;
     color: #fff;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: 5px;
 }
 
 .button:hover {
@@ -64,3 +65,32 @@ p {
 .recommended-videos .video-carousel-item:hover {
     transform: scale(1.05);
 }
+
+.galleria-wrapper {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    height: 750px; /* 使容器高度占满整个视窗 */
+  }
+  
+  .galleria-container {
+    max-width: 400px; 
+    max-height: 350px; 
+  }
+  
+  .p-galleria {
+    display: flex;
+  }
+  
+  .thumbnail-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 100px;
+    overflow-y: auto;
+  }
+  
+  .thumbnail-image {
+    width: 100%;
+    height: auto;
+  }

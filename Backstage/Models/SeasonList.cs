@@ -2,28 +2,26 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Backstage.Models;
 
 public partial class SeasonList
 {
     public int SeasonId { get; set; }
-    [Display(Name ="系列名稱")]
+
     public int? SeriesId { get; set; }
-    [Display(Name ="季名稱")]
+
     public string SeasonName { get; set; }
-    [Display(Name ="季數")]
+
     public int? SeasonNumber { get; set; }
-    [Display(Name ="集數")]
+
     public int? EpisodeCount { get; set; }
-    [Display(Name ="上映日期")]
+
     public DateOnly? ReleaseDate { get; set; }
-    [Display(Name ="簡介")]
+
     public string Summary { get; set; }
 
     public virtual SeriesList Series { get; set; }
-    [JsonIgnore]
+
     public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }

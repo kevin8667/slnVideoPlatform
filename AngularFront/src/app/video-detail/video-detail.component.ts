@@ -1,13 +1,15 @@
 import { Season } from './../interfaces/season';
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-video-detail',
   templateUrl: './video-detail.component.html',
   styleUrls: ['./video-detail.component.css']
+
 
 })
 export class VideoDetailComponent implements OnInit{
@@ -65,8 +67,15 @@ export class VideoDetailComponent implements OnInit{
             this.videoService.getSeasonWithID(data.seasonId.toString()).subscribe((data)=>{this.season = data})
           }
         });
+
+        this.videoService.getImagesByVideoID(videoID).subscribe(images=>{
+          this.images=images;
+          console.log(images);
+        })
       }
     });
+
+    
 
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
 

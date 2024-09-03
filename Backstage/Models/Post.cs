@@ -21,7 +21,7 @@ public partial class Post
 
     public string PostImage { get; set; }
 
-    public virtual Article Article { get; set; }
+    public virtual Article PostNavigation { get; set; }
 
     public virtual MemberInfo Poster { get; set; }
 }

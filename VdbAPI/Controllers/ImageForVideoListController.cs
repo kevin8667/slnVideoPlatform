@@ -41,6 +41,22 @@ namespace VdbAPI.Controllers
             return imageForVideoList;
         }
 
+        [HttpGet("video={videoId}")]
+        public ActionResult<List<string>> GetImagePathsByVideoId(int videoId)
+        {
+            var imagePaths = _context.ImageForVideoLists
+                .Where(iv => iv.VideoId == videoId)
+                .Select(iv => iv.Image.ImagePath)
+                .ToList();
+
+            if (imagePaths == null || imagePaths.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(imagePaths);
+        }
+
         // PUT: api/ImageForVideoList/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

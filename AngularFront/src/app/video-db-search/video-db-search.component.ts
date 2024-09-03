@@ -62,22 +62,36 @@ export class VideoDbSearchComponent implements OnInit {
       { typeName: '影集', typeId: 2 },
       { typeName: '其他', typeId: 3 }
     ];
+    this.route.queryParams.subscribe(params => {
+      this.videoName = params['videoName'] || null;
+      this.typeId = params['typeId'] ? +params['typeId'] : null;
+      this.summary = params['summary'] || null;
+      this.genreName = params['genreName'] || null;
+      this.seriesName = params['seriesName'] || null;
+      this.seasonName = params['seasonName'] || null;
 
-    // const savedParams = this.searchStateService.getSearchParams();
-    // const savedResults = this.searchStateService.getSearchResults();
+      // 如果有参数，则根据参数搜索视频
+      if (this.videoName || this.typeId || this.summary || this.genreName || this.seriesName || this.seasonName) {
+          this.searchVideos();
+      }
+  });
 
-    // if (savedParams && savedResults) {
-    //   this.videoName = savedParams.videoName;
-    //   this.typeId = savedParams.typeId;
-    //   this.summary = savedParams.summary;
-    //   this.genreName = savedParams.genreName;
-    //   this.seriesName = savedParams.seriesName;
-    //   this.seasonName = savedParams.seasonName;
+    const savedParams = this.searchStateService.getSearchParams();
+    const savedResults = this.searchStateService.getSearchResults();
 
-    //   this.videos = savedResults;
-    // } else {
-    //   this.searchVideoByFilters();
-    // }
+    if (savedParams && savedResults) {
+      this.videoName = savedParams.videoName;
+      this.typeId = savedParams.typeId;
+      this.summary = savedParams.summary;
+      this.genreName = savedParams.genreName;
+      this.seriesName = savedParams.seriesName;
+      this.seasonName = savedParams.seasonName;
+
+      this.videos = savedResults;
+    } else {
+      this.searchVideoByFilters();
+    }
+
   }
 
   searchVideoByFilters() {
@@ -103,15 +117,15 @@ export class VideoDbSearchComponent implements OnInit {
       console.log(this.typeId);
       this.videos = response;
 
-    //   this.searchStateService.saveSearchParams({
-    //     videoName: this.videoName,
-    //     typeId: this.typeId,
-    //     summary: this.summary,
-    //     genreName: this.genreName,
-    //     seriesName: this.seriesName,
-    //     seasonName: this.seasonName
-    //   });
-    //   this.searchStateService.saveSearchResults(this.videos);
+      this.searchStateService.saveSearchParams({
+        videoName: this.videoName,
+        typeId: this.typeId,
+        summary: this.summary,
+        genreName: this.genreName,
+        seriesName: this.seriesName,
+        seasonName: this.seasonName
+      });
+      this.searchStateService.saveSearchResults(this.videos);
       });
   }
 }

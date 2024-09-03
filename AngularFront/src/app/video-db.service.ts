@@ -105,4 +105,18 @@ export class VideoDBService {
 
     return this.httpClient.get<Video[]>(url, { params })
   }
+
+  getImagesByVideoID(id:string)
+  {
+    const url = `https://localhost:7193/api/ImageForVideoList/video=${id}`;
+
+    this.httpClient.get<string[]>(url)
+    .subscribe(images => {
+      console.log(images);
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<string[]>(url)
+  }
 }

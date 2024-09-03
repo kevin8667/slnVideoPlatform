@@ -14,6 +14,4 @@ public partial class ImageForVideoList
     public int? VideoId { get; set; }
 
     public virtual ImageList Image { get; set; }
-
-    public virtual VideoList Video { get; set; }
 }

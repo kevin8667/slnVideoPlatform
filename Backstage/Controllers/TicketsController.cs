@@ -21,7 +21,7 @@ namespace Backstage.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-            var videoDBContext = _context.Tickets.Include(t => t.Reservation).Include(t => t.Seat).Include(t => t.Showtime).Include(t => t.TypeOfTicketNavigation);
+            var videoDBContext = _context.Tickets.Include(t => t.ReservationId).Include(t => t.Seat).Include(t => t.Showtime).Include(t => t.TypeOfTicketNavigation);
             return View(await videoDBContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace Backstage.Controllers
             }
 
             var ticket = await _context.Tickets
-                .Include(t => t.Reservation)
+                .Include(t => t.ReservationId)
                 .Include(t => t.Seat)
                 .Include(t => t.Showtime)
                 .Include(t => t.TypeOfTicketNavigation)
@@ -145,7 +145,7 @@ namespace Backstage.Controllers
             }
 
             var ticket = await _context.Tickets
-                .Include(t => t.Reservation)
+                .Include(t => t.ReservationId)
                 .Include(t => t.Seat)
                 .Include(t => t.Showtime)
                 .Include(t => t.TypeOfTicketNavigation)

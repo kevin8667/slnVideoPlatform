@@ -9,5 +9,9 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'AngularFront';
- 
+  keywordForSearch: string = "";
+
+
+  constructor(private router: Router) {}
+
 }

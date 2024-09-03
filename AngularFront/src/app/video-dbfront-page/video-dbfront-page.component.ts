@@ -9,6 +9,8 @@ import { VideoDBService } from '../video-db.service';
   styleUrls: ['./video-dbfront-page.component.css']
 })
 export class VideoDBFrontPageComponent implements OnInit{
+  images:any[]=[1,2,3];
+
 
   videos:Video[] =[];
 

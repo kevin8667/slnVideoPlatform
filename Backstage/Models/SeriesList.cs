@@ -2,18 +2,16 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Backstage.Models;
 
 public partial class SeriesList
 {
     public int SeriesId { get; set; }
-    [Display(Name ="系列名稱")]
+
     public string SeriesName { get; set; }
 
     public virtual ICollection<SeasonList> SeasonLists { get; set; } = new List<SeasonList>();
-    [JsonIgnore]
+
     public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }

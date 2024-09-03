@@ -5,21 +5,11 @@
         src="/assets/img/NoImage.jpg"
         alt="{{ video.videoName }}"
         class="video-image"
-       [preview]="true"
-       width="300px"
-       height="450px"
+        [preview]="true"
+        width="300px"
+        height="450px"
       ></p-image>
-    </div>
-    <div class="text-content">
-      <h1 style="color: black;">{{ video.videoName }}</h1>
-      <p><strong>Season:</strong> {{ season?.seasonName }}</p>
-      <p><strong>Episode:</strong> {{ video.episode }}</p>
-      <p><strong>Running Time:</strong> {{ video.runningTime }}</p>
-      <p><strong>Release Date:</strong> {{ video.releaseDate | date }}</p>
-      <p><strong>Rating:</strong> {{ video.rating }} / 5</p>
-      <p><strong>Summary:</strong> {{ video.summary }}</p>
-      <p><strong>Language:</strong> {{ video.lang }}</p>
-      <p><strong>Age Rating:</strong> {{ video.ageRating }}</p>
+      <br>
       <a
         class="button"
         pButton
@@ -27,24 +17,108 @@
         [href]="video.trailerUrl"
         target="_blank"
         icon="pi pi-play"
-        label="Watch Trailer"
-        >預告片</a
-      >
+        >串流</a>
+        <a
+        class="button"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-play"
+        >購買或租借</a>
+    </div>
+    <div class="text-content">
+      <h1 style="color: black;">{{ video.videoName }}</h1>
+      <div>
+        <a
+        class="button"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-play"
+        >加入片單</a>
+        <a
+        class="button"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-play"
+        >加入最愛</a>
+        <a
+        class="button"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-play"
+        >觀看預告片</a>
+      </div>
+      <div>
+        <p><strong>季:</strong> {{ season?.seasonName }}</p>
+        <p><strong>集:</strong> {{ video.episode }}</p>
+        <p><strong>片長:</strong> {{ video.runningTime }}</p>
+        <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
+        <p><strong>評分:</strong> {{ video.rating }} / 5</p>
+        <p><strong>語言:</strong> {{ video.lang }}</p>
+        <p><strong>簡介:</strong> {{ video.summary }}</p>
+      </div>
+      <div>
+        <p><strong>導演:</strong> TEST </p>
+        <p><strong>主演:</strong> TEST </p>
+      </div>
+      <div class="flex ">
+        
+      </div>
+      
     </div>
   </div>
 </div>
 
-<div class="card">
-  <p-galleria [value]="images" [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '640px' }" [numVisible]="5" (valueChange)="onValueChange($event)" >
-      <ng-template pTemplate="item" let-item>
-          <img src="/assets/img/NoClue.jpg" style="width: 100%;" />
-      </ng-template>
-      <ng-template pTemplate="thumbnail" let-item>
-          <div class="grid grid-nogutter justify-content-center">
-              <img src="/assets/img/NoClue.jpg" />
-          </div>
-      </ng-template>
+<!-- <div class="card">
+  <p-galleria 
+    [value]="images" 
+    [responsiveOptions]="responsiveOptions" 
+    [containerStyle]="{ 'max-width': '300px', 'max-height': '350px' }" 
+    [numVisible]="5" 
+    (valueChange)="onValueChange($event)"
+    style="height: 350px; overflow: hidden;"
+    thumbnailsPosition="left">
+
+    <ng-template pTemplate="item" let-item>
+      <img [src]="'/assets/' + item" style="width: 100%;" />
+    </ng-template>
+
+    <ng-template pTemplate="thumbnail" let-item>
+      <div class="grid grid-nogutter justify-content-center" style="width: 100%; max-height: 80px; overflow: hidden;">
+        <img [src]="'/assets/' + item" style="width: 100%;" />
+      </div>
+    </ng-template>
   </p-galleria>
+</div> -->
+<div class="galleria-wrapper">
+  <div class="galleria-container">
+    <p-galleria 
+        [value]="images" 
+        [responsiveOptions]="responsiveOptions" 
+        [containerStyle]="{ 'max-width': '400px', 'max-height': '350px' }" 
+        [numVisible]="5" 
+        (valueChange)="onValueChange($event)"
+        thumbnailsPosition="bottom">
+        <!-- Main Image -->
+        <ng-template pTemplate="item" let-item>
+            <img [src]="'/assets/' + item" style="width: 100%; min-height: 420px; display: block;" />
+        </ng-template>
+        <!-- Thumbnail Images -->
+        <ng-template pTemplate="thumbnail" let-item>
+            <div class="thumbnail-container">
+                <img [src]="'/assets/' + item" class="thumbnail-image" />
+            </div>
+        </ng-template>
+    </p-galleria>
+
+  </div>
 </div>
 
 <h3 style="color: black; margin-top: 2rem;">推薦影片</h3>

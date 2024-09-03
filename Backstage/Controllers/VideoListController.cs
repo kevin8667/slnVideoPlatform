@@ -83,35 +83,35 @@ namespace Backstage.Controllers
 
             return Json(video);
         }
-        public async Task<IActionResult> GetImage(int videoId)
-        {
-            // 根據 videoId 查找 VideoList 中的 ThumbnailId
-            var video = await _context.VideoLists
-                .Where(v => v.VideoId == videoId)
-                .Select(v => new { v.ThumbnailId })
-                .FirstOrDefaultAsync();
+        //public async Task<IActionResult> GetImage(int videoId)
+        //{
+        //    // 根據 videoId 查找 VideoList 中的 ThumbnailId
+        //    var video = await _context.VideoLists
+        //        .Where(v => v.VideoId == videoId)
+        //        .Select(v => new { v.ThumbnailPath })
+        //        .FirstOrDefaultAsync();
 
-            if (video == null || video.ThumbnailId == null)
-            {
-                return Json(new { success = false, message = "找不到對應的影片或縮圖。" });
-            }
+        //    if (video == null || video.ThumbnailPath == null)
+        //    {
+        //        return Json(new { success = false, message = "找不到對應的影片或縮圖。" });
+        //    }
 
-            // 根據 ThumbnailId 查找 ImageList 中的 ImagePath
-            var image = await _context.ImageLists
-                .Where(i => i.ImageId == video.ThumbnailId)
-                .Select(i => new { i.ImagePath })
-                .FirstOrDefaultAsync();
+        //    // 根據 ThumbnailId 查找 ImageList 中的 ImagePath
+        //    var image = await _context.ImageLists
+        //        .Where(i => i.ImageId == video.ThumbnailPath)
+        //        .Select(i => new { i.ImagePath })
+        //        .FirstOrDefaultAsync();
 
-            if (image == null)
-            {
-                return Json(new { success = false, message = "找不到對應的圖片。" });
-            }
+        //    if (image == null)
+        //    {
+        //        return Json(new { success = false, message = "找不到對應的圖片。" });
+        //    }
 
-            // 組合圖片的完整 URL (假設圖片儲存在 wwwroot/img 下)
-            var imageUrl = Url.Content(image.ImagePath);
+        //    // 組合圖片的完整 URL (假設圖片儲存在 wwwroot/img 下)
+        //    var imageUrl = Url.Content(image.ImagePath);
 
-            return Json(new { success = true, imageUrl });
-        }
+        //    return Json(new { success = true, imageUrl });
+        //}
 
         // GET: VideoList/Create
         public IActionResult Create()
