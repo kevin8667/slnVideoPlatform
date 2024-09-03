@@ -20,6 +20,8 @@ export class VideoDetailComponent implements OnInit{
 
   responsiveOptions: any[] | undefined;
 
+  images:any[] | undefined;
+
 
   constructor(private route: ActivatedRoute, private videoService: VideoDBService) {
     this.video = {
@@ -46,6 +48,10 @@ export class VideoDetailComponent implements OnInit{
   };
   }
 
+  onValueChange(newValue: any) {
+    this.images = newValue;
+  }
+
   ngOnInit() {
     var videoID: string | null
       this.route.paramMap.subscribe(params => {
@@ -61,7 +67,6 @@ export class VideoDetailComponent implements OnInit{
         });
       }
     });
-
 
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
 

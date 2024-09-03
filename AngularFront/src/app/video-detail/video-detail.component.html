@@ -1,41 +1,3 @@
-<!-- <p-card header="{{ video.videoName }}" class="p-mb-3 video-card">
-  <ng-template pTemplate="header">
-    <div class="text-center header-img">
-      <p-image
-        src="/assets/img/NoImage.jpg"
-        class="p-mb-2"
-        width="400px"
-        height="600px"
-        [preview]="true"
-      ></p-image>
-    </div>
-  </ng-template>
-  <div class="p-d-flex p-jc-between p-ai-start video-info">
-    <div class="p-mr-3">
-      <p><strong>Season:</strong> {{ season?.seasonName }}</p>
-      <p><strong>Episode:</strong> {{ video.episode }}</p>
-      <p><strong>Running Time:</strong> {{ video.runningTime }}</p>
-      <p><strong>Release Date:</strong> {{ video.releaseDate | date }}</p>
-      <p><strong>Rating:</strong> {{ video.rating }} / 5</p>
-      <p><strong>Summary:</strong> {{ video.summary }}</p>
-      <p><strong>Language:</strong> {{ video.lang }}</p>
-      <p><strong>Age Rating:</strong> {{ video.ageRating }}</p>
-    </div>
-    <div>
-      <a
-        class="button"
-        pButton
-        pRipple
-        [href]="video.trailerUrl"
-        target="_blank"
-        icon="pi pi-play"
-        label="Watch Trailer"
-        >預告片</a
-      >
-    </div>
-  </div>
-</p-card> -->
-
 <div class="custom-card">
   <div class="card-body">
     <div class="image-container">
@@ -70,6 +32,19 @@
       >
     </div>
   </div>
+</div>
+
+<div class="card">
+  <p-galleria [value]="images" [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '640px' }" [numVisible]="5" (valueChange)="onValueChange($event)" >
+      <ng-template pTemplate="item" let-item>
+          <img src="/assets/img/NoClue.jpg" style="width: 100%;" />
+      </ng-template>
+      <ng-template pTemplate="thumbnail" let-item>
+          <div class="grid grid-nogutter justify-content-center">
+              <img src="/assets/img/NoClue.jpg" />
+          </div>
+      </ng-template>
+  </p-galleria>
 </div>
 
 <h3 style="color: black; margin-top: 2rem;">推薦影片</h3>

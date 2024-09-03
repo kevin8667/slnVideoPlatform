@@ -23,7 +23,8 @@ import { DataViewModule } from 'primeng/dataview';
 import { ImageModule } from 'primeng/image';
 import { SeasonListComponent } from './season-list/season-list.component';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
-
+import { PersonDetailComponent } from './person-detail/person-detail.component';
+import { GalleriaModule } from 'primeng/galleria';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { EpisodeListComponent } from './episode-list/episode-list.component';
     VideoDetailComponent,
     VideoDbSearchComponent,
     SeasonListComponent,
-    EpisodeListComponent
+    EpisodeListComponent,
+    PersonDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import { EpisodeListComponent } from './episode-list/episode-list.component';
     PaginatorModule,
     TableModule,
     DataViewModule,
-    ImageModule
+    ImageModule,
+    GalleriaModule
   ],
   providers: [],
   bootstrap: [AppComponent]
