@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class ArticleComponent implements OnInit {
+  edit() {}
   getSafe = (data: string) => this.forumService.getSafe(data);
   article: ArticleView = {} as ArticleView;
   articleId!: number;

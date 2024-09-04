@@ -23,7 +23,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { ToastModule } from 'primeng/toast';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { GalleriaModule } from 'primeng/galleria';
-import { EditComponent } from './edit/edit.component';
+import { EditorComponent } from './share/editor/editor.component';
 @NgModule({
   declarations: [
     ArticleComponent,
@@ -31,7 +31,7 @@ import { EditComponent } from './edit/edit.component';
     NewArticleComponent,
     NewPostComponent,
     ArticleListComponent,
-    EditComponent,
+    EditorComponent
   ],
   imports: [
     TableModule,

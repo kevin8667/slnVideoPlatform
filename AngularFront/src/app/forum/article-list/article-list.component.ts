@@ -1,4 +1,3 @@
-import { SafeHtml } from '@angular/platform-browser';
 import { ArticleView } from './../../interface/ArticleView';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -37,6 +36,12 @@ export class ArticleListComponent implements OnInit {
     },
     {
       pic: '/assets/images/forumAd2.png',
+    },
+    {
+      pic: '/assets/images/forumAd3.png',
+    },
+    {
+      pic: '/assets/images/forumAd4.png',
     },
   ];
 

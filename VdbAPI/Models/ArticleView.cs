@@ -18,7 +18,7 @@ public partial class ArticleView
 
     public DateTime? UpdateDate { get; set; }
 
-    public int? ReplyCount { get; set; }
+    public int? ReplyCount { get; set; } = 0;
 
     public bool Lock { get; set; }
 

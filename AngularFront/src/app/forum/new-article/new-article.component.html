@@ -1,14 +1,8 @@
 <div class="newContainer">
   <aside class="aside">
-    <button class="imgBtn">
-      <span class="icon"></span>插入圖片
-    </button>
-    <button class="imgBtn">
-      <span class="icon"></span>插入貼圖
-    </button>
-    <button class="imgBtn">
-      <span class="icon"></span>插入表情
-    </button>
+    <button class="imgBtn"><span class="icon"></span>插入圖片</button>
+    <button class="imgBtn"><span class="icon"></span>插入貼圖</button>
+    <button class="imgBtn"><span class="icon"></span>插入表情</button>
   </aside>
   <main class="mainSection">
     <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
@@ -17,9 +11,10 @@
       <div class="form-group">
         <div class="themeTag1">
           <p-dropdown
-            formControlName="themeTag"
+            formControlName="themeId"
             [options]="themeTag"
             optionLabel="themeName"
+            optionValue="themeId"
             placeholder="請選擇主題"
             [showClear]="true"
           />
@@ -51,7 +46,6 @@
       <!-- 內文 -->
       <div class="form-group">
         <quill-editor
-          id="content"
           formControlName="content"
           placeholder="輸入文章內文"
           [modules]="{
