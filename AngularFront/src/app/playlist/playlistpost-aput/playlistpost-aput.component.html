@@ -1,0 +1,32 @@
+<p-dialog [(visible)]="displayDialog" [modal]="true" [closable]="false" [style]="{width: '50vw'}" [baseZIndex]="10000">
+  <ng-template pTemplate="header">
+    {{ isEditing ? '編輯播放清單' : '新增播放清單' }}
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div>
+      <div class="form-group">
+        <label for="playListName">片單名稱</label>
+        <input type="text" id="playListName" [(ngModel)]="playlist.playListName" name="playListName" />
+      </div>
+
+      <div class="form-group">
+        <label for="playListDescription">片單描述</label>
+        <textarea id="playListDescription" [(ngModel)]="playlist.playListDescription" name="playListDescription"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="playListImage">片單圖片</label>
+        <img [src]="getImagePreview()" alt="Image Preview" class="image-preview">
+        <input type="file" id="playListImage" (change)="onImageSelected($event)" />
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="button-group">
+      <button pButton label="取消" icon="pi pi-times" (click)="onCancel()" class="p-button-text"></button>
+      <button pButton label="確認" icon="pi pi-check" (click)="onSubmit()" class="p-button-primary"></button>
+    </div>
+  </ng-template>
+</p-dialog>

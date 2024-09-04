@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PlaylistService } from '../../services/playlist.service';
 import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
+import { PlaylistpostAputComponent } from '../playlistpost-aput/playlistpost-aput.component';
 
 @Component({
   selector: 'app-playlistmember',
@@ -12,6 +13,8 @@ export class PlaylistMemberComponent implements OnInit {
   addedPlaylists: PlaylistDTO[] = [];
   collaboratorPlaylists: PlaylistDTO[] = [];
   memberId: number = 5;
+
+  @ViewChild(PlaylistpostAputComponent) playlistPostAputComponent!: PlaylistpostAputComponent;
 
   constructor(private playlistService: PlaylistService) { }
 
@@ -89,11 +92,14 @@ export class PlaylistMemberComponent implements OnInit {
     );
   }
 
-  addNewPlaylist(){
-
+  addNewPlaylist(): void {
+    this.playlistPostAputComponent.showDialog(false);
   }
 
   editPlaylist(playlistId: number): void {
-    console.log('Editing playlist with ID:', playlistId);
+    const playlist = this.createdPlaylists.find(p => p.playListId === playlistId);
+    if (playlist) {
+      this.playlistPostAputComponent.showDialog(true, playlist);
+    }
   }
 }

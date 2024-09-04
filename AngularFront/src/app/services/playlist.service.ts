@@ -44,4 +44,12 @@ export class PlaylistService {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url);
   }
+
+  addNewPlaylist(playlist: PlaylistDTO): Observable<PlaylistDTO> {
+    return this.http.post<PlaylistDTO>(this.apiUrl, playlist);
+  }
+
+  editPlaylist(playlistId: number, playlist: PlaylistDTO): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${playlistId}`, playlist);
+  }
 }

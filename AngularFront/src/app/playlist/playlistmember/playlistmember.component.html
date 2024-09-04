@@ -1,7 +1,8 @@
 <div class="topbar">
-  <i class="pi pi-plus-circle add-icon"></i>
+  <i class="pi pi-plus-circle add-icon" (click)="addNewPlaylist()"></i>
   <i class="pi pi-trash trash-icon" id="trashIcon"></i>
 </div>
+<a routerLink="../">播放清單</a>
 
 <div class="playlist-container">
   <div class="playlist-section">
@@ -55,3 +56,5 @@
     </div>
   </div>
 </div>
+
+<app-playlistpost-aput></app-playlistpost-aput>
