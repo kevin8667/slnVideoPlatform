@@ -5,7 +5,7 @@
         <div class="col-12 d-flex align-items-center my-3 position-relative">
             <div>
                 <a href="javascript:void(0);" class="btn btn-success" onclick="createPlaylist()">新增</a>
-            </div>
+            </div>            
             <div class="position-absolute top-50 start-50 translate-middle">
                 <div id="table-selector" class="btn-group" role="group">
                     <button type="button" class="btn btn-outline-primary" id="btn-playlists">播放清單</button>
@@ -25,7 +25,7 @@
 
     <div class="bg-light p-3 shadow-sm">
         <div id="topbar" class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center">                
                 <select id="page-size-select" class="form-select me-2" aria-label="每頁顯示筆數" style="height: 38px;" onchange="changePageSize(event)">
                     <option value="1">每頁1筆資料</option>
                     <option selected value="5">每頁5筆資料</option>
@@ -33,8 +33,27 @@
                     <option value="15">每頁15筆資料</option>
                     <option value="20">每頁20筆資料</option>
                     <option value="25">每頁25筆資料</option>
-                </select>                
-            </div>
+                </select>
+            </div>            
+            <div class="me-auto">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>            
             <div class="d-flex align-items-center">
                 <select class="form-select me-2" aria-label="排序方式" style="height: 38px;" onchange="changeSort(event)">
                     <option value="ascPlayListId">播放ID升冪</option>
@@ -182,7 +201,7 @@
         });
 
         var currentPage = 1;
-        var pageSize = 25;
+        var pageSize = 10;
         var sortOrder = "asc";
         var sortBy = "PlayListId";
 
@@ -197,7 +216,7 @@
                     sortOrder: sortOrder
                 },
                 success: function (result) {
-                    $('#content').html(result);
+                    $('#content').html(result.html);
                     updatePagination(result.totalPages);
                 },
                 error: function () {
@@ -232,7 +251,7 @@
             var pagination = $('.pagination');
             pagination.empty();
 
-            if (totalPages === 0) {
+            if (totalPages <= 1) {
                 pagination.hide();
                 return;
             }
@@ -242,10 +261,37 @@
             if (currentPage > 1) {
                 pagination.append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(' + (currentPage - 1) + ')">&laquo;</a></li>');
             }
-
-            for (var i = 1; i <= totalPages; i++) {
-                var activeClass = i === currentPage ? ' active' : '';
-                pagination.append('<li class="page-item' + activeClass + '"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>');
+            
+            if (totalPages <= 10) {
+                for (var i = 1; i <= totalPages; i++) {
+                    var activeClass = i === currentPage ? ' active' : '';
+                    pagination.append('<li class="page-item' + activeClass + '"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>');
+                }
+            } else {                
+                if (currentPage <= 4) {
+                    for (var i = 1; i <= 5; i++) {
+                        var activeClass = i === currentPage ? ' active' : '';
+                        pagination.append('<li class="page-item' + activeClass + '"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>');
+                    }
+                    pagination.append('<li class="page-item disabled"><span class="page-link">...</span></li>');
+                    pagination.append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(' + totalPages + ')">' + totalPages + '</a></li>');
+                } else if (currentPage > totalPages - 4) {
+                    pagination.append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>');
+                    pagination.append('<li class="page-item disabled"><span class="page-link">...</span></li>');
+                    for (var i = totalPages - 4; i <= totalPages; i++) {
+                        var activeClass = i === currentPage ? ' active' : '';
+                        pagination.append('<li class="page-item' + activeClass + '"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>');
+                    }
+                } else {
+                    pagination.append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>');
+                    pagination.append('<li class="page-item disabled"><span class="page-link">...</span></li>');
+                    for (var i = currentPage - 2; i <= currentPage + 2; i++) {
+                        var activeClass = i === currentPage ? ' active' : '';
+                        pagination.append('<li class="page-item' + activeClass + '"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>');
+                    }
+                    pagination.append('<li class="page-item disabled"><span class="page-link">...</span></li>');
+                    pagination.append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(' + totalPages + ')">' + totalPages + '</a></li>');
+                }
             }
 
             if (currentPage < totalPages) {
