@@ -25,6 +25,7 @@ import { SeasonListComponent } from './season-list/season-list.component';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
 import { GalleriaModule } from 'primeng/galleria';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { GalleriaModule } from 'primeng/galleria';
     TableModule,
     DataViewModule,
     ImageModule,
-    GalleriaModule
+    GalleriaModule,
+    AutoCompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

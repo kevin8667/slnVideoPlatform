@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Video } from './interfaces/video';
 import { HttpParams } from '@angular/common/http';
 import { PagedResult } from './interfaces/PagedResult';
+import {Genre} from './interfaces/genre';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class VideoDBService {
   // seriesName:string | null = null;
   // seasonName:string | null = null;
 
-    
+
 
   getVideoApi(){
     this.httpClient.get<Video[]>('https://localhost:7193/api/VideoList')
@@ -70,11 +71,17 @@ export class VideoDBService {
 
     return this.httpClient.get<Video[]>(url)
   }
-  getSearchVideoApi(videoName: string | null, typeId: number | null, summary: string | null, genreName: string | null, seriesName: string | null, seasonName: string | null ){
-
-    const url = `https://localhost:7193/api/VideoList/search`
-
+  getSearchVideoApi(
+    videoName: string | null,
+    typeId: number | null,
+    summary: string | null,
+    genreNames: string[] | null,
+    seriesName: string | null,
+    seasonName: string | null
+  ) {
+    const url = `https://localhost:7193/api/VideoList/search`;
     let params = new HttpParams();
+
     if (videoName) {
       params = params.set('videoName', videoName);
     }
@@ -84,8 +91,10 @@ export class VideoDBService {
     if (summary) {
       params = params.set('summary', summary);
     }
-    if (genreName) {
-      params = params.set('genreName', genreName);
+    if (genreNames && genreNames.length > 0) {
+      genreNames.forEach(genreName => {
+        params = params.append('genreNames', genreName);
+      });
     }
     if (seriesName) {
       params = params.set('seriesName', seriesName);
@@ -93,17 +102,8 @@ export class VideoDBService {
     if (seasonName) {
       params = params.set('seasonName', seasonName);
     }
-    // params = params.set('pageNumber', pageNumber);
-    // params = params.set('pageSize', pageSize);
 
-    this.httpClient.get<Video[]>(url, { params })
-    .subscribe(video => {
-      console.log(video);
-    }, error => {
-      console.error('Error fetching videos:', error);
-    });
-
-    return this.httpClient.get<Video[]>(url, { params })
+    return this.httpClient.get<Video[]>(url, { params });
   }
 
   getImagesByVideoID(id:string)
@@ -118,5 +118,18 @@ export class VideoDBService {
     });
 
     return this.httpClient.get<string[]>(url)
+  }
+
+  getGenresApi(){
+    const url = `https://localhost:7193/api/GenreList`;
+
+    this.httpClient.get<Genre[]>(url)
+    .subscribe(genres => {
+      console.log(genres);
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<Genre[]>(url)
   }
 }

@@ -1,7 +1,9 @@
+import { event } from 'jquery';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
-import { ActivatedRoute } from '@angular/router';
+import { Genre } from '../interfaces/genre';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SearchStateService } from '../search-state.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
@@ -9,6 +11,11 @@ interface VideoType
 {
   typeName:string;
   typeId:number;
+}
+
+interface AutoCompleteCompleteEvent {
+  originalEvent: Event;
+  query: string;
 }
 
 @Component({
@@ -20,11 +27,11 @@ interface VideoType
     trigger('listAnimation', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('0.5s ease-in-out', 
+        animate('0.5s ease-in-out',
                 style({ opacity: 1, transform: 'translateY(0)' }))
       ]),
       transition(':leave', [
-        animate('0.5s ease-in-out', 
+        animate('0.5s ease-in-out',
                 style({ opacity: 0, transform: 'translateY(20px)' }))
       ])
     ])
@@ -38,10 +45,14 @@ export class VideoDbSearchComponent implements OnInit {
   types: VideoType[] | undefined;
   selectedType: VideoType | undefined;
 
+  genres :Genre[] |undefined;
+  selectedGenres : Genre[] |undefined;
+  filteredGenres : any[] = [];
+
   videoName: string | null = null;
   typeId: number | null = null;
   summary: string | null = null;
-  genreName: string | null = null;
+  genreNames: string[]= [];
   seriesName: string | null = null;
   seasonName: string | null = null;
 
@@ -53,7 +64,8 @@ export class VideoDbSearchComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private videoDbService: VideoDBService,
-    private searchStateService: SearchStateService
+    private searchStateService: SearchStateService,
+    private router : Router
   ) {}
 
   ngOnInit() {
@@ -62,70 +74,111 @@ export class VideoDbSearchComponent implements OnInit {
       { typeName: '影集', typeId: 2 },
       { typeName: '其他', typeId: 3 }
     ];
+
+    this.genreNames = [];
+
+    this.videoDbService.getGenresApi().subscribe((genres)=>{
+      this.genres=genres;
+      console.log(genres)
+    });
+
     this.route.queryParams.subscribe(params => {
       this.videoName = params['videoName'] || null;
       this.typeId = params['typeId'] ? +params['typeId'] : null;
       this.summary = params['summary'] || null;
-      this.genreName = params['genreName'] || null;
+
+      // 解析逗號分隔的 genreNames 字符串為數組
+      this.genreNames = params['genreName'] ? params['genreName'].split(',') : null;
+
       this.seriesName = params['seriesName'] || null;
       this.seasonName = params['seasonName'] || null;
 
       // 如果有参数，则根据参数搜索视频
-      if (this.videoName || this.typeId || this.summary || this.genreName || this.seriesName || this.seasonName) {
+      if (this.videoName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || this.seriesName || this.seasonName) {
           this.searchVideos();
       }
-  });
+    });
 
-    const savedParams = this.searchStateService.getSearchParams();
-    const savedResults = this.searchStateService.getSearchResults();
+    // const savedParams = this.searchStateService.getSearchParams();
+    // const savedResults = this.searchStateService.getSearchResults();
 
-    if (savedParams && savedResults) {
-      this.videoName = savedParams.videoName;
-      this.typeId = savedParams.typeId;
-      this.summary = savedParams.summary;
-      this.genreName = savedParams.genreName;
-      this.seriesName = savedParams.seriesName;
-      this.seasonName = savedParams.seasonName;
+    // if (savedParams && savedResults) {
+    //   this.videoName = savedParams.videoName;
+    //   this.typeId = savedParams.typeId;
+    //   this.summary = savedParams.summary;
 
-      this.videos = savedResults;
-    } else {
-      this.searchVideoByFilters();
-    }
+
+    //   this.genreNames = savedParams.genreName ? savedParams.genreName.split(',') : [];
+
+    //   this.seriesName = savedParams.seriesName;
+    //   this.seasonName = savedParams.seasonName;
+
+    //   this.videos = savedResults;
+    // } else {
+    //     this.searchVideoByFilters();
+    //   }
 
   }
 
+
   searchVideoByFilters() {
     this.videoName = this.inputName;
-    if (this.selectedType != undefined) {
+    if (this.selectedType) {
       this.typeId = this.selectedType.typeId;
-    }else
-    {
+    } else {
       this.typeId = null;
     }
     this.searchVideos();
   }
 
   searchVideos(): void {
+    const genreNames = this.selectedGenres?.map(genre => genre.genreName) || [];
+
     this.videoDbService.getSearchVideoApi(
       this.videoName,
       this.typeId,
       this.summary,
-      this.genreName,
+      genreNames,
       this.seriesName,
       this.seasonName
     ).subscribe((response) => {
       console.log(this.typeId);
       this.videos = response;
 
-      this.searchStateService.saveSearchParams({
-        videoName: this.videoName,
-        typeId: this.typeId,
-        summary: this.summary,
-        genreName: this.genreName,
-        seriesName: this.seriesName,
-        seasonName: this.seasonName
-      });
+      // this.searchStateService.saveSearchParams({
+      //   videoName: this.videoName,
+      //   typeId: this.typeId,
+      //   summary: this.summary,
+      //   genreNames: genreNames,
+      //   seriesName: this.seriesName,
+      //   seasonName: this.seasonName
+      // });
       this.searchStateService.saveSearchResults(this.videos);
-      });
+    });
+  }
+
+  filterGenre(event: AutoCompleteCompleteEvent) {
+    let filtered: Genre[] = [];
+    let query = event.query;
+
+    if (this.genres) {
+      for (let i = 0; i < this.genres.length; i++) {
+        let genre = this.genres[i];
+        if (genre.genreName.indexOf(query) === 0) {
+          filtered.push(genre);
+        }
+      }
+    }
+
+    this.filteredGenres = filtered;
+  }
+
+  handleGenreSelection(genre: Genre) {
+    if (this.genreNames) {
+      this.genreNames.push(genre.genreName);
+    } else {
+      this.genreNames = [genre.genreName];
+    }
+    this.searchVideos();
   }
 }

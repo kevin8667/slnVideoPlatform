@@ -57,21 +57,19 @@ namespace VdbAPI.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<PaginatedResponse<VideoListDTO>>> SearchVideos(
+        public async Task<ActionResult<IEnumerable<VideoListDTO>>> SearchVideos(
             string? videoName,
             int? typeId,
             string? summary,
-            string? genreName,
+            [FromQuery(Name = "genreNames")] List<string>? genreNames,
             string? seriesName,
             string? seasonName)
-            //int pageNumber = 1,
-            //int pageSize = 10)
         {
             var query = _context.VideoLists
                 .Include(v => v.MainGenre)
                 .Include(v => v.Series)
                 .Include(v => v.Season)
-                .Include(v => v.Type) // 如果需要 Type 名稱
+                .Include(v => v.Type)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(videoName))
@@ -89,9 +87,9 @@ namespace VdbAPI.Controllers
                 query = query.Where(v => v.Summary.Contains(summary));
             }
 
-            if (!string.IsNullOrEmpty(genreName))
+            if (genreNames != null && genreNames.Any())
             {
-                query = query.Where(v => v.MainGenre.GenreName.Contains(genreName));
+                query = query.Where(v => genreNames.Contains(v.MainGenre.GenreName));
             }
 
             if (!string.IsNullOrEmpty(seriesName))
@@ -104,17 +102,13 @@ namespace VdbAPI.Controllers
                 query = query.Where(v => v.Season.SeasonName.Contains(seasonName));
             }
 
-            // 總記錄數量
-            var totalRecords = await query.CountAsync();
-
-            // 應用分頁
             var videoListDTOs = await query
                 .Select(v => new VideoListDTO
                 {
                     VideoId = v.VideoId,
                     VideoName = v.VideoName,
                     TypeId = v.TypeId,
-                    TypeName = v.Type.TypeName, // 假設 Type 有 TypeName 屬性
+                    TypeName = v.Type.TypeName,
                     Summary = v.Summary,
                     SeriesId = v.SeriesId,
                     SeriesName = v.Series.SeriesName,
@@ -123,15 +117,6 @@ namespace VdbAPI.Controllers
                     MainGenreId = v.MainGenreId,
                     MainGenreName = v.MainGenre.GenreName
                 }).ToListAsync();
-
-            // 返回分頁結果
-            //var response = new PaginatedResponse<VideoListDTO>
-            //{
-            //    Items = videoListDTOs,
-            //    TotalRecords = totalRecords,
-            //    PageNumber = pageNumber,
-            //    PageSize = pageSize
-            //};
 
             return Ok(videoListDTOs);
         }

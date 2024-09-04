@@ -1,7 +1,7 @@
 /* .flex {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 10px; 
+  gap: 10px;
 } */
 
 .p-grid {
@@ -10,10 +10,10 @@
   gap: 1rem;
 }
 
-/* .p-dataview .p-dataview-grid .p-col-12, 
+/* .p-dataview .p-dataview-grid .p-col-12,
 .p-dataview .p-dataview-grid .p-md-4 {
     display: inline-block ;
-    width: 100%; 
+    width: 100%;
 }
 
 @media (min-width: 300px) {
@@ -72,3 +72,5 @@ img.border-round {
   display: flex;
   gap: 1.5rem;
 }
+
+

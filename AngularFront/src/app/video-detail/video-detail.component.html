@@ -69,19 +69,19 @@
         <p><strong>主演:</strong> TEST </p>
       </div>
       <div class="flex ">
-        
+
       </div>
-      
+
     </div>
   </div>
 </div>
 
 <!-- <div class="card">
-  <p-galleria 
-    [value]="images" 
-    [responsiveOptions]="responsiveOptions" 
-    [containerStyle]="{ 'max-width': '300px', 'max-height': '350px' }" 
-    [numVisible]="5" 
+  <p-galleria
+    [value]="images"
+    [responsiveOptions]="responsiveOptions"
+    [containerStyle]="{ 'max-width': '300px', 'max-height': '350px' }"
+    [numVisible]="5"
     (valueChange)="onValueChange($event)"
     style="height: 350px; overflow: hidden;"
     thumbnailsPosition="left">
@@ -99,21 +99,24 @@
 </div> -->
 <div class="galleria-wrapper">
   <div class="galleria-container">
-    <p-galleria 
-        [value]="images" 
-        [responsiveOptions]="responsiveOptions" 
-        [containerStyle]="{ 'max-width': '400px', 'max-height': '350px' }" 
-        [numVisible]="5" 
+    <p-galleria
+        [value]="images"
+        [responsiveOptions]="responsiveOptions"
+        [containerStyle]="{ 'max-width': '400px', 'max-height': '350px' }"
+        [numVisible]="5"
         (valueChange)="onValueChange($event)"
         thumbnailsPosition="bottom">
         <!-- Main Image -->
         <ng-template pTemplate="item" let-item>
-            <img [src]="'/assets/' + item" style="width: 100%; min-height: 420px; display: block;" />
+            <p-image [src]="'/assets' + item" class="video-image"
+            [preview]="true"
+            width="300px"
+            height="450px" ></p-image>
         </ng-template>
         <!-- Thumbnail Images -->
         <ng-template pTemplate="thumbnail" let-item>
             <div class="thumbnail-container">
-                <img [src]="'/assets/' + item" class="thumbnail-image" />
+                <img [src]="'/assets' + item" class="thumbnail-image" />
             </div>
         </ng-template>
     </p-galleria>
