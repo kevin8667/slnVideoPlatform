@@ -12,7 +12,7 @@ namespace Backstage.ViewModels
         public int TotalPages { get; set; } = 1;
         public string SortOrder { get; set; } = "asc";
         public string SortBy { get; set; } = "PlayListId";
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 15;
     }
 }
 

@@ -37,15 +37,9 @@
             </div>            
             <div class="me-auto">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination mb-0">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
+                    <ul class="pagination mb-0">                        
                         <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>                        
                         <li class="page-item">
                             <a class="page-link" href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
@@ -134,6 +128,28 @@
             });
         });
 
+        function previewImage(inputFile) {
+            if (inputFile.files && inputFile.files[0]) {
+                var allowType = "image.*";
+                if (inputFile.files[0].type.match(allowType)) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#imgPreview").attr('src', e.target.result);
+                        $("#imgPreview").attr('title', inputFile.files[0].name);
+                    };
+                    reader.readAsDataURL(inputFile.files[0]);
+                    $("#insertbtn").prop('disabled', false);
+                } else {
+                    alert("不支援上傳檔案格式!!");
+                    $("#ShowImage").val("");
+                    $("#insertbtn").prop('disabled', true);
+                }
+            } else {
+                $("#imgPreview").attr('src', '/img/NoImageOOO.jpg');
+                $("#imgPreview").attr('title', '尚未選擇圖片');
+            }
+        }
+
         function showPopup(title, contentUrl) {
             $('#popup-title').text(title);
             $.ajax({
@@ -142,12 +158,16 @@
                 success: function (data) {
                     $('#popup-content').html(data);
                     $('#popup-window').show();
+                    
+                    $('#ShowImage').on('change', function () {
+                        previewImage(this);
+                    });
                 },
                 error: function () {
                     alert('Failed to load content.');
                 }
             });
-        }
+        }        
 
         function closePopup() {
             $('#popup-window').hide();
@@ -201,7 +221,7 @@
         });
 
         var currentPage = 1;
-        var pageSize = 10;
+        var pageSize = 15;
         var sortOrder = "asc";
         var sortBy = "PlayListId";
 

@@ -104,19 +104,7 @@ namespace Backstage.Controllers
                                             .ToList();
 
             return PartialView("_PlayListPartial", filteredPlaylists);
-        }
-
-        // GET: PlayList/Details/5
-        public async Task<IActionResult> PlayListDetails(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var playList = await _context.PlayLists
-                .FirstOrDefaultAsync(m => m.PlayListId == id);
-            if (playList == null) return NotFound();
-
-            return PartialView("_PlayListDetailsPartial", playList);
-        }
+        }        
 
         private async Task SaveUploadedFileAsync(PlayList playList)
         {
@@ -143,6 +131,18 @@ namespace Backstage.Controllers
             {
                 return File("~/img/noimageooo.jpg", "image/jpeg");
             }
+        }
+
+        // GET: PlayList/Details/5
+        public async Task<IActionResult> PlayListDetails(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var playList = await _context.PlayLists
+                .FirstOrDefaultAsync(m => m.PlayListId == id);
+            if (playList == null) return NotFound();
+
+            return PartialView("_PlayListDetailsPartial", playList);
         }
 
         // GET: PlayList/Create

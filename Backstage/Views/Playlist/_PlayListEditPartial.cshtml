@@ -32,32 +32,3 @@
         <button type="submit" class="btn btn-primary">保存更改</button>
     </div>
 </form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function previewImage(inputFile) {
-            if (inputFile.files && inputFile.files[0]) {
-                var allowType = "image.*";
-                if (inputFile.files[0].type.match(allowType)) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $("#imgPreview").attr('src', e.target.result);
-                        $("#imgPreview").attr('title', inputFile.files[0].name);
-                    };
-                    reader.readAsDataURL(inputFile.files[0]);
-                } else {
-                    alert("不支援上傳檔案格式!!");
-                    $("#ShowImage").val("");
-                }
-            }
-        }
-        $("#ShowImage").on("change", function () {
-            previewImage(this);
-        });
-    </script>
-}
