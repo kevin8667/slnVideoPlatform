@@ -1,0 +1,19 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>會員名稱</th>
+      <th>影片名稱</th>
+      <th>方案名稱</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of sc">
+      <td>{{ item.memberName }}</td>
+      <td>{{ item.videoName }}</td>
+      <td>{{ item.planName }}</td>
+      <td><button>去結帳</button></td>
+    </tr>
+  </tbody>
+</table>

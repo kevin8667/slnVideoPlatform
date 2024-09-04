@@ -13,7 +13,7 @@ public partial class Order
 
     public int? CouponId { get; set; }
 
-    public DateOnly? OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
 
     public decimal? OrderTotalPrice { get; set; }
 
@@ -34,6 +34,4 @@ public partial class Order
     public virtual MemberInfo Driver { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
-    public virtual ShoppingCart ShoppingCart { get; set; }
 }
