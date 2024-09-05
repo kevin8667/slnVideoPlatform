@@ -35,7 +35,6 @@ export class VideoDBFrontPageComponent implements OnInit{
   typeID:any;
 
   videoTypes:any[] = [
-
     {name: '電影', typeID:'1'},
     {name: '影集', typeID:'2'},
     {name: '其他', typeID:'3'}
@@ -49,6 +48,9 @@ export class VideoDBFrontPageComponent implements OnInit{
 
   onSelect(event: any) {
 
+    if (this.typeID === event.value.typeID) {
+      return;
+    }
     const selectedIndex = this.videoTypes.findIndex(type => type.name === event.value.name);
     const slider = document.querySelector('.slider-background') as HTMLElement;
     slider.style.left = `${selectedIndex * 33}%`; 
@@ -68,29 +70,29 @@ export class VideoDBFrontPageComponent implements OnInit{
   ngOnInit() {
     this.defaultTypeID = 1;  // 設置預設的 typeID 為電影
     this.typeID = this.defaultTypeID;
-  
+      
     // 預設加載「電影」類型的影片
     this.videoDbService.getVideoApiWithTypeID(this.typeID.toString())
       .subscribe((videos) => {
         this.videos = videos;
       });
-    this.responsiveOptions = [
-      {
-          breakpoint: '1199px',
+      this.responsiveOptions = [
+        {
+          breakpoint: '1024px',
+          numVisible: 5,
+          numScroll: 2
+        },
+        {
+          breakpoint: '768px',
+          numVisible: 3,
+          numScroll: 1
+        },
+        {
+          breakpoint: '560px',
           numVisible: 1,
           numScroll: 1
-      },
-      {
-          breakpoint: '991px',
-          numVisible: 2,
-          numScroll: 1
-      },
-      {
-          breakpoint: '767px',
-          numVisible: 1,
-          numScroll: 1
-      }
-  ];
+        }
+      ];
 
   }
 }
