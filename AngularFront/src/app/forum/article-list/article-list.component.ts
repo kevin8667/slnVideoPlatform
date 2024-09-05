@@ -42,6 +42,8 @@ export class ArticleListComponent implements OnInit {
     },
     {
       pic: '/assets/images/forumAd4.png',
+    },    {
+      pic: '/assets/images/forumAd5.png',
     },
   ];
 

@@ -1,3 +1,4 @@
+import { EditComponent } from './edit/edit.component';
 import { QuillModule } from 'ngx-quill';
 import { NgModule } from '@angular/core';
 
@@ -31,7 +32,8 @@ import { EditorComponent } from './share/editor/editor.component';
     NewArticleComponent,
     NewPostComponent,
     ArticleListComponent,
-    EditorComponent
+    EditorComponent,
+    EditComponent
   ],
   imports: [
     TableModule,
