@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { VideoDetailComponent } from '../video-detail/video-detail.component';
+import { VideoDbSearchComponent } from '../video-db-search/video-db-search.component';
+import { VideoDBFrontPageComponent } from '../video-dbfront-page/video-dbfront-page.component';
 
-
+const routes: Routes = [
+  { path: '', component: VideoDBFrontPageComponent },
+  { path: 'details/:id', component: VideoDetailComponent },
+  { path: 'search', component: VideoDbSearchComponent },
+];
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  imports: [RouterModule.forChild(routes)], // 正確地使用 forChild
+  exports: [RouterModule]
 })
-export class VideoDBRoutingModule { }
+export class VideoDBRoutingModule {}
