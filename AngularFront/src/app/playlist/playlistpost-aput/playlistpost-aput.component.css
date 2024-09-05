@@ -8,6 +8,13 @@ label {
   margin-bottom: 8px;
 }
 
+::ng-deep .p-dialog-header {
+  font-family: 'Noto Sans TC', '微軟正黑體', 'Arial', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
 input[type="text"],
 textarea {
   width: 100%;
@@ -22,7 +29,8 @@ textarea {
 }
 
 .image-preview {
-  width: 100px;
+  width: 100%;
+  max-width: 300px;
   height: auto;
   display: block;
   margin-top: 10px;

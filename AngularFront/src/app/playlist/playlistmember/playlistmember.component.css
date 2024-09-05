@@ -62,6 +62,10 @@
   gap: 20px;
 }
 
+::ng-deep .playlist-cards div {
+  transition: transform 1s ease-in-out;
+}
+
 ::ng-deep .custom-card {
   width: 100%;
   box-sizing: border-box;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using VdbAPI.Models;
 
 namespace VdbAPI.Controllers
@@ -69,6 +70,12 @@ namespace VdbAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<PlaylistDTO>> PostPlayList(PlaylistDTO playlistDto)
         {
+            byte[] showImageBytes = null;
+            if (!string.IsNullOrEmpty(playlistDto.ShowImage))
+            {
+                showImageBytes = Convert.FromBase64String(playlistDto.ShowImage); // 轉換 Base64 字串為 byte[]
+            }
+
             var playList = new PlayList
             {
                 PlayListName = playlistDto.PlayListName,
@@ -77,7 +84,7 @@ namespace VdbAPI.Controllers
                 LikeCount = playlistDto.LikeCount,
                 AddedCount = playlistDto.AddedCount,
                 SharedCount = playlistDto.SharedCount,
-                ShowImage = playlistDto.ShowImage,
+                ShowImage = showImageBytes, // 保存 byte[] 類型的圖片
                 PlayListCreatedAt = DateTime.UtcNow,
                 PlayListUpdatedAt = DateTime.UtcNow,
                 AnalysisTimestamp = DateTime.UtcNow
@@ -90,6 +97,7 @@ namespace VdbAPI.Controllers
 
             return CreatedAtAction(nameof(GetPlayList), new { id = playList.PlayListId }, playlistDto);
         }
+
 
         // PUT: api/PlayList/5
         [HttpPut("{id}")]

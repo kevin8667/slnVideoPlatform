@@ -67,8 +67,8 @@ export class PlaylistMemberComponent implements OnInit {
       const trashIconRect = trashIcon.getBoundingClientRect();
       const elementRect = element.getBoundingClientRect();
 
-      const xOffset = trashIconRect.left - elementRect.left;
-      const yOffset = trashIconRect.top - elementRect.top;
+      const xOffset = trashIconRect.left - elementRect.left + (trashIconRect.width / 2 - elementRect.width / 2);
+      const yOffset = trashIconRect.top - elementRect.top + (trashIconRect.height / 2 - elementRect.height / 2);
 
       element.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(0)`;
       element.style.transition = 'transform 1s ease-in-out';
