@@ -1,0 +1,68 @@
+
+<div class="container">
+  <div class="topFlex">
+      <div class="button-container">
+          <button>上一步</button>
+      </div>
+      <div class="button-container">
+          <button>下一步</button>
+      </div>
+  </div>
+
+
+  <div class="title-box">
+      <img src="assets/img/godfather.jpg" alt="重點圖片" class="title-image">
+      <div class="title-text">
+          <h1>教父 - 完整收藏</h1>
+          <h4>$350</h4>
+      </div>
+  </div>
+  <div class="content">
+      <!-- Left Panel -->
+      <div class="left-panel">
+          <div class="side-card mainOne" *ngFor="let product of displayedProducts">
+              <img src="assets/img/NoImage.jpg" alt="{{product.productName}}" class="product-image">
+              <div class="product-info2">
+                <h3>{{product.productName}}</h3>
+                <p>{{product.productDescription}}</p>
+                <p class="price">${{product.productPrice}}</p>
+              </div>
+              <div class="product-action">
+                <button class="add-button" >加購</button>
+              </div>
+            </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+          <div class="summary">
+              <p>
+                  <span>小計&#12288;</span>
+                  <input type="number" value="398" disabled>
+              </p>
+              <p>
+                  <span>運費&#12288;</span>
+                  <input type="number" value="0" disabled>
+              </p>
+              <p>
+                  <span>折價券</span>
+                  <input type="text" value="-10%">
+              </p>
+              <p>
+                  <span>總額&#12288;</span>
+                  <input type="number" value="358" disabled>
+              </p>
+          </div>
+          <div class="address">
+              <p>
+                  <span>收件人</span>
+                  <input type="text" value="王小名">
+              </p>
+              <p>
+                  <span style="vertical-align: top;">地址&#12288;</span>
+                  <textarea rows="4" cols="20" placeholder="請在此輸入內容" style="resize: none;">台北市大安區復興南路一段390號2樓</textarea>
+              </p>
+          </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,237 @@
+.container {
+  width: 80%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+.header {
+  text-align: left;
+  padding: 20px 0;
+}
+.header h1 {
+  color: #3a77ff;
+  font-size: 28px;
+  margin: 0;
+}
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+.top-bar .checkout {
+  color: white;
+  background-color: #ff8080;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.button-container {
+  margin-bottom: 20px;
+}
+.button-container button {
+  border: 1px solid #000;
+  padding: 10px 20px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+.content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* 這裡設置左右面板之間的空間 */
+}
+.left-panel {
+  width: 60%;
+  box-sizing: border-box;
+}
+.right-panel {
+  width: 40%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.product-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  padding: 10px;
+  justify-content: space-between;
+}
+.product-info {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+.product-item img {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #000;
+  margin-right: 10px;
+}
+.product-title {
+  flex-grow: 1;
+  padding: 10px;
+}
+.product-action {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* 確保價格和按鈕之間有一致的間距 */
+}
+.product-price {
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap; /* 確保價格不換行 */
+  margin-right: 5px;
+}
+.add-button, .checkout-button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+}
+.add-button {
+  background-color: #ffcccc;
+}
+.add-button.blue {
+  background-color: #b3e0ff;
+}
+.checkout-button {
+  background-color: #ff8080;
+}
+.summary, .address {
+  border: 1px solid #000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.summary p, .address p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+.topFlex{
+  display: flex;
+  justify-content: space-between; /* 讓左邊和右邊的 div 分開 */
+  align-items: center; /* 垂直居中，可選 */
+  width: 100%; /* 設置容器的寬度 */
+}
+
+.button-container button, .add-button, .checkout-button {
+background-color: lightgray; /* 藍色按鈕 */
+color: black;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+}
+
+.product-item {
+background-color: #f7f7f7; /* 輕微的灰色背景，讓產品區塊與白色背景區分 */
+border: 1px solid #ddd; /* 淺灰色邊框 */
+padding: 15px;
+margin-bottom: 15px;
+}
+
+.summary, .address {
+background-color: #f2f2f2; /* 輕微灰色背景，讓總結與地址區塊有區別 */
+color: #333;
+border: 1px solid #ddd;
+padding: 20px;
+box-sizing: border-box;
+}
+
+.product-price {
+color: #ff6600; /* 顯眼的橙色，讓價格突出 */
+}
+.side-card {
+display: flex;
+align-items: center;
+border: 1px solid #ddd;
+margin-bottom: 20px;
+padding: 10px;
+background-color: #f2f2f2; /* 卡片淺灰色背景 */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease, box-shadow 0.3s ease; /* 添加浮動效果 */
+justify-content: space-between;
+}
+
+.side-card:hover {
+transform: translateY(-5px); /* 卡片滑過時向上浮動 */
+box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* 更大的陰影 */
+}
+
+.product-image {
+width: 100px;
+height: 100px;
+object-fit: cover;
+margin-right: 20px;
+border-radius: 8px;
+}
+
+.product-info2 {
+flex: 1;
+}
+
+.price {
+font-size: 18px;
+color: #ff6600; /* 顯眼的橙色價格 */
+font-weight: bold;
+margin-top: 10px;
+}
+
+.product-action {
+margin-left: 20px;
+}
+
+.add-button {
+background-color: #ff5722; /* 顯眼的橙紅色按鈕 */
+color: white;
+border: none;
+padding: 10px 15px;
+cursor: pointer;
+border-radius: 5px;
+font-size: 14px;
+font-weight: bold;
+transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+background-color: #e64a19; /* 按鈕滑過時顏色變深 */
+}
+.title-box {
+display: flex;
+align-items: center;
+background-color: #f2f2f2; /* 鮮明的橙色背景 */
+padding: 30px;
+margin-bottom: 20px;
+color: black;
+border: 1px solid #ddd;
+}
+
+.title-image {
+width: 100px;
+height: 100px;
+object-fit: cover;
+margin-right: 20px;
+}
+
+.title-text h1 {
+font-size: 28px;
+margin: 0;
+}
+
+.title-text h4 {
+margin: 5px 0 0;
+font-weight: normal;
+}

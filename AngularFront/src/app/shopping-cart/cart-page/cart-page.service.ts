@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { cartPage } from './cart-page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class CartPageService {
 
   constructor(private http: HttpClient) { }
 
-  GetShoppingCarts(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  GetShoppingCarts(): Observable<cartPage[]> {
+    return this.http.get<cartPage[]>(this.apiUrl);
   }
 }
