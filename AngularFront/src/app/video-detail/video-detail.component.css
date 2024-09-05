@@ -66,31 +66,91 @@ p {
     transform: scale(1.05);
 }
 
+.content-wrapper {
+  display: flex;
+  gap: 20px; /* 調整圖庫與演員區塊間距 */
+  align-items: flex-start; /* 對齊兩個區塊的內容到頂部 */
+}
+
 .galleria-wrapper {
-    display: flex;
-    justify-content: center; /* 水平居中 */
-    height: 750px; /* 使容器高度占满整个视窗 */
-  }
+  width: 500px;
+  height: 450px;
+  margin-left: 300px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
 
-  .galleria-container {
-    max-width: 400px;
-    max-height: 350px;
-  }
+.galleria-container {
+  text-align: center;
+  background-color: transparent;
+  border-radius: 0; /* 保持直角 */
+}
 
-  .p-galleria {
-    display: flex;
-  }
+.galleria-title {
+  color: #333; /* 深色標題 */
+  font-family: 'Arial', sans-serif;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
 
-  .thumbnail-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 100px;
-    overflow-y: auto;
-  }
+.main-image {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease-in-out;
+}
 
-  .thumbnail-image {
-    width: 100%;
-    height: auto;
-  }
+.main-image:hover {
+  transform: scale(1.05); /* 當滑鼠懸停時稍微放大圖片 */
+}
+
+.thumbnail-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+
+.thumbnail-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.thumbnail-container:hover {
+  transform: translateY(-5px); /* 當滑鼠懸停時上移縮圖 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影 */
+}
+
+.actors-grid {
+  max-width: 500px; /* 調整為更大的寬度 */
+  width: 100%; /* 確保網格容器占滿可用空間 */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 設定兩列，根據需要調整列數 */
+  gap: 10px; /* 調整卡片間距 */
+}
+
+.actor-card {
+  padding: 10px;
+  text-align: center;
+}
+
+.actor-image {
+  width: 100px; /* 設定固定寬度 */
+  height: 150px; /* 設定固定高度 */
+  object-fit: cover; /* 保持圖片比例，裁切多餘部分以適應容器 */
+}
+
+:host ::ng-deep .actor-card .p-card-body {
+  padding: 5px; /* 調整內邊距 */
+}
+
+:host ::ng-deep .actor-card .p-card-content {
+  padding-top: 10px; /* 調整內邊距 */
+  padding-bottom: 10px;
+}

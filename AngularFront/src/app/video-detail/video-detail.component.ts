@@ -1,5 +1,5 @@
 import { Season } from './../interfaces/season';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoDBService } from '../video-db.service';
 import { Video } from '../interfaces/video';
@@ -8,10 +8,9 @@ import { data } from 'jquery';
 @Component({
   selector: 'app-video-detail',
   templateUrl: './video-detail.component.html',
-  styleUrls: ['./video-detail.component.css']
-
-
+  styleUrls: ['./video-detail.component.css'],
 })
+
 export class VideoDetailComponent implements OnInit{
 
   video:Video;
@@ -24,6 +23,33 @@ export class VideoDetailComponent implements OnInit{
 
   images:any[] | undefined;
 
+
+  actors : any[]=[
+    {
+      name:"馬龍·白蘭度",
+      imagePath:"/assets/img/Marlon.jpg"
+    },
+    {
+      name:"艾爾·帕西諾",
+      imagePath:"/assets/img/Alfredo.jpg"
+    },
+    {
+      name:"詹姆士·肯恩",
+      imagePath:"/assets/img/James.jpg"
+    },
+    {
+      name:"勞勃·杜瓦",
+      imagePath:"/assets/img/Robert.jpg"
+    },
+    {
+      name:"黛安·基頓",
+      imagePath:"/assets/img/Diane.jpg"
+    },
+    {
+      name:"約翰·卡佐爾",
+      imagePath:"/assets/img/John.jpg"
+    }
+  ]
 
   constructor(private route: ActivatedRoute, private videoService: VideoDBService) {
     this.video = {

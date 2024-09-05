@@ -76,52 +76,53 @@
   </div>
 </div>
 
-<!-- <div class="card">
-  <p-galleria
-    [value]="images"
-    [responsiveOptions]="responsiveOptions"
-    [containerStyle]="{ 'max-width': '300px', 'max-height': '350px' }"
-    [numVisible]="5"
-    (valueChange)="onValueChange($event)"
-    style="height: 350px; overflow: hidden;"
-    thumbnailsPosition="left">
-
-    <ng-template pTemplate="item" let-item>
-      <img [src]="'/assets/' + item" style="width: 100%;" />
-    </ng-template>
-
-    <ng-template pTemplate="thumbnail" let-item>
-      <div class="grid grid-nogutter justify-content-center" style="width: 100%; max-height: 80px; overflow: hidden;">
-        <img [src]="'/assets/' + item" style="width: 100%;" />
+<div class="content-wrapper">
+  <!-- 新增的演員網格區域 -->
+  <div class="actors-grid">
+    <h2 style="color: black;">主要演員</h2>
+    <div class="grid">
+      <div *ngFor="let actor of actors" class="card">
+        <p-card
+          class="actor-card">
+          <ng-template pTemplate="header">
+            <div style="font-size:18px;">{{ actor.name }}</div> <!-- 調整字體大小 -->
+          </ng-template>
+          <ng-template pTemplate="content">
+            <img [src]="actor.imagePath" alt="{{ actor.name }}" class="actor-image">
+          </ng-template>
+        </p-card>
       </div>
-    </ng-template>
-  </p-galleria>
-</div> -->
-<div class="galleria-wrapper">
-  <div class="galleria-container">
-    <p-galleria
+    </div>
+  </div>
+
+  <div class="galleria-wrapper">
+    <div class="galleria-container">
+      <!-- <h2 style="color: black; padding-right: 500px;">圖庫</h2> -->
+      <p-galleria
         [value]="images"
         [responsiveOptions]="responsiveOptions"
         [containerStyle]="{ 'max-width': '400px', 'max-height': '350px' }"
         [numVisible]="5"
         (valueChange)="onValueChange($event)"
-        thumbnailsPosition="bottom">
+        thumbnailsPosition="left">
         <!-- Main Image -->
         <ng-template pTemplate="item" let-item>
-            <p-image [src]="'/assets' + item" class="video-image"
+          <p-image [src]="'/assets' + item" class="video-image"
             [preview]="true"
             width="300px"
-            height="450px" ></p-image>
+            height="450px"></p-image>
         </ng-template>
         <!-- Thumbnail Images -->
         <ng-template pTemplate="thumbnail" let-item>
-            <div class="thumbnail-container">
-                <img [src]="'/assets' + item" class="thumbnail-image" />
-            </div>
+          <div class="thumbnail-container">
+            <img [src]="'/assets' + item" class="thumbnail-image" />
+          </div>
         </ng-template>
-    </p-galleria>
-
+      </p-galleria>
+    </div>
   </div>
+
+  
 </div>
 
 <h3 style="color: black; margin-top: 2rem;">推薦影片</h3>
