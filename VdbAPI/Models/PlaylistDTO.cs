@@ -9,6 +9,6 @@
         public int LikeCount { get; set; }
         public int AddedCount { get; set; }
         public int SharedCount { get; set; }
-        public string ShowImage { get; set; }
+        public byte[] ShowImage { get; set; }
     }
 }

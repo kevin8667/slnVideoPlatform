@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
@@ -19,5 +20,6 @@ public partial class MemberCreatedPlayList
 
     public virtual MemberInfo Member { get; set; }
 
+    [JsonIgnore]
     public virtual PlayList PlayList { get; set; }
 }
