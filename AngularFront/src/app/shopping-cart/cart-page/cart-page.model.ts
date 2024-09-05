@@ -6,4 +6,6 @@ export interface cartPage {
   planName: string;
   videoId: number;
   videoName: string;
+  price?: number;
+  imagePath?: string;
 }
