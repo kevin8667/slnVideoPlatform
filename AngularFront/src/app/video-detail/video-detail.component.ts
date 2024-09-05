@@ -9,6 +9,7 @@ import { data } from 'jquery';
   selector: 'app-video-detail',
   templateUrl: './video-detail.component.html',
   styleUrls: ['./video-detail.component.css'],
+  // encapsulation:ViewEncapsulation.None
 })
 
 export class VideoDetailComponent implements OnInit{
@@ -21,7 +22,7 @@ export class VideoDetailComponent implements OnInit{
 
   responsiveOptions: any[] | undefined;
 
-  images:any[] | undefined;
+  images:any[] =[];
 
 
   actors : any[]=[

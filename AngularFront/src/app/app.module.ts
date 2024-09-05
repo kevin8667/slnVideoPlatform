@@ -27,6 +27,7 @@ import { PersonDetailComponent } from './person-detail/person-detail.component';
 import { GalleriaModule } from 'primeng/galleria';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,7 +58,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     DataViewModule,
     ImageModule,
     GalleriaModule,
-    AutoCompleteModule
+    AutoCompleteModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

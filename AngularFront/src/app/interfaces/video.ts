@@ -7,7 +7,7 @@ export interface Video
     seriesId:number;
     mainGenreId:number;
     seasonId:number;
-    episode:number;
+    episode?:number|undefined;
     runningTime:string;
     isShowing:boolean;
     releaseDate:Date;

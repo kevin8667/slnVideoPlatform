@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { Video } from '../interfaces/video';
 import { VideoDBService } from '../video-db.service';
 
@@ -6,11 +6,27 @@ import { VideoDBService } from '../video-db.service';
 @Component({
   selector: 'app-video-dbfront-page',
   templateUrl: './video-dbfront-page.component.html',
-  styleUrls: ['./video-dbfront-page.component.css']
+  styleUrls: ['./video-dbfront-page.component.css'],
+  //encapsulation:ViewEncapsulation.None
 })
 export class VideoDBFrontPageComponent implements OnInit{
-  images:any[]=[1,2,3];
+  images:any[]=
+  [
+    {
+      name:"刺激1995",
+      imagePath:"/assets/img/1995.jpg"
+    },
+    {
+      name:"教父",
+      imagePath:"/assets/img/godfather.jpg"
+    },
+    {
+      name:"黑暗騎士",
+      imagePath:"/assets/img/Dark Knight.jpg"
+    }
+  ]
 
+  defaultTypeID:number = 1;
 
   videos:Video[] =[];
 
@@ -31,26 +47,33 @@ export class VideoDBFrontPageComponent implements OnInit{
 
   }
 
-  onSelect(event:any){
+  onSelect(event: any) {
+
+    const selectedIndex = this.videoTypes.findIndex(type => type.name === event.value.name);
+    const slider = document.querySelector('.slider-background') as HTMLElement;
+    slider.style.left = `${selectedIndex * 33}%`; 
+
     if (event.value !== null && event.value !== undefined) {
       this.typeID = event.value.typeID;  // 更新選中的值
-      this.videoDbService.getVideoApiWithTypeID(this.typeID.toString())
-    .subscribe((videos)=>{this.videos = videos});
     } else {
-      // 處理取消選擇的情況，可能是將 selectedValue 設置為 null
-      this.typeID = null;
-      this.videoDbService.getVideoApi().subscribe((videos) => {
-        this.videos = videos;
-    });
-      console.log('Selection cleared');
+      this.typeID = this.defaultTypeID;  // 如果沒有選擇，使用預設值
     }
-
+  
+    this.videoDbService.getVideoApiWithTypeID(this.typeID.toString())
+      .subscribe((videos) => {
+        this.videos = videos;
+      });
   }
 
   ngOnInit() {
-    this.videoDbService.getVideoApi().subscribe((videos) => {
+    this.defaultTypeID = 1;  // 設置預設的 typeID 為電影
+    this.typeID = this.defaultTypeID;
+  
+    // 預設加載「電影」類型的影片
+    this.videoDbService.getVideoApiWithTypeID(this.typeID.toString())
+      .subscribe((videos) => {
         this.videos = videos;
-    });
+      });
     this.responsiveOptions = [
       {
           breakpoint: '1199px',

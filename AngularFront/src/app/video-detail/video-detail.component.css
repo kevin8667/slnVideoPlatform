@@ -1,10 +1,13 @@
-p {
+/* p {
     color: black;
-}
+} */
+@import "primeicons/primeicons.css";
 
 .custom-card {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto; /* 中央對齊 */
     width: 100%; /* 讓卡片寬度占滿父容器 */
-    height: 600px; /* 設定卡片的高度 */
     max-height: 700px; /* 設定卡片的最大高度 */
     border-top: 1px solid #ddd; /* 上邊框 */
     border-bottom: 1px solid #ddd; /* 下邊框 */
@@ -15,6 +18,20 @@ p {
     padding: 16px; /* 增加內部填充 */
     box-sizing: border-box; /* 確保 padding 不會影響卡片的寬度 */
     position: relative;
+    background-image: url('/assets/img/godfatherBackground.jpg'); /* 設定背景圖案 */
+    background-size: cover; /* 確保背景圖案覆蓋整個區塊 */
+    background-position: center; /* 將背景圖案置中 */
+    color: white; /* 確保文字顯示在半透明背景上 */
+  }
+  .custom-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* 半透明黑色背景 */
+    z-index: 1; /* 確保這層在內容之上 */
   }
 
   .card-header {
@@ -25,22 +42,34 @@ p {
 
   .card-body {
     display: flex;
+    flex-direction: row;
     justify-content: space-between; /* 保持圖片和文字在一行 */
     align-items: center;
     padding: 0 400px; /* 調整左右邊距，使內容更集中 */
+    position: relative;
+    z-index: 2; /* 確保內容層在背景和半透明層之上 */
   }
 
   .image-container {
     flex: 0 0 auto;
     margin-right: 16px; /* 圖片與文字之間的間距 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 300px; /* 限制圖片容器的最大寬度 */
+    
   }
-
   .video-image {
-    max-width: 200px;
-    height: auto;
-    border-radius: 8px;
+    width: 100%;
+    height: auto; /* 保持圖片比例 */
+    max-height: 450px; /* 限制圖片的最大高度 */
+    object-fit: cover; /* 保持圖片比例，裁剪多餘部分 */
   }
 
+  .button-container {
+    display: flex;
+    flex-direction: row;
+  }
   .text-content {
     flex: 1; /* 讓文字內容占據剩餘的空間 */
   }
@@ -58,6 +87,24 @@ p {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+@media (max-width: 768px) {
+  .custom-card {
+    flex-direction: column;
+  }
+  .card-body {
+    flex-direction: column;
+    padding: 0px;
+  }
+  .image-container {
+    align-items: center;
+    margin-right: 0;
+    max-width: 100%; /* 確保圖片容器的最大寬度適應視窗 */
+  }
+  .video-image {
+    max-height: 300px; /* 在小視窗下限制圖片高度 */
+  }
+}
+
 .recommended-videos .video-carousel-item {
     transition: transform 0.3s ease-in-out;
 }
@@ -66,16 +113,11 @@ p {
     transform: scale(1.05);
 }
 
-.content-wrapper {
-  display: flex;
-  gap: 20px; /* 調整圖庫與演員區塊間距 */
-  align-items: flex-start; /* 對齊兩個區塊的內容到頂部 */
-}
 
 .galleria-wrapper {
-  width: 500px;
+  width: 1000px;
   height: 450px;
-  margin-left: 300px;
+  margin-left: 450px;
   margin-bottom: 30px;
   margin-top: 30px;
 }
@@ -124,9 +166,27 @@ p {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影 */
 }
 
+h2
+{
+  margin-bottom: 5px;
+}
+
+.content-wrapper {
+  /* display: flex;
+  gap: 20px; 
+  align-items: flex-start;  */
+  padding: 20px; /* 增加適當的內邊距 */
+}
+.content-container {
+  display: flex; /* 使用 Flexbox 進行排列 */
+  gap: 20px; /* 主要演員和 carousel 之間的間距 */
+}
+
+
 .actors-grid {
-  max-width: 500px; /* 調整為更大的寬度 */
-  width: 100%; /* 確保網格容器占滿可用空間 */
+  flex: 1; /* 主要演員區域會自動填滿容器的空間 */
+  max-width: 300px; /* 設定主要演員區域的最大寬度 */
+  /* width: 100%;  */
 }
 
 .grid {
@@ -153,4 +213,36 @@ p {
 :host ::ng-deep .actor-card .p-card-content {
   padding-top: 10px; /* 調整內邊距 */
   padding-bottom: 10px;
+}
+
+.carousel-container {
+  flex: 2; /* carousel 區域會占據更多的空間 */
+  max-width: calc(100% - 800px); 
+  max-height: 450px; /* 限制 carousel 區塊的最大高度 */
+  overflow: hidden; /* 防止內容超出範圍 */
+}
+
+/* 可以選擇性地調整 carousel 的樣式 */
+.carousel-item-container {
+  position: relative;
+  width: 100%;
+  height: 100%; /* 確保內容區域不超出 */
+}
+
+.position-absolute {
+  position: absolute;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 確保圖片按照比例填滿容器 */
+  max-height: 450px; /* 限制圖片的最大高度 */
+}
+.carousel-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
 }

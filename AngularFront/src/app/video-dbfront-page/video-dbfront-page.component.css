@@ -52,7 +52,156 @@
   article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
     display: block;
   }
-  
+
+  .img-box {
+    padding: 10px 5px;  /* 減少內部的上下間距 */
+  }
+
+
+.thumbnail-container {
+    margin-bottom: 5px; /* 減少圖片與文字的間隔 */
+}
+
+.uniform-thumbnail {
+  width: 180px; /* 統一圖片的寬度 */
+  height: 270px; /* 統一圖片的高度 */
+  object-fit: cover; /* 保持比例，裁切多餘部分 */
+  transition: transform 0.3s ease-in-out;
+}
+
+.uniform-thumbnail:hover {
+  transform: scale(1.05); /* 滑過時稍微放大 */
+}
+
+.thumbnail-container {
+  height: 270px; /* 固定圖片容器的高度，與圖片一致 */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 圖片在容器內居中顯示 */
+}
+
+.video-title {
+    margin-top: 5px; /* 減少文字與圖片之間的間距 */
+    font-size: 1rem; /* 調整標題字體大小，根據需求可調整 */
+}
+
+
+.trending-carousel {
+  padding: 20px;
+}
+
+.video-card {
+  position: relative;
+  width: 180px;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 80%;
+}
+
+.video-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.rating-indicator {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.video-details {
+  padding: 10px;
+}
+
+.video-details h4 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.video-details p {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.card {
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 50px;
+  background-color: #e0e0e0;
+}
+
+/* 背景滑動條的樣式 */
+.slider-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 33.33%; /* 假設有三個選項，每個占據 1/3 寬度 */
+  height: 100%;
+  background-color: #1f3f5b;
+  border-radius: 50px;
+  transition: left 0.4s ease; /* 平滑滑動 */
+  z-index: 1;
+}
+
+
+::ng-deep .custom-select-button .p-button {
+  position: relative;
+  z-index: 2; /* 保證按鈕在滑動條之上 */
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-weight: bold;
+  padding: 10px 20px;
+  transition: color 0.3s ease;
+  border-radius: 50px;
+  outline: none; /* 移除點擊時的外框 */
+  box-shadow: none; /* 移除點擊時的陰影 */
+}
+
+/* ::ng-deep .custom-select-button .p-button:hover {
+  background-color: #dcdcdc; 
+} */
+
+::ng-deep  .custom-select-button .p-highlight {
+  color: white !important;
+  background-color: transparent;
+}
+
+::ng-deep  .custom-select-button .p-button:not(.p-highlight) {
+  background-color: transparent;
+}
+
+.custom-select-button {
+  position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: auto; /* 確保不會被強制設置過大的寬度 */
+    max-width: 300px; /* 可以根據你的實際需求調整寬度 */
+    height: 40px; /* 控制按鈕的高度 */
+    padding: 0; /* 移除多餘的內間距 */
+    border: none; /* 移除邊框 */
+}
+
+
+
   body {
     margin: 0;
     font-family: "Roboto", sans-serif;
