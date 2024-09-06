@@ -9,8 +9,6 @@
     margin: 0 auto; /* 中央對齊 */
     width: 100%; /* 讓卡片寬度占滿父容器 */
     max-height: 700px; /* 設定卡片的最大高度 */
-    border-top: 1px solid #ddd; /* 上邊框 */
-    border-bottom: 1px solid #ddd; /* 下邊框 */
     border-left: none; /* 隱藏左邊框 */
     border-right: none; /* 隱藏右邊框 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -57,7 +55,7 @@
     flex-direction: column;
     align-items: flex-start;
     max-width: 300px; /* 限制圖片容器的最大寬度 */
-    
+
   }
   .video-image {
     width: 100%;
@@ -173,7 +171,7 @@ h2
 
 .content-wrapper {
   /* display: flex;
-  gap: 20px; 
+  gap: 20px;
   align-items: flex-start;  */
   padding: 20px; /* 增加適當的內邊距 */
 }
@@ -217,7 +215,7 @@ h2
 
 .carousel-container {
   flex: 2; /* carousel 區域會占據更多的空間 */
-  max-width: calc(100% - 800px); 
+  max-width: calc(100% - 800px);
   max-height: 450px; /* 限制 carousel 區塊的最大高度 */
   overflow: hidden; /* 防止內容超出範圍 */
 }
