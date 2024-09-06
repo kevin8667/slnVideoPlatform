@@ -14,9 +14,7 @@
         </span>
       </div>
     </div>
-    <div class="article-content"
-      [innerHTML]="getSafe(article.articleContent)"
-    ></div>
+    <div class="article-content" [innerHTML]="article.articleContent"></div>
     <div class="article-actions">
       <div>
         <p-button
@@ -34,12 +32,11 @@
           severity="Warn"
         ></p-button>
       </div>
-
-      <div class="">
+      <div>
         <p-button
-          label="編輯"
-          (onClick)="edit()"
           styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
+          label="編輯"
+          (onClick)="edit(article.articleId, 'article')"
         ></p-button>
       </div>
     </div>
@@ -58,9 +55,7 @@
         <span class="reply-author">{{ post.nickName }}</span>
         <span class="reply-date">{{ post.postDate | forumDate }}</span>
       </div>
-      <div class="reply-content">
-        {{ post.postContent }}
-      </div>
+      <div class="reply-content" [innerHTML]="post.postContent"></div>
       <div class="reply-actions">
         <div>
           <p-button
@@ -80,9 +75,9 @@
         </div>
         <div class="right">
           <p-button
-            label="編輯"
-            (onClick)="edit()"
             styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
+            label="編輯"
+            (onClick)="edit(post.postId, 'post')"
           ></p-button>
         </div>
       </div>

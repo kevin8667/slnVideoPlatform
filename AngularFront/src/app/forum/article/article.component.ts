@@ -1,6 +1,5 @@
 import { Post } from './../../interface/Post';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleView } from 'src/app/interface/ArticleView';
 import ForumService from 'src/app/service/forum.service';
@@ -12,12 +11,13 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class ArticleComponent implements OnInit {
-  edit() {}
-  getSafe = (data: string) => this.forumService.getSafe(data);
+  edit(id: number, type: string) {
+    this.route.navigate(['forum/ed', type, id]);
+  }
+  // getSafe = (data: string) => this.forumService.getSafe(data);
   article: ArticleView = {} as ArticleView;
   articleId!: number;
   posts: Post[] = [];
-  postContent: SafeHtml[] = [];
 
   constructor(
     private route: Router,
@@ -40,7 +40,6 @@ export class ArticleComponent implements OnInit {
       }
 
       this.article = data;
-      this.forumService.getSafe(this.article.articleContent);
     });
 
     this.forumService.getPosts(this.articleId).subscribe((data) => {

@@ -14,7 +14,6 @@
       <!-- 內文 -->
       <div class="form-group">
         <quill-editor
-          id="content"
           formControlName="content"
           placeholder="輸入文章內文"
           [modules]="{
@@ -35,12 +34,12 @@
         ></quill-editor>
         <div
           *ngIf="
-            articleForm.get('content').invalid &&
-            articleForm.get('content').touched
+            articleForm.get('content')?.invalid &&
+            articleForm.get('content')?.touched
           "
           class="error-message"
         >
-          請填入您的內文
+          至少填入20字的內文
         </div>
       </div>
 

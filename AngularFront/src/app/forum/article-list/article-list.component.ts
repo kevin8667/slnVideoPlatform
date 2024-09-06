@@ -11,7 +11,7 @@ import ForumService from 'src/app/service/forum.service';
   styleUrls: ['./article-list.component.css'],
 })
 export class ArticleListComponent implements OnInit {
-  getSafe = (data: string) => this.forumService.getSafe(data);
+  // getSafe = (data: string) => this.forumService.getSafe(data);
   articles: ArticleView[] = [];
 
   forumPagingDTO: ForumPagingDTO | undefined;
@@ -42,7 +42,8 @@ export class ArticleListComponent implements OnInit {
     },
     {
       pic: '/assets/images/forumAd4.png',
-    },    {
+    },
+    {
       pic: '/assets/images/forumAd5.png',
     },
   ];
@@ -119,6 +120,6 @@ export class ArticleListComponent implements OnInit {
 
     const truncatedText =
       text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
-    return this.getSafe(truncatedText);
+    return truncatedText;
   }
 }

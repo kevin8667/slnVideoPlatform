@@ -51,20 +51,24 @@
 
 <!-- 文章列表開始 -->
 <div class="flex mt-3">
-  <!-- 左側發表文章 -->
+  <!-- 左側廣告區-->
   <div class="d1">
     <div id="ad-container">
       <!-- 廣告 -->
-      <p-galleria
-        [value]="images"
-        [autoPlay]="true"
-        [circular]="true"
-        [responsiveOptions]="responsiveOptions"
-      >
-        <ng-template pTemplate="item" let-item>
-          <img [src]="item.pic" />
-        </ng-template>
-      </p-galleria>
+      <a href="Https://www.google.com.tw">
+        <p-galleria
+          [value]="images"
+          [autoPlay]="true"
+          [circular]="true"
+          [showThumbnails]="false"
+          [transitionInterval]="10000"
+        >
+          >
+          <ng-template pTemplate="item" let-item>
+            <img [src]="item.pic" />
+          </ng-template>
+        </p-galleria>
+      </a>
       <!-- <img src="/assets/images/forumAd.png" alt="飄香的咖啡" /> -->
     </div>
   </div>
@@ -119,7 +123,7 @@
                   {{ article.themeName }} - {{ article.nickName }}
                 </div>
                 <div class="p-card-body-content">
-                  <p [innerHTML]="truncateText(article.articleContent, 45)"></p>
+                  <p>{{truncateText(article.articleContent, 45)}}</p>
                   <p>
                     <i class="pi pi-calendar"></i> 更新時間:
                     {{ article.updateDate | forumDate }}

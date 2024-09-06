@@ -23,15 +23,22 @@ namespace VdbAPI.Controllers {
         }
 
         // GET: api/Posts
-        [HttpGet]
-        public ActionResult<IEnumerable<Post>> GetPosts()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Post>> GetPost(int id)
         {
-            return _context.Posts;
+            var sql = @"select * from post where postId = @Id";
+            using var con = new SqlConnection(_connection);
+            var post = await con.QueryFirstOrDefaultAsync<Post>(sql,new {
+                Id = id
+            });
+            if(post == null)
+                return NotFound();
+            return Ok(post);
         }
 
         // GET: api/Posts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPost(int id)
+        [HttpGet("all/{articleId}")]
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPosts(int articleId)
         {
             var sql = new StringBuilder(@"select p.*,m.NickName FROM Post p 
                         join MemberInfo m
@@ -40,7 +47,7 @@ namespace VdbAPI.Controllers {
             using var con = new SqlConnection(_connection);
 
             var post = await con.QueryAsync<PostDTO>(sql.ToString(),new {
-                Id = id
+                Id = articleId
             });
 
             if(post == null) {
@@ -50,30 +57,23 @@ namespace VdbAPI.Controllers {
             return Ok(post.ToList());
         }
 
-        // PUT: api/Posts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id,Post post)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdatePost(int id,PostUpdate postUpdate)
         {
-            if(id != post.PostId) {
-                return BadRequest();
+            if(postUpdate.PostContent.Length < 20) {
+                return BadRequest(postUpdate.PostContent);
             }
+            var sql = "UPDATE Post SET PostContent = @PostContent WHERE PostId = @Id";
+            using var con = new SqlConnection(_connection);
+            var rowsAffected = await con.ExecuteAsync(sql,new {
+                postUpdate.PostContent,
+                Id = id
+            });
 
-            _context.Entry(post).State = EntityState.Modified;
-
-            try {
-                await _context.SaveChangesAsync();
+            if(rowsAffected == 0) {
+                return NotFound();
             }
-            catch(DbUpdateConcurrencyException) {
-                if(!PostExists(id)) {
-                    return NotFound();
-                }
-                else {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Posts
@@ -107,6 +107,12 @@ namespace VdbAPI.Controllers {
         private bool PostExists(int id)
         {
             return _context.Posts.Any(e => e.PostId == id);
+        }
+    }
+
+    public class PostUpdate {
+        public required string PostContent {
+            get; set;
         }
     }
 }

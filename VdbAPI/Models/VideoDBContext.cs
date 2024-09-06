@@ -912,12 +912,12 @@ public partial class VideoDBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.PosterId).HasColumnName("PosterID");
 
-            entity.HasOne(d => d.Article).WithMany(p => p.Posts)
+            entity.HasOne<Article>().WithMany(p => p.Posts)
                 .HasForeignKey(d => d.ArticleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Post_Article");
 
-            entity.HasOne(d => d.Poster).WithMany(p => p.Posts)
+            entity.HasOne<MemberInfo>().WithMany(p => p.Posts)
                 .HasForeignKey(d => d.PosterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Post_MemberInfo");

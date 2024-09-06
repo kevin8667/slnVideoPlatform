@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', component: ArticleListComponent },
   { path: 'newA', component: NewArticleComponent },
   { path: 'newP', component: NewPostComponent },
-  { path: 'ed', component: EditComponent },
+  { path: 'ed/:type/:id', component: EditComponent },
   { path: ':id', component: ArticleComponent },
   { path: '**', redirectTo: '' }
 ];

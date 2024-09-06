@@ -9,6 +9,13 @@
 }
 .d1 {
   flex: 10%;
+  margin: 0 10px;
+
+}
+.ad-container{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
+  cursor: pointer;
+  padding: 5px;
 }
 .d3 {
   flex: 20%;

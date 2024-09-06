@@ -1,9 +1,11 @@
 ﻿using Dapper;
 
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -45,29 +47,22 @@ namespace VdbAPI.Controllers {
             return Ok(article);
         }
 
-        // PUT: api/Articles/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutArticle(int id,Article article)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchArticle(int id,ArtcleUpdate artcleUpdate)
         {
-            if(id != article.ArticleId) {
-                return BadRequest();
-            }
+            if(artcleUpdate.ArticleContent.Length < 20)
+                return BadRequest("文章內容長度必須至少 20 個字元。");
+            var sql = "UPDATE Article SET ArticleContent = @ArticleContent WHERE ArticleId = @Id";
+            using var con = new SqlConnection(_connection);
+            var rowsAffected = await con.ExecuteAsync(sql,new {
+                artcleUpdate.ArticleContent,
+                Id = id
+            });
 
-            _context.Entry(article).State = EntityState.Modified;
-
-            try {
-                await _context.SaveChangesAsync();
+            if(rowsAffected == 0) {
+                return NotFound();
             }
-            catch(DbUpdateConcurrencyException) {
-                if(!ArticleExists(id)) {
-                    return NotFound();
-                }
-                else {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok();
         }
 
         // DELETE: api/Articles/5
@@ -143,10 +138,25 @@ namespace VdbAPI.Controllers {
                 return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
             }
         }
-       
+
         private bool ArticleExists(int id)
         {
             return _context.Articles.Any(e => e.ArticleId == id);
+        }
+    }
+
+    public class ArtcleUpdate {
+        public required string ArticleContent {
+            get;
+            set;
+        }
+        public  int? ThemeId {
+            get;
+            set;
+        }
+        public  int? Author {
+            get;
+            set;
         }
     }
 }
