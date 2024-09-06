@@ -46,7 +46,7 @@ export class VideoDbSearchComponent implements OnInit {
   selectedType: VideoType | undefined;
 
   genres :Genre[] |undefined;
-  selectedGenres : Genre[] |undefined;
+  selectedGenres : Genre[] =[];
   filteredGenres : any[] = [];
 
   videoName: string | null = null;
@@ -88,13 +88,18 @@ export class VideoDbSearchComponent implements OnInit {
       this.summary = params['summary'] || null;
 
       // 解析逗號分隔的 genreNames 字符串為數組
-      this.genreNames = params['genreName'] ? params['genreName'].split(',') : null;
+      this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : null;
+
+
+
+      console.log(this.genreNames);
 
       this.seriesName = params['seriesName'] || null;
       this.seasonName = params['seasonName'] || null;
 
-      // 如果有参数，则根据参数搜索视频
       if (this.videoName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || this.seriesName || this.seasonName) {
+          this.selectedGenres = [{genreId:1, genreName:''}];
+          this.selectedGenres[0].genreName = this.genreNames[0];
           this.searchVideos();
       }
     });
@@ -132,7 +137,10 @@ export class VideoDbSearchComponent implements OnInit {
   }
 
   searchVideos(): void {
+
     const genreNames = this.selectedGenres?.map(genre => genre.genreName) || [];
+
+
 
     this.videoDbService.getSearchVideoApi(
       this.videoName,
@@ -142,7 +150,6 @@ export class VideoDbSearchComponent implements OnInit {
       this.seriesName,
       this.seasonName
     ).subscribe((response) => {
-      console.log(this.typeId);
       this.videos = response;
 
       // this.searchStateService.saveSearchParams({
@@ -153,7 +160,7 @@ export class VideoDbSearchComponent implements OnInit {
       //   seriesName: this.seriesName,
       //   seasonName: this.seasonName
       // });
-      this.searchStateService.saveSearchResults(this.videos);
+      // this.searchStateService.saveSearchResults(this.videos);
     });
   }
 
