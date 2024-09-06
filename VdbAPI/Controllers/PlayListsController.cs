@@ -69,87 +69,75 @@ namespace VdbAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<PlayList>> PostPlayList(PlayList playList)
         {
-            // 檢查 PlayListName 是否為 null 或空
             if (string.IsNullOrEmpty(playList.PlayListName))
             {
                 return BadRequest("播放清單名稱為必填欄位");
             }
 
-            // 檢查 PlayListDescription 是否為 null 或空
             if (string.IsNullOrEmpty(playList.PlayListDescription))
             {
                 return BadRequest("播放清單描述為必填欄位");
             }
-
-            // 檢查並處理 Base64 圖片轉換為 byte[]
+            
             if (!string.IsNullOrEmpty(playList.PlayListImage))
             {
                 try
                 {
-                    playList.ShowImage = Convert.FromBase64String(playList.PlayListImage); // 將 Base64 字串轉換為 byte[]
+                    playList.ShowImage = Convert.FromBase64String(playList.PlayListImage);
                 }
                 catch (FormatException)
                 {
                     return BadRequest("圖片格式無效");
                 }
             }
-
-            // 預設 ViewCount、LikeCount、AddedCount、SharedCount 為 100
+            
             playList.ViewCount = 100;
             playList.LikeCount = 100;
             playList.AddedCount = 100;
             playList.SharedCount = 100;
-
-            // 設定創建、更新時間以及分析時間戳
+            
             playList.PlayListCreatedAt = DateTime.UtcNow;
             playList.PlayListUpdatedAt = DateTime.UtcNow;
             playList.AnalysisTimestamp = DateTime.UtcNow;
-
-            // 將 PlayList 儲存到資料庫
+            
             _context.PlayLists.Add(playList);
             await _context.SaveChangesAsync();
-
-            // 插入 MemberCreatedPlayList，設定 MemberId 為 5 並使用剛剛新增的 PlayListId
+            
             var memberCreatedPlayList = new MemberCreatedPlayList
             {
-                MemberId = 5, // 固定的 MemberId
-                PlayListId = playList.PlayListId, // 使用剛剛新增的 PlayListId
+                MemberId = 5,
+                PlayListId = playList.PlayListId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
-
-            // 儲存到 MemberCreatedPlayList 資料表
+            
             _context.MemberCreatedPlayLists.Add(memberCreatedPlayList);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPlayList), new { id = playList.PlayListId }, playList);
         }
 
-
-
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayList(int id, PlayList playList)
-        {
+        {            
             if (id != playList.PlayListId)
             {
-                return BadRequest();
+                return BadRequest("播放清單 ID 不匹配");
             }
-
+            
             var existingPlayList = await _context.PlayLists.FindAsync(id);
             if (existingPlayList == null)
             {
-                return NotFound();
+                return NotFound("播放清單不存在");
             }
-
-            // 更新 PlayList 欄位
-            existingPlayList.PlayListName = playList.PlayListName;
-            existingPlayList.PlayListDescription = playList.PlayListDescription;
+            
+            existingPlayList.PlayListName = playList.PlayListName ?? existingPlayList.PlayListName;
+            existingPlayList.PlayListDescription = playList.PlayListDescription ?? existingPlayList.PlayListDescription;
             existingPlayList.ViewCount = playList.ViewCount;
             existingPlayList.LikeCount = playList.LikeCount;
             existingPlayList.AddedCount = playList.AddedCount;
             existingPlayList.SharedCount = playList.SharedCount;
-
-            // 更新 Base64 圖片
+            
             if (!string.IsNullOrEmpty(playList.PlayListImage))
             {
                 try
@@ -161,18 +149,15 @@ namespace VdbAPI.Controllers
                     return BadRequest("圖片格式無效");
                 }
             }
-
-            // 更新修改時間
+            
             existingPlayList.PlayListUpdatedAt = DateTime.UtcNow;
-
+            
             _context.Entry(existingPlayList).State = EntityState.Modified;
-
-            // 更新 PlayList 資料庫資料
+            
             await _context.SaveChangesAsync();
-
-            // 查找對應的 MemberCreatedPlayList 資料
+           
             var memberCreatedPlayList = await _context.MemberCreatedPlayLists
-                .Where(mcp => mcp.PlayListId == id && mcp.MemberId == 5)  // 找到特定 MemberId 的資料
+                .Where(mcp => mcp.PlayListId == id && mcp.MemberId == 5)
                 .FirstOrDefaultAsync();
 
             if (memberCreatedPlayList != null)
@@ -181,10 +166,9 @@ namespace VdbAPI.Controllers
                 _context.Entry(memberCreatedPlayList).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-
+            
             return NoContent();
         }
-
 
         // DELETE: api/PlayList/5
         [HttpDelete("{id}")]
