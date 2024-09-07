@@ -1,12 +1,9 @@
 ﻿using Dapper;
 
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
 
 using VdbAPI.DTO;

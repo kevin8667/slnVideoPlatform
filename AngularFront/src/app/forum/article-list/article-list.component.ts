@@ -1,6 +1,7 @@
 import { ArticleView } from './../../interface/ArticleView';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 import { ForumPagingDTO } from 'src/app/interface/ForumPagingDTO';
 import { Theme } from 'src/app/interface/Theme';
 import ForumService from 'src/app/service/forum.service';
@@ -13,10 +14,9 @@ import ForumService from 'src/app/service/forum.service';
 export class ArticleListComponent implements OnInit {
   // getSafe = (data: string) => this.forumService.getSafe(data);
   articles: ArticleView[] = [];
-
-  forumPagingDTO: ForumPagingDTO | undefined;
-
   themeTag: Theme[] = [];
+  debounceTimer!: number;
+  forumPagingDTO: ForumPagingDTO | undefined;
 
   forumDto = {
     categoryId: 0,
@@ -63,7 +63,7 @@ export class ArticleListComponent implements OnInit {
     },
   ];
   constructor(private route: Router, private forumService: ForumService) {}
-
+  loading = false;
   ngOnInit(): void {
     this.load();
 
@@ -72,13 +72,19 @@ export class ArticleListComponent implements OnInit {
     });
   }
 
-  private load() {
-    this.forumService
-      .getArticleView(this.forumDto)
-      .subscribe((data: { forumResult: ArticleView[]; totalCount: number }) => {
-        this.articles = data.forumResult;
-        this.pages.totalRecords = data.totalCount;
-      });
+  private async load() {
+    this.loading = true;
+    try {
+      const data = await lastValueFrom(
+        this.forumService.getArticleView(this.forumDto)
+      );
+      this.articles = data.forumResult;
+      this.pages.totalRecords = data.totalCount;
+    } catch (err) {
+      console.error('讀取文章發生例外:', err);
+    } finally {
+      this.loading = false;
+    }
   }
 
   loadTheme(id: number) {
@@ -96,11 +102,19 @@ export class ArticleListComponent implements OnInit {
   }
 
   onSliderChange() {
+    // 清除之前的計時器，避免累積執行
+    if (this.debounceTimer !== 0) {
+      clearTimeout(this.debounceTimer);
+    }
+
     // 設置頁面大小並重設起始位置
     this.forumDto.page = 1; // 設置為第1頁
 
-    // 重新加載文章
-    this.load();
+    // 設置新的計時器，並保存到 debounceTimer
+    this.debounceTimer = window.setTimeout(() => {
+      this.load(); // 使用箭頭函數，確保 this 的上下文不變
+      this.debounceTimer = 0; // 重置計時器
+    }, 500); // 延遲n秒
   }
 
   search() {
@@ -110,6 +124,7 @@ export class ArticleListComponent implements OnInit {
   openCreateArticleDialog() {
     this.route.navigateByUrl('forum/newA');
   }
+
   truncateText(articleContent: string, maxLength: number) {
     if (!articleContent) {
       return '並無內容，請盡速修改'; // 或者其他預設值，例如 '無內容'

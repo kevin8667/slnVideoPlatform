@@ -1,8 +1,8 @@
 // forum.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Theme } from '../interface/Theme';
 import { ForumPagingDTO } from '../interface/ForumPagingDTO';
 import { ArticleView } from '../interface/ArticleView';
@@ -16,9 +16,7 @@ export default class ForumService {
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
 
-  constructor(
-    private client: HttpClient,
-    private route: Router  ) {
+  constructor(private client: HttpClient, private route: Router) {
     this.loadThemeTags();
   }
 
@@ -71,11 +69,25 @@ export default class ForumService {
     const api = `https://localhost:7193/api/Posts/${id}`;
     return this.client.patch<ArticleView>(api, data);
   }
-  deleteArticle(id:number){
-
+  deleteArticle(id: number) {
+    const api = `https://localhost:7193/api/Articles/${id}`;
+    return this.client
+      .delete(api)
+      .pipe(
+        catchError(() =>
+          throwError(() => new Error('服務異常:刪除單筆文章發生例外'))
+        )
+      );
   }
-  deletePost(id:number){
-
+  deletePost(id: number) {
+    const api = `https://localhost:7193/api/Posts/${id}`;
+    return this.client
+      .delete<Post>(api)
+      .pipe(
+        catchError(() =>
+          throwError(() => new Error('服務異常:獲取單筆回文發生例外'))
+        )
+      );
   }
   // getSafe(data: string): SafeHtml {
   //   if (!data) return '此文章並無內容，請盡速修改!';

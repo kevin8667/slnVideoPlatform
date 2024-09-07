@@ -14,7 +14,12 @@
         </span>
       </div>
     </div>
-    <div class="article-content" [innerHTML]="article.articleContent"></div>
+    <div class="">
+      <div
+        class="ql-editor article-content"
+        [innerHTML]="article.articleContent"
+      ></div>
+    </div>
     <div class="article-actions">
       <div>
         <p-button
@@ -55,7 +60,7 @@
         <span class="reply-author">{{ post.nickName }}</span>
         <span class="reply-date">{{ post.postDate | forumDate }}</span>
       </div>
-      <div class="reply-content" [innerHTML]="post.postContent"></div>
+      <div class="ql-editor reply-content" [innerHTML]="post.postContent"></div>
       <div class="reply-actions">
         <div>
           <p-button
@@ -84,4 +89,3 @@
     </div>
   </div>
 </div>
-<div>123</div>

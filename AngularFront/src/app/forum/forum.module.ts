@@ -25,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { GalleriaModule } from 'primeng/galleria';
 import { EditorComponent } from './share/editor/editor.component';
+import { TagModule } from 'primeng/tag';
 @NgModule({
   declarations: [
     ArticleComponent,
@@ -54,6 +55,7 @@ import { EditorComponent } from './share/editor/editor.component';
     ToastModule,
     AutoFocusModule,
     GalleriaModule,
+    TagModule,
   ],
   exports: [],
   providers: [ForumService],

@@ -1,41 +1,123 @@
-.card .pageBar {
+.myContainer {
+  width: 100vw;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
-.flex {
+.card .pageBar {
   display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 20px; /* 保持左右區域間至少20px的間距 */
 }
+.mainPart {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+@media (max-width: 768px) {
+  .d3 {
+    display: none;
+  }
+  .d1 {
+    display: none;
+  }
+  .pageBar {
+    width: 95%;
+    /* justify-content: start; */
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .slider {
+    display: none;
+  }
+  .page {
+    min-width: none;
+    margin: 0 auto;
+  }
+  .fixed-button {
+    margin: 0;
+  }
+  nav.card {
+    margin: 20px 0;
+  }
+}
+.slider {
+}
+.page {
+  display: flex;
+  justify-content: center; /* 確保頁碼區塊在中間 */
+  flex-grow: 1; /* 讓頁碼區域擴展以保持居中 */
+  min-width: 710px;
+  margin: 0 20px;
+}
+
 .d2 {
-  flex: 950px;
+  /* min-width: 1044px; */
+  flex-grow: 1;
 }
 .d1 {
-  flex: 10%;
-  margin: 0 10px;
-
+  /* flex: 10%; */
+  margin: 0 20px;
+  /* padding: 5px; */
 }
-.ad-container{
+.ad-container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
   cursor: pointer;
-  padding: 5px;
 }
+
 .d3 {
-  flex: 20%;
+  margin: 0 20px;
 }
-.mt-3 {
-  margin-top: 3%;
+.article {
+  margin-top: 2%;
 }
 /* 篩選按鈕 */
 .button-container {
   display: flex;
   flex-wrap: wrap-reverse;
-  justify-content: space-between; /* 平均分配按鈕之間的空間 */
   background-color: #f8f9fa; /* 背景色 */
-  border-radius: 8px; /* 圓角邊框 */
   gap: 3px; /* 按鈕之間的間距 */
 }
+.article a:hover {
+  text-decoration: none;
+}
+::ng-deep .themeBtn {
+  font-size: 13px;
+  font-family: Verdana, Arial, Helvetica, sans-serif, Oswald;
+  background-color: #199dbe;
+  color: #e8ecee;
 
-.button-container .ui-button {
-  font-size: 13px; /* 調整字體大小 */
-  text-align: center; /* 文字居中 */
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+}
+::ng-deep .allBtn {
+  font-size: 13px;
+  font-family: Verdana, Arial, Helvetica, sans-serif, Oswald;
+  background-color: #2980b9;
+  color: white;
+
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+}
+::ng-deep .myArticleBtn {
+  font-size: 13px;
+  font-family: Verdana, Arial, Helvetica, sans-serif, Oswald;
+  background-color: #2980b9;
+  color: #e8ecee;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+}
+::ng-deep .button-container .p-button:hover {
+  background-color: #e66241; /* 當滑鼠懸停時的背景顏色 */
+
+  color: #e8ecee; /* 懸停時的文字顏色 */
+  border-color: #b9ad9a; /* 懸停時的邊框顏色 */
+}
+::ng-deep .button-container .p-button:active {
+  transform: translateY(-10px); /* 向上移動 5px */
+  transition: transform 0.4s ease; /* 加入平滑的動畫效果 */
 }
 
 .text-label {
@@ -45,13 +127,13 @@
 }
 
 .gap-3 {
-  gap: 4px; /* 調整為你需要的間距 */
+  gap: 25px; /* 調整為你需要的間距 */
 }
 
-.align-items-center {
-  align-items: center;
+.searchFlex {
+  display: flex;
+  margin: 0 20px; /* 中間和右邊區域的間距 */
 }
-
 .text-label {
   margin-right: 0.5rem;
 }
@@ -60,31 +142,9 @@
   border-radius: 8px; /* 邊角圓角 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
   padding: 1.5rem; /* 內邊距 */
-  margin: 1rem; /* 外邊距 */
+  margin: 20px; /* 外邊距 */
   overflow: hidden; /* 隱藏超出邊界的內容 */
   transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
-}
-
-.card:hover {
-  transform: translateY(-5px); /* 鼠標懸停時的位移效果 */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 鼠標懸停時的陰影效果 */
-}
-
-.card-title {
-  font-size: 1.25rem; /* 標題字體大小 */
-  font-weight: bold; /* 標題字體粗細 */
-  margin-bottom: 0.5rem; /* 標題下方外邊距 */
-}
-
-.card-subtitle {
-  font-size: 1rem; /* 副標題字體大小 */
-  color: #666; /* 副標題顏色 */
-  margin-bottom: 1rem; /* 副標題下方外邊距 */
-}
-
-.card-body-content {
-  font-size: 0.875rem; /* 內容字體大小 */
-  color: #333; /* 內容顏色 */
 }
 
 .card img {
@@ -106,7 +166,6 @@
   overflow: hidden; /* 隱藏超出邊界的內容 */
   transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
   flex-direction: row; /* 使圖片和內容水平排列 */
-  max-width: 1100px; /* 設定最大寬度 */
   width: 100%;
   margin: 0 auto; /* 使卡片水平居中 */
 }
@@ -122,10 +181,10 @@
 }
 
 .p-card-title {
-  font-size: 1.25rem; /* 標題字體大小 */
-  font-weight: bold; /* 標題字體粗細 */
-  margin-bottom: 0.5rem; /* 標題下方外邊距 */
-  color: #007bff; /* 藍色標題 */
+  font-weight: bold;
+  font-size: 20px; /* 調大字體 */
+  color: #1a73e8; /* 使用較深的藍色 */
+  margin-bottom: 5px; /* 增加與其他元素的間距 */
 }
 
 .p-card-subtitle {
@@ -135,8 +194,8 @@
 }
 
 .p-card-body-content {
-  font-size: 0.875rem; /* 內容字體大小 */
-  color: #495057; /* 深灰色內容 */
+  line-height: 1.6; /* 增加行距 */
+  margin-bottom: 10px; /* 增加段落間距 */
 }
 
 .p-card-body-content i {
@@ -167,6 +226,7 @@
   display: flex;
   align-items: center;
   gap: 2rem; /* 調整圖片和內容之間的間距 */
+  padding: 10px;
 }
 
 .card-image {
@@ -177,6 +237,7 @@
   width: 100%; /* 使圖片適應容器寬度 */
   height: auto; /* 保持圖片高度自適應 */
   object-fit: cover; /* 確保圖片不變形地填滿容器 */
+  border-radius: 8px; /* 添加圓角 */
 }
 
 .card-body {
@@ -211,7 +272,7 @@
 }
 
 .chat-header {
-  background-color: #007bff;
+  background-color: #56ccf2;
   color: #fff;
   padding: 1rem;
   text-align: center;
@@ -258,9 +319,10 @@
 }
 
 .chat-input button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #007bff;
+  padding: 10px 20px; /* 增加按鈕的內邊距 */
+  font-size: 16px; /* 增大字體 */
+  border-radius: 5px; /* 調整圓角讓按鈕更柔和 */
+  background-color: #2d9cdb; /* 明亮的藍色 */
   color: #ffffff;
   border-radius: 4px;
   cursor: pointer;
@@ -269,10 +331,29 @@
 }
 
 .chat-input button:hover {
-  background-color: #0056b3;
+  background-color: #1b82b1;
 }
 
+::ng-deep .fixed-button .p-button {
+  background-color: #6198c8;
+  color: #ffffd4;
+}
 .fixed-button {
-  align-items: center;
-  margin-left:200px;
+  margin-left: 160px;
+  min-width: 8ren;
+}
+
+::ng-deep .p-tag {
+  background-color: #56ccf2;
+  padding: 5px 10px;
+  font-size: 14px !important; /* 修改字體大小 */
+  min-width: 80px; /* 設定最小寬度，讓所有標籤保持一致 */
+  border-radius: 12px; /* 添加圓角，讓標籤更柔和 */
+  margin-right: 8px; /* 增加標籤之間的間距 */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+  transition: all 0.3s ease;
+}
+::ng-deep .p-tag:hover {
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* 懸停時陰影加深 */
+  background-color: #2d9cdb; /* 改變背景色來增強效果 */
 }
