@@ -1,7 +1,7 @@
 // forum.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Theme } from '../interface/Theme';
 import { ForumPagingDTO } from '../interface/ForumPagingDTO';
@@ -103,5 +103,10 @@ export default class ForumService {
     if (!data) return '此文章並無內容，請盡速修改!';
 
     return this.sanitizer.bypassSecurityTrustHtml(data);
+  }
+  async getPicture(img: any){
+    const api = 'https://localhost:7193/api/FourmImg'
+    const data = await firstValueFrom(this.client.post(api,img))
+    return data
   }
 }
