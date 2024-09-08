@@ -399,5 +399,21 @@ namespace VdbAPI.Controllers
 
             return Ok(playlists);
         }
+
+        [HttpGet("{playlistId}/collaborators")]
+        public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int playlistId)
+        {
+            var collaborators = await _context.PlayListCollaborators
+                .Where(c => c.PlayListId == playlistId)
+                .Select(c => new MemberInfoDTO
+                {
+                    MemberId = c.Member.MemberId,
+                    MemberName = c.Member.MemberName,
+                    PhotoPath = c.Member.PhotoPath ?? "/assets/img/memberooo.png"
+                })
+                .ToListAsync();
+
+            return Ok(collaborators);
+        }
     }
 }
