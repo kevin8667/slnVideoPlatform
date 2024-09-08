@@ -71,11 +71,11 @@ export default class ForumService {
       })
     );
   }
-  updateArticle(id: number, articleData: ArticleView) {
+  updateArticle(id: number, articleData: Partial<ArticleView>) {
     const api = `https://localhost:7193/api/Articles/${id}`;
     return this.client.patch(api, articleData);
   }
-  updatePost(id: number, data: Post) {
+  updatePost(id: number, data: Partial<Post>) {
     const api = `https://localhost:7193/api/Posts/${id}`;
     return this.client.patch<ArticleView>(api, data);
   }

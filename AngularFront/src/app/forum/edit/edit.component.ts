@@ -12,7 +12,7 @@ import ForumService from 'src/app/service/forum.service';
   styleUrls: ['./edit.component.css'],
 })
 export class EditComponent {
-  articleForm!: FormGroup;
+  articleForm!: FormGroup<any>;
   article!: ArticleView;
   post!: Post;
   id!: number;
@@ -25,21 +25,18 @@ export class EditComponent {
     private actRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
-    this.articleForm = this.fb.group({
-      content: ['', [Validators.required, Validators.minLength(20)]],
-      title: ['', this.type === 'article' ? Validators.required : null],
-      theme: [0, this.type === 'article' ? Validators.required : null],
-    });
-
     this.id = Number(this.actRoute.snapshot.paramMap.get('id'));
     this.type = String(this.actRoute.snapshot.paramMap.get('type'));
-
-    if (this.type !== 'post' && this.type !== 'article') {
-      console.error('無效的 type 值:', this.type);
-      // 如果無效，可以拋出錯誤或者導航到錯誤頁面
-      // this.router.navigate(['/error']);
-      return;
+    this.articleForm = this.fb.group({
+      content: ['', [Validators.required, Validators.minLength(20)]],
+      title: ['', Validators.required],
+      theme: [null, Validators.required],
+    });
+    if (this.type !== 'article') {
+      this.articleForm.removeControl('title');
+      this.articleForm.removeControl('theme');
     }
+
     if (this.type === 'post') {
       this.forumService.getPost(this.id).subscribe((data: Post) => {
         this.post = data;
@@ -67,26 +64,39 @@ export class EditComponent {
 
   onSubmit(): void {
     if (this.articleForm.invalid) return;
+    try {
+      if (this.type === 'article') {
+        const articleValue = this.articleForm.getRawValue();
+        const updatedData: Partial<ArticleView> = {
+          articleContent: articleValue['content'],
+          themeId: articleValue['theme'],
+          title: articleValue['title'],
+        };
 
-    if (this.type === 'article') {
-      this.article.articleContent = this.articleForm.controls['content'].value;
-      this.article.title = this.articleForm.controls['title'].value;
-      this.article.themeId = this.articleForm.controls['theme'].value;
+        this.forumService.updateArticle(this.id, updatedData).subscribe({
+          next: (response) => console.log(response),
+          error: (err) => console.error('傳送資料發生意外:', err),
+          complete: () => history.back(),
+        });
+      }
 
-      this.forumService.updateArticle(this.id, this.article).subscribe({
-        next: (response) => console.log(response),
-        error: (err) => console.error('傳送資料發生意外:', err),
-        complete: () => history.back(),
-      });
-    }
+      if (this.type === 'post') {
+        const postValue = this.articleForm.getRawValue();
 
-    if (this.type === 'post') {
-      this.post.postContent = this.articleForm.controls['content'].value;
-      this.forumService.updatePost(this.id, this.post).subscribe({
-        next: (response) => console.log(response),
-        error: (err) => console.error(err),
-        complete: () => history.back(),
-      });
+        const updatedData: Partial<Post> = {
+          postContent: postValue['content'],
+        };
+        this.forumService.updatePost(this.id, updatedData).subscribe({
+          next: (response) => console.log(response),
+          error: (err) => console.error(err),
+          complete: () => history.back(),
+        });
+      }
+    } catch (error) {
+      console.error('發生例外的錯誤:', error);
+      return;
+    } finally {
+      return;
     }
   }
 }

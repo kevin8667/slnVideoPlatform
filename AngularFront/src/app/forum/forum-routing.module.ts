@@ -5,18 +5,19 @@ import { NewArticleComponent } from './new-article/new-article.component';
 import { NewPostComponent } from './new-post/new-post.component';
 import { ArticleComponent } from './article/article.component';
 import { EditComponent } from './edit/edit.component';
+import { forumGuard } from './forum.guard';
 
 const routes: Routes = [
   { path: '', component: ArticleListComponent },
   { path: 'newA', component: NewArticleComponent },
   { path: 'newP', component: NewPostComponent },
-  { path: 'ed/:type/:id', component: EditComponent },
-  { path: ':id', component: ArticleComponent },
-  { path: '**', redirectTo: '' }
+  { path: 'ed/:type/:id', component: EditComponent, canActivate: [forumGuard] },
+  { path: ':id', component: ArticleComponent, canActivate: [forumGuard] },
+  { path: '**', redirectTo: '/error' },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class ForumRoutingModule {}

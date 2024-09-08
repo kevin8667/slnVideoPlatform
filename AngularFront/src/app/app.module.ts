@@ -6,9 +6,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 @NgModule({
-  declarations: [AppComponent, NavBarComponent, FooterComponent],
-  imports: [BrowserModule,
+  declarations: [
+    AppComponent,
+    NavBarComponent,
+    FooterComponent,
+    ErrorPageComponent
+  ],
+  imports: [
+    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule
   ],

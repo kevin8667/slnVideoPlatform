@@ -108,3 +108,6 @@ h2 {
 .imgBtn:not(:last-child) {
   border-bottom: 0;
 }
+.contentSection{
+  margin-bottom: 1rem;
+}

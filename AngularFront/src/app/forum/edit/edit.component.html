@@ -8,7 +8,12 @@
     <h2>編輯文章</h2>
     <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
       <!-- 標題 -->
-      <div class="form-group" *ngIf="type === 'article'">
+      <div
+        class="titleSection"
+        *ngIf="
+          type === 'article'
+        "
+      >
         <div class="themeTag1">
           <p-dropdown
             formControlName="theme"
@@ -41,7 +46,7 @@
       </div>
 
       <!-- 內文 -->
-      <div class="form-group">
+      <div class="contentSection">
         <quill-editor
           formControlName="content"
           placeholder="輸入文章內文"
@@ -73,7 +78,7 @@
       </div>
 
       <!-- 提交按鈕 -->
-      <div class="form-group">
+      <div class="submitBtn">
         <button
           type="submit"
           class="btn btn-primary"
