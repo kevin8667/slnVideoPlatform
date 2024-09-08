@@ -9,7 +9,7 @@
 &nbsp;<a routerLink="add">新增頁面</a>
 
 <div class="grid-view">
-  <div *ngFor="let playlist of paginatedPlaylists" class="playlist-card" [attr.data-id]="playlist.playListId" (click)="onCardClick(playlist.playListId)">
+  <div *ngFor="let playlist of paginatedPlaylists" class="playlist-card" [attr.data-id]="playlist.playListId" (click)="onCardClick(playlist.playListId??0)">
     <p-card
       [header]="playlist.playListName"
       [subheader]="playlist.playListDescription"

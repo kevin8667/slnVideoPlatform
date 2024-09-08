@@ -37,7 +37,7 @@ export class PlaylistComponent implements OnInit {
   }
 
   incrementLike(playlist: PlaylistDTO): void {
-    playlist.likeCount += 1;
+    playlist.likeCount = (playlist.likeCount ?? 0) + 1;
     playlist.showLikeEffect = true;
     setTimeout(() => {
       playlist.showLikeEffect = false;

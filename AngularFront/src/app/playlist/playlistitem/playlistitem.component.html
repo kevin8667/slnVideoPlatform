@@ -1,5 +1,5 @@
 <div class="playlist-item" [attr.data-id]="item.videoId" cdkDrag>
-  <img [src]="getThumbnailUrl(item.thumbnailId)" alt="{{ item.videoName }}" class="playlist-thumbnail">
+  <img [src]="getThumbnailUrl(item.thumbnailPath)" alt="{{ item.videoName }}" class="playlist-thumbnail">
 
   <div class="playlist-item-info">
     <h4>{{ item.videoName }}</h4>

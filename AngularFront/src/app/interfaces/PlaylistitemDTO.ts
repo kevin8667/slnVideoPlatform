@@ -3,6 +3,6 @@ export interface PlaylistitemDTO {
   videoId: number;
   videoPosition: number;
   videoName: string;
-  thumbnailId: number | null;
+  thumbnailPath: string | null;
   episode: number | null;
 }

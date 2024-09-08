@@ -13,8 +13,8 @@ export class PlaylistitemComponent {
   @Output()
   remove: EventEmitter<void> = new EventEmitter<void>();
 
-  getThumbnailUrl(thumbnailId: number | null): string {
-    return thumbnailId ? `https://path-to-your-thumbnails/${thumbnailId}.jpg` : 'assets/img/movie.png';
+  getThumbnailUrl(thumbnailPath: string | null): string {
+    return thumbnailPath ?? '/assets/img/movie.png';
   }
 
   removeItem(): void {
