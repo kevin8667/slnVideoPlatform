@@ -31,7 +31,7 @@ public partial class VideoList
 
     public decimal? Popularity { get; set; }
 
-    public int? ThumbnailId { get; set; }
+    public string ThumbnailPath { get; set; }
 
     public string Lang { get; set; }
 

@@ -245,24 +245,42 @@ namespace VdbAPI.Controllers
         [HttpGet("{id}/items")]
         public async Task<ActionResult<IEnumerable<PlaylistitemDTO>>> GetPlayListItems(int id)
         {
-            var playListItems = await _context.PlayListItems
-                .Where(p => p.PlayListId == id)
-                .Select(p => new PlaylistitemDTO
-                {
-                    PlayListId = p.PlayListId,
-                    VideoId = p.VideoId,
-                    VideoPosition = p.VideoPosition,
-                    VideoName = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).VideoName,
-                    ThumbnailId = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).ThumbnailId,
-                    Episode = _context.VideoLists.FirstOrDefault(v => v.VideoId == p.VideoId).Episode
-                }).ToListAsync();
-
-            if (playListItems == null || !playListItems.Any())
+            try
             {
-                return NotFound();
-            }
+                var playListItems = await _context.PlayListItems
+                    .Where(p => p.PlayListId == id)
+                    .Select(p => new PlaylistitemDTO
+                    {
+                        PlayListId = p.PlayListId,
+                        VideoId = p.VideoId,
+                        VideoPosition = p.VideoPosition,
+                        VideoName = _context.VideoLists
+                            .Where(v => v.VideoId == p.VideoId)
+                            .Select(v => v.VideoName)
+                            .FirstOrDefault() ?? "Unknown",
+                        
+                        ThumbnailPath = _context.VideoLists
+                            .Where(v => v.VideoId == p.VideoId)
+                            .Select(v => v.ThumbnailPath)
+                            .FirstOrDefault() ?? "/assets/img/movie.png",
 
-            return Ok(playListItems);
+                        Episode = _context.VideoLists
+                            .Where(v => v.VideoId == p.VideoId)
+                            .Select(v => v.Episode)
+                            .FirstOrDefault() ?? 1
+                    }).ToListAsync();
+
+                if (playListItems == null || !playListItems.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(playListItems);
+            }
+            catch (Exception ex)
+            {                
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}/items/{videoId}")]

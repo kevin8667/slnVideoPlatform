@@ -8,8 +8,6 @@ namespace VdbAPI.Models;
 
 public partial class VideoDBContext : DbContext
 {
-    private DbSet<MemberCreatedPlayList> memberCreatedPlayLists;
-
     public VideoDBContext(DbContextOptions<VideoDBContext> options)
         : base(options)
     {
@@ -57,7 +55,7 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<MemberCoupon> MemberCoupons { get; set; }
 
-    public virtual DbSet<MemberCreatedPlayList> MemberCreatedPlayLists { get => memberCreatedPlayLists; set => memberCreatedPlayLists = value; }
+    public virtual DbSet<MemberCreatedPlayList> MemberCreatedPlayLists { get; set; }
 
     public virtual DbSet<MemberInfo> MemberInfos { get; set; }
 
@@ -333,6 +331,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.FriendStatus)
                 .IsRequired()
                 .HasMaxLength(50);
+            entity.Property(e => e.InvitedMessage).HasMaxLength(50);
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
             entity.HasOne(d => d.Friend).WithMany(p => p.FriendListFriends)
@@ -817,9 +816,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.AnalysisTimestamp).HasColumnType("datetime");
             entity.Property(e => e.PlayListCreatedAt).HasColumnType("datetime");
             entity.Property(e => e.PlayListDescription).HasMaxLength(50);
-            entity.Property(e => e.PlayListName)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.PlayListName).HasMaxLength(50);
             entity.Property(e => e.PlayListUpdatedAt).HasColumnType("datetime");
         });
 
@@ -1190,7 +1187,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.SeasonId).HasColumnName("SeasonID");
             entity.Property(e => e.SeriesId).HasColumnName("SeriesID");
             entity.Property(e => e.Summary).HasMaxLength(500);
-            entity.Property(e => e.ThumbnailId).HasColumnName("ThumbnailID");
+            entity.Property(e => e.ThumbnailPath).HasMaxLength(300);
             entity.Property(e => e.TrailerUrl).HasColumnName("TrailerURL");
             entity.Property(e => e.TypeId).HasColumnName("TypeID");
             entity.Property(e => e.VideoName)

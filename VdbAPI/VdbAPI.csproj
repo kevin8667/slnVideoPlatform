@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20240908071834_RenameThumbnailIdToThumbnailPath.cs" />
+    <Compile Remove="Migrations\20240908071834_RenameThumbnailIdToThumbnailPath.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="efpt.config.json.user" />
   </ItemGroup>
 
