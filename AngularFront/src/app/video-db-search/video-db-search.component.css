@@ -1,76 +1,35 @@
-/* .flex {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 10px;
-} */
+.p-dataview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 最小寬度200px，根據父容器自動調整 */
+  grid-gap: 20px; /* 卡片之間的間距 */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-.p-grid {
+.p-dataview-grid .p-card {
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* .p-dataview .p-dataview-grid .p-col-12,
-.p-dataview .p-dataview-grid .p-md-4 {
-    display: inline-block ;
-    width: 100%;
+.p-dataview-grid img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
 }
 
-@media (min-width: 300px) {
-    .p-dataview .p-dataview-grid .p-md-4 {
-        width: 33.3333%;
-    }
-} */
-
-.search-container {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.p-dataview {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* p-card 美化 */
-.p-card-shadow {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.p-card-shadow:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* 搜尋結果卡片動畫 */
-.video-item {
+.p-paginator {
   display: flex;
-  flex: 1 1 calc(33.333% - 1rem);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
 }
-
-.video-item.ng-enter, .video-item.ng-leave {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-/* 調整卡片內圖片的效果 */
-.transition-transform {
-  transition: transform 0.3s ease;
-}
-.hover\:scale-105:hover {
-  transform: scale(1.05);
-}
-
-/* 提高圖片的邊框 */
-img.border-round {
-  border: 2px solid #ccc;
-}
-
-/* Video Grid 調整 */
-.video-grid {
-  display: flex;
-  gap: 1.5rem;
-}
-
-

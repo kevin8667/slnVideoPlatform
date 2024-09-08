@@ -22,7 +22,7 @@ interface AutoCompleteCompleteEvent {
   selector: 'app-video-db-search',
   templateUrl: './video-db-search.component.html',
   styleUrls: ['./video-db-search.component.css'],
-  encapsulation:ViewEncapsulation.None,
+  // encapsulation:ViewEncapsulation.None,
   animations: [
     trigger('listAnimation', [
       transition(':enter', [
