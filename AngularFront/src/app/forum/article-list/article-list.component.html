@@ -1,56 +1,52 @@
 <div class="myContainer">
   <nav class="card">
-    <!-- 搜尋和換頁功能放在同一個區塊 -->
-    <div class="pageBar">
-      <!-- 換頁功能 -->
-      <div class="slider gap-3">
-        <span class="text-label">筆數:{{ forumDto.pageSize }}</span>
-        <p-slider
-          [(ngModel)]="forumDto.pageSize"
-          (ngModelChange)="onSliderChange()"
-          [style]="{ width: '10rem' }"
-          [min]="10"
-          [max]="100"
-          [step]="10"
-        ></p-slider>
-      </div>
-      <div class="page">
-        <p-paginator
-          (onPageChange)="changePage($event)"
-          [first]="pages.first"
-          [rows]="forumDto.pageSize"
-          [totalRecords]="pages.totalRecords"
-          [showFirstLastIcon]="true"
-          [showCurrentPageReport]="true"
-          currentPageReportTemplate="{first} - {last} 共 {totalRecords}筆"
-        ></p-paginator>
-      </div>
-      <!-- 搜尋功能 -->
-      <div class="searchFlex">
-        <div>
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              type="text"
-              pInputText
-              pTooltip="作者、標題、內容"
-              [(ngModel)]="forumDto.keyword"
-              (keydown.enter)="search()"
-              placeholder="搜尋此討論區"
-            />
-          </span>
-        </div>
-        <div class="fixed-button">
-          <p-button
-            label="發表文章"
-            icon="fa fa-plus"
-            (onClick)="openCreateArticleDialog()"
-          ></p-button>
-        </div>
-      </div>
+    <!-- 變更筆數 -->
+    <div class="slider gap-3">
+      <span class="text-label">筆數:{{ forumDto.pageSize }}</span>
+      <p-slider
+        [(ngModel)]="forumDto.pageSize"
+        (ngModelChange)="onSliderChange()"
+        [style]="{ width: '10rem' }"
+        [min]="10"
+        [max]="100"
+        [step]="10"
+      ></p-slider>
+    </div>
+    <!-- 換頁功能 -->
+    <div class="page">
+      <p-paginator
+        (onPageChange)="changePage($event)"
+        [first]="pages.first"
+        [rows]="forumDto.pageSize"
+        [totalRecords]="pages.totalRecords"
+        [showFirstLastIcon]="true"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} 共 {totalRecords}筆"
+      ></p-paginator>
+    </div>
+    <!-- 搜尋功能 -->
+    <div class="searchInput">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          pInputText
+          pTooltip="作者、標題、內容"
+          [(ngModel)]="forumDto.keyword"
+          (keydown.enter)="search()"
+          placeholder="搜尋此討論區"
+        />
+      </span>
+    </div>
+    <!-- 發表文章按鈕 -->
+    <div class="fixed-button">
+      <p-button
+        label="發表文章"
+        icon="fa fa-plus"
+        (onClick)="openCreateArticleDialog()"
+      ></p-button>
     </div>
   </nav>
-
   <!-- 文章列表開始 -->
   <main class="mainPart">
     <!-- 左側廣告區-->
@@ -102,30 +98,30 @@
           <ng-template pTemplate="gridItem" let-article>
             <div class="p-card grid-item">
               <div class="card-content">
+                <!-- 圖片 -->
                 <div class="card-image">
                   <a routerLink="{{ article.articleId }}"
                     ><img
                       class="article-cover"
                       [src]="
-                        article.coverImageUrl || 'assets/images/avantar.jpg'
-                      "
-                      [alt]="article.title"
-                  /></a>
+                        article.coverImageUrl || 'assets/images/avantar.jpg'" [alt]="article.title"/>
+                  </a>
                 </div>
+                <!-- 文章 -->
                 <div class="card-body">
+                  <!-- 標題 -->
                   <a routerLink="{{ article.articleId }}">
                     <div class="p-card-title">{{ article.title }}</div>
                   </a>
+                  <!-- 作者 -->
                   <div class="p-card-subtitle">
                     <p-tag class="label-tag" value="{{ article.themeName }}" />
                     {{ article.nickName }}
                   </div>
-
+                  <!-- 內文 -->
                   <div class="p-card-body-content">
                     <a routerLink="{{ article.articleId }}">
-                      <p
-                        [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }"
-                      >
+                      <p [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }">
                         {{ truncateText(article.articleContent, 60) }}
                       </p>
                     </a>

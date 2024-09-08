@@ -17,7 +17,7 @@
     <div class="">
       <div
         class="ql-editor article-content"
-        [innerHTML]="article.articleContent"
+        [innerHTML]="safeHtml(article.articleContent)"
       ></div>
     </div>
     <div class="article-actions">
@@ -60,7 +60,10 @@
         <span class="reply-author">{{ post.nickName }}</span>
         <span class="reply-date">{{ post.postDate | forumDate }}</span>
       </div>
-      <div class="ql-editor reply-content" [innerHTML]="post.postContent"></div>
+      <div
+        class="ql-editor reply-content"
+        [innerHTML]="safeHtml(post.postContent)"
+      ></div>
       <div class="reply-actions">
         <div>
           <p-button

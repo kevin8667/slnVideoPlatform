@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center; /* 使整個內容區域在頁面中置中 */
   align-items: flex-start; /* 使側邊欄和內容區域的頂部對齊 */
-  padding: 20px;
+  padding: 1rem;
 }
 .mainSection {
   max-width: 800px; /* 設定最大寬度以保證內容區域不會太寬 */
@@ -20,6 +20,9 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
 }
 
+.themeTag1 {
+  margin: 10px 0; /* 上下邊距 */
+}
 .error-message {
   background-color: #f8d7da; /* 淡紅色背景 */
   color: #721c24; /* 深紅色文字 */
@@ -94,4 +97,11 @@ h2 {
 
 .imgBtn:not(:last-child) {
   border-bottom: 0;
+}
+
+.titleInput {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  width: 100%;
 }

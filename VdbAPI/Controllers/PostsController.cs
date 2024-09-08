@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 using System.Text;
@@ -60,24 +61,42 @@ namespace VdbAPI.Controllers {
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdatePost(int id,PostUpdate postUpdate)
         {
-            if(postUpdate.PostContent.Length < 20) {
-                return BadRequest(postUpdate.PostContent);
-            }
-            var sql = "UPDATE Post SET PostContent = @PostContent WHERE PostId = @Id";
-            using var con = new SqlConnection(_connection);
-            var rowsAffected = await con.ExecuteAsync(sql,new {
-                postUpdate.PostContent,
-                Id = id
-            });
+            if(!PostExists(id))
+                return BadRequest(new {
+                    Error = "無此回文的ID"
+                });
 
-            if(rowsAffected == 0) {
-                return NotFound();
+            if(postUpdate.PostContent.Length < 20) {
+                return BadRequest(new {
+                    錯誤 = "回文字數過少"
+                });
             }
-            return Ok();
+            try {
+                var sql = "UPDATE Post SET PostContent = @PostContent WHERE PostId = @Id";
+                using var con = new SqlConnection(_connection);
+                var rowsAffected = await con.ExecuteAsync(sql,new {
+                    postUpdate.PostContent,
+                    Id = id
+                });
+
+                if(rowsAffected == 0) {
+                    return NotFound();
+                }
+
+                return Ok(new {
+                    OK = "修改回文成功",
+                });
+            }
+            catch(Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError,new {
+                    Message = "內部服務器錯誤",
+                    Details = ex.Message
+                });
+            }
+
         }
 
         // POST: api/Posts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {

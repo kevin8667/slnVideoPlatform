@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 using System.Text;
@@ -47,21 +48,43 @@ namespace VdbAPI.Controllers {
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchArticle(int id,ArtcleUpdate artcleUpdate)
         {
-            if(artcleUpdate.ArticleContent.Length < 20)
-                return BadRequest("文章內容長度必須至少 20 個字元。");
-            var sql = "UPDATE Article SET ArticleContent = @ArticleContent WHERE ArticleId = @Id";
-            using var con = new SqlConnection(_connection);
-            var rowsAffected = await con.ExecuteAsync(sql,new {
-                artcleUpdate.ArticleContent,
-                Id = id
-            });
+            if(artcleUpdate.ArticleContent.Length < 40)
+                return BadRequest("文章內容長度必須至少 40 個字元。");
 
-            if(rowsAffected == 0) {
-                return NotFound();
+            if(!ArticleExists(id))
+                return NotFound(new {
+                    Message = "未找到對應的文章 ID。"
+                });
+
+            var sql = @"UPDATE Article SET ArticleContent = @ArticleContent,Title = @Title,
+                        ThemeId = @ThemeId WHERE ArticleId = @id";
+            try {
+                using var con = new SqlConnection(_connection);
+                var rowsAffected = await con.ExecuteAsync(sql,new {
+                    artcleUpdate.ArticleContent,
+                    artcleUpdate.Title,
+                    artcleUpdate.ThemeId,
+                    id,
+                });
+
+                if(rowsAffected == 0) {
+                    return NotFound(new {
+                        Message = "未找到要更新的文章。"
+                    });
+
+                }
+
+                return Ok(new {
+                    Message = "修改文章成功"
+                });
             }
-            return Ok();
+            catch(Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError,new {
+                    Message = "內部服務器錯誤",
+                    Details = ex.Message
+                });
+            }
         }
-
         // DELETE: api/Articles/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
@@ -147,11 +170,15 @@ namespace VdbAPI.Controllers {
             get;
             set;
         }
-        public  int? ThemeId {
+        public required int ThemeId {
             get;
             set;
         }
-        public  int? Author {
+        public int? AuthorID {
+            get;
+            set;
+        }
+        public required string Title {
             get;
             set;
         }

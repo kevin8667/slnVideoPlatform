@@ -5,12 +5,41 @@
     <button class="imgBtn"><span class="icon"></span>插入表情</button>
   </aside>
   <main class="mainSection">
+    <h2>編輯文章</h2>
     <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
       <!-- 標題 -->
-      <h2>編輯文章</h2>
-      <div class="form-group">
-        <label for="title">RE: </label>
+      <div class="form-group" *ngIf="type === 'article'">
+        <div class="themeTag1">
+          <p-dropdown
+            formControlName="theme"
+            [options]="themeTag"
+            optionLabel="themeName"
+            optionValue="themeId"
+            placeholder="請選擇主題"
+            [showClear]="true"
+          />
+        </div>
+        <div class="titleInput">
+          <!-- 分類 -->
+          <input
+            pInputText
+            formControlName="title"
+            pAutoFocus
+            [autofocus]="true"
+            placeholder="輸入文章標題"
+          />
+          <div
+            class="error-message"
+            *ngIf="
+              articleForm.get('title')?.invalid &&
+              articleForm.get('title')?.touched
+            "
+          >
+            文章標題請勿空白
+          </div>
+        </div>
       </div>
+
       <!-- 內文 -->
       <div class="form-group">
         <quill-editor
@@ -50,7 +79,7 @@
           class="btn btn-primary"
           [disabled]="articleForm.invalid"
         >
-          發表回覆
+          提交
         </button>
       </div>
     </form>

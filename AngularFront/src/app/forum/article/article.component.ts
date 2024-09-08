@@ -47,6 +47,10 @@ export class ArticleComponent implements OnInit {
     });
   }
 
+  safeHtml(data: string) {
+    return this.forumService.getSafe(data);
+  }
+
   navToReply() {
     this.route.navigateByUrl('forum/newP');
   }

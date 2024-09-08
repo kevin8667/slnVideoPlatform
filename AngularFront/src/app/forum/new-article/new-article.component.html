@@ -19,19 +19,16 @@
             [showClear]="true"
           />
         </div>
-        <div class="p-fluid">
-          <div class="p-field">
+        <div class="titleInput">
             <!-- 分類 -->
             <input
-              id="title"
               pInputText
               formControlName="title"
               pAutoFocus
               [autofocus]="true"
               placeholder="輸入文章標題"
             />
-            <div
-              class="error-message"
+            <div class="error-message"
               *ngIf="
                 articleForm.get('title').invalid &&
                 articleForm.get('title').touched
@@ -39,12 +36,12 @@
             >
               文章標題請勿空白
             </div>
-          </div>
+
         </div>
       </div>
 
       <!-- 內文 -->
-      <div class="form-group">
+      <div class="form-group content">
         <quill-editor
           formControlName="content"
           placeholder="輸入文章內文"

@@ -8,6 +8,7 @@ import { ForumPagingDTO } from '../interface/ForumPagingDTO';
 import { ArticleView } from '../interface/ArticleView';
 import { Router } from '@angular/router';
 import { Post } from '../interface/Post';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -16,14 +17,23 @@ export default class ForumService {
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
 
-  constructor(private client: HttpClient, private route: Router) {
+  constructor(
+    private client: HttpClient,
+    private route: Router,
+    private sanitizer: DomSanitizer
+  ) {
     this.loadThemeTags();
   }
 
-  private loadThemeTags(): void {
-    this.client.get<Theme[]>('https://localhost:7193/api/Articles').subscribe({
-      next: (data: Theme[]) => this.themeTagSubject.next(data),
-      error: (error: any) => console.error('Failed to load theme tags', error),
+    loadThemeTags(): void {
+    const api = 'https://localhost:7193/api/Articles';
+    this.client.get<Theme[]>(api).subscribe({
+      next: (data: Theme[]) => {
+        this.themeTagSubject.next(data)
+      },
+      error: (error: any) => {
+        console.error('Failed to load theme tags', error);
+      },
     });
   }
   getArticleView(data: {}): Observable<ForumPagingDTO> {
@@ -89,9 +99,9 @@ export default class ForumService {
         )
       );
   }
-  // getSafe(data: string): SafeHtml {
-  //   if (!data) return '此文章並無內容，請盡速修改!';
+  getSafe(data: string): SafeHtml {
+    if (!data) return '此文章並無內容，請盡速修改!';
 
-  //   return this.sanitizer.bypassSecurityTrustHtml(data);
-  // }
+    return this.sanitizer.bypassSecurityTrustHtml(data);
+  }
 }

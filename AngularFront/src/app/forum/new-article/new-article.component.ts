@@ -17,7 +17,7 @@ export class NewArticleComponent implements OnInit {
     this.articleForm = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
-      themeId: [Number, Validators.required],
+      theme: [Number, Validators.required],
     });
     this.forumService.themeTag$.subscribe((data) => {
       this.themeTag = data;

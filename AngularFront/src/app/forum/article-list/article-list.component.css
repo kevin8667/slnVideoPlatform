@@ -1,66 +1,38 @@
 .myContainer {
-  width: 100vw;
-  min-width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  width: 100%;
 }
-.card .pageBar {
+.card {
+  background: #ffffff31; /* 背景顏色 */
+  border-radius: 8px; /* 邊角圓角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+  padding: 1.5rem; /* 內邊距 */
+  margin: 20px; /* 外邊距 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
+  justify-content: space-between;
   display: flex;
   align-items: center;
-  width: 100%;
-  gap: 20px; /* 保持左右區域間至少20px的間距 */
 }
+
 .mainPart {
-  width: 100%;
   display: flex;
   justify-content: space-between;
 }
-@media (max-width: 768px) {
-  .d3 {
-    display: none;
-  }
-  .d1 {
-    display: none;
-  }
-  .pageBar {
-    width: 95%;
-    /* justify-content: start; */
-    flex-wrap: wrap;
-    flex-direction: column;
-  }
-  .slider {
-    display: none;
-  }
-  .page {
-    min-width: none;
-    margin: 0 auto;
-  }
-  .fixed-button {
-    margin: 0;
-  }
-  nav.card {
-    margin: 20px 0;
-  }
-}
+
 .slider {
+  /* 每頁大小 */
 }
+
 .page {
   display: flex;
   justify-content: center; /* 確保頁碼區塊在中間 */
-  flex-grow: 1; /* 讓頁碼區域擴展以保持居中 */
-  min-width: 710px;
-  margin: 0 20px;
+  /* min-width: 630px; */
 }
 
 .d2 {
-  /* min-width: 1044px; */
   flex-grow: 1;
 }
 .d1 {
-  /* flex: 10%; */
   margin: 0 20px;
-  /* padding: 5px; */
 }
 .ad-container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
@@ -69,6 +41,7 @@
 
 .d3 {
   margin: 0 20px;
+  flex-grow: 1;
 }
 .article {
   margin-top: 2%;
@@ -85,7 +58,7 @@
 }
 ::ng-deep .themeBtn {
   font-size: 13px;
-  font-family: Verdana, Arial, Helvetica, sans-serif, Oswald;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   background-color: #199dbe;
   color: #e8ecee;
 
@@ -94,7 +67,7 @@
 }
 ::ng-deep .allBtn {
   font-size: 13px;
-  font-family: Verdana, Arial, Helvetica, sans-serif, Oswald;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   background-color: #2980b9;
   color: white;
 
@@ -103,7 +76,7 @@
 }
 ::ng-deep .myArticleBtn {
   font-size: 13px;
-  font-family: Verdana, Arial, Helvetica, sans-serif, Oswald;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   background-color: #2980b9;
   color: #e8ecee;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s,
@@ -130,21 +103,11 @@
   gap: 25px; /* 調整為你需要的間距 */
 }
 
-.searchFlex {
-  display: flex;
-  margin: 0 20px; /* 中間和右邊區域的間距 */
+.searchInput {
+  min-width: auto;
 }
 .text-label {
   margin-right: 0.5rem;
-}
-.card {
-  background: #ffffff31; /* 背景顏色 */
-  border-radius: 8px; /* 邊角圓角 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
-  padding: 1.5rem; /* 內邊距 */
-  margin: 20px; /* 外邊距 */
-  overflow: hidden; /* 隱藏超出邊界的內容 */
-  transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
 }
 
 .card img {
@@ -230,7 +193,7 @@
 }
 
 .card-image {
-  flex: 30%; /* 圖片區域擁有的空間 */
+  flex: 1;
 }
 
 .article-cover {
@@ -238,19 +201,14 @@
   height: auto; /* 保持圖片高度自適應 */
   object-fit: cover; /* 確保圖片不變形地填滿容器 */
   border-radius: 8px; /* 添加圓角 */
+  min-width: 214px;
 }
 
 .card-body {
-  flex: 70%; /* 內容區域擁有的空間 */
+  width: 70%;
 }
 
 /* 聊天室 */
-.container {
-  display: flex;
-  gap: 1rem; /* 設定文章和聊天區域之間的間距 */
-  padding: 1rem;
-  margin: 0;
-}
 
 .discussion-section {
   flex: 3; /* 討論區域佔據的比例 */
@@ -268,7 +226,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  height: 700px; /* 設定固定高度，方便顯示 */
+  height: 75vh; /* 設定固定高度，方便顯示 */
 }
 
 .chat-header {
@@ -339,8 +297,7 @@
   color: #ffffd4;
 }
 .fixed-button {
-  margin-left: 160px;
-  min-width: 8ren;
+  min-width: 128px;
 }
 
 ::ng-deep .p-tag {
@@ -356,4 +313,30 @@
 ::ng-deep .p-tag:hover {
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* 懸停時陰影加深 */
   background-color: #2d9cdb; /* 改變背景色來增強效果 */
+}
+/* 響應式手機板 */
+
+@media (max-width: 1368px) {
+  .d1 {
+    display: none;
+  }
+  .slider {
+    display: none;
+  }
+  .card {
+    /* flex-direction: column-reverse; */
+    flex-wrap: wrap-reverse;
+  }
+}
+
+@media (max-width: 768px) {
+  .d3 {
+    display: none;
+  }
+  .page {
+    min-width: none;
+  }
+  .card {
+    margin: 20px 0;
+  }
 }
