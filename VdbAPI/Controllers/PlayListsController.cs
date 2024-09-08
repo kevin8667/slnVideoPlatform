@@ -65,10 +65,13 @@ namespace VdbAPI.Controllers
 
             return Ok(playlist);
         }
-
         [HttpPost]
-        public async Task<ActionResult<PlayList>> PostPlayList(PlayList playList)
+        public async Task<ActionResult<PlayList>> PostPlayList([FromBody] PlayListCreateDTO dto)
         {
+            var playList = dto.PlayList;
+            var videoIds = dto.VideoIds;
+            var collaboratorIds = dto.CollaboratorIds;
+
             if (string.IsNullOrEmpty(playList.PlayListName))
             {
                 return BadRequest("播放清單名稱為必填欄位");
@@ -78,7 +81,7 @@ namespace VdbAPI.Controllers
             {
                 return BadRequest("播放清單描述為必填欄位");
             }
-            
+
             if (!string.IsNullOrEmpty(playList.PlayListImage))
             {
                 try
@@ -90,19 +93,18 @@ namespace VdbAPI.Controllers
                     return BadRequest("圖片格式無效");
                 }
             }
-            
+
             playList.ViewCount = 100;
             playList.LikeCount = 100;
             playList.AddedCount = 100;
             playList.SharedCount = 100;
-            
             playList.PlayListCreatedAt = DateTime.UtcNow;
             playList.PlayListUpdatedAt = DateTime.UtcNow;
             playList.AnalysisTimestamp = DateTime.UtcNow;
-            
+
             _context.PlayLists.Add(playList);
             await _context.SaveChangesAsync();
-            
+
             var memberCreatedPlayList = new MemberCreatedPlayList
             {
                 MemberId = 5,
@@ -110,21 +112,51 @@ namespace VdbAPI.Controllers
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
-            
             _context.MemberCreatedPlayLists.Add(memberCreatedPlayList);
+
+            int position = 1;
+            foreach (var videoId in videoIds.Distinct())
+            {
+                var playListItem = new PlayListItem
+                {
+                    PlayListId = playList.PlayListId,
+                    VideoId = videoId,
+                    VideoPosition = position++,
+                    VideoAddedAt = DateTime.UtcNow
+                };
+                _context.PlayListItems.Add(playListItem);
+            }
+
+            foreach (var collaboratorId in collaboratorIds.Distinct().Where(id => id != 5))
+            {
+                var collaborator = new PlayListCollaborator
+                {
+                    PlayListId = playList.PlayListId,
+                    MemberId = collaboratorId,
+                    CollaboratorJoinedAt = DateTime.UtcNow,
+                    CollaboratorActionType = "Added",
+                    ActionTimestamp = DateTime.UtcNow
+                };
+                _context.PlayListCollaborators.Add(collaborator);
+            }
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPlayList), new { id = playList.PlayListId }, playList);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayList(int id, PlayList playList)
-        {            
+        public async Task<IActionResult> PutPlayList(int id, [FromBody] PlayListCreateDTO dto)
+        {
+            var playList = dto.PlayList;
+            var videoIds = dto.VideoIds ?? new List<int>();
+            var collaboratorIds = dto.CollaboratorIds ?? new List<int>();
+
             if (id != playList.PlayListId)
             {
                 return BadRequest("播放清單 ID 不匹配");
             }
-            
+
             var existingPlayList = await _context.PlayLists.FindAsync(id);
             if (existingPlayList == null)
             {
@@ -137,7 +169,7 @@ namespace VdbAPI.Controllers
             existingPlayList.LikeCount = playList.LikeCount;
             existingPlayList.AddedCount = playList.AddedCount;
             existingPlayList.SharedCount = playList.SharedCount;
-            
+
             if (!string.IsNullOrEmpty(playList.PlayListImage))
             {
                 try
@@ -149,24 +181,44 @@ namespace VdbAPI.Controllers
                     return BadRequest("圖片格式無效");
                 }
             }
-            
-            existingPlayList.PlayListUpdatedAt = DateTime.UtcNow;
-            
-            _context.Entry(existingPlayList).State = EntityState.Modified;
-            
-            await _context.SaveChangesAsync();
-           
-            var memberCreatedPlayList = await _context.MemberCreatedPlayLists
-                .Where(mcp => mcp.PlayListId == id && mcp.MemberId == 5)
-                .FirstOrDefaultAsync();
 
-            if (memberCreatedPlayList != null)
+            existingPlayList.PlayListUpdatedAt = DateTime.UtcNow;
+            _context.Entry(existingPlayList).State = EntityState.Modified;
+           
+            var existingPlayListItems = await _context.PlayListItems.Where(item => item.PlayListId == id).ToListAsync();
+            _context.PlayListItems.RemoveRange(existingPlayListItems);
+
+            int position = 1;
+            foreach (var videoId in videoIds.Distinct())
             {
-                memberCreatedPlayList.UpdatedAt = DateTime.UtcNow;
-                _context.Entry(memberCreatedPlayList).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                var playListItem = new PlayListItem
+                {
+                    PlayListId = id,
+                    VideoId = videoId,
+                    VideoPosition = position++,
+                    VideoAddedAt = DateTime.UtcNow
+                };
+                _context.PlayListItems.Add(playListItem);
             }
             
+            var existingCollaborators = await _context.PlayListCollaborators.Where(collab => collab.PlayListId == id).ToListAsync();
+            _context.PlayListCollaborators.RemoveRange(existingCollaborators);
+
+            foreach (var collaboratorId in collaboratorIds.Distinct().Where(id => id != 5))
+            {
+                var collaborator = new PlayListCollaborator
+                {
+                    PlayListId = id,
+                    MemberId = collaboratorId,
+                    CollaboratorJoinedAt = DateTime.UtcNow,
+                    CollaboratorActionType = "Updated",
+                    ActionTimestamp = DateTime.UtcNow
+                };
+                _context.PlayListCollaborators.Add(collaborator);
+            }
+
+            await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
