@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -12,16 +12,22 @@ import ForumService from 'src/app/service/forum.service';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css'],
 })
-export class EditComponent {
+export class EditComponent implements OnInit {
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    if (this.articleForm.touched) {
+      $event.returnValue = true; // 這裡的訊息大多數瀏覽器不會顯示，會顯示預設提示
+    }
+  }
   @ViewChild('quillEditor') quillEditor!: QuillEditorComponent;
   @ViewChild('fileInput') fileInput: any;
   articleForm!: FormGroup<any>;
   article!: ArticleView;
+  articleId = 0;
   post!: Post;
-  id!: number;
+  id?: number | null;
   type!: string;
   themeTag: Theme[] = [];
-
   constructor(
     private fb: FormBuilder,
     private forumService: ForumService,
@@ -29,17 +35,34 @@ export class EditComponent {
   ) {}
 
   ngOnInit(): void {
-    this.id = Number(this.actRoute.snapshot.paramMap.get('id'));
+    const idRoute = this.actRoute.snapshot.paramMap.get('id');
+    this.id = idRoute ? Number(idRoute) : null;
+    this.articleId = Number(this.actRoute.snapshot.paramMap.get('articleId'));
     this.type = String(this.actRoute.snapshot.paramMap.get('type'));
+
+    this.initializeForm();
+    if (this.type === 'post') {
+      this.changeFormGroup();
+    }
+
+    this.loadingContent();
+  }
+  private initializeForm() {
     this.articleForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(20)]],
       title: ['', Validators.required],
       theme: [null, Validators.required],
     });
-    if (this.type !== 'article') {
-      this.articleForm.removeControl('title');
-      this.articleForm.removeControl('theme');
-    }
+  }
+
+  private changeFormGroup() {
+    this.articleForm.removeControl('title');
+    this.articleForm.removeControl('theme');
+  }
+
+  private loadingContent() {
+    this.forumService.themeTag$.subscribe((data) => (this.themeTag = data));
+    if (!this.id) return;
 
     if (this.type === 'post') {
       this.forumService.getPost(this.id).subscribe((data: Post) => {
@@ -48,9 +71,7 @@ export class EditComponent {
           content: data.postContent,
         });
       });
-    }
-    if (this.type === 'article') {
-      this.forumService.themeTag$.subscribe((data) => (this.themeTag = data));
+    } else {
       this.forumService.getArticle(this.id).subscribe((data) => {
         this.article = data;
         this.articleForm.patchValue({
@@ -68,38 +89,76 @@ export class EditComponent {
 
   onSubmit(): void {
     if (this.articleForm.invalid) return;
+    const articleValue = this.articleForm.getRawValue();
+    const postValue = this.articleForm.getRawValue();
+
     try {
-      if (this.type === 'article') {
-        const articleValue = this.articleForm.getRawValue();
-        const updatedData: Partial<ArticleView> = {
-          articleContent: articleValue['content'],
-          themeId: articleValue['theme'],
-          title: articleValue['title'],
-        };
+      if (this.id) {
+        if (this.type === 'article') {
+          const updatedData: Partial<ArticleView> = {
+            articleContent: articleValue['content'],
+            themeId: articleValue['theme'],
+            title: articleValue['title'],
+          };
 
-        this.forumService.updateArticle(this.id, updatedData).subscribe({
-          next: (response) => console.log(response),
-          error: (err) => console.error('傳送資料發生意外:', err),
-          complete: () => history.back(),
-        });
-      }
+          this.forumService.updateArticle(this.id, updatedData).subscribe({
+            next: (response) => console.log(response),
+            error: (err) => console.error('傳送資料發生意外:', err),
+            complete: () => history.back(),
+          });
+        } else {
+          const updatedData: Partial<Post> = {
+            postContent: postValue['content'],
+          };
 
-      if (this.type === 'post') {
-        const postValue = this.articleForm.getRawValue();
-
-        const updatedData: Partial<Post> = {
-          postContent: postValue['content'],
-        };
-        this.forumService.updatePost(this.id, updatedData).subscribe({
-          next: (response) => console.log(response),
-          error: (err) => console.error(err),
-          complete: () => history.back(),
-        });
+          this.forumService.updatePost(this.id, updatedData).subscribe({
+            next: (response) => console.log(response),
+            error: (err) => console.error(err),
+            complete: () => history.back(),
+          });
+        }
+      } else {
+        if (this.type === 'article') {
+          const updatedData: ArticleView = {
+            articleContent: articleValue['content'],
+            themeId: articleValue['theme'],
+            title: articleValue['title'],
+            articleImage: '',
+            authorId: 2,
+            lock: true,
+            nickName: '',
+            postDate: new Date(),
+            replyCount: 0,
+            themeName: '',
+            updateDate: new Date(),
+            articleId: 0,
+          };
+          this.forumService.createArticle(updatedData).subscribe({
+            next: (response) => console.log(response),
+            error: (err) => console.error('傳送資料發生意外:', err),
+            complete: () => history.back(),
+          });
+        } else {
+          if (this.articleId === 0) return;
+          const updatedData: Post = {
+            postContent: postValue['content'],
+            articleId: this.articleId,
+            postId: 0,
+            posterId: 5,
+            postDate: new Date(),
+            lock: true,
+            postImage: '',
+            nickName: '',
+          };
+          this.forumService.createPost(updatedData).subscribe({
+            next: (response) => console.log(response),
+            error: (err) => console.error('傳送資料發生意外:', err),
+            complete: () => history.back(),
+          });
+        }
       }
     } catch (error) {
       console.error('發生例外的錯誤:', error);
-      return;
-    } finally {
       return;
     }
   }

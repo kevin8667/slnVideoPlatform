@@ -104,7 +104,10 @@
                     ><img
                       class="article-cover"
                       [src]="
-                        article.coverImageUrl || 'assets/images/avantar.jpg'" [alt]="article.title"/>
+                        article.coverImageUrl || 'assets/images/avantar.jpg'
+                      "
+                      [alt]="article.title"
+                    />
                   </a>
                 </div>
                 <!-- 文章 -->
@@ -121,7 +124,9 @@
                   <!-- 內文 -->
                   <div class="p-card-body-content">
                     <a routerLink="{{ article.articleId }}">
-                      <p [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }">
+                      <p
+                        [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }"
+                      >
                         {{ truncateText(article.articleContent, 60) }}
                       </p>
                     </a>

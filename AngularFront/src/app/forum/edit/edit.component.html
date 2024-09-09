@@ -1,20 +1,26 @@
 <div class="newContainer">
   <aside class="aside">
-    <button  class="imgBtn" (click)="openFile()"><span class="icon"></span>插入圖片</button>
-    <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" accept="image/*" />
+    <button class="imgBtn" (click)="openFile()">
+      <span class="icon"></span>插入圖片
+    </button>
+    <input
+      type="file"
+      #fileInput
+      (change)="onFileSelected($event)"
+      style="display: none"
+      accept="image/*"
+    />
     <button class="imgBtn"><span class="icon"></span>插入貼圖</button>
     <button class="imgBtn"><span class="icon"></span>插入表情</button>
   </aside>
   <main class="mainSection">
-    <h2>編輯文章</h2>
+    <h2 *ngIf="type === 'article' && !id">發表文章</h2>
+    <h2 *ngIf="type === 'post' && !id">發表回覆</h2>
+    <h2 *ngIf="type === 'article' && id">編輯文章</h2>
+    <h2 *ngIf="type === 'post' && id">編輯回覆</h2>
     <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
       <!-- 標題 -->
-      <div
-        class="titleSection"
-        *ngIf="
-          type === 'article'
-        "
-      >
+      <div class="titleSection" *ngIf="type === 'article'">
         <div class="themeTag1">
           <p-dropdown
             formControlName="theme"
@@ -48,7 +54,8 @@
 
       <!-- 內文 -->
       <div class="contentSection">
-        <quill-editor #quillEditor
+        <quill-editor
+          #quillEditor
           formControlName="content"
           placeholder="輸入文章內文"
           [modules]="{

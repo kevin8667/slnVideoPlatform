@@ -5,6 +5,6 @@ export interface Post {
   postContent: string;
   postDate: Date;
   lock: boolean;
-  postImage: null;
+  postImage: '';
   nickName:string;
 }

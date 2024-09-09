@@ -144,16 +144,16 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
             entity.Property(e => e.Lock).HasDefaultValue(true);
             entity.Property(e => e.PostDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+                .HasColumnType("datetime")
+                .HasDefaultValueSql("(getdate())");
             entity.Property(e => e.ReplyCount).HasDefaultValue(0);
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
             entity.Property(e => e.Title).HasMaxLength(50);
             entity.Property(e => e.UpdateDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+                .HasColumnType("datetime")
+                .HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.Member).WithMany(p => p.Articles)
+            entity.HasOne(d => d.Author).WithMany(p => p.Articles)
                 .HasForeignKey(d => d.AuthorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Article_MemberInfo");
@@ -174,14 +174,14 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
             entity.Property(e => e.NickName)
                 .IsRequired()
-                .HasMaxLength(30);
-            entity.Property(e => e.PostDate).HasColumnType("datetime");
+                .HasMaxLength(10);
+            entity.Property(e => e.PostDate).HasPrecision(0);
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
             entity.Property(e => e.ThemeName)
                 .IsRequired()
                 .HasMaxLength(50);
             entity.Property(e => e.Title).HasMaxLength(50);
-            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdateDate).HasPrecision(0);
         });
 
         modelBuilder.Entity<BlackList>(entity =>
@@ -912,12 +912,12 @@ public partial class VideoDBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.PosterId).HasColumnName("PosterID");
 
-            entity.HasOne<Article>().WithMany(p => p.Posts)
+            entity.HasOne(d => d.Article).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.ArticleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Post_Article");
 
-            entity.HasOne<MemberInfo>().WithMany(p => p.Posts)
+            entity.HasOne(d => d.Poster).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.PosterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Post_MemberInfo");

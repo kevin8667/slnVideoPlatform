@@ -20,4 +20,8 @@ public partial class Post
     public bool? Lock { get; set; }
 
     public string PostImage { get; set; }
+
+    public virtual Article Article { get; set; }
+
+    public virtual MemberInfo Poster { get; set; }
 }

@@ -16,6 +16,7 @@ namespace VdbAPI.Controllers {
     public class PostsController : ControllerBase {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
+        private int _replyCount = 0;
 
         public PostsController(VideoDBContext context,IConfiguration configuration)
         {
@@ -100,7 +101,27 @@ namespace VdbAPI.Controllers {
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
+            if(post == null) {
+                return NotFound();
+            }
+            post = new Post {
+                ArticleId = post.ArticleId,
+                Lock = true,
+                PostContent = post.PostContent,
+                PostDate = DateTime.UtcNow,
+                PosterId = post.PosterId,
+                PostImage = "",
+            };
             _context.Posts.Add(post);
+
+            var article = await _context.Articles.FirstOrDefaultAsync(c => c.ArticleId == post.ArticleId);
+            if(article != null) {
+                // 更新文章的更新時間和回覆次數
+                article.UpdateDate = DateTime.UtcNow;  // 更新為當前時間
+                article.ReplyCount++;                  // 回覆次數增加 1
+                _context.Articles.Update(article);
+            }
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPost",new {
@@ -118,6 +139,26 @@ namespace VdbAPI.Controllers {
             }
 
             _context.Posts.Remove(post);
+            var article = await _context.Articles.FirstOrDefaultAsync(c => c.ArticleId == post.PostId);
+            if(article != null) {
+                article.ReplyCount--;
+                // 查找該文章的最新回覆時間
+                var latestPost = await _context.Posts
+                    .Where(p => p.ArticleId == article.ArticleId)
+                    .OrderByDescending(p => p.PostDate)  // 根據回覆日期降序排序
+                    .FirstOrDefaultAsync();  // 取得最新的回覆
+
+                // 如果還有其他回覆，更新文章的最新回覆時間，否則保持文章的發布時間或其它邏輯
+                if(latestPost != null) {
+                    article.UpdateDate = latestPost.PostDate;
+                }
+                else {
+                    // 如果沒有回覆，這裡可以選擇保持文章的初始發布時間或設置為其它值
+                    article.UpdateDate = article.PostDate;  // 或者保持不變
+                }
+
+                _context.Articles.Update(article);
+            }
             await _context.SaveChangesAsync();
 
             return NoContent();

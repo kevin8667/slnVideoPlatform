@@ -1,12 +1,17 @@
 // forum.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  firstValueFrom,
+  lastValueFrom,
+  Observable,
+  throwError,
+} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Theme } from '../interface/Theme';
 import { ForumPagingDTO } from '../interface/ForumPagingDTO';
 import { ArticleView } from '../interface/ArticleView';
-import { Router } from '@angular/router';
 import { Post } from '../interface/Post';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -17,19 +22,15 @@ export default class ForumService {
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
 
-  constructor(
-    private client: HttpClient,
-    private route: Router,
-    private sanitizer: DomSanitizer
-  ) {
+  constructor(private client: HttpClient, private sanitizer: DomSanitizer) {
     this.loadThemeTags();
   }
 
-    loadThemeTags(): void {
+  loadThemeTags(): void {
     const api = 'https://localhost:7193/api/Articles/Theme';
     this.client.get<Theme[]>(api).subscribe({
       next: (data: Theme[]) => {
-        this.themeTagSubject.next(data)
+        this.themeTagSubject.next(data);
       },
       error: (error: any) => {
         console.error('Failed to load theme tags', error);
@@ -104,9 +105,17 @@ export default class ForumService {
 
     return this.sanitizer.bypassSecurityTrustHtml(data);
   }
-  async getPicture(img: any){
-    const api = 'https://localhost:7193/api/FourmImg'
-    const data = await firstValueFrom(this.client.post(api,img))
-    return data
+  async getPicture(img: any) {
+    const api = 'https://localhost:7193/api/FourmImg';
+    const data = await firstValueFrom(this.client.post(api, img));
+    return data;
+  }
+  createArticle(data: ArticleView) {
+    const api = 'https://localhost:7193/api/Articles';
+    return this.client.post(api, data);
+  }
+  createPost(data: Post) {
+    const api = 'https://localhost:7193/api/Posts';
+    return this.client.post(api, data);
   }
 }

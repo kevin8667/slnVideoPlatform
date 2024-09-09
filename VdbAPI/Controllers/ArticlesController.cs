@@ -52,6 +52,9 @@ namespace VdbAPI.Controllers {
                     error = "沒收到封包"
                 });
             }
+            if(!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
             try {
                 var article = new Article {
                     AuthorId = articleView.AuthorId,
@@ -60,14 +63,12 @@ namespace VdbAPI.Controllers {
                     ArticleContent = articleView.ArticleContent,
                     Lock = true,
                     ArticleImage = "",
-                    PostDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
+                    PostDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow,
                     ReplyCount = 0,
                 };
 
-                if(!ModelState.IsValid) {
-                    return BadRequest(ModelState);
-                }
+
 
                 _context.Articles.Add(article);
                 await _context.SaveChangesAsync();
@@ -156,7 +157,7 @@ namespace VdbAPI.Controllers {
                 // 排序
 
                 // 計算總筆數
-                var countSql = $"SELECT COUNT(1) FROM ({sql.ToString()}) AS CountQuery";
+                var countSql = $"SELECT COUNT(1) FROM ({sql}) AS CountQuery";
                 var dataCount = await connection.ExecuteScalarAsync<int>(countSql,new {
                     CategoryId = searchDTO.categoryId,
                     Keyword = $"%{searchDTO.keyword}%"

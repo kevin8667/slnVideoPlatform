@@ -10,15 +10,31 @@ import { forumGuard } from './guards/forum.guard';
 
 const routes: Routes = [
   { path: '', component: ArticleListComponent },
-  { path: 'newA', component: NewArticleComponent },
-  { path: 'newP', component: NewPostComponent },
+  { path: ':id', component: ArticleComponent, canActivate: [forumGuard] },
+  {
+    path: 'new/:type',
+    component: EditComponent,
+    canActivate: [forumGuard],
+    canDeactivate: [unsavedChangesGuard],
+  },
+  {
+    path: 'new/:type/:articleId',
+    component: EditComponent,
+    canActivate: [forumGuard],
+    canDeactivate: [unsavedChangesGuard],
+  },
+  {
+    path: 'ed/:type',
+    component: EditComponent,
+    canActivate: [forumGuard],
+    canDeactivate: [unsavedChangesGuard],
+  },
   {
     path: 'ed/:type/:id',
     component: EditComponent,
     canActivate: [forumGuard],
-    canDeactivate: [unsavedChangesGuard]
+    canDeactivate: [unsavedChangesGuard],
   },
-  { path: ':id', component: ArticleComponent, canActivate: [forumGuard] },
   { path: '**', redirectTo: '/error' },
 ];
 

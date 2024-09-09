@@ -122,7 +122,7 @@ export class ArticleListComponent implements OnInit {
     this.forumDto.keyword = '';
   }
   openCreateArticleDialog() {
-    this.route.navigateByUrl('forum/newA');
+    this.route.navigateByUrl('forum/new/article');
   }
 
   truncateText(articleContent: string, maxLength: number) {
