@@ -58,8 +58,12 @@ export class PlaylistService {
     return this.http.put<void>(`${this.apiUrl}/${playlistId}/items/${videoId}/position`, { newPosition });
   }
 
-  getCollaborators(playlistId: number): Observable<MemberInfoDTO[]> {
-    return this.http.get<MemberInfoDTO[]>(`${this.apiUrl}/${playlistId}/collaborators`);
+  getCollaborators(playlistId?: number): Observable<MemberInfoDTO[]> {
+    if (playlistId) {
+      return this.http.get<MemberInfoDTO[]>(`${this.apiUrl}/collaborators/${playlistId}`);
+    } else {
+      return this.http.get<MemberInfoDTO[]>(`${this.apiUrl}/collaborators`);
+    }
   }
 
   addCollaboratorToPlaylist(playlistId: number, memberId: number): Observable<void> {

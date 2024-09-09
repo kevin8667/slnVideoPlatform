@@ -45,3 +45,48 @@ textarea {
 button {
   margin-left: 10px;
 }
+
+.video-item {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+}
+
+.thumbnail {
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+}
+
+.remove-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.drag-handle {
+  cursor: move;
+}
+
+.collaborator-item {
+  display: flex;
+  align-items: center;
+}
+
+.collaborator-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}

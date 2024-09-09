@@ -10,6 +10,7 @@ import { DialogModule } from 'primeng/dialog';
 import { PlaylistitemComponent } from './playlistitem/playlistitem.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { PlaylistMemberComponent } from './playlistmember/playlistmember.component';
 import { PlaylistpostAputComponent } from './playlistpost-aput/playlistpost-aput.component';
 
@@ -36,7 +37,8 @@ const routes: Routes = [
     PaginatorModule,
     DialogModule,
     DragDropModule,
-    PanelModule
+    PanelModule,
+    MultiSelectModule
   ],
   exports: [RouterModule],
 })
