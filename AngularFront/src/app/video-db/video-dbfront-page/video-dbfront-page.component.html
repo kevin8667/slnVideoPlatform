@@ -48,7 +48,7 @@
       <ng-template let-video pTemplate="item">
         <div class="video-card">
           <div class="video-thumbnail">
-            <a [routerLink]="['/details', video.videoId]">
+            <a [routerLink]="['/video-db/details', video.videoId]">
               <img [src]="video.thumbnailPath" [alt]="video.videoName" class="video-image" />
             </a>
             <!-- <div class="rating-indicator">{{ video.rating }}</div> -->
@@ -67,7 +67,7 @@
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="pr-3" style="color: Black;">影片類型</span></h2>
     <div class="row px-xl-5 pb-3">
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a [routerLink]="['/search']" [queryParams]="{ genreNames: '動作' }" queryParamsHandling="merge">
+            <a [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '動作' }" queryParamsHandling="merge">
                 <div class="cat-item d-flex align-items-center mb-4">
                     <div class="overflow-hidden" style="width: 100px; height: 100px;">
                         <img class="img-fluid" src="img/cat-1.jpg" alt="">

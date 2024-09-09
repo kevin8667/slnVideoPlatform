@@ -1,10 +1,10 @@
-import { Season } from './interfaces/season';
+import { Season } from './video-db/interfaces/season';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Video } from './interfaces/video';
+import { Video } from './video-db/interfaces/video';
 import { HttpParams } from '@angular/common/http';
-import { PagedResult } from './interfaces/PagedResult';
-import {Genre} from './interfaces/genre';
+import { PagedResult } from './video-db/interfaces/PagedResult';
+import {Genre} from './video-db/interfaces/genre';
 
 @Injectable({
   providedIn: 'root'

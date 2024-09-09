@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Video } from './interfaces/video';
+import { Video } from './video-db/interfaces/video';
 
 @Injectable({
   providedIn: 'root',

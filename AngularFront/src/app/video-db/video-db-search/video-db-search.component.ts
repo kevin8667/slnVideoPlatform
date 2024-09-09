@@ -1,10 +1,9 @@
-import { event } from 'jquery';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { VideoDBService } from '../video-db.service';
+import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
 import { Genre } from '../interfaces/genre';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SearchStateService } from '../search-state.service';
+import { SearchStateService } from '../../search-state.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 interface VideoType

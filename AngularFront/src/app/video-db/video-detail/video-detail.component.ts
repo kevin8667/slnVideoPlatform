@@ -1,7 +1,7 @@
-import { Season } from './../interfaces/season';
+import { Season } from '../interfaces/season';
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { VideoDBService } from '../video-db.service';
+import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
 import { data } from 'jquery';
 

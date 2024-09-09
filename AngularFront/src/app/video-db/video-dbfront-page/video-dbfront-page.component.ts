@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { Video } from '../interfaces/video';
-import { VideoDBService } from '../video-db.service';
+import { VideoDBService } from '../../video-db.service';
 
 
 @Component({

@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VideoDBFrontPageComponent } from './video-dbfront-page/video-dbfront-page.component';
+// import { VideoDBFrontPageComponent } from './video-db/video-dbfront-page/video-dbfront-page.component';
 import { AppComponent } from './app.component';
-import { VideoDetailComponent } from './video-detail/video-detail.component';
-import { VideoDbSearchComponent } from './video-db-search/video-db-search.component';
+// import { VideoDetailComponent } from './video-db/video-detail/video-detail.component';
+// import { VideoDbSearchComponent } from './video-db/video-db-search/video-db-search.component';
 
 const routes: Routes = [
-    { path: 'video', component: VideoDBFrontPageComponent },
-    { path:'details/:id', component: VideoDetailComponent},
-    { path: 'search', component: VideoDbSearchComponent },
+  { path: 'video-db', loadChildren: () => import('./video-db/video-db.module').then(m => m.VideoDbModule) },
+    
     { path:"**", component: AppComponent}
   ];
 
