@@ -50,7 +50,7 @@ namespace VdbAPI.Controllers {
                 }
 
                 // 返回可用於前端的 URL
-               
+
                 return Ok(new {
                     filePath = $"https://localhost:7193/img/{newFileName}"
                 });

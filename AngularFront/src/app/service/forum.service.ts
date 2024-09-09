@@ -26,7 +26,7 @@ export default class ForumService {
   }
 
     loadThemeTags(): void {
-    const api = 'https://localhost:7193/api/Articles';
+    const api = 'https://localhost:7193/api/Articles/Theme';
     this.client.get<Theme[]>(api).subscribe({
       next: (data: Theme[]) => {
         this.themeTagSubject.next(data)
@@ -38,7 +38,7 @@ export default class ForumService {
   }
   getArticleView(data: {}): Observable<ForumPagingDTO> {
     return this.client.post<ForumPagingDTO>(
-      'https://localhost:7193/api/Articles',
+      'https://localhost:7193/api/Articles/LoadIndex',
       data
     );
   }

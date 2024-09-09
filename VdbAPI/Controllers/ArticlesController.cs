@@ -23,7 +23,7 @@ namespace VdbAPI.Controllers {
         }
 
         // GET: api/Articles
-        [HttpGet]
+        [HttpGet("Theme")]
         public ActionResult<IEnumerable<Theme>> GetThemes()
         {
             return _context.Themes;
@@ -43,6 +43,44 @@ namespace VdbAPI.Controllers {
                 return NotFound();
             }
             return Ok(article);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateArticle(ArticleView articleView)
+        {
+            if(articleView == null) {
+                return BadRequest(new {
+                    error = "沒收到封包"
+                });
+            }
+            try {
+                var article = new Article {
+                    AuthorId = articleView.AuthorId,
+                    ThemeId = articleView.ThemeId,
+                    Title = articleView.Title,
+                    ArticleContent = articleView.ArticleContent,
+                    Lock = true,
+                    ArticleImage = "",
+                    PostDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    ReplyCount = 0,
+                };
+
+                if(!ModelState.IsValid) {
+                    return BadRequest(ModelState);
+                }
+
+                _context.Articles.Add(article);
+                await _context.SaveChangesAsync();
+
+                return Ok(new {
+                    OK = "新增文章成功"
+                });
+            }
+            catch(Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
+
+            }
+
         }
 
         [HttpPatch("{id}")]
@@ -100,7 +138,7 @@ namespace VdbAPI.Controllers {
             return NoContent();
         }
 
-        [HttpPost]
+        [HttpPost("LoadIndex")]
         public async Task<ActionResult<forumDto>> LoadIndex(forumDto searchDTO)
         {
             try {
