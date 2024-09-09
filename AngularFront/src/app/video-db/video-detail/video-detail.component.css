@@ -4,23 +4,23 @@
 @import "primeicons/primeicons.css";
 
 .custom-card {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto; /* 中央對齊 */
-    width: 100%; /* 讓卡片寬度占滿父容器 */
-    max-height: 700px; /* 設定卡片的最大高度 */
-    border-left: none; /* 隱藏左邊框 */
-    border-right: none; /* 隱藏右邊框 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    padding: 16px; /* 增加內部填充 */
-    box-sizing: border-box; /* 確保 padding 不會影響卡片的寬度 */
-    position: relative;
-    background-image: url('/assets/img/godfatherBackground.jpg'); /* 設定背景圖案 */
-    background-size: cover; /* 確保背景圖案覆蓋整個區塊 */
-    background-position: center; /* 將背景圖案置中 */
-    color: white; /* 確保文字顯示在半透明背景上 */
-  }
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  max-height: 700px;
+  border-left: none;
+  border-right: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 16px;
+  box-sizing: border-box;
+  position: relative;
+  background-size: cover;  /* 背景圖片覆蓋整個區域 */
+  background-position: center; /* 背景圖片居中顯示 */
+  color: white;
+}
+
   .custom-card::before {
     content: '';
     position: absolute;
@@ -111,80 +111,29 @@
     transform: scale(1.05);
 }
 
-
-.galleria-wrapper {
-  width: 1000px;
-  height: 450px;
-  margin-left: 450px;
-  margin-bottom: 30px;
-  margin-top: 30px;
-}
-
-.galleria-container {
-  text-align: center;
-  background-color: transparent;
-  border-radius: 0; /* 保持直角 */
-}
-
-.galleria-title {
-  color: #333; /* 深色標題 */
-  font-family: 'Arial', sans-serif;
-  font-size: 24px;
-  letter-spacing: 1px;
-}
-
-.main-image {
-  object-fit: cover;
-  width: 100%;
-  height: auto;
-  transition: transform 0.3s ease-in-out;
-}
-
-.main-image:hover {
-  transform: scale(1.05); /* 當滑鼠懸停時稍微放大圖片 */
-}
-
-.thumbnail-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-
-.thumbnail-image {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.thumbnail-container:hover {
-  transform: translateY(-5px); /* 當滑鼠懸停時上移縮圖 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影 */
-}
-
 h2
 {
   margin-bottom: 5px;
 }
-
 .content-wrapper {
-  /* display: flex;
-  gap: 20px;
-  align-items: flex-start;  */
-  padding: 20px; /* 增加適當的內邊距 */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 增加內容之間的間距 */
+  padding: 20px;
 }
+
+
 .content-container {
   display: flex; /* 使用 Flexbox 進行排列 */
   gap: 20px; /* 主要演員和 carousel 之間的間距 */
 }
 
 
+
 .actors-grid {
-  flex: 1; /* 主要演員區域會自動填滿容器的空間 */
-  max-width: 300px; /* 設定主要演員區域的最大寬度 */
-  /* width: 100%;  */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .grid {
@@ -196,6 +145,12 @@ h2
 .actor-card {
   padding: 10px;
   text-align: center;
+  width: 150px; 
+}
+
+p-carousel {
+  margin-top: 30px; /* 確保 Carousel 與演員區域分開 */
+  max-width: 1100px;
 }
 
 .actor-image {
@@ -213,34 +168,57 @@ h2
   padding-bottom: 10px;
 }
 
-.carousel-container {
-  flex: 2; /* carousel 區域會占據更多的空間 */
-  max-width: calc(100% - 800px);
-  max-height: 450px; /* 限制 carousel 區塊的最大高度 */
-  overflow: hidden; /* 防止內容超出範圍 */
-}
-
-/* 可以選擇性地調整 carousel 的樣式 */
-.carousel-item-container {
-  position: relative;
-  width: 100%;
-  height: 100%; /* 確保內容區域不超出 */
-}
-
-.position-absolute {
-  position: absolute;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* 確保圖片按照比例填滿容器 */
-  max-height: 450px; /* 限制圖片的最大高度 */
-}
-.carousel-caption {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+/* 修正圖片縮放效果 */
+.gallery-container {
   text-align: center;
+  transition: transform 0.5s ease; /* 增加動畫效果 */
+  padding: 10px;
+  transform: scale(0.8); /* 預設縮小圖片 */
+}
+
+.gallery-container.active {
+  transform: scale(2); /* 當前選中的圖片放大 */
+}
+
+.gallery-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* 修正左右箭頭按鈕的大小和位置 */
+.p-carousel .p-carousel-prev, 
+.p-carousel .p-carousel-next {
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  position: absolute;
+}
+
+.p-carousel .p-carousel-prev {
+  left: -40px; /* 調整位置，避免按鈕太靠右 */
+}
+
+.p-carousel .p-carousel-next {
+  right: -40px; /* 調整位置，避免按鈕太靠右 */
+}
+
+/* 確保 Carousel 容器內的圖片不會超出 */
+.p-carousel .p-carousel-items-container {
+  display: flex;
+  justify-content: center; /* 中央對齊圖片 */
+  overflow: hidden; /* 防止內容溢出 */
+}
+
+.p-carousel .p-carousel-items-container .p-carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(1); /* 預設縮放 */
+  transition: transform 0.5s ease; /* 動畫效果 */
+}
+
+.p-carousel .p-carousel-items-container .p-carousel-item.active {
+  transform: scale(2); /* 中央圖片放大 */
 }

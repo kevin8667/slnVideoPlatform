@@ -41,6 +41,34 @@ namespace VdbAPI.Controllers
             return castList;
         }
 
+        // GET: api/CastList/actor/5
+        [HttpGet("actor/{actorId}")]
+        public async Task<ActionResult<IEnumerable<VideoList>>> GetVideosByActor(int actorId)
+        {
+            // 找到該演員的 CastList 內所有相關的 VideoID
+            var videoIds = await _context.CastLists
+                                        .Where(c => c.ActorId == actorId)
+                                        .Select(c => c.VideoId)
+                                        .ToListAsync();
+
+            if (videoIds == null || !videoIds.Any())
+            {
+                return NotFound("No videos found for this actor.");
+            }
+
+            // 使用這些 VideoID 來取得對應的 VideoList
+            var videos = await _context.VideoLists
+                                        .Where(v => videoIds.Contains(v.VideoId))
+                                        .ToListAsync();
+
+            if (videos == null || !videos.Any())
+            {
+                return NotFound("No videos found.");
+            }
+
+            return Ok(videos);
+        }
+
         // PUT: api/CastList/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

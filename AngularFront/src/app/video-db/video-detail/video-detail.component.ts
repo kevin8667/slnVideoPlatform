@@ -25,6 +25,9 @@ export class VideoDetailComponent implements OnInit{
   images:any[] =[];
 
 
+  selectedIndex = 0; // 初始為第一張圖片
+  selectedImage: string = this.images[this.selectedIndex]; // 預設選中第一個
+
   actors : any[]=[
     {
       name:"馬龍·白蘭度",
@@ -66,19 +69,34 @@ export class VideoDetailComponent implements OnInit{
       releaseDate: new Date('2024-01-01'),
       rating: 4.5,
       popularity: 100,
-      thumbnailId: 5,
+      thumbnailPath: '',
       lang: 'English',
       summary: 'This is a sample video summary.',
       views: 1000,
       ageRating: 'PG',
       trailerUrl: 'https://example.com/trailer',
       mainGenreName:' ',
-      seasonName: ' '
+      seasonName: ' ',
+      bgpath:''
   };
   }
 
   onValueChange(newValue: any) {
     this.images = newValue;
+  }
+
+  onCarouselPageChange(event: any) {
+    const visibleImagesCount = 3; // 假設 Carousel 可見圖片數量是 3
+
+    // 透過 % 避免溢出，實現無限循環
+    this.selectedIndex = (event.page + Math.floor(visibleImagesCount / 2)) % this.images.length;
+    
+    // 更新選中的圖片
+    this.selectedImage = this.images[this.selectedIndex];
+  }
+  onImageClick(index: number) {
+    this.selectedIndex = index;
+    this.selectedImage = this.images[index];
   }
 
   ngOnInit() {
@@ -102,7 +120,7 @@ export class VideoDetailComponent implements OnInit{
       }
     });
 
-    
+    this.selectedImage = this.images[this.selectedIndex];
 
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
 

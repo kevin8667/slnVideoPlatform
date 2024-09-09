@@ -43,11 +43,15 @@ public partial class VideoList
 
     public string TrailerUrl { get; set; }
 
+    public string Bgpath { get; set; }
+
     public virtual ICollection<CastList> CastLists { get; set; } = new List<CastList>();
 
     public virtual ICollection<DirectorForVideoList> DirectorForVideoLists { get; set; } = new List<DirectorForVideoList>();
 
     public virtual ICollection<GenresForVideoList> GenresForVideoLists { get; set; } = new List<GenresForVideoList>();
+
+    public virtual ICollection<ImageForVideoList> ImageForVideoLists { get; set; } = new List<ImageForVideoList>();
 
     public virtual ICollection<KeywordForVideoList> KeywordForVideoLists { get; set; } = new List<KeywordForVideoList>();
 

@@ -41,6 +41,20 @@ namespace VdbAPI.Controllers
             return genreList;
         }
 
+        [HttpGet("name={genreName}")]
+        public async Task<ActionResult<int>> GetGenreList(string genreName)
+        {
+            var genre = await _context.GenreLists.FirstOrDefaultAsync(v => v.GenreName == genreName);
+
+
+            if (genre == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(genre.GenreId);
+        }
+
         // PUT: api/GenreList/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

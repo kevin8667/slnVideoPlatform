@@ -5,6 +5,7 @@ import { Video } from './video-db/interfaces/video';
 import { HttpParams } from '@angular/common/http';
 import { PagedResult } from './video-db/interfaces/PagedResult';
 import {Genre} from './video-db/interfaces/genre';
+import { Actor } from './video-db/interfaces/actor';
 
 @Injectable({
   providedIn: 'root'
@@ -131,5 +132,47 @@ export class VideoDBService {
     });
 
     return this.httpClient.get<Genre[]>(url)
+  }
+
+  getGenreIdWithName(name:string)
+  {
+    const url = `https://localhost:7193/api/GenreList/name=${name}`;
+
+    this.httpClient.get<number>(url)
+    .subscribe(id => {
+      console.log(id);
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<number>(url)
+  }
+
+  getActorWithId(id:string)
+  {
+    const url = `https://localhost:7193/api/ActorList/${id}`;
+
+    this.httpClient.get<Actor>(url)
+    .subscribe(Actor => {
+      console.log(Actor);
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<Actor>(url)
+  }
+
+  getVideosWithActorId(actorId:string)
+  {
+    const url = `https://localhost:7193/api/CastList/actor/${actorId}`;
+
+    this.httpClient.get<Video[]>(url)
+    .subscribe(videos => {
+      console.log(videos);
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<Video[]>(url)
   }
 }

@@ -20,12 +20,16 @@ import { DataViewModule } from 'primeng/dataview';
 import { ImageModule } from 'primeng/image';
 import { GalleriaModule } from 'primeng/galleria';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TestComponent,
+    NavBarComponent,
+    FooterComponent,
     // 這些組件將被移除並轉移到 VideoDBModule
     // VideoDBFrontPageComponent,
     // VideoDetailComponent,

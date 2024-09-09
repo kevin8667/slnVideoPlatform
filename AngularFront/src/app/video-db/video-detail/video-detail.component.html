@@ -1,8 +1,8 @@
-<div class="custom-card">
+<div class="custom-card"  [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
   <div class="card-body">
     <div class="image-container">
       <p-image
-        src="/assets/img/godfather.jpg"
+        [src]="video.thumbnailPath"
         alt="{{ video.videoName }}"
         class="video-image"
         [preview]="true"
@@ -101,22 +101,21 @@
       </div>
     </div>
 
-    <!-- 其他區域，例如 p-carousel -->
-    <!-- <div class="carousel-container">
-      <p-carousel [value]="images" [numVisible]="1" >
-        <ng-template pTemplate="item" let-image>
-          <div class="carousel-item-container" style="height: 430px; position: relative;">
-            <img [src]="'/assets' + image" class="position-absolute w-100 h-100" style="object-fit: cover;">
-            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-              <div class="p-3" style="max-width: 700px;">
-                <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">{{image.name}}</h1>
-                <p class="mx-md-5 px-5 animate__animated animate__bounceIn">{{image.description}}</p>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-      </p-carousel>
-    </div> -->
+    <p-carousel 
+  [value]="images" 
+  [numVisible]="3" 
+  [circular]="true" 
+  [autoplayInterval]="3000" 
+  [numScroll]="1"
+  (onPage)="onCarouselPageChange($event)">
+  <ng-template let-image let-index="index" pTemplate="item">
+    <div class="gallery-container" 
+         [ngClass]="{ 'active': index === selectedIndex }" 
+         (click)="onImageClick(index)">
+      <img [src]="image" class="gallery-image" />
+    </div>
+  </ng-template>
+</p-carousel>
   </div>
 </div>
 
@@ -137,7 +136,7 @@
         <div class="mb-3">
           <a [routerLink]="['/details', video.videoId]"
             ><img
-              src="/assets/img/NoClue.jpg"
+              [src]="video.thumbnailPath"
               [alt]="video.name"
               class="w-6 shadow-2"
               style="width: 200px; border-radius: 10px;"

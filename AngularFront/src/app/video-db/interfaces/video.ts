@@ -13,7 +13,7 @@ export interface Video
     releaseDate:Date;
     rating:number;
     popularity:number;
-    thumbnailId:number;//
+    thumbnailPath:string;//
     lang:string;
     summary:string;
     views:number;
@@ -21,4 +21,5 @@ export interface Video
     trailerUrl:string;
     mainGenreName:string;
     seasonName:string;
+    bgpath:string;
 }

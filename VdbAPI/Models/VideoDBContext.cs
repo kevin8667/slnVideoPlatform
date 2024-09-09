@@ -126,7 +126,8 @@ public partial class VideoDBContext : DbContext
             entity.ToTable("ActorList");
 
             entity.Property(e => e.ActorId).HasColumnName("ActorID");
-            entity.Property(e => e.ActorImage).HasColumnType("image");
+            entity.Property(e => e.ActorDescription).HasMaxLength(500);
+            entity.Property(e => e.ActorImgPath).HasMaxLength(300);
             entity.Property(e => e.ActorName)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -284,7 +285,8 @@ public partial class VideoDBContext : DbContext
             entity.ToTable("DirectorList");
 
             entity.Property(e => e.DirectorId).HasColumnName("DirectorID");
-            entity.Property(e => e.DirectorImage).HasColumnType("image");
+            entity.Property(e => e.DirectorDescription).HasMaxLength(500);
+            entity.Property(e => e.DirectorImgPath).HasMaxLength(300);
             entity.Property(e => e.DirectorName)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -449,6 +451,11 @@ public partial class VideoDBContext : DbContext
                 .HasForeignKey(d => d.ImageId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ImageForVideoList_ImageList");
+
+            entity.HasOne(d => d.Video).WithMany(p => p.ImageForVideoLists)
+                .HasForeignKey(d => d.VideoId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ImageForVideoList_VideoList");
         });
 
         modelBuilder.Entity<ImageList>(entity =>
@@ -1158,6 +1165,9 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.VideoId).HasColumnName("VideoID");
             entity.Property(e => e.AgeRating).HasMaxLength(50);
+            entity.Property(e => e.Bgpath)
+                .HasMaxLength(300)
+                .HasColumnName("BGPath");
             entity.Property(e => e.Lang).HasMaxLength(50);
             entity.Property(e => e.MainGenreId).HasColumnName("MainGenreID");
             entity.Property(e => e.Popularity).HasColumnType("decimal(2, 1)");

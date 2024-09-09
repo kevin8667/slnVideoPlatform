@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -115,7 +116,9 @@ namespace VdbAPI.Controllers
                     SeasonId = v.SeasonId,
                     SeasonName = v.Season.SeasonName,
                     MainGenreId = v.MainGenreId,
-                    MainGenreName = v.MainGenre.GenreName
+                    MainGenreName = v.MainGenre.GenreName,
+                    ThumbnailPath = v.ThumbnailPath,
+                    Bgpath = v.Bgpath
                 }).ToListAsync();
 
             return Ok(videoListDTOs);
