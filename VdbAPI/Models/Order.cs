@@ -13,7 +13,7 @@ public partial class Order
 
     public int? CouponId { get; set; }
 
-    public DateOnly? OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
 
     public decimal? OrderTotalPrice { get; set; }
 
@@ -28,8 +28,6 @@ public partial class Order
     public int? DeliveryStatus { get; set; }
 
     public DateTime? LastEditTime { get; set; }
-
-    public virtual CouponInfo Coupon { get; set; }
 
     public virtual MemberInfo Driver { get; set; }
 

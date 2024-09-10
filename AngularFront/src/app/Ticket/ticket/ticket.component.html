@@ -1,0 +1,52 @@
+<div class="ticket-container">
+  <div class="movie-container">
+    <div class="movie-poster">
+      <img
+        src="../../../../assets/image/Deadpool_Wolverine.png"
+        alt="Deadpool & Wolverine"
+      />
+    </div>
+    <div class="movie-info">
+      <h2>死侍與金鋼狼</h2>
+      <h4>Deadpool & Wolverine</h4>
+      <p><strong>上映日期:</strong> 2024/07/24</p>
+      <p>
+        簡介：準備好見證終極太銀幕至尊對決拍檔《死侍與金鋼狼》！史上最另類超級英雄，諧不驚人死不休的死侍，睽違六年終於在萬眾矚目下重返大銀幕，更與睽別15年的金鋼狼攜手首度加入漫威電影宇宙！金鋼狼應聲重出江湖，與死侍再續兄弟情，時間變異管理局卻突然找上門帶走死侍，但他依然老神在在，並自認只有自己能當漫威救世主，改寫漫威電影宇宙！
+      </p>
+    </div>
+  </div>
+
+  <div class="cinema-selection">
+    <label for="cinema"><strong>選擇影院：</strong></label>
+    <select
+      id="cinema"
+      [(ngModel)]="selectedCinema"
+      (change)="onCinemaChange($event)"
+      class="form-control"
+    >
+      <option *ngFor="let cinema of cinemas" [value]="cinema.CinemaId">
+        {{ cinema.CinemaName }}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="selectedCinema" class="showtimes">
+    <h3>{{ selectedCinema.CinemaName }}的上映時間</h3>
+    <div *ngFor="let hall of selectedCinema.Halls" class="hall-container">
+      <h4>{{ hall.HallName }}</h4>
+      <ul>
+        <!-- 修改這部分，加入日期與星期的顯示 -->
+        <li *ngFor="let showtime of hall.Showtimes" class="showtime">
+          <div class="showtime-details">
+            <strong>{{ showtime.date }} {{ showtime.day }}</strong> <!-- 顯示日期與星期 -->
+            <button (click)="onTimeSelect(hall.HallName, showtime.time)">
+              {{ showtime.time }}
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <button routerLink="ticketorder" class="btn">選擇票券</button>
+  </div>
+</div>

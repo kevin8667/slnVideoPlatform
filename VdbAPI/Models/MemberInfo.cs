@@ -90,11 +90,19 @@ public partial class MemberInfo
 
     public string MemberIdentity { get; set; }
 
+    public bool Fidoenabled { get; set; }
+
+    public int? FidocredentialId { get; set; }
+
     public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 
     public virtual ICollection<BlackList> BlackListBlockedMembers { get; set; } = new List<BlackList>();
 
     public virtual ICollection<BlackList> BlackListMembers { get; set; } = new List<BlackList>();
+
+    public virtual Fidocredential Fidocredential { get; set; }
+
+    public virtual ICollection<Fidocredential> Fidocredentials { get; set; } = new List<Fidocredential>();
 
     public virtual ICollection<FriendChat> FriendChatReceivers { get; set; } = new List<FriendChat>();
 
@@ -110,9 +118,13 @@ public partial class MemberInfo
 
     public virtual ICollection<MemberCoupon> MemberCoupons { get; set; } = new List<MemberCoupon>();
 
+    public virtual ICollection<MemberCreatedPlayList> MemberCreatedPlayLists { get; set; } = new List<MemberCreatedPlayList>();
+
     public virtual ICollection<MemberNotice> MemberNotices { get; set; } = new List<MemberNotice>();
 
     public virtual ICollection<MemberPlayList> MemberPlayLists { get; set; } = new List<MemberPlayList>();
+
+    public virtual ICollection<MemberRating> MemberRatings { get; set; } = new List<MemberRating>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
