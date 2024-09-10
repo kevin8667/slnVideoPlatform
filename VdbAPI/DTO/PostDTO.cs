@@ -21,6 +21,12 @@
         public string? NickName {
             get; set;
         } = "異常:無名字";
+        public int LikeCount {
+            get; set;
+        }
+        public int DislikeCount {
+            get; set;
+        }
     }
 
 }

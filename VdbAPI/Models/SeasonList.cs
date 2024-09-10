@@ -21,7 +21,5 @@ public partial class SeasonList
 
     public string Summary { get; set; }
 
-    public virtual SeriesList Series { get; set; }
-
     public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }

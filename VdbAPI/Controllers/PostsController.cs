@@ -101,32 +101,47 @@ namespace VdbAPI.Controllers {
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
+            if(!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
             if(post == null) {
-                return NotFound();
+                return NotFound(new {
+                    error = "找不到post"
+                });
             }
-            post = new Post {
-                ArticleId = post.ArticleId,
-                Lock = true,
-                PostContent = post.PostContent,
-                PostDate = DateTime.UtcNow,
-                PosterId = post.PosterId,
-                PostImage = "",
-            };
-            _context.Posts.Add(post);
+            try {
+     
+                post = new Post {
+                    ArticleId = post.ArticleId,
+                    Lock = true,
+                    PostContent = post.PostContent,
+                    PostDate = DateTime.UtcNow,
+                    PosterId = post.PosterId,
+                    PostImage = "",
+                    LikeCount = 0,
+                    DislikeCount = 0,
+                    
+                };
+                _context.Posts.Add(post);
 
-            var article = await _context.Articles.FirstOrDefaultAsync(c => c.ArticleId == post.ArticleId);
-            if(article != null) {
-                // 更新文章的更新時間和回覆次數
-                article.UpdateDate = DateTime.UtcNow;  // 更新為當前時間
-                article.ReplyCount++;                  // 回覆次數增加 1
-                _context.Articles.Update(article);
+                var article = await _context.Articles.FirstOrDefaultAsync(c => c.ArticleId == post.ArticleId);
+                if(article != null) {
+
+                    article.ReplyCount++;                  // 回覆次數增加 1
+                    _context.Articles.Update(article);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new {
+                    message = "新增回文成功"
+                });
             }
-
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPost",new {
-                id = post.PostId
-            },post);
+            catch(Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError,new {
+                    error = "API發生例外的錯誤:" + ex.Message,
+                });
+            }
         }
 
         // DELETE: api/Posts/5

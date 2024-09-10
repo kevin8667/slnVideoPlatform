@@ -28,6 +28,20 @@ export class EditComponent implements OnInit {
   id?: number | null;
   type!: string;
   themeTag: Theme[] = [];
+  /*
+  {
+    "articleId": 18,
+    "dislikeCount": 0,
+    "likeCount": 0,
+    "lock": true,
+    "nickName": "",
+    "postContent": "<p><img src=\"https://localhost:7193/img/0d23e5c5-9391-4cfd-9fb2-4e7b9589018b.jpg\"></p><p><br></p><p><br></p><p><br></p><p>52415545241554524155452415545241554</p>",
+    "postDate": "2024-09-10T04:06:35.208Z",
+    "postId": 0,
+    "postImage": "",
+    "posterId": 5
+  }
+  */
   constructor(
     private fb: FormBuilder,
     private forumService: ForumService,

@@ -22,4 +22,6 @@ public partial class ReservationDetail
     public int? CouponId { get; set; }
 
     public virtual MemberInfo Member { get; set; }
+
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

@@ -38,7 +38,6 @@ import { TagModule } from 'primeng/tag';
   ],
   imports: [
     TableModule,
-    HttpClientModule,
     ButtonModule,
     CommonModule,
     PaginatorModule,
@@ -46,7 +45,6 @@ import { TagModule } from 'primeng/tag';
     AutoCompleteModule,
     DataViewModule,
     ReactiveFormsModule,
-    FormsModule,
     ForumRoutingModule,
     QuillModule,
     InputTextModule,

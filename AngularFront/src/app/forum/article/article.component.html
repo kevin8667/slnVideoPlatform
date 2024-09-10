@@ -31,7 +31,7 @@
         ></p-button>
         <p-button
           [label]="'踩(' + NumToString(article.dislikeCount) + ')'"
-          (onClick)="dislike()"
+          (onClick)="dislike(0)"
           styleClass="p-button-outlined p-button-danger action-btn mr-2 mb-2"
           [raised]="true"
           severity="Warn"
@@ -76,8 +76,8 @@
             severity="success"
           ></p-button>
           <p-button
-            [label]="'踩(' + NumToString(post.dislikeCount) + ')'"
-            (onClick)="dislike()"
+            [label]="'踩(' + NumToString(post.dislikeCount) +')'"
+            (onClick)="dislike(post.dislikeCount)"
             styleClass="p-button-outlined p-button-danger  action-btn mr-2 mb-2"
             [raised]="true"
             severity="Warn"
