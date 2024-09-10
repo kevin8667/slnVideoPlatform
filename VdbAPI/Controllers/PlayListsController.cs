@@ -242,6 +242,28 @@ namespace VdbAPI.Controllers
             return _context.PlayLists.Any(e => e.PlayListId == id);
         }
 
+        // GET: api/PlayList/videos
+        [HttpGet("videos")]
+        public async Task<ActionResult<IEnumerable<VideoListDTO>>> GetAllVideos()
+        {
+            var videos = await _context.VideoLists
+                .Select(v => new VideoListDTO
+                {
+                    VideoId = v.VideoId,
+                    VideoName = v.VideoName,
+                    Episode = v.Episode, // 如果存在集數，則返回
+                    ThumbnailPath = v.ThumbnailPath ?? "/assets/img/movie.png" // 預設圖片
+                })
+                .ToListAsync();
+
+            if (videos == null || !videos.Any())
+            {
+                return NotFound("No videos found.");
+            }
+
+            return Ok(videos);
+        }
+
         [HttpGet("{id}/items")]
         public async Task<ActionResult<IEnumerable<PlaylistitemDTO>>> GetPlayListItems(int id)
         {

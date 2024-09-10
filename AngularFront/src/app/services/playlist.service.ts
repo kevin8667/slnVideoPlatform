@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { PlaylistDTO } from '../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../interfaces/PlaylistitemDTO';
 import { MemberInfoDTO } from '../interfaces/MemberInfoDTO';
+import { VideoListDTO } from '../interfaces/VideoListDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,14 @@ export class PlaylistService {
 
   getPlaylistItems(playlistId: number): Observable<PlaylistitemDTO[]> {
     return this.http.get<PlaylistitemDTO[]>(`${this.apiUrl}/${playlistId}/items`);
+  }
+
+  getAllVideos(): Observable<VideoListDTO[]> {
+    return this.http.get<VideoListDTO[]>('https://localhost:7193/api/PlayList/videos');
+  }
+
+  addPlaylistItems(playListId: number, playlistItems: PlaylistitemDTO[]): Observable<any> {
+    return this.http.post(`${this.apiUrl}/playlists/${playListId}/items`, playlistItems);
   }
 
   addVideoToPlaylist(playlistId: number, video: PlaylistitemDTO): Observable<void> {

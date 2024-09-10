@@ -47,7 +47,6 @@ button {
 }
 
 .video-item {
-  margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -55,28 +54,64 @@ button {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f9f9f9;
+  margin-bottom: 10px;
+  transition: transform 0.2s ease, background-color 0.2s ease; /* 添加過渡效果 */
+}
+
+.video-item:hover {
+  background-color: #f1f1f1; /* 當項目被懸停時改變背景顏色 */
+  transform: translateY(-2px); /* 添加微妙的浮動效果 */
 }
 
 .card {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  display: flex;
   align-items: center;
 }
 
-.thumbnail {
-  width: 50px;
-  height: 50px;
-  margin-right: 15px;
+.card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Push actions to the right */
 }
 
-.remove-button {
+.thumbnail {
+  width: 70px; /* 增大圖片尺寸 */
+  height: 70px;
+  margin-right: 15px;
+  object-fit: cover; /* 確保圖片不會變形 */
+  border-radius: 8px; /* 讓圖片有些圓角 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* 增加圖片的立體效果 */
+}
+
+.remove-button,
+.move-button {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  color: #17A2B8; /* 調整圖示顏色 */
+}
+
+.move-button {
+  margin-left: 10px;
 }
 
 .drag-handle {
-  cursor: move;
+  margin-left: 10px; /* 增加與內容之間的間距 */
+  cursor: grab;
+  color: #666; /* 給手柄一個顏色，讓它更明顯 */
+  font-size: 18px; /* 調整手柄圖示大小 */
 }
 
 .collaborator-item {
@@ -89,4 +124,22 @@ button {
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
+}
+
+/* 對拖曳的項目進行強調效果 */
+.cdk-drag-preview {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+  transform: scale(1.02); /* 輕微放大拖曳的項目 */
+}
+
+.cdk-drag-placeholder {
+  background: transparent; /* 保持拖動區域透明 */
+  border: 2px dashed #17A2B8; /* 添加虛線邊框作為佔位符 */
+}
+
+.cdk-drop-list-dragging .video-item {
+  opacity: 0.8; /* 在拖曳時減少其他項目的不透明度 */
 }
