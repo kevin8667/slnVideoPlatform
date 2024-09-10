@@ -16,6 +16,7 @@ namespace VdbAPI.Controllers {
     public class ArticlesController : ControllerBase {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
+
         public ArticlesController(VideoDBContext context,IConfiguration configuration)
         {
             _context = context;

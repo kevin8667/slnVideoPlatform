@@ -11,6 +11,9 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class ArticleComponent implements OnInit {
+  NumToString(count: number) {
+    return String(count);
+  }
 
   // getSafe = (data: string) => this.forumService.getSafe(data);
   article: ArticleView = {} as ArticleView;
@@ -50,10 +53,10 @@ export class ArticleComponent implements OnInit {
   }
 
   edit(id: number, type: string) {
-    this.route.navigate(['/forum','ed', type, id]);
+    this.route.navigate(['/forum', 'ed', type, id]);
   }
-  navToReply(articleId:number) {
-    this.route.navigate(['/forum','new', 'post',articleId ]);
+  navToReply(articleId: number) {
+    this.route.navigate(['/forum', 'new', 'post', articleId]);
   }
 
   dislike() {

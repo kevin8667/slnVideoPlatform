@@ -119,6 +119,7 @@ export class EditComponent implements OnInit {
         }
       } else {
         if (this.type === 'article') {
+          // 新增文章
           const updatedData: ArticleView = {
             articleContent: articleValue['content'],
             themeId: articleValue['theme'],
@@ -132,6 +133,8 @@ export class EditComponent implements OnInit {
             themeName: '',
             updateDate: new Date(),
             articleId: 0,
+            likeCount: 0,
+            dislikeCount: 0,
           };
           this.forumService.createArticle(updatedData).subscribe({
             next: (response) => console.log(response),
@@ -139,6 +142,7 @@ export class EditComponent implements OnInit {
             complete: () => history.back(),
           });
         } else {
+          // 新增回文
           if (this.articleId === 0) return;
           const updatedData: Post = {
             postContent: postValue['content'],
@@ -149,6 +153,8 @@ export class EditComponent implements OnInit {
             lock: true,
             postImage: '',
             nickName: '',
+            likeCount: 0,
+            dislikeCount: 0,
           };
           this.forumService.createPost(updatedData).subscribe({
             next: (response) => console.log(response),

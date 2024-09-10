@@ -11,4 +11,6 @@ export interface ArticleView {
   themeName: string;
   title: string;
   updateDate: Date;
+  likeCount: 0;
+  dislikeCount: 0;
 }

@@ -23,14 +23,14 @@
     <div class="article-actions">
       <div>
         <p-button
-          label="讚(10)"
+          [label]="'讚(' + NumToString(article.likeCount) + ')'"
           (onClick)="like()"
           styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
           [raised]="true"
           severity="success"
         ></p-button>
         <p-button
-          label="踩(2)"
+          [label]="'踩(' + NumToString(article.dislikeCount) + ')'"
           (onClick)="dislike()"
           styleClass="p-button-outlined p-button-danger action-btn mr-2 mb-2"
           [raised]="true"
@@ -69,14 +69,14 @@
       <div class="reply-actions">
         <div>
           <p-button
-            label="讚(10)"
+            [label]="'讚(' + NumToString(post.likeCount) + ')'"
             (onClick)="like()"
             styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
             [raised]="true"
             severity="success"
           ></p-button>
           <p-button
-            label="踩(2)"
+            [label]="'踩(' + NumToString(post.dislikeCount) + ')'"
             (onClick)="dislike()"
             styleClass="p-button-outlined p-button-danger  action-btn mr-2 mb-2"
             [raised]="true"

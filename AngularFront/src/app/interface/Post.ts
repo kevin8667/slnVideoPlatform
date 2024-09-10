@@ -6,5 +6,7 @@ export interface Post {
   postDate: Date;
   lock: boolean;
   postImage: '';
-  nickName:string;
+  nickName: string;
+  likeCount: 0;
+  dislikeCount: 0;
 }

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 using System.Text;
@@ -11,11 +14,11 @@ namespace VdbAPI.Controllers {
     public class FourmImgController : ControllerBase {
         // GET: api/<fourmImgController>
         private readonly IWebHostEnvironment _web;
-        private readonly IConfiguration _configuration;
+        private readonly string? _connection;
         public FourmImgController(IWebHostEnvironment environment,IConfiguration configuration)
         {
             _web = environment;
-            _configuration = configuration;
+            _connection = configuration.GetConnectionString("VideoDB");
         }
 
         [HttpPost]
@@ -62,6 +65,31 @@ namespace VdbAPI.Controllers {
             }
         }
 
+        [HttpGet("ChangePost")]
+        public IActionResult ChangePostCount()
+        {
+            string sql = @"update Post
+                          set LikeCount = 0,DislikeCount = 0
+                          where LikeCount is null or DislikeCount is null";
+            using var con = new SqlConnection(_connection);
+            con.Execute(sql);
+            sql = @"select * from Post where LikeCount is null or DislikeCount is null";
+            var result = con.Query(sql);
+            return Ok(result);
+        }
+
+        [HttpGet("ChangeArticle")]
+        public IActionResult ChangeArticleCount()
+        {
+            string sql = @" update Article
+                          set LikeCount = 0,DislikeCount = 0
+                          where LikeCount is null or DislikeCount is null";
+            using var con = new SqlConnection(_connection);
+            con.Execute(sql);
+            sql = @"select * from Article where LikeCount is null or DislikeCount is null";
+            var result = con.Query(sql);
+            return Ok(result);
+        }
         public class UserInfo {
             public IFormFile? UserPhoto {
                 get;
