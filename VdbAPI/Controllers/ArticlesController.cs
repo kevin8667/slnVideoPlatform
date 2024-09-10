@@ -54,7 +54,7 @@ namespace VdbAPI.Controllers {
                 });
             }
             if(!ModelState.IsValid) {
-                return BadRequest(ModelState);
+                return BadRequest("傳入值不符合規範" + ModelState);
             }
             try {
                 var article = new Article {
@@ -67,6 +67,8 @@ namespace VdbAPI.Controllers {
                     PostDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     ReplyCount = 0,
+                    LikeCount = 0,
+                    DislikeCount = 0,
                 };
 
 

@@ -55,7 +55,12 @@
   min-height: 72px;
   color: #333;
 }
-
+::ng-deep .ql-editor.reply-content{
+  padding: 1rem 0;
+}
+::ng-deep .ql-editor.article-content{
+  padding: 1rem 0;
+}
 .article-actions {
   margin-top: 0.5rem;
   display: flex;
@@ -115,8 +120,7 @@
   cursor: pointer; /* 鼠標指針 */
   display: flex; /* 使圖標和文字對齊 */
   align-items: center; /* 垂直對齊 */
-  top: 25vh;
-  right: 15vh;
+  margin-bottom: 1rem;
 }
 
 .editor-button {

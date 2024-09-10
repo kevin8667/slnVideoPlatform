@@ -23,9 +23,8 @@
 }
 
 .page {
-  display: flex;
-  justify-content: center; /* 確保頁碼區塊在中間 */
-  /* min-width: 630px; */
+  /* display: flex;
+  justify-content: center;  */
 }
 
 .d2 {
@@ -227,6 +226,7 @@
   display: flex;
   flex-direction: column;
   height: 75vh; /* 設定固定高度，方便顯示 */
+  min-height: 600px;
 }
 
 .chat-header {
@@ -286,6 +286,7 @@
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s;
+  white-space: nowrap
 }
 
 .chat-input button:hover {
@@ -314,7 +315,7 @@
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* 懸停時陰影加深 */
   background-color: #2d9cdb; /* 改變背景色來增強效果 */
 }
-/* 響應式手機板 */
+/* 響應式 */
 
 @media (max-width: 1368px) {
   .d1 {
@@ -333,10 +334,10 @@
   .d3 {
     display: none;
   }
-  .page {
-    min-width: none;
-  }
   .card {
     margin: 20px 0;
   }
+}
+.page ::ng-deep .p-paginator {
+  background: transparent;
 }

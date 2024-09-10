@@ -11,6 +11,27 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class ArticleComponent implements OnInit {
+  deletePost(postId: number) {
+    if (!confirm('確定要刪除嗎?')) return;
+    this.forumService.deletePost(postId).subscribe({
+      next: (res) => {
+        alert('已刪除成功');
+      },
+      error: (err) => console.error('刪除回文發生例外:', err),
+      complete: () => location.reload(),
+    });
+  }
+  deleteArticle(articleId: number) {
+    if (!confirm('確定要刪除嗎?')) return;
+
+    this.forumService.deleteArticle(articleId).subscribe({
+      next: () => {
+        alert('已刪除成功');
+      },
+      error: (err) => alert('刪除文章發生例外:' + err),
+      complete: () => location.reload(),
+    });
+  }
   NumToString(count: number) {
     return String(count);
   }
@@ -59,7 +80,7 @@ export class ArticleComponent implements OnInit {
     this.route.navigate(['/forum', 'new', 'post', articleId]);
   }
 
-  dislike(e:any) {
+  dislike(e: any) {
     this.messageService.add({
       severity: 'warn',
       summary: '注意',

@@ -82,23 +82,11 @@ export default class ForumService {
   }
   deleteArticle(id: number) {
     const api = `https://localhost:7193/api/Articles/${id}`;
-    return this.client
-      .delete(api)
-      .pipe(
-        catchError(() =>
-          throwError(() => new Error('服務異常:刪除單筆文章發生例外'))
-        )
-      );
+    return this.client.delete(api);
   }
   deletePost(id: number) {
     const api = `https://localhost:7193/api/Posts/${id}`;
-    return this.client
-      .delete<Post>(api)
-      .pipe(
-        catchError(() =>
-          throwError(() => new Error('服務異常:獲取單筆回文發生例外'))
-        )
-      );
+    return this.client.delete(api);
   }
   getSafe(data: string): SafeHtml {
     if (!data) return '此文章並無內容，請盡速修改!';

@@ -20,7 +20,37 @@ namespace VdbAPI.Controllers {
             _web = environment;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        [HttpGet("UPDATEReplyCount")]
+        public IActionResult UPDATEReplyCount()
+        {
+            try {
+                using var con = new SqlConnection(_connection);
+                // 查找 ReplyCount 不等於實際 Post 數量的文章，並更新它們
+                var sql = @"
+            UPDATE Article
+            SET ReplyCount = (
+                SELECT COUNT(*)
+                FROM Post
+                WHERE Post.ArticleID = Article.ArticleID
+            )
+            WHERE Article.ArticleID IN (
+                SELECT Article.ArticleID
+                FROM Article
+                JOIN Post 
+                ON Post.ArticleID = Article.ArticleID
+                GROUP BY Article.ArticleID, Article.ReplyCount
+                HAVING Article.ReplyCount != COUNT(Post.PostID)
+            );";
 
+                var result = con.Execute(sql);
+
+                return Ok(result > 0 ? $"{result} 篇文章的回覆數已更新" : "無需更新");
+            }
+            catch(Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
+
+            }
+        }
         [HttpPost]
         public IActionResult UploadUserPhoto(UserInfo user)
         {
@@ -65,31 +95,29 @@ namespace VdbAPI.Controllers {
             }
         }
 
-        [HttpGet("ChangePost")]
-        public IActionResult ChangePostCount()
+        [HttpGet("PostLikeNull")]
+        public IActionResult ChangePostLikeNull()
         {
             string sql = @"update Post
                           set LikeCount = 0,DislikeCount = 0
                           where LikeCount is null or DislikeCount is null";
             using var con = new SqlConnection(_connection);
-            con.Execute(sql);
-            sql = @"select * from Post where LikeCount is null or DislikeCount is null";
-            var result = con.Query(sql);
-            return Ok(result);
+            var result = con.Execute(sql);
+            return Ok(result > 0 ? $"{result} 篇回文的讚跟喜歡已更新" : "無需更新");
+
         }
 
-        [HttpGet("ChangeArticle")]
-        public IActionResult ChangeArticleCount()
+        [HttpGet("ArticleLikeNull")]
+        public IActionResult ChangeArticleLikeNull()
         {
             string sql = @" update Article
                           set LikeCount = 0,DislikeCount = 0
                           where LikeCount is null or DislikeCount is null";
             using var con = new SqlConnection(_connection);
-            con.Execute(sql);
-            sql = @"select * from Article where LikeCount is null or DislikeCount is null";
-            var result = con.Query(sql);
-            return Ok(result);
+            var result = con.Execute(sql);
+            return Ok(result > 0 ? $"{result} 篇文章的讚跟喜歡已更新" : "無需更新");
         }
+       
         public class UserInfo {
             public IFormFile? UserPhoto {
                 get;

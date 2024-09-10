@@ -39,6 +39,11 @@
       </div>
       <div>
         <p-button
+          styleClass="p-button-outlined p-button-danger action-btn editor-button mb-2"
+          label="刪除"
+          (onClick)="deleteArticle(article.articleId)"
+        ></p-button>
+        <p-button
           styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
           label="編輯"
           (onClick)="edit(article.articleId, 'article')"
@@ -76,7 +81,7 @@
             severity="success"
           ></p-button>
           <p-button
-            [label]="'踩(' + NumToString(post.dislikeCount) +')'"
+            [label]="'踩(' + NumToString(post.dislikeCount) + ')'"
             (onClick)="dislike(post.dislikeCount)"
             styleClass="p-button-outlined p-button-danger  action-btn mr-2 mb-2"
             [raised]="true"
@@ -84,6 +89,11 @@
           ></p-button>
         </div>
         <div class="right">
+          <p-button
+            styleClass="p-button-outlined p-button-danger action-btn editor-button mb-2"
+            label="刪除"
+            (onClick)="deletePost(post.postId)"
+          ></p-button>
           <p-button
             styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
             label="編輯"
