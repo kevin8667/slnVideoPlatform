@@ -11,5 +11,5 @@ public partial class PlanList
 
     public string PlanName { get; set; }
 
-    public virtual ICollection<ViedoPlanList> ViedoPlanLists { get; set; } = new List<ViedoPlanList>();
+    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
 }

@@ -65,11 +65,11 @@ public partial class VideoList
 
     public virtual SeriesList Series { get; set; }
 
+    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
+
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
 
     public virtual TypeList Type { get; set; }
 
     public virtual ICollection<VideoStreamingLinkList> VideoStreamingLinkLists { get; set; } = new List<VideoStreamingLinkList>();
-
-    public virtual ICollection<ViedoPlanList> ViedoPlanLists { get; set; } = new List<ViedoPlanList>();
 }

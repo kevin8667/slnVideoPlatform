@@ -24,13 +24,14 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     TestComponent,
     NavBarComponent,
     FooterComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,
