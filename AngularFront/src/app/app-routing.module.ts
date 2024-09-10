@@ -8,6 +8,11 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 const routes: Routes = [
   { path: '', component: AppComponent },
   {
+    path: 'ticket',
+    loadChildren: () =>
+      import('./Ticket/ticket.module').then((m) => m.TicketModule),
+  },
+  {
     path: 'forum',
     loadChildren: () =>
       import('./forum/forum.module').then((m) => m.ForumModule),
