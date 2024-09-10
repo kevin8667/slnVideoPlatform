@@ -5,20 +5,41 @@
 <div class="container flex">
   <!-- 左側篩選器 -->
   <div class="filters">
-    <div class="p-inputgroup" >
+    <div class="p-inputgroup" style="margin-bottom: 25px;">
       <input type="text" pInputText placeholder="Title" [(ngModel)]="inputName" />
-      <button type="button" pButton label="Search" (click)="searchVideoByFilters()" class="p-button-primary"></button>
+
     </div>
-    <div>
+    <div style="margin-bottom: 25px;">
       <p-chips [(ngModel)]="keyword" placeholder="keyword"></p-chips>
     </div>
-    <div class="flex justify-content-center">
+    <div style="margin-bottom: 25px;">
       <p-dropdown [options]="types" [(ngModel)]="selectedType" optionLabel="typeName"
                   [showClear]="true" placeholder="Select a Type"
                   (onChange)="searchVideoByFilters()"></p-dropdown>
     </div>
+    <div style="margin-bottom: 25px;">
+      <!-- 改成MultiSelect -->
+      <!-- <p-autoComplete [(ngModel)]="selectedGenres" [suggestions]="filteredGenres" (completeMethod)="filterGenre($event)" [multiple]="true" [dropdown]="true" placeholder="Genre Name" field="genreName" ></p-autoComplete> -->
+      <!-- <span class="p-float-label" style="width: 250px;">
+      <p-multiSelect inputId="float-label" [options]="genres" [(ngModel)]="selectedGenres"  optionLabel="genreName" display="chip"  styleClass="custom-multiselect" [showClear]="true">
+      </p-multiSelect>
+      <label for="float-label">影片類型</label>
+      </span> -->
+      <div class="genre-button-group">
+        <h3>類型</h3>
+        <div class="genre-buttons">
+          <button
+            *ngFor="let genre of genres"
+            (click)="toggleGenreSelection(genre.genreName)"
+            [ngClass]="{'selected': isSelected(genre.genreName)}">
+            {{ genre.genreName }}
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div>
-      <p-autoComplete [(ngModel)]="selectedGenres" [suggestions]="filteredGenres" (completeMethod)="filterGenre($event)" [multiple]="true" [dropdown]="true" placeholder="Genre Name" field="genreName" ></p-autoComplete>
+      <button type="button" pButton label="Search" (click)="searchVideoByFilters()" class="p-button-primary"></button>
     </div>
   </div>
 
@@ -31,8 +52,8 @@
                     <a [routerLink]='"/video-db/details/"+video.videoId' style="text-decoration: none;">
                     <div class="p-4 border-1 surface-border surface-card border-round movie-card">
                         <div class="image-container">
-                            <img class="thumbnail" 
-                                 [src]="video.thumbnailPath" 
+                            <img class="thumbnail"
+                                 [src]="video.thumbnailPath"
                                  [alt]="video.videoName" />
                         </div>
                         <div class="flex flex-column align-items-center gap-3 py-4">

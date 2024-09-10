@@ -41,11 +41,12 @@
   .card-body {
     display: flex;
     flex-direction: row;
-    justify-content: space-between; /* 保持圖片和文字在一行 */
-    align-items: center;
-    padding: 0 400px; /* 調整左右邊距，使內容更集中 */
+    justify-content: center; /* 確保內容水平置中 */
+    align-items: center; /* 垂直置中 */
     position: relative;
-    z-index: 2; /* 確保內容層在背景和半透明層之上 */
+    z-index: 2;
+    gap: 20px; /* 圖片和文字之間的間距 */
+    width: 100%; /* 設置寬度為100%，避免脫離父容器 */
   }
 
   .image-container {
@@ -70,6 +71,7 @@
   }
   .text-content {
     flex: 1; /* 讓文字內容占據剩餘的空間 */
+    max-width: 500px; /* 限制文字內容區塊的最大寬度，避免過於寬大 */
   }
 
 .button {
@@ -145,7 +147,7 @@ h2
 .actor-card {
   padding: 10px;
   text-align: center;
-  width: 150px; 
+  width: 150px;
 }
 
 p-carousel {
@@ -188,7 +190,7 @@ p-carousel {
 }
 
 /* 修正左右箭頭按鈕的大小和位置 */
-.p-carousel .p-carousel-prev, 
+.p-carousel .p-carousel-prev,
 .p-carousel .p-carousel-next {
   top: 50%;
   transform: translateY(-50%);

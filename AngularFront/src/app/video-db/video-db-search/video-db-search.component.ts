@@ -45,9 +45,9 @@ export class VideoDbSearchComponent implements OnInit {
   types: VideoType[] | undefined;
   selectedType: VideoType | undefined;
 
-  genres :Genre[] |undefined;
+  genres :Genre[] =[];
   selectedGenres : Genre[] =[];
-  filteredGenres : any[] = [];
+  urlGenre:string[] |null = null;
 
   videoName: string | null = null;
   typeId: number | null = null;
@@ -60,7 +60,7 @@ export class VideoDbSearchComponent implements OnInit {
   pageSize: number = 15;
 
   totalRecords:number=0;
-  
+
 
   videos!: Video[];
 
@@ -92,25 +92,22 @@ export class VideoDbSearchComponent implements OnInit {
 
       // 解析逗號分隔的 genreNames 字符串為數組
       this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : null;
-      console.log(this.genreNames);
+      console.log("類型："+this.genreNames);
+      this.urlGenre = this.genreNames;
 
       this.seriesName = params['seriesName'] || null;
       this.seasonName = params['seasonName'] || null;
 
+
+           // 如果有任何查詢參數存在，則執行搜索
       if (this.videoName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || this.seriesName || this.seasonName) {
-
-        if(this.genreNames !== null)
-          {
-            this.selectedGenres = [{genreId:0, genreName:this.genreNames[0]}];
-
-            this.videoDbService.getGenreIdWithName(this.genreNames[0]).subscribe((data)=>this.selectedGenres[0].genreId=data);
-          }
-          
-
-          this.searchVideos();
+        // 執行搜索操作
+        this.searchVideos();
       }
     });
   }
+
+
 
 
   searchVideoByFilters() {
@@ -130,7 +127,7 @@ export class VideoDbSearchComponent implements OnInit {
       this.videoName,
       this.typeId,
       this.summary,
-      genreNames,
+      this.urlGenre,
       this.seriesName,
       this.seasonName
     ).subscribe((response) => {
@@ -138,30 +135,5 @@ export class VideoDbSearchComponent implements OnInit {
       this.totalRecords = this.videos.length;
       console.log(this.videos);
     });
-  }
-
-  filterGenre(event: AutoCompleteCompleteEvent) {
-    let filtered: Genre[] = [];
-    let query = event.query;
-
-    if (this.genres) {
-      for (let i = 0; i < this.genres.length; i++) {
-        let genre = this.genres[i];
-        if (genre.genreName.indexOf(query) === 0) {
-          filtered.push(genre);
-        }
-      }
-    }
-
-    this.filteredGenres = filtered;
-  }
-
-  handleGenreSelection(genre: Genre) {
-    if (this.genreNames) {
-      this.genreNames.push(genre.genreName);
-    } else {
-      this.genreNames = [genre.genreName];
-    }
-    this.searchVideos();
   }
 }

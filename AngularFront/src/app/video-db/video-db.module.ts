@@ -23,6 +23,7 @@ import { ImageModule } from 'primeng/image';
 import { GalleriaModule } from 'primeng/galleria';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { CarouselModule } from 'primeng/carousel';
     ImageModule,
     GalleriaModule,
     AutoCompleteModule,
-    CarouselModule
+    CarouselModule,
+    MultiSelectModule
   ]
 })
 export class VideoDbModule { }
