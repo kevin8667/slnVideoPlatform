@@ -1,9 +1,9 @@
-import { ArticleView } from './../../interface/ArticleView';
+import { ArticleView } from '../../interfaces/forumnterface/ArticleView';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
-import { ForumPagingDTO } from 'src/app/interface/ForumPagingDTO';
-import { Theme } from 'src/app/interface/Theme';
+import { ForumPagingDTO } from 'src/app/interfaces/forumnterface/ForumPagingDTO';
+import { Theme } from 'src/app/interfaces/forumnterface/Theme';
 import ForumService from 'src/app/service/forum.service';
 
 @Component({

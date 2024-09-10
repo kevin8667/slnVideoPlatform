@@ -1,7 +1,7 @@
-import { Post } from './../../interface/Post';
+import { Post } from '../../interfaces/forumnterface/Post';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ArticleView } from 'src/app/interface/ArticleView';
+import { ArticleView } from 'src/app/interfaces/forumnterface/ArticleView';
 import ForumService from 'src/app/service/forum.service';
 import { MessageService } from 'primeng/api';
 @Component({

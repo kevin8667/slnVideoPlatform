@@ -2,9 +2,9 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QuillEditorComponent } from 'ngx-quill';
-import { ArticleView } from 'src/app/interface/ArticleView';
-import { Post } from 'src/app/interface/Post';
-import { Theme } from 'src/app/interface/Theme';
+import { ArticleView } from 'src/app/interfaces/forumnterface/ArticleView';
+import { Post } from 'src/app/interfaces/forumnterface/Post';
+import { Theme } from 'src/app/interfaces/forumnterface/Theme';
 import ForumService from 'src/app/service/forum.service';
 
 @Component({

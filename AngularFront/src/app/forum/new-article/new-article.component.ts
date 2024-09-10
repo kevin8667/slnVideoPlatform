@@ -1,4 +1,4 @@
-import { Theme } from './../../interface/Theme';
+import { Theme } from '../../interfaces/forumnterface/Theme';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import ForumService from 'src/app/service/forum.service';
