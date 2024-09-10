@@ -13,7 +13,7 @@ public partial class MemberPlayList
 
     public int PlayListId { get; set; }
 
-    public DateTime AddedOtherMemberPlayListAt { get; set; }
+    public DateTime? AddedOtherMemberPlayListAt { get; set; }
 
     public virtual MemberInfo Member { get; set; }
 

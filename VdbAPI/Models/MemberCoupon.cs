@@ -40,7 +40,7 @@ public partial class MemberCoupon
     /// <summary>
     /// 得到優惠券時間
     /// </summary>
-    public DateTime? GetTime { get; set; }
+    public DateTime GetTime { get; set; }
 
     /// <summary>
     /// 使用類型(線上電影票/線下電影票)
