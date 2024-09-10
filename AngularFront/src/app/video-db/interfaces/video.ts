@@ -13,7 +13,7 @@ export interface Video
     releaseDate:Date;
     rating:number;
     popularity:number;
-    thumbnailPath:string;//
+    thumbnailPath:string;
     lang:string;
     summary:string;
     views:number;
