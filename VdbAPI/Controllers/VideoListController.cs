@@ -117,8 +117,8 @@ namespace VdbAPI.Controllers
                     SeasonName = v.Season.SeasonName,
                     MainGenreId = v.MainGenreId,
                     MainGenreName = v.MainGenre.GenreName,
-                    //ThumbnailPath = v.ThumbnailPath,
-                    //Bgpath = v.Bgpath
+                    ThumbnailPath = v.ThumbnailPath,
+                    Bgpath = v.Bgpath
                 }).ToListAsync();
 
             return Ok(videoListDTOs);

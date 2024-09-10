@@ -7,6 +7,7 @@ body{
   background-color: #f5f9f9;
   margin: 0;
 }
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -63,3 +64,4 @@ a:not([href]):not([class]):hover {
   color: inherit;
   text-decoration: none;
 }
+

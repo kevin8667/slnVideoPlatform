@@ -99,6 +99,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[MemberCreatedPlayList]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[MemberInfo]",
          "ObjectType": 0
       },

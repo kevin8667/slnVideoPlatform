@@ -1,0 +1,140 @@
+/* 主要按鈕樣式 */
+.ticket-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #17A2B8;
+  color: #ffffff; /* 按鈕文字改為白色 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* 添加過渡效果 */
+}
+
+.ticket-btn:hover {
+  background-color: #138496;
+  transform: scale(1.05); /* 增加縮放效果 */
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #17A2B8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+/* 票選擇容器樣式 */
+.ticket-selection-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+/* 電影資訊樣式 */
+.movie-details {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.movie-poster img {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.movie-info {
+  flex: 1;
+  color: #343a40;
+}
+
+.movie-info h2 {
+  color: #17A2B8; /* 主色調 */
+  margin-bottom: 10px;
+}
+
+.movie-info p {
+  color: #6C757D; /* 次要色調 */
+  margin-bottom: 10px;
+}
+
+/* 票選擇部分樣式 */
+.ticket-selection {
+  margin-bottom: 20px;
+}
+
+.ticket-selection label {
+  font-weight: bold;
+}
+
+.ticket-selection select {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* 將下拉式選單背景設為白色 */
+  color: #343a40; /* 字體顏色 */
+}
+
+.ticket-options {
+  margin-top: 20px;
+}
+
+.ticket-option {
+  margin-bottom: 10px;
+}
+
+.ticket-option label {
+  color: #17A2B8;
+}
+
+.ticket-option select {
+  display: inline-block;
+  background-color: #ffffff; /* 下拉式選單背景設為白色 */
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  cursor: pointer;
+}
+
+.ticket-option select:hover {
+  background-color: #ffffff;
+  color: #343a40;
+}
+
+.ticket-option:first-child select {
+  margin-left: 22px;
+}
+
+/* 總計價格樣式 */
+.ticket-selection .total-price {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #131414 !important; /* 強制使用黑色 */
+}
+
+h4 {
+  color: #131414;
+}
+h3 {
+  color: #131414;
+}
+
+
+/* 新增：將按鈕置中的樣式 */
+.btn-container {
+  text-align: center; /* 讓按鈕居中 */
+  margin-top: 20px; /* 與其他內容保持適當距離 */
+}
