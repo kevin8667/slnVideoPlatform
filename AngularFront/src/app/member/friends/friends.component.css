@@ -1,0 +1,78 @@
+h1,h2,h3,h4,h5,label,div {
+  color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+a {
+  cursor: pointer;
+}
+
+.card-container {
+  flex-wrap:nowrap; /* 允許換行 */
+}
+
+.card-wrapper {
+  margin: 10px; /* 設定卡片之間的間距 */
+  box-sizing: border-box; /* 包含內邊距和邊框 */
+}
+
+.add-friend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  max-height: 125px;
+  max-width: 331px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.add-friend-text {
+  color: #333; /* 按鈕顏色 */
+  font-size: 32px;
+}
+
+.card-wrapper img {
+  width: 100%; /* 使圖片寬度填滿容器 */
+  height: 200px; /* 設定固定高度 */
+  object-fit: cover; /* 保持圖片比例，並填滿容器 */
+}
+
+
+.profile-header {
+  display: flex;
+  align-items: flex-end; /* 垂直對齊底部 */
+  gap: 10px; /* 圖片和文字之間的間距 */
+}
+
+.rounded-circle {
+  width: 200px; /* 或者你需要的其他尺寸 */
+  height: 200px; /* 或者你需要的其他尺寸 */
+}
+
+.profile-info {
+  display: flex;
+  align-items: flex-end; /* 垂直對齊底部 */
+}
+
+.crown {
+  width: 25px;
+  margin-right: 5px; /* 圖標和文字之間的間距 */
+  margin-bottom: 10px;
+}
+
+.profile-info label {
+  font-size: 1rem; /* 調整文字大小 */
+}
+
+
+.profile-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+:host ::ng-deep .p-card-title {
+  font-size: 1.2rem; /* 设置你想要的字体大小 */
+}

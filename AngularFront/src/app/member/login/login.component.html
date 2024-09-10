@@ -1,0 +1,21 @@
+<div class="container">
+  <h1>會員登入</h1>
+
+  <span class="p-float-label">
+    <input type="text" pInputText id="email" [(ngModel)]="email" />
+    <label for="email">電子信箱</label>
+  </span>
+  <br>
+  <span class="p-float-label">
+    <input type="password" pInputText id="pwd" [(ngModel)]="pwd" />
+    <label for="pwd">密碼</label>
+  </span>
+
+  <!-- 添加 reCAPTCHA v2 的元素 -->
+  <div id="recaptcha-container" class="g-recaptcha" [attr.data-sitekey]="siteKey"></div>
+  <!-- <button (click)="login()">Sign in with Google</button> -->
+  <button (click)="onLogin()">登入</button>
+  <button (click)="onForgetpwd()">忘記密碼</button>
+  <button (click)="onregister()">註冊</button>
+
+</div>

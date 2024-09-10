@@ -6,6 +6,7 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 const routes: Routes = [
+  { path: 'login', loadChildren: () => import('./member/member.module').then(m => m.MemberModule)},
   { path: '', component: AppComponent },
   {
     path: 'forum',
