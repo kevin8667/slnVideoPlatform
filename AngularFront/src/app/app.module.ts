@@ -1,3 +1,4 @@
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
@@ -24,6 +25,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +34,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     NavBarComponent,
     FooterComponent,
     ErrorPageComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule,

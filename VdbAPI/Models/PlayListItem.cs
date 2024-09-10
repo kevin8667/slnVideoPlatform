@@ -15,7 +15,7 @@ public partial class PlayListItem
 
     public int VideoPosition { get; set; }
 
-    public DateTime VideoAddedAt { get; set; }
+    public DateTime? VideoAddedAt { get; set; }
 
     public virtual PlayList PlayList { get; set; }
 
