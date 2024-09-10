@@ -57,6 +57,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<MemberCoupon> MemberCoupons { get; set; }
 
+    public virtual DbSet<MemberCreatedPlayList> MemberCreatedPlayLists { get; set; }
+
     public virtual DbSet<MemberInfo> MemberInfos { get; set; }
 
     public virtual DbSet<MemberNotice> MemberNotices { get; set; }
@@ -611,6 +613,26 @@ public partial class VideoDBContext : DbContext
                 .HasConstraintName("FK_MemberCoupon_MemberInfo");
         });
 
+        modelBuilder.Entity<MemberCreatedPlayList>(entity =>
+        {
+            entity.ToTable("MemberCreatedPlayList");
+
+            entity.Property(e => e.MemberCreatedPlayListId).HasColumnName("MemberCreatedPlayListID");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.PlayListId).HasColumnName("PlayListID");
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.MemberCreatedPlayLists)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_MemberCreatedPlayList_MemberInfo");
+
+            entity.HasOne(d => d.PlayList).WithMany(p => p.MemberCreatedPlayLists)
+                .HasForeignKey(d => d.PlayListId)
+                .HasConstraintName("FK_MemberCreatedPlayList_PlayList");
+        });
+
         modelBuilder.Entity<MemberInfo>(entity =>
         {
             entity.HasKey(e => e.MemberId).HasName("PK_MemberInformation");
@@ -785,6 +807,7 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_OrderDetail_Order");
 
             entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)

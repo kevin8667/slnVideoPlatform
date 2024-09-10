@@ -8,6 +8,11 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 const routes: Routes = [
   { path: '', component: AppComponent },
   {
+    path: 'playlist',
+    loadChildren: () =>
+      import('./playlist/playlist.module').then((m) => m.PlaylistModule),
+  },
+  {
     path: 'ticket',
     loadChildren: () =>
       import('./Ticket/ticket.module').then((m) => m.TicketModule),
@@ -36,5 +41,6 @@ const routes: Routes = [
     providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   })
 export class AppRoutingModule { }
+
 
 

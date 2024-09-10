@@ -1,0 +1,52 @@
+<p-paginator
+  [rows]="rows"
+  [totalRecords]="playlists.length"
+  [rowsPerPageOptions]="[1, 5, 10, 15, 20]"
+  (onPageChange)="paginate($event)">
+</p-paginator>
+
+<a routerLink="member">會員頁面</a>&nbsp;<a routerLink="item">清單內容</a>
+&nbsp;<a routerLink="add">新增頁面</a>
+
+<div class="grid-view">
+  <div *ngFor="let playlist of paginatedPlaylists" class="playlist-card" [attr.data-id]="playlist.playListId" (click)="onCardClick(playlist.playListId??0)">
+    <p-card
+      [header]="playlist.playListName"
+      [subheader]="playlist.playListDescription"
+      class="custom-card">
+
+      <ng-template pTemplate="content">
+        <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
+      </ng-template>
+
+      <div class="playlist-info">
+        <div class="info-row">
+          <span class="info-item">
+            <i class="pi pi-eye"></i> {{ playlist.viewCount }}
+          </span>
+          <span class="info-item">
+            <i class="pi pi-plus-circle"></i> {{ playlist.addedCount }}
+          </span>
+          <span class="info-item">
+            <i class="pi pi-share-alt"></i> {{ playlist.sharedCount }}
+          </span>
+          <span class="info-item like-item" (click)="incrementLike(playlist); $event.stopPropagation()">
+            <i class="pi pi-heart"></i> {{ playlist.likeCount }}
+            <span *ngIf="playlist.showLikeEffect" class="increment-effect">+1</span>
+          </span>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+<p-dialog [(visible)]="displayModal" [modal]="true" header="播放清單內容" (onHide)="closeModal()">
+  <div cdkDropList (cdkDropListDropped)="drop($event)">
+    <app-playlistitem *ngFor="let item of selectedPlaylistItems; let i = index"
+                      [item]="item"
+                      (remove)="removeItem(item)"
+                      cdkDrag>
+    </app-playlistitem>
+  </div>
+</p-dialog>
+

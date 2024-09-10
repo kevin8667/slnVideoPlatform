@@ -6,19 +6,17 @@ using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
-public partial class PlayListCollaborator
+public partial class MemberCreatedPlayList
 {
-    public int CollaboratorId { get; set; }
-
-    public int PlayListId { get; set; }
+    public int MemberCreatedPlayListId { get; set; }
 
     public int MemberId { get; set; }
 
-    public DateTime? CollaboratorJoinedAt { get; set; }
+    public int PlayListId { get; set; }
 
-    public string CollaboratorActionType { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
-    public DateTime? ActionTimestamp { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public virtual MemberInfo Member { get; set; }
     [JsonIgnore]

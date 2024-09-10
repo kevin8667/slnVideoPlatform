@@ -114,6 +114,8 @@ public partial class MemberInfo
 
     public virtual ICollection<MemberCoupon> MemberCoupons { get; set; } = new List<MemberCoupon>();
 
+    public virtual ICollection<MemberCreatedPlayList> MemberCreatedPlayLists { get; set; } = new List<MemberCreatedPlayList>();
+
     public virtual ICollection<MemberNotice> MemberNotices { get; set; } = new List<MemberNotice>();
 
     public virtual ICollection<MemberPlayList> MemberPlayLists { get; set; } = new List<MemberPlayList>();

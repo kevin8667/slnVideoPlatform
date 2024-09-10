@@ -1,6 +1,9 @@
 ﻿using Backstage.Models;
 using Backstage.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backstage.Controllers
@@ -8,10 +11,12 @@ namespace Backstage.Controllers
     public class PlaylistController : Controller
     {
         private readonly VideoDBContext _context;
+        private readonly ICompositeViewEngine _viewEngine;
 
-        public PlaylistController(VideoDBContext context)
+        public PlaylistController(VideoDBContext context, ICompositeViewEngine viewEngine)
         {
             _context = context;
+            _viewEngine = viewEngine;
         }
 
         // GET: PlayList/Index
@@ -31,7 +36,6 @@ namespace Backstage.Controllers
         {
             var query = _context.PlayLists.AsQueryable();
 
-            // 排序邏輯
             switch (sortBy)
             {
                 case "PlayListName":
@@ -45,23 +49,51 @@ namespace Backstage.Controllers
                     query = sortOrder == "asc" ? query.OrderBy(p => p.PlayListId) : query.OrderByDescending(p => p.PlayListId);
                     break;
             }
-
-            // 計算總項目數並進行分頁
+                        
             var totalItems = query.Count();
             var playlists = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-            // 構建視圖模型
+            
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+                        
             var viewModel = new PlaylistViewModel
             {
                 PlayLists = playlists,
                 CurrentPage = page,
-                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize),
+                TotalPages = totalPages,
                 SortOrder = sortOrder,
                 SortBy = sortBy,
                 PageSize = pageSize
             };
 
-            return PartialView("_PlayListPartial", viewModel.PlayLists); // 傳遞 PlayLists 屬性
+            var html = RenderPartialViewToString("_PlayListPartial", viewModel.PlayLists).Result;
+
+            return Json(new { html = html, totalPages = totalPages });
+        }
+
+        private async Task<string> RenderPartialViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = _viewEngine.FindView(ControllerContext, viewName, false);
+
+                if (viewResult.View == null)
+                {
+                    throw new ArgumentNullException($"{viewName} does not match any available view");
+                }
+
+                var viewContext = new ViewContext(
+                    ControllerContext,
+                    viewResult.View,
+                    ViewData,
+                    TempData,
+                    sw,
+                    new HtmlHelperOptions()
+                );
+
+                await viewResult.View.RenderAsync(viewContext);
+                return sw.ToString();
+            }
         }
 
         [HttpGet]
@@ -72,19 +104,8 @@ namespace Backstage.Controllers
                                             .ToList();
 
             return PartialView("_PlayListPartial", filteredPlaylists);
-        }
+        }        
 
-        // GET: PlayList/Details/5
-        public async Task<IActionResult> PlayListDetails(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var playList = await _context.PlayLists
-                .FirstOrDefaultAsync(m => m.PlayListId == id);
-            if (playList == null) return NotFound();
-
-            return PartialView("_PlayListDetailsPartial", playList);
-        }
         private async Task SaveUploadedFileAsync(PlayList playList)
         {
             if (Request.Form.Files["ShowImage"] != null)
@@ -110,6 +131,18 @@ namespace Backstage.Controllers
             {
                 return File("~/img/noimageooo.jpg", "image/jpeg");
             }
+        }
+
+        // GET: PlayList/Details/5
+        public async Task<IActionResult> PlayListDetails(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var playList = await _context.PlayLists
+                .FirstOrDefaultAsync(m => m.PlayListId == id);
+            if (playList == null) return NotFound();
+
+            return PartialView("_PlayListDetailsPartial", playList);
         }
 
         // GET: PlayList/Create
@@ -164,10 +197,10 @@ namespace Backstage.Controllers
                     }
                     else
                     {
-                        playList.ShowImage = existingPlayList.ShowImage; // 保留原圖片
+                        playList.ShowImage = existingPlayList.ShowImage;
                     }
 
-                    _context.Entry(existingPlayList).State = EntityState.Detached; // Detach original entity to prevent conflict
+                    _context.Entry(existingPlayList).State = EntityState.Detached;
                     _context.Update(playList);
                     await _context.SaveChangesAsync();
 
@@ -196,8 +229,7 @@ namespace Backstage.Controllers
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
-                {
-                    // 在發生異常時返回錯誤訊息
+                {                    
                     return Json(new { success = false, message = ex.Message });
                 }
             }
@@ -477,6 +509,7 @@ namespace Backstage.Controllers
             }
             return PartialView("_PlayListCollaboratorEditPartial", playListCollaborator);
         }
+
         public async Task<IActionResult> PlayListCollaboratorDelete(int? id)
         {
             if (id == null) return NotFound();
