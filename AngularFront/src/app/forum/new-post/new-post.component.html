@@ -1,0 +1,59 @@
+<div class="newContainer">
+  <aside class="aside">
+    <button class="imgBtn"><span class="icon"></span>插入圖片</button>
+    <button class="imgBtn"><span class="icon"></span>插入貼圖</button>
+    <button class="imgBtn"><span class="icon"></span>插入表情</button>
+  </aside>
+  <main class="mainSection">
+    <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+      <!-- 標題 -->
+      <h2>回覆文章</h2>
+      <div class="form-group">
+        <label for="title">RE: </label>
+      </div>
+      <!-- 內文 -->
+      <div class="form-group">
+        <quill-editor
+          id="content"
+          formControlName="content"
+          placeholder="輸入文章內文"
+          [modules]="{
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{ header: 1 }, { header: 2 }],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              [{ size: ['small', false, 'large', 'huge'] }],
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              ['link', 'video'],
+              [{ color: [] }, { background: [] }],
+              ['clean']
+            ]
+          }"
+          [theme]="'snow'"
+          class="quill-editor"
+        ></quill-editor>
+        <div
+          *ngIf="
+            articleForm.get('content').invalid &&
+            articleForm.get('content').touched
+          "
+          class="error-message"
+        >
+          請填入您的內文
+        </div>
+      </div>
+
+      <!-- 提交按鈕 -->
+      <div class="form-group">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="articleForm.invalid"
+        >
+          發表回覆
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

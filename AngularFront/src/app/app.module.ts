@@ -22,7 +22,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
-
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -30,13 +30,7 @@ import { FooterComponent } from './footer/footer.component';
     TestComponent,
     NavBarComponent,
     FooterComponent,
-    // 這些組件將被移除並轉移到 VideoDBModule
-    // VideoDBFrontPageComponent,
-    // VideoDetailComponent,
-    // VideoDbSearchComponent,
-    // SeasonListComponent,
-    // EpisodeListComponent,
-    // PersonDetailComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
@@ -58,8 +52,9 @@ import { FooterComponent } from './footer/footer.component';
     ImageModule,
     GalleriaModule,
     AutoCompleteModule,
+
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

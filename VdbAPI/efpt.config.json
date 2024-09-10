@@ -217,6 +217,10 @@
       {
          "Name": "[dbo].[ViedoPlanList]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ArticleView]",
+         "ObjectType": 3
       }
    ],
    "UiHint": null,

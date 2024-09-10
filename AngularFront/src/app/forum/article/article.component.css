@@ -1,0 +1,129 @@
+/* styles.css */
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.reply-button i {
+  margin-right: 8px; /* 圖標與文字間距 */
+}
+
+.article {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.article-header {
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.article-title {
+  font-size: 1.75rem;
+  color: #007bff;
+  margin: 0;
+}
+
+.article-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+.article-author {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: bold;
+  padding-right: 30px;
+}
+
+.article-date {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.article-content {
+  font-size: 1rem;
+  min-height: 72px;
+  color: #333;
+}
+
+.article-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.reply {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.reply-header {
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.reply-author {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.reply-date {
+  font-size: 0.875rem;
+  color: #666;
+  margin-left: 0.5rem;
+}
+
+.reply-content {
+  font-size: 1rem;
+  color: #333;
+  min-height: 72px;
+}
+
+.reply-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.action-btn {
+  font-size: 0.875rem;
+}
+
+.reply-button {
+  background-color: #007bff; /* 按鈕背景色 */
+  color: white; /* 按鈕文字顏色 */
+  border: none; /* 取消邊框 */
+  border-radius: 4px; /* 邊框圓角 */
+  padding: 10px 20px; /* 內邊距 */
+  font-size: 14px; /* 字體大小 */
+  cursor: pointer; /* 鼠標指針 */
+  display: flex; /* 使圖標和文字對齊 */
+  align-items: center; /* 垂直對齊 */
+  top: 25vh;
+  right: 15vh;
+}
+
+.editor-button {
+  margin: 1rem; /* 添加邊距以避免緊貼邊緣 */
+  padding: 10px 20px; /* 內邊距 */
+  font-size: 14px; /* 字體大小 */
+  cursor: pointer; /* 鼠標指針 */
+  display: flex; /* 使圖標和文字對齊 */
+  align-items: center; /* 垂直對齊 */
+}

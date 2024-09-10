@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { VideoDBFrontPageComponent } from './video-db/video-dbfront-page/video-dbfront-page.component';
 import { AppComponent } from './app.component';
-// import { VideoDetailComponent } from './video-db/video-detail/video-detail.component';
-// import { VideoDbSearchComponent } from './video-db/video-db-search/video-db-search.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 const routes: Routes = [
+  { path: '', component: AppComponent },
+  {
+    path: 'forum',
+    loadChildren: () =>
+      import('./forum/forum.module').then((m) => m.ForumModule),
+  },
   { path: 'video-db', loadChildren: () => import('./video-db/video-db.module').then(m => m.VideoDbModule) },
-    
-    { path:"**", component: AppComponent}
+
+  { path: 'error', component: ErrorPageComponent },
+  { path: '**', redirectTo: '/error' },
   ];
 
   @NgModule({
@@ -16,3 +21,4 @@ const routes: Routes = [
     exports: [RouterModule]
   })
 export class AppRoutingModule { }
+

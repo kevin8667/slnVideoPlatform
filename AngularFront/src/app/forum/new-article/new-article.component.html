@@ -1,0 +1,87 @@
+<div class="newContainer">
+  <aside class="aside">
+    <button class="imgBtn"><span class="icon"></span>插入圖片</button>
+    <button class="imgBtn"><span class="icon"></span>插入貼圖</button>
+    <button class="imgBtn"><span class="icon"></span>插入表情</button>
+  </aside>
+  <main class="mainSection">
+    <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+      <!-- 標題 -->
+      <h2>發表文章</h2>
+      <div class="">
+        <div class="themeTag1">
+          <p-dropdown
+            formControlName="theme"
+            [options]="themeTag"
+            optionLabel="themeName"
+            optionValue="themeId"
+            placeholder="請選擇主題"
+            [showClear]="true"
+          />
+        </div>
+        <div class="titleInput">
+            <!-- 分類 -->
+            <input
+              pInputText
+              formControlName="title"
+              pAutoFocus
+              [autofocus]="true"
+              placeholder="輸入文章標題"
+            />
+            <div class="error-message"
+              *ngIf="
+                articleForm.get('title').invalid &&
+                articleForm.get('title').touched
+              "
+            >
+              文章標題請勿空白
+            </div>
+
+        </div>
+      </div>
+
+      <!-- 內文 -->
+      <div class="contentSection">
+        <quill-editor
+          formControlName="content"
+          placeholder="輸入文章內文"
+          [modules]="{
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{ header: 1 }, { header: 2 }],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              [{ size: ['small', false, 'large', 'huge'] }],
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              ['link', 'video'],
+              [{ color: [] }, { background: [] }],
+              ['clean']
+            ]
+          }"
+          [theme]="'snow'"
+          class="quill-editor"
+        ></quill-editor>
+        <div
+          *ngIf="
+            articleForm.get('content').invalid &&
+            articleForm.get('content').touched
+          "
+          class="error-message"
+        >
+          請填入您的內文
+        </div>
+      </div>
+
+      <!-- 提交按鈕 -->
+      <div class="">
+        <button class=""
+          type="submit"
+
+          [disabled]="articleForm.invalid"
+        >
+          發表文章
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

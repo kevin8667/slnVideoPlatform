@@ -17,6 +17,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<Article> Articles { get; set; }
 
+    public virtual DbSet<ArticleView> ArticleViews { get; set; }
+
     public virtual DbSet<BlackList> BlackLists { get; set; }
 
     public virtual DbSet<CastList> CastLists { get; set; }
@@ -117,8 +119,6 @@ public partial class VideoDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
-
         modelBuilder.Entity<ActorList>(entity =>
         {
             entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
@@ -143,6 +143,8 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
+            entity.Property(e => e.DislikeCount).HasDefaultValue(0);
+            entity.Property(e => e.LikeCount).HasDefaultValue(0);
             entity.Property(e => e.Lock).HasDefaultValue(true);
             entity.Property(e => e.PostDate)
                 .HasDefaultValueSql("(getdate())")
@@ -163,6 +165,26 @@ public partial class VideoDBContext : DbContext
                 .HasForeignKey(d => d.ThemeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Article_Theme");
+        });
+
+        modelBuilder.Entity<ArticleView>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("ArticleView");
+
+            entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
+            entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
+            entity.Property(e => e.NickName)
+                .IsRequired()
+                .HasMaxLength(10);
+            entity.Property(e => e.PostDate).HasColumnType("datetime");
+            entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
+            entity.Property(e => e.ThemeName)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<BlackList>(entity =>
@@ -887,6 +909,8 @@ public partial class VideoDBContext : DbContext
                 .ValueGeneratedOnAdd()
                 .HasColumnName("PostID");
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
+            entity.Property(e => e.DislikeCount).HasDefaultValue(0);
+            entity.Property(e => e.LikeCount).HasDefaultValue(0);
             entity.Property(e => e.Lock).HasDefaultValue(true);
             entity.Property(e => e.PostContent).IsRequired();
             entity.Property(e => e.PostDate)
