@@ -11,7 +11,9 @@ public partial class DirectorList
 
     public string DirectorName { get; set; }
 
-    public byte[] DirectorImage { get; set; }
+    public string DirectorDescription { get; set; }
+
+    public string DirectorImgPath { get; set; }
 
     public virtual ICollection<DirectorForVideoList> DirectorForVideoLists { get; set; } = new List<DirectorForVideoList>();
 }

@@ -1,0 +1,174 @@
+<div class="custom-card"  [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
+  <div class="card-body">
+    <div class="image-container">
+      <p-image
+        [src]="video.thumbnailPath"
+        alt="{{ video.videoName }}"
+        class="video-image"
+        [preview]="true"
+        width="300px"
+        height="450px"
+      ></p-image>
+      <br>
+      <div class="button-container">
+        <a
+          class="button"
+          style="text-decoration-line: none;"
+          pButton
+          pRipple
+          [href]="video.trailerUrl"
+          target="_blank"
+        >串流</a>
+        <a
+          class="button"
+          style="text-decoration-line: none;"
+          pButton
+          pRipple
+          [href]="video.trailerUrl"
+          target="_blank"
+        >購買或租借</a>
+      </div>
+    </div>
+    <div class="text-content">
+      <h1 >{{ video.videoName }}</h1>
+      <div>
+        <a
+        class="button"
+        style="text-decoration-line: none;"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-heart"
+        >加入最愛</a>
+        <a
+        class="button"
+        style="text-decoration-line: none;"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-plus-circle"
+        >加入片單</a>
+        <a
+        class="button"
+        style="text-decoration-line: none;"
+        pButton
+        pRipple
+        [href]="video.trailerUrl"
+        target="_blank"
+        icon="pi pi-play"
+        >觀看預告片</a>
+      </div>
+      <div>
+        <p *ngIf="season?.seasonName"><strong>季:</strong> {{ season?.seasonName }}</p>
+        <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
+        <p><strong>片長:</strong> {{ video.runningTime }}</p>
+        <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
+        <p><strong>評分:</strong> 4.7 / 5</p>
+        <p><strong>語言:</strong> {{ video.lang }}</p>
+        <p><strong>簡介:</strong> 一場盛大熱鬧的婚禮派對即將展開，這是黑手黨黨魁唐柯里昂尼（馬龍白蘭度 飾）為女兒舉行的婚禮。當年由西西里隻身流浪到美國的唐，步步為營成為黑幫大亨，然而歲月不饒人讓他疲態盡現，所以想將衣缽傳承給兒子。老大桑尼（詹姆士肯恩 飾）衝動暴躁，老二佛雷多（約翰卡佐爾 飾）懦弱無能，老三麥可（艾爾帕西諾 飾）是戰爭英雄，卻不願捲入黑社會是非。<br>
+        由於唐堅持不和其它幫派合作毒品買賣，得罪對他心生不滿已久的其它幫派，更對他的家族展開一連串狙殺行動，以致桑尼和麥可的新婚妻子遭致殺害，而唐竟姑息此事，不願讓事情越演越烈。身體精神狀況不如從前的唐，與孫兒嬉戲時遏然過世，逃亡在外的三子麥可得知消息後，毅然返回美國接掌父業，更因而成為黑手黨教父，開始籌畫報仇大業…</p>
+      </div>
+      <div>
+        <p><strong>導演:</strong> 法蘭西斯·科波拉</p>
+        <p><strong>主演:</strong> 馬龍‧白蘭度 </p>
+      </div>
+      <div class="flex ">
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="content-wrapper">
+  <div class="content-container">
+    <!-- 主要演員區域 -->
+    <div class="actors-grid">
+      <h2 class="starring" style="color: black;">主要演員</h2>
+      <div class="grid">
+        <div *ngFor="let actor of actors" class="card">
+          <p-card class="actor-card">
+            <ng-template pTemplate="header">
+              <div style="font-size:18px;">{{ actor.name }}</div> <!-- 調整字體大小 -->
+            </ng-template>
+            <ng-template pTemplate="content">
+              <img [src]="actor.imagePath" alt="{{ actor.name }}" class="actor-image">
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+    </div>
+
+    <p-carousel 
+  [value]="images" 
+  [numVisible]="3" 
+  [circular]="true" 
+  [autoplayInterval]="3000" 
+  [numScroll]="1"
+  (onPage)="onCarouselPageChange($event)">
+  <ng-template let-image let-index="index" pTemplate="item">
+    <div class="gallery-container" 
+         [ngClass]="{ 'active': index === selectedIndex }" 
+         (click)="onImageClick(index)">
+      <img [src]="image" class="gallery-image" />
+    </div>
+  </ng-template>
+</p-carousel>
+  </div>
+</div>
+
+<h3 style="color: black; margin-top: 2rem;">推薦影片</h3>
+<div class="card recommended-videos">
+  <p-carousel
+    [value]="videos"
+    [numVisible]="5"
+    [numScroll]="2"
+    [circular]="true"
+    [responsiveOptions]="responsiveOptions"
+    [autoplayInterval]="3000"
+  >
+    <ng-template let-video pTemplate="item">
+      <div
+        class="video-carousel-item border-1 surface-border border-round m-2 text-center py-5 px-3"
+      >
+        <div class="mb-3">
+          <a [routerLink]="['/details', video.videoId]"
+            ><img
+              [src]="video.thumbnailPath"
+              [alt]="video.name"
+              class="w-6 shadow-2"
+              style="width: 200px; border-radius: 10px;"
+          /></a>
+        </div>
+        <div>
+          <h4 style="color: black" class="mb-1">{{ video.videoName }}</h4>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>
+ <!-- <div class="galleria-wrapper">
+    <div class="galleria-container">
+      <p-galleria
+        [value]="images"
+        [responsiveOptions]="responsiveOptions"
+        [containerStyle]="{ 'max-width': '400px', 'max-height': '350px' }"
+        [numVisible]="5"
+        (valueChange)="onValueChange($event)"
+        thumbnailsPosition="left">
+        <ng-template pTemplate="item" let-item>
+          <p-image [src]="'/assets' + item" class="video-image"
+            [preview]="true"
+            width="300px"
+            height="450px"></p-image>
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item >
+          <div class="thumbnail-container">
+            <img [src]="'/assets' + item" class="thumbnail-image" />
+          </div>
+        </ng-template>
+      </p-galleria>
+    </div>
+  </div> -->

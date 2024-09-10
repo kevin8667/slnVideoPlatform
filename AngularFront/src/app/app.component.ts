@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'AngularFront';
+  keywordForSearch: string = "";
+
+
+  constructor(private router: Router) {}
+
 }

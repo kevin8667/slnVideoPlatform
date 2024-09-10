@@ -27,11 +27,11 @@ public partial class VideoList
 
     public DateOnly? ReleaseDate { get; set; }
 
-    public decimal Rating { get; set; }
+    public decimal? Rating { get; set; }
 
-    public decimal Popularity { get; set; }
+    public decimal? Popularity { get; set; }
 
-    public int? ThumbnailId { get; set; }
+    public string ThumbnailPath { get; set; }
 
     public string Lang { get; set; }
 
@@ -42,6 +42,8 @@ public partial class VideoList
     public string AgeRating { get; set; }
 
     public string TrailerUrl { get; set; }
+
+    public string Bgpath { get; set; }
 
     public virtual ICollection<CastList> CastLists { get; set; } = new List<CastList>();
 

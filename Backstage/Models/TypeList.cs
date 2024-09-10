@@ -2,14 +2,13 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Backstage.Models;
 
 public partial class TypeList
 {
     public int TypeId { get; set; }
-    [Display(Name ="影片形式")]
+
     public string TypeName { get; set; }
 
     public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
