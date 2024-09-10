@@ -29,7 +29,10 @@ namespace VdbAPI.Controllers
                          join sc in _context.ShoppingCarts on o.ShoppingCartId equals sc.ShoppingCartId
                          join plan in _context.PlanLists on sc.PlanId equals plan.PlanId
                          join video in _context.VideoLists on sc.VideoId equals video.VideoId
-                         join cp in _context.CouponInfos on o.CouponId equals cp.CouponId
+
+                         join mc in _context.MemberCoupons on o.CouponId equals mc.SerialNo
+                         join cp in _context.CouponInfos on mc.CouponId equals cp.CouponId
+                         //join cp in _context.CouponInfos on o.CouponId equals cp.CouponId
                          join mem in _context.MemberInfos on sc.MemberId equals mem.MemberId
                          select new getOrderDTO
                          {

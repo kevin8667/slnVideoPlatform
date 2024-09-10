@@ -1,6 +1,7 @@
 import { CartPageService } from './cart-page.service';
 import { Component, OnInit } from '@angular/core';
 import { cartPage } from './cart-page.model';
+import { Router } from '@angular/router';
 
 
 
@@ -13,7 +14,10 @@ export class CartPageComponent {
   sc: cartPage[] = []; //用model定義介面數據
   filterMemberId: number = 2;
 
-  constructor(private CartPageService: CartPageService){}
+  constructor(
+    private CartPageService: CartPageService,
+    private router: Router  // 注入 Angular 的 Router
+    ){}
 
   ngOnInit(): void {
     // 訂閱服務返回的數據
@@ -70,6 +74,31 @@ export class CartPageComponent {
         console.error('Error fetching shopping carts:', error);
       }
     );
+
+  }
+  // 選擇購物車資料，傳到結帳頁面
+  selectedItem: any;
+  // 選擇某一行資料
+  selectItem(item: any) {
+    this.selectedItem = item;
+  }
+  checkout() {
+    if (this.selectedItem) {
+      console.log('selectedItem',this.selectedItem);
+      console.log('videoName',this.selectedItem.videoName)
+      try{
+        this.router.navigate([
+          '/shoppingCart/preOrder',
+          this.selectedItem.shoppingCartId,
+          this.selectedItem.videoName,
+          this.selectedItem.planName,
+          this.selectedItem.price,
+          this.selectedItem.imagePath,
+        ]);
+      } catch (error) {
+        console.error('Error navigating:', error);
+      }
+    }
 
   }
 }

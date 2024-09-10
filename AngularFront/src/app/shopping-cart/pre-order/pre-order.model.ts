@@ -4,4 +4,5 @@ export interface preOrder{
   productPrice: number;
   productDescription: string;
   productImg: string;
+  isAdded: boolean;  // 判斷有沒有加購
 }

@@ -546,7 +546,6 @@ public partial class VideoDBContext : DbContext
                 .HasComment("優惠券序號(代碼)");
             entity.Property(e => e.ActionRefNo).HasComment("使用的交易單號");
             entity.Property(e => e.ActionType)
-                .IsRequired()
                 .HasMaxLength(5)
                 .HasComment("使用類型(線上電影票/線下電影票)");
             entity.Property(e => e.CouponId)
@@ -565,7 +564,6 @@ public partial class VideoDBContext : DbContext
                 .HasComment("會員編號")
                 .HasColumnName("MemberID");
             entity.Property(e => e.Status)
-                .IsRequired()
                 .HasMaxLength(5)
                 .HasComment("狀態(是否兌換,是否失效)");
             entity.Property(e => e.UseTime)
@@ -739,13 +737,13 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.OrderTotalPrice).HasColumnType("money");
             entity.Property(e => e.ShoppingCartId).HasColumnName("ShoppingCartID");
 
-            entity.HasOne(d => d.Coupon).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.CouponId)
-                .HasConstraintName("FK_Order_CouponInfo");
-
             entity.HasOne(d => d.Driver).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.DriverId)
                 .HasConstraintName("FK_Order_MemberInfo");
+
+            entity.HasOne(d => d.ShoppingCart).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.ShoppingCartId)
+                .HasConstraintName("FK_Order_ShoppingCart");
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>

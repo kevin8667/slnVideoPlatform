@@ -127,7 +127,7 @@
 }
 
 .button-container button, .add-button, .checkout-button {
-background-color: lightgray; /* 藍色按鈕 */
+background-color: lightgray;
 color: black;
 border: none;
 padding: 10px 20px;
@@ -158,7 +158,6 @@ color: #ff6600; /* 顯眼的橙色，讓價格突出 */
 display: flex;
 align-items: center;
 border: 1px solid #ddd;
-margin-bottom: 20px;
 padding: 10px;
 background-color: #f2f2f2; /* 卡片淺灰色背景 */
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -185,7 +184,7 @@ flex: 1;
 
 .price {
 font-size: 18px;
-color: #ff6600; /* 顯眼的橙色價格 */
+color: black;
 font-weight: bold;
 margin-top: 10px;
 }
@@ -195,8 +194,8 @@ margin-left: 20px;
 }
 
 .add-button {
-background-color: #ff5722; /* 顯眼的橙紅色按鈕 */
-color: white;
+background-color: gray; /* 顯眼的按鈕 #007BFF */
+color: snow;
 border: none;
 padding: 10px 15px;
 cursor: pointer;
@@ -207,12 +206,12 @@ transition: background-color 0.3s ease;
 }
 
 .add-button:hover {
-background-color: #e64a19; /* 按鈕滑過時顏色變深 */
+background-color: #007BFF; /* 按鈕滑過時顏色變#66b2ff */
 }
 .title-box {
 display: flex;
 align-items: center;
-background-color: #f2f2f2; /* 鮮明的橙色背景 */
+background-color: #f2f2f2; /* 背景 */
 padding: 30px;
 margin-bottom: 20px;
 color: black;
@@ -234,4 +233,73 @@ margin: 0;
 .title-text h4 {
 margin: 5px 0 0;
 font-weight: normal;
+}
+
+.textLeftValueRight{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.up-Text, .up-Value, .down-Text, .down-Value{
+  font-size: 18px;
+}
+.up-Text{
+
+  text-align: left;
+}
+
+.up-Value{
+  text-align: right;
+}
+
+.finalPrice{
+  font-size: 20px;
+  color: #FF0000;
+}
+
+.textLeftValueLeft{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin: 8px;
+}
+
+.w233{
+  display: inline-block;
+  width: 233px;
+}
+
+.textareaAddress{
+  resize: none;
+  height: 100px;
+}
+
+.full-width-button {
+  width: 100%;   /* 讓按鈕填滿父容器 */
+  box-sizing: border-box; /* 確保 padding 和 border 不會擴展按鈕超出父容器 */
+}
+
+.red-button {
+  background-color: #DC3545; /* 紅色背景 */
+  color: white; /* 文字顏色設為白色 */
+  border: none; /* 去除邊框 */
+  padding: 10px 20px; /* 調整按鈕內部間距 */
+  font-size: 16px; /* 調整字體大小 */
+  cursor: pointer; /* 滑鼠變為手形指標 */
+  width: 100%; /* 按鈕填滿父容器 */
+  box-sizing: border-box; /* 確保寬度正確 */
+  border-radius: 5px;
+}
+
+.red-button:hover {
+  background-color: #C82333; /* 滑鼠懸停時的深紅色 */
+}
+
+.red-button:active {
+  background-color: #A71D2A; /* 按下時的顏色變化 */
+}
+
+.add-button.added {
+  background-color: #007BFF; /* 點擊後的顏色 */
 }

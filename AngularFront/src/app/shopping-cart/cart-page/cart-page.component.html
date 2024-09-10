@@ -32,10 +32,10 @@
               <th class="text_center" width="10%">價格</th>
               <th class="text_center" width="15%">操作</th>
           </tr>
-          <tr *ngFor="let item of sc">
+          <tr *ngFor="let item of sc" (click)="selectItem(item)" [class.selected]="item === selectedItem">
               <!-- 照片 -->
-              <td class="text_center" width="10%"  data-web='20210703a'  >
-                  <div class="pic" style="position:relative;"><a href="goods_detail.php?gid=5134611" target="_blank"><img src={{item.imagePath}}/></a></div>
+              <td class="text_center" width="10%">
+                  <div class="pic" style="position:relative;"><a><img src={{item.imagePath}}/></a></div>
               </td>
               <!-- 商品名稱 -->
               <td width="37%" class="text_left">
@@ -59,8 +59,8 @@
               <!-- 管理 -->
               <td class="text_left">
                   <div class="info">
-                      <a href="javascript:void(0);" onclick="doFollowGoods('5134611')">修改</a>
-                      <a href="javascript:void(0);" data-sc-id="3001643" onclick="doDel_1(this,'MDNkMGU0ODI1MTRhZGFhOTNjNGVmZWNkZGZmMmQ4NDg=','237842_2')">刪除</a>
+                      <a >修改</a>
+                      <a >刪除</a>
                   </div>
               </td>
           </tr>
@@ -69,7 +69,8 @@
               <td colspan=5></td>
               <td style="margin:0;padding:0px 0px;border:0px;">
                   <!-- <span class="td_gray" id="237842_2_check" routerLink="preOrder">結帳</span> -->
-                  <button class="td_gray">結帳</button>
+                  <!-- [routerLink]="['/shoppingCart/preOrder']" -->
+                  <button class="td_gray" [disabled]="!selectedItem" (click)="checkout()">結帳</button>
               </td>
           </tr>
       </table>

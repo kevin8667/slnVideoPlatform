@@ -17,6 +17,8 @@ public partial class ShoppingCart
 
     public virtual MemberInfo Member { get; set; }
 
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     public virtual PlanList Plan { get; set; }
 
     public virtual VideoList Video { get; set; }
