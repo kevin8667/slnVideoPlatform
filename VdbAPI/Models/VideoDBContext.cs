@@ -918,11 +918,6 @@ public partial class VideoDBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.PosterId).HasColumnName("PosterID");
 
-            entity.HasOne(d => d.PostNavigation).WithOne(p => p.Post)
-                .HasForeignKey<Post>(d => d.PostId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Post_Article");
-
             entity.HasOne(d => d.Poster).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.PosterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

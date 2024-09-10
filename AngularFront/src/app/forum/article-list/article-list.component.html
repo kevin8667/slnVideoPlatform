@@ -1,5 +1,5 @@
 <div class="myContainer">
-  <nav class="card">
+  <nav class="card1">
     <!-- 變更筆數 -->
     <div class="slider gap-3">
       <span class="text-label">筆數:{{ forumDto.pageSize }}</span>
@@ -93,10 +93,10 @@
         ></p-button>
       </div>
       <div class="article" *ngIf="!loading">
-        <p-dataView [value]="articles" layout="grid" [paginator]="false">
+        <p-dataView [value]="articles" layout="list" [paginator]="false">
           <!-- Grid Item 模板 -->
-          <ng-template pTemplate="gridItem" let-article>
-            <div class="p-card grid-item">
+          <ng-template pTemplate="listItem" let-article>
+            <div class="p-card1 ">
               <div class="card-content">
                 <!-- 圖片 -->
                 <div class="card-image">

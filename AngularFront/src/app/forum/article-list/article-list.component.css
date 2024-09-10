@@ -1,7 +1,7 @@
 .myContainer {
   width: 100%;
 }
-.card {
+.card1 {
   background: #ffffff31; /* 背景顏色 */
   border-radius: 8px; /* 邊角圓角 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
@@ -122,7 +122,7 @@
   box-sizing: border-box;
 }
 
-.p-card {
+.p-card1 {
   background: #f9f9f956; /* 淺灰背景色 */
   border-radius: 8px; /* 邊角圓角 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
