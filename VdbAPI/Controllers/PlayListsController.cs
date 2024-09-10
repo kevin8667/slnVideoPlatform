@@ -267,7 +267,7 @@ namespace VdbAPI.Controllers
                         Episode = _context.VideoLists
                             .Where(v => v.VideoId == p.VideoId)
                             .Select(v => v.Episode)
-                            .FirstOrDefault() ?? 1
+                            .FirstOrDefault()
                     }).ToListAsync();
 
                 if (playListItems == null || !playListItems.Any())
