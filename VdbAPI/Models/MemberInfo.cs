@@ -90,6 +90,10 @@ public partial class MemberInfo
 
     public string MemberIdentity { get; set; }
 
+    public bool Fidoenabled { get; set; }
+
+    public int? FidocredentialId { get; set; }
+
     public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 
     public virtual ICollection<BlackList> BlackListBlockedMembers { get; set; } = new List<BlackList>();
