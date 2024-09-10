@@ -127,7 +127,7 @@
               <a asp-area="Frontend" asp-controller="Member" asp-action="Index" class="nav-item nav-link">會員</a>
               <a asp-area="Frontend" asp-controller="VideoDB" asp-action="Index" class="nav-item nav-link">影視</a>
               <a asp-area="Frontend" asp-controller="Cart" asp-action="Index" class="nav-item nav-link">交易</a>
-              <a asp-area="Frontend" asp-controller="Ticket" asp-action="Index" class="nav-item nav-link">票務</a>
+              <a routerLink="ticket" class="nav-item nav-link">票務</a>
               <a asp-area="Frontend" asp-controller="Forum" asp-action="Index" class="nav-item nav-link">社群</a>
               <a asp-area="Frontend" asp-controller="Playlist" asp-action="Index" class="nav-item nav-link">片單</a>
             </div>
@@ -147,7 +147,8 @@
     </div>
   </div>
   <!-- Navbar End -->
-  <app-test></app-test>
+  <router-outlet></router-outlet>
+
 
   <!-- Footer Start -->
   <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
