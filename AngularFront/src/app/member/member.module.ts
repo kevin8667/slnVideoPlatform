@@ -19,7 +19,8 @@ import { CouponComponent } from './coupon/coupon.component';
 import { MessageComponent } from './message/message.component';
 import { FriendsComponent } from './friends/friends.component';
 import { HistoryComponent } from './history/history.component';
-import { LoginCallbackComponent } from './login-callback/login-callback.component';
+// import { LoginCallbackComponent } from './login-callback/login-callback.component';
+
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -41,7 +42,7 @@ const routes: Routes = [
     MessageComponent,
     FriendsComponent,
     HistoryComponent,
-    LoginCallbackComponent
+    // LoginCallbackComponent
   ],
   imports: [
     RouterModule.forChild(routes),
