@@ -89,9 +89,18 @@ export class PlaylistpostAputComponent implements OnInit {
           this.selectedVideos = this.playlistItems.map((item) => ({
             videoId: item.videoId,
             videoName: item.videoName,
-            episode: item.episode ?? 0,
+            episode: item.episode,
             thumbnailPath: item.thumbnailPath ?? '',
           }));
+
+          this.selectedVideos.forEach((video) => {
+            console.log(
+              'Video Name:',
+              video.videoName,
+              'Episode:',
+              video.episode
+            );
+          });
         },
         (error) => {
           console.error('Error loading playlist items', error);
@@ -175,31 +184,20 @@ export class PlaylistpostAputComponent implements OnInit {
         .editPlaylist(this.playlist.playListId ?? 0, playListCreateDTO)
         .subscribe(
           (response) => {
-            this.updatePlaylistItems();
-
-            console.log('圖片已編輯');
+            console.log('播放清單已編輯')
           },
-          (error) => {}
+          (error) => {
+            console.error('編輯播放清單時發生錯誤', error);
+          }
         );
     } else {
-
       this.playlistService.addNewPlaylist(playListCreateDTO).subscribe(
         (response) => {
-          const playListId = response.playListId;
-          if (playListId) {
-            this.playlistItems.forEach(
-              (item) => (item.playListId = playListId)
-            );
-            this.playlistService
-              .addPlaylistItems(playListId, this.playlistItems)
-              .subscribe(
-                (res) => {},
-                (error) => {}
-              );
-          } else {
-          }
+          console.log('播放清單已新增');
         },
-        (error) => {}
+        (error) => {
+          console.error('新增播放清單時發生錯誤', error);
+        }
       );
     }
 
@@ -320,6 +318,6 @@ export class PlaylistpostAputComponent implements OnInit {
         (error) => {
           console.error('Error removing video from playlist:', error);
         }
-      );
-    }
+    );
   }
+}

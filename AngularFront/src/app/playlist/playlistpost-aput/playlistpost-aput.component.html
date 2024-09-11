@@ -100,9 +100,7 @@
                 class="thumbnail"
               />
               <span>{{ video.videoName }}</span>
-              <span
-                *ngIf="video.episode !== null && video.episode !== undefined"
-              >
+              <span *ngIf="video.episode !== null && video.episode > 0">
                 - 第 {{ video.episode }} 集
               </span>
             </div>
@@ -116,15 +114,13 @@
                 class="thumbnail"
               />
               <span>{{ video.videoName }}</span>
-              <span
-                *ngIf="video.episode !== null && video.episode !== undefined"
-              >
+              <span *ngIf="video.episode !== null && video.episode > 0">
                 - 第 {{ video.episode }} 集
               </span>
             </div>
           </ng-template>
         </p-multiSelect>
-        <br>
+
         <div class="video-list">
           <div
             cdkDropList
