@@ -23,31 +23,39 @@ namespace VdbAPI.Controllers {
             _connection = configuration.GetConnectionString("VideoDB");
         }
 
-        // GET: api/Articles
+        // GET: api/Articles  取得主題標籤
         [HttpGet("Theme")]
         public ActionResult<IEnumerable<Theme>> GetThemes()
         {
             return _context.Themes;
         }
 
-        // GET: api/Articles/5
+        // GET: api/Articles/5 取得文章內文
         [HttpGet("{id}")]
         public async Task<ActionResult<ArticleView>> GetArticle(int id)
         {
+            var article = await _context.Articles.FindAsync(id);
+            if (article == null)
+            {
+                return NotFound(new { message = "找不到指定的文章" });
+            }
+
             const string sql = "SELECT * FROM ArticleView WHERE ArticleId = @Id ";
 
             using var connection = new SqlConnection(_connection);
-            var article = await connection.QueryFirstOrDefaultAsync<ArticleView>(sql,new {
+            var articleView = await connection.QueryFirstOrDefaultAsync<ArticleView>(sql,new {
                 Id = id
             });
-            if(article == null) {
+            if(articleView == null) {
                 return NotFound();
             }
-            return Ok(article);
+            return Ok(articleView);
         }
+        //新增
         [HttpPost]
         public async Task<IActionResult> CreateArticle(ArticleView articleView)
         {
+
             if(articleView == null) {
                 return BadRequest(new {
                     error = "沒收到封包"
@@ -56,6 +64,8 @@ namespace VdbAPI.Controllers {
             if(!ModelState.IsValid) {
                 return BadRequest("傳入值不符合規範" + ModelState);
             }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try {
                 var article = new Article {
                     AuthorId = articleView.AuthorId,
@@ -71,26 +81,27 @@ namespace VdbAPI.Controllers {
                     DislikeCount = 0,
                 };
 
-
-
                 _context.Articles.Add(article);
                 await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
 
                 return Ok(new {
                     OK = "新增文章成功"
                 });
             }
             catch(Exception ex) {
+                await transaction.RollbackAsync();
                 return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
 
             }
 
         }
-
+        //編輯
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchArticle(int id,ArtcleUpdate artcleUpdate)
+        public async Task<IActionResult> PatchArticle(int id,ArticleUpdate articleUpdate)
         {
-            if(artcleUpdate.ArticleContent.Length < 10)
+            if(articleUpdate.ArticleContent.Length < 10)
                 return BadRequest("文章內容長度必須至少 10 個字元。");
 
             if(!ArticleExists(id))
@@ -100,12 +111,14 @@ namespace VdbAPI.Controllers {
 
             var sql = @"UPDATE Article SET ArticleContent = @ArticleContent,Title = @Title,
                         ThemeId = @ThemeId WHERE ArticleId = @id";
+            using var con = new SqlConnection(_connection);
+            using var transaction = await con.BeginTransactionAsync();
             try {
-                using var con = new SqlConnection(_connection);
+
                 var rowsAffected = await con.ExecuteAsync(sql,new {
-                    artcleUpdate.ArticleContent,
-                    artcleUpdate.Title,
-                    artcleUpdate.ThemeId,
+                    articleUpdate.ArticleContent,
+                    articleUpdate.Title,
+                    articleUpdate.ThemeId,
                     id,
                 });
 
@@ -115,33 +128,42 @@ namespace VdbAPI.Controllers {
                     });
 
                 }
-
+                await transaction.CommitAsync();
                 return Ok(new {
                     Message = "修改文章成功"
                 });
             }
             catch(Exception ex) {
+                await transaction.RollbackAsync();
                 return StatusCode(StatusCodes.Status500InternalServerError,new {
                     Message = "內部服務器錯誤",
                     Details = ex.Message
                 });
             }
         }
-        // DELETE: api/Articles/5
+
+        // DELETE: api/Articles/5 刪除
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {
             var article = await _context.Articles.FindAsync(id);
+            var trans = await _context.Database.BeginTransactionAsync();
             if(article == null) {
                 return NotFound();
             }
+            try {
+                await trans.CommitAsync();
+                _context.Articles.Remove(article);
+                await _context.SaveChangesAsync();
 
-            _context.Articles.Remove(article);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                return NoContent();
+            }
+            catch(Exception ex) {
+                await trans.RollbackAsync();
+                return StatusCode(500,"錯誤原因: " + ex.Message);
+            }
         }
-
+        // 文章列表
         [HttpPost("LoadIndex")]
         public async Task<ActionResult<forumDto>> LoadIndex(forumDto searchDTO)
         {
@@ -205,9 +227,10 @@ namespace VdbAPI.Controllers {
         {
             return _context.Articles.Any(e => e.ArticleId == id);
         }
+
     }
 
-    public class ArtcleUpdate {
+    public class ArticleUpdate {
         public required string ArticleContent {
             get;
             set;

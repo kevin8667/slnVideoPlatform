@@ -6,43 +6,53 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Text;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class FourmImgController : ControllerBase {
-        // GET: api/<fourmImgController>
+    public class ForumImgController : ControllerBase {
+        // GET: api/<forumImgController>
         private readonly IWebHostEnvironment _web;
         private readonly string? _connection;
-        public FourmImgController(IWebHostEnvironment environment,IConfiguration configuration)
+        public ForumImgController(IWebHostEnvironment environment,IConfiguration configuration)
         {
             _web = environment;
             _connection = configuration.GetConnectionString("VideoDB");
         }
         [HttpGet("ArticleContent")]
-        public IActionResult NullArticle()
+        public async Task<IActionResult> NullArticleAsync()
         {
             try {
                 using var con = new SqlConnection(_connection);
-                var sql = @"Update Article
-                        Set ArticleContent = '<h1>清新多多綠好喝</h1><p><span class=""ql-size-large"">雞腿也讚!</span></p>
-                        <p><br></p>'
-                        where ArticleContent is null";
-                var result = con.Execute(sql);
-                return Ok($"更新{result}筆");
+                await con.OpenAsync(); // 顯式打開連接
+                using var transaction = await con.BeginTransactionAsync();
+                try {
+                    var sql = @"Update Article
+                            Set ArticleContent = '<h1>清新多多綠好喝</h1><p><span class=""ql-size-large"">雞腿也讚!</span></p>
+                            <p><br></p>'
+                            where ArticleContent is null";
+                    var result = await con.ExecuteAsync(sql,transaction: transaction);
+
+                    await transaction.CommitAsync();
+                    return Ok($"更新{result}筆");
+                }
+                catch {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
             }
             catch(Exception ex) {
                 return StatusCode(500,ex.Message);
             }
         }
         [HttpGet("UPDATEReplyCount")]
-        public IActionResult UPDATEReplyCount()
+        public async Task<IActionResult> UPDATEReplyCountAsync()
         {
             try {
                 using var con = new SqlConnection(_connection);
-                // 查找 ReplyCount 不等於實際 Post 數量的文章，並更新它們
-                var sql = @"    UPDATE Article
+                await con.OpenAsync(); // 顯式打開連接
+                using var transaction = await con.BeginTransactionAsync();
+                try {
+                    var sql = @"UPDATE Article
                                 SET ReplyCount = (
                                     SELECT COUNT(*)
                                     FROM Post
@@ -57,14 +67,18 @@ namespace VdbAPI.Controllers {
                                 HAVING Article.ReplyCount != COUNT(Post.ArticleID)
                                 )";
 
-                var result = con.Execute(sql);
+                    var result = await con.ExecuteAsync(sql,transaction: transaction);
 
-
-                return Ok(result > 0 ? $"{result} 篇文章的回覆數已更新" : "無需更新");
+                    await transaction.CommitAsync();
+                    return Ok(result > 0 ? $"{result} 篇文章的回覆數已更新" : "無需更新");
+                }
+                catch {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
             }
             catch(Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
-
             }
         }
         [HttpPost]
@@ -111,27 +125,40 @@ namespace VdbAPI.Controllers {
             }
         }
 
-        [HttpGet("PostLikeNull")]
-        public IActionResult ChangePostLikeNull()
+        [HttpGet("UpdateLikeCounts")]
+        public async Task<IActionResult> UpdateLikeCountsAsync()
         {
-            string sql = @"update Post
-                          set LikeCount = 0,DislikeCount = 0
-                          where LikeCount is null or DislikeCount is null";
-            using var con = new SqlConnection(_connection);
-            var result = con.Execute(sql);
-            return Ok(result > 0 ? $"{result} 篇回文的讚跟喜歡已更新" : "無需更新");
+            try {
+                using var con = new SqlConnection(_connection);
+                await con.OpenAsync(); // 顯式打開連接
+                using var transaction = await con.BeginTransactionAsync();
+                try {
+                    // 更新文章的讚和不喜歡計數
+                    string articleSql = @"UPDATE Article
+                                        SET LikeCount = COALESCE(LikeCount, 0),
+                                            DislikeCount = COALESCE(DislikeCount, 0)
+                                        WHERE LikeCount IS NULL OR DislikeCount IS NULL";
+                    var articleResult = await con.ExecuteAsync(articleSql,transaction: transaction);
 
-        }
+                    // 更新帖子的讚和不喜歡計數
+                    string postSql = @"UPDATE Post
+                                    SET LikeCount = COALESCE(LikeCount, 0),
+                                        DislikeCount = COALESCE(DislikeCount, 0)
+                                    WHERE LikeCount IS NULL OR DislikeCount IS NULL";
+                    var postResult = await con.ExecuteAsync(postSql,transaction: transaction);
 
-        [HttpGet("ArticleLikeNull")]
-        public IActionResult ChangeArticleLikeNull()
-        {
-            string sql = @" update Article
-                          set LikeCount = 0,DislikeCount = 0
-                          where LikeCount is null or DislikeCount is null";
-            using var con = new SqlConnection(_connection);
-            var result = con.Execute(sql);
-            return Ok(result > 0 ? $"{result} 篇文章的讚跟喜歡已更新" : "無需更新");
+                    await transaction.CommitAsync();
+
+                    return Ok($"已更新 {articleResult} 篇文章和 {postResult} 篇回文的讚和不喜歡計數");
+                }
+                catch {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+            catch(Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
+            }
         }
 
         public class UserInfo {
