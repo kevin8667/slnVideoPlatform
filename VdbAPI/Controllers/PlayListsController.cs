@@ -24,8 +24,8 @@ namespace VdbAPI.Controllers
         public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
         {
             var playlists = await _context.PlayLists
-                .Include(pl => pl.PlayListItems)    // 加載 PlayListItems
-                    .ThenInclude(pli => pli.Video)  // 連接 VideoList
+                .Include(pl => pl.PlayListItems)
+                    .ThenInclude(pli => pli.Video)
                 .Select(pl => new PlaylistDTO
                 {
                     PlayListId = pl.PlayListId,
@@ -36,16 +36,15 @@ namespace VdbAPI.Controllers
                     AddedCount = pl.AddedCount,
                     SharedCount = pl.SharedCount,
                     ShowImage = pl.ShowImage,
-
-                    // 將 PlayListItem 映射到 PlaylistitemDTO 中
+                    
                     Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
                     {
                         PlayListId = pli.PlayListId,
                         VideoId = pli.Video.VideoId,
                         VideoPosition = pli.VideoPosition,
-                        VideoName = pli.Video.VideoName,  // 從 VideoList 中獲取 VideoName
-                        ThumbnailPath = pli.Video.ThumbnailPath,  // 從 VideoList 中獲取縮略圖
-                        Episode = pli.Video.Episode  // 從 VideoList 中獲取集數
+                        VideoName = pli.Video.VideoName,
+                        ThumbnailPath = pli.Video.ThumbnailPath,
+                        Episode = pli.Video.Episode
                     }).ToList()
                 })
                 .ToListAsync();
