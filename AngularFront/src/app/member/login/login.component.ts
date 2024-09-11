@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { MemberService } from './../member.service';
 import { Router } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
+// import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from './../../../environments/environment';
 
 declare var grecaptcha: any;
@@ -22,14 +22,14 @@ export class LoginComponent implements AfterViewInit {
 
 
 
-  constructor(private memberService: MemberService, private router: Router, private oauthService: OAuthService) {
+  constructor(private memberService: MemberService, private router: Router, /*private oauthService: OAuthService*/) {
     console.log('Google Client ID:', this.googleClientId);
   }
 
   login() {
     debugger;
     console.log("Login()")
-    this.oauthService.initLoginFlow();
+   /* this.oauthService.initLoginFlow();*/
   }
 
   ngAfterViewInit() {
