@@ -65,6 +65,7 @@ namespace VdbAPI.Controllers
 
             return Ok(playlist);
         }
+
         [HttpPost]
         public async Task<ActionResult<PlayList>> PostPlayList([FromBody] PlayListCreateDTO dto)
         {
@@ -169,17 +170,21 @@ namespace VdbAPI.Controllers
             existingPlayList.LikeCount = playList.LikeCount;
             existingPlayList.AddedCount = playList.AddedCount;
             existingPlayList.SharedCount = playList.SharedCount;
-
+            
             if (!string.IsNullOrEmpty(playList.PlayListImage))
             {
                 try
-                {
+                {                    
                     existingPlayList.ShowImage = Convert.FromBase64String(playList.PlayListImage);
                 }
                 catch (FormatException)
                 {
                     return BadRequest("圖片格式無效");
                 }
+            }
+            else            {
+                
+                existingPlayList.ShowImage = existingPlayList.ShowImage;
             }
 
             existingPlayList.PlayListUpdatedAt = DateTime.UtcNow;
@@ -251,8 +256,8 @@ namespace VdbAPI.Controllers
                 {
                     VideoId = v.VideoId,
                     VideoName = v.VideoName,
-                    Episode = v.Episode, // 如果存在集數，則返回
-                    ThumbnailPath = v.ThumbnailPath ?? "/assets/img/movie.png" // 預設圖片
+                    Episode = v.Episode,
+                    ThumbnailPath = v.ThumbnailPath ?? "/assets/img/movie.png"
                 })
                 .ToListAsync();
 
