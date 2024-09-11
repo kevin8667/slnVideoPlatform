@@ -111,6 +111,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<TypeOfTicket> TypeOfTickets { get; set; }
 
+    public virtual DbSet<UserReaction> UserReactions { get; set; }
+
     public virtual DbSet<ValidCode> ValidCodes { get; set; }
 
     public virtual DbSet<VideoList> VideoLists { get; set; }
@@ -1157,6 +1159,23 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.TypeOfTicket1).HasColumnName("TypeOfTicket");
             entity.Property(e => e.TypeOfTicketName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<UserReaction>(entity =>
+        {
+            entity.HasKey(e => e.CountId).HasName("PK__UserReac__06678B7C5DB7CB87");
+
+            entity.HasIndex(e => new { e.MemberId, e.ArticleId }, "UQ_UserReactions_MemberArticle").IsUnique();
+
+            entity.HasOne(d => d.Article).WithMany(p => p.UserReactions)
+                .HasForeignKey(d => d.ArticleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserReactions_Article");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.UserReactions)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserReactions_MemberInfo");
         });
 
         modelBuilder.Entity<ValidCode>(entity =>

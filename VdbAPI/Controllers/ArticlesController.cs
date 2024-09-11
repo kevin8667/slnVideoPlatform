@@ -22,6 +22,61 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        [HttpGet("React")]
+        public async Task<IActionResult> React(int memberId,int articleId,int reactionType)
+        {
+            // 驗證 reactionType 參數
+            if(reactionType != -1 && reactionType != 0 && reactionType != 1) {
+                return BadRequest("無效的反應類型。必須是 -1, 0 或 1。");
+            }
+
+            // 驗證文章是否存在
+            var article = await _context.Articles.FindAsync(articleId);
+            if(article == null)
+                return NotFound("文章不存在");
+
+            using var connection = new SqlConnection(_connection);
+
+            try {
+                // SQL 處理 UserReactions
+            var sqlUserReaction = @"
+                IF EXISTS (SELECT 1 FROM UserReactions WHERE MemberId = @MemberId AND ArticleId = @ArticleId)
+                BEGIN
+                    UPDATE UserReactions SET ReactionType = @ReactionType 
+                    WHERE MemberId = @MemberId AND ArticleId = @ArticleId;
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO UserReactions (MemberId, ArticleId, ReactionType)
+                    VALUES (@MemberId, @ArticleId, @ReactionType);
+                END";
+
+                await connection.ExecuteAsync(sqlUserReaction,new UserReaction{
+                    MemberId = memberId,
+                    ArticleId = articleId,
+                    ReactionType = (short?)reactionType
+                });
+
+                var sqlGetCounts = @"
+            SELECT 
+                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
+                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = -1) AS DislikeCount";
+
+        var counts = await connection.QueryFirstAsync(sqlGetCounts, new { ArticleId = articleId });
+
+        // 更新文章的計數
+        article.LikeCount = counts.LikeCount;
+        article.DislikeCount = counts.DislikeCount;
+        await _context.SaveChangesAsync();
+
+        return Ok(counts);
+            }
+            catch(Exception ex) {
+                return StatusCode(500,"錯誤原因: " + ex.Message);
+            }
+        }
+
+
 
         // GET: api/Articles  取得主題標籤
         [HttpGet("Theme")]
@@ -35,9 +90,10 @@ namespace VdbAPI.Controllers {
         public async Task<ActionResult<ArticleView>> GetArticle(int id)
         {
             var article = await _context.Articles.FindAsync(id);
-            if (article == null)
-            {
-                return NotFound(new { message = "找不到指定的文章" });
+            if(article == null) {
+                return NotFound(new {
+                    message = "找不到指定的文章"
+                });
             }
 
             const string sql = "SELECT * FROM ArticleView WHERE ArticleId = @Id ";

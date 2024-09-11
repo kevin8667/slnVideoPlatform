@@ -207,6 +207,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[UserReactions]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ValidCode]",
          "ObjectType": 0
       },

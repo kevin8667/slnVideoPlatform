@@ -36,4 +36,6 @@ public partial class Article
     public virtual Post Post { get; set; }
 
     public virtual Theme Theme { get; set; }
+
+    public virtual ICollection<UserReaction> UserReactions { get; set; } = new List<UserReaction>();
 }

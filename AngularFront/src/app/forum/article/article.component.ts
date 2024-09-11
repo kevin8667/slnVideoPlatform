@@ -107,7 +107,7 @@ export class ArticleComponent implements OnInit {
     this.router.navigate(['/forum', 'new', 'post', articleId]);
   }
 
-  dislike(e: any) {
+  dislike() {
     this.messageService.add({
       severity: 'warn',
       summary: '注意',
