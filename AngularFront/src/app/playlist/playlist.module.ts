@@ -11,6 +11,8 @@ import { PlaylistitemComponent } from './playlistitem/playlistitem.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ChipsModule } from 'primeng/chips';
 import { PlaylistMemberComponent } from './playlistmember/playlistmember.component';
 import { PlaylistpostAputComponent } from './playlistpost-aput/playlistpost-aput.component';
 
@@ -38,7 +40,9 @@ const routes: Routes = [
     DialogModule,
     DragDropModule,
     PanelModule,
-    MultiSelectModule
+    MultiSelectModule,
+    AutoCompleteModule,
+    ChipsModule
   ],
   exports: [RouterModule],
 })
