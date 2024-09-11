@@ -4,11 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleView } from 'src/app/interfaces/forumnterface/ArticleView';
 import ForumService from 'src/app/service/forum.service';
 import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
+
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.css'],
-  providers: [MessageService],
 })
 export class ArticleComponent implements OnInit {
   deletePost(postId: number) {
@@ -22,14 +24,20 @@ export class ArticleComponent implements OnInit {
     });
   }
   deleteArticle(articleId: number) {
-    if (!confirm('確定要刪除嗎?')) return;
-
-    this.forumService.deleteArticle(articleId).subscribe({
-      next: () => {
-        alert('已刪除成功');
-      },
-      error: (err) => alert('刪除文章發生例外:' + err),
-      complete: () => location.reload(),
+    this.confirmationService.confirm({
+      message: '確定要刪除這篇文章嗎？',
+      accept: () => {
+        this.forumService.deleteArticle(articleId).subscribe({
+          next: () => {
+            this.messageService.add({severity:'success', summary: '成功', detail: '文章已刪除'});
+            this.router.navigate(['/forum']);
+          },
+          error: (err) => {
+            console.error('刪除文章失敗:', err);
+            this.messageService.add({severity:'error', summary: '錯誤', detail: '刪除文章失敗：' + err});
+          }
+        });
+      }
     });
   }
   NumToString(count: number) {
@@ -40,24 +48,26 @@ export class ArticleComponent implements OnInit {
   article: ArticleView = {} as ArticleView;
   articleId!: number;
   posts: Post[] = [];
+  menuItems: MenuItem[] = [];
 
   constructor(
-    private route: Router,
+    private router: Router,
     private forumService: ForumService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private actRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
     if (isNaN(this.articleId)) {
-      this.route.navigateByUrl('forum');
+      this.router.navigateByUrl('forum');
       return;
     }
 
     this.forumService.getArticle(this.articleId).subscribe((data) => {
       if (!data.lock) {
-        this.route.navigateByUrl('forum');
+        this.router.navigateByUrl('forum');
         return;
       }
 
@@ -67,6 +77,23 @@ export class ArticleComponent implements OnInit {
     this.forumService.getPosts(this.articleId).subscribe((data) => {
       this.posts = data;
     });
+
+    this.initializeMenu();
+  }
+
+  private initializeMenu() {
+    this.menuItems = [
+      {
+        label: '編輯',
+        icon: 'pi pi-pencil',
+        command: () => this.edit(this.articleId, 'article')
+      },
+      {
+        label: '刪除',
+        icon: 'pi pi-trash',
+        command: () => this.deleteArticle(this.articleId)
+      }
+    ];
   }
 
   safeHtml(data: string) {
@@ -74,10 +101,10 @@ export class ArticleComponent implements OnInit {
   }
 
   edit(id: number, type: string) {
-    this.route.navigate(['/forum', 'ed', type, id]);
+    this.router.navigate(['/forum', 'ed', type, id]);
   }
   navToReply(articleId: number) {
-    this.route.navigate(['/forum', 'new', 'post', articleId]);
+    this.router.navigate(['/forum', 'new', 'post', articleId]);
   }
 
   dislike(e: any) {

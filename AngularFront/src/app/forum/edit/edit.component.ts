@@ -13,10 +13,12 @@ import ForumService from 'src/app/service/forum.service';
   styleUrls: ['./edit.component.css'],
 })
 export class EditComponent implements OnInit {
+  isSubmitting: boolean = false;
+
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
-    if (this.articleForm.touched) {
-      $event.returnValue = true; // 這裡的訊息大多數瀏覽器不會顯示，會顯示預設提示
+    if (this.articleForm.touched && !this.isSubmitting) {
+      $event.returnValue = true;
     }
   }
   @ViewChild('quillEditor') quillEditor!: QuillEditorComponent;
@@ -90,6 +92,8 @@ export class EditComponent implements OnInit {
 
   onSubmit(): void {
     if (this.articleForm.invalid) return;
+    this.isSubmitting = true;
+
     const articleValue = this.articleForm.getRawValue();
     const postValue = this.articleForm.getRawValue();
 
@@ -104,8 +108,14 @@ export class EditComponent implements OnInit {
 
           this.forumService.updateArticle(this.id, updatedData).subscribe({
             next: (response) => console.log(response),
-            error: (err) => console.error('傳送資料發生意外:', err),
-            complete: () => history.back(),
+            error: (err) => {
+              console.error('傳送資料發生意外:', err);
+              this.isSubmitting = false;
+            },
+            complete: () => {
+              this.isSubmitting = false;
+              history.back();
+            },
           });
         } else {
           const updatedData: Partial<Post> = {
@@ -114,8 +124,14 @@ export class EditComponent implements OnInit {
 
           this.forumService.updatePost(this.id, updatedData).subscribe({
             next: (response) => console.log(response),
-            error: (err) => console.error(err),
-            complete: () => history.back(),
+            error: (err) => {
+              console.error(err);
+              this.isSubmitting = false;
+            },
+            complete: () => {
+              this.isSubmitting = false;
+              history.back();
+            },
           });
         }
       } else {
@@ -139,8 +155,14 @@ export class EditComponent implements OnInit {
           };
           this.forumService.createArticle(updatedData).subscribe({
             next: (response) => console.log(response),
-            error: (err) => console.error('傳送資料發生意外:', err),
-            complete: () => history.back(),
+            error: (err) => {
+              console.error('傳送資料發生意外:', err);
+              this.isSubmitting = false;
+            },
+            complete: () => {
+              this.isSubmitting = false;
+              history.back();
+            },
           });
         } else {
           // 新增回文
@@ -159,13 +181,20 @@ export class EditComponent implements OnInit {
           };
           this.forumService.createPost(updatedData).subscribe({
             next: (response) => console.log(response),
-            error: (err) => console.error('傳送資料發生意外:', err),
-            complete: () => history.back(),
+            error: (err) => {
+              console.error('傳送資料發生意外:', err);
+              this.isSubmitting = false;
+            },
+            complete: () => {
+              this.isSubmitting = false;
+              history.back();
+            },
           });
         }
       }
     } catch (error) {
       console.error('發生例外的錯誤:', error);
+      this.isSubmitting = false;
       return;
     }
   }

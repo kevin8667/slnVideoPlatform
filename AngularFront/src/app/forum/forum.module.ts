@@ -15,7 +15,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DataViewModule } from 'primeng/dataview';
 import { NewArticleComponent } from './new-article/new-article.component';
 import { NewPostComponent } from './new-post/new-post.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ForumRoutingModule } from './forum-routing.module';
 import { ArticleListComponent } from './article-list/article-list.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,6 +26,11 @@ import { AutoFocusModule } from 'primeng/autofocus';
 import { GalleriaModule } from 'primeng/galleria';
 import { EditorComponent } from './share/editor/editor.component';
 import { TagModule } from 'primeng/tag';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { MenuModule } from 'primeng/menu';
+
 @NgModule({
   declarations: [
     ArticleComponent,
@@ -54,8 +59,10 @@ import { TagModule } from 'primeng/tag';
     AutoFocusModule,
     GalleriaModule,
     TagModule,
+    ConfirmDialogModule,
+    MenuModule
   ],
   exports: [],
-  providers: [ForumService],
+  providers: [ForumService, MessageService, ConfirmationService],
 })
 export class ForumModule {}

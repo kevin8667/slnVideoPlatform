@@ -38,16 +38,8 @@
         ></p-button>
       </div>
       <div>
-        <p-button
-          styleClass="p-button-outlined p-button-danger action-btn editor-button mb-2"
-          label="刪除"
-          (onClick)="deleteArticle(article.articleId)"
-        ></p-button>
-        <p-button
-          styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
-          label="編輯"
-          (onClick)="edit(article.articleId, 'article')"
-        ></p-button>
+        <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+        <button pButton type="button" icon="pi pi-ellipsis-v" (click)="menu.toggle($event)" class="p-button-text custom-menu-button"></button>
       </div>
     </div>
   </div>
@@ -103,4 +95,5 @@
       </div>
     </div>
   </div>
+  <p-confirmDialog></p-confirmDialog>
 </div>

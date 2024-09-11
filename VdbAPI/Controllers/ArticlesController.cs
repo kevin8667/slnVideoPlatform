@@ -90,8 +90,8 @@ namespace VdbAPI.Controllers {
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchArticle(int id,ArtcleUpdate artcleUpdate)
         {
-            if(artcleUpdate.ArticleContent.Length < 40)
-                return BadRequest("文章內容長度必須至少 40 個字元。");
+            if(artcleUpdate.ArticleContent.Length < 10)
+                return BadRequest("文章內容長度必須至少 10 個字元。");
 
             if(!ArticleExists(id))
                 return NotFound(new {
