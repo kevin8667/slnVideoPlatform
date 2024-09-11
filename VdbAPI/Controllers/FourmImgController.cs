@@ -20,29 +20,45 @@ namespace VdbAPI.Controllers {
             _web = environment;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        [HttpGet("ArticleContent")]
+        public IActionResult NullArticle()
+        {
+            try {
+                using var con = new SqlConnection(_connection);
+                var sql = @"Update Article
+                        Set ArticleContent = '<h1>清新多多綠好喝</h1><p><span class=""ql-size-large"">雞腿也讚!</span></p>
+                        <p><br></p>'
+                        where ArticleContent is null";
+                var result = con.Execute(sql);
+                return Ok($"更新{result}筆");
+            }
+            catch(Exception ex) {
+                return StatusCode(500,ex.Message);
+            }
+        }
         [HttpGet("UPDATEReplyCount")]
         public IActionResult UPDATEReplyCount()
         {
             try {
                 using var con = new SqlConnection(_connection);
                 // 查找 ReplyCount 不等於實際 Post 數量的文章，並更新它們
-                var sql = @"
-            UPDATE Article
-            SET ReplyCount = (
-                SELECT COUNT(*)
-                FROM Post
-                WHERE Post.ArticleID = Article.ArticleID
-            )
-            WHERE Article.ArticleID IN (
-                SELECT Article.ArticleID
-                FROM Article
-                JOIN Post 
-                ON Post.ArticleID = Article.ArticleID
-                GROUP BY Article.ArticleID, Article.ReplyCount
-                HAVING Article.ReplyCount != COUNT(Post.PostID)
-            );";
+                var sql = @"    UPDATE Article
+                                SET ReplyCount = (
+                                    SELECT COUNT(*)
+                                    FROM Post
+                                    WHERE Post.ArticleID = Article.ArticleID
+                                )
+                                WHERE Article.ArticleID IN (
+                                SELECT Article.ArticleID
+                                FROM Article
+                                LEFT JOIN Post 
+                                ON Post.ArticleID = Article.ArticleID
+                                GROUP BY Article.ArticleID, Article.ReplyCount
+                                HAVING Article.ReplyCount != COUNT(Post.ArticleID)
+                                )";
 
                 var result = con.Execute(sql);
+
 
                 return Ok(result > 0 ? $"{result} 篇文章的回覆數已更新" : "無需更新");
             }
@@ -117,7 +133,7 @@ namespace VdbAPI.Controllers {
             var result = con.Execute(sql);
             return Ok(result > 0 ? $"{result} 篇文章的讚跟喜歡已更新" : "無需更新");
         }
-       
+
         public class UserInfo {
             public IFormFile? UserPhoto {
                 get;
