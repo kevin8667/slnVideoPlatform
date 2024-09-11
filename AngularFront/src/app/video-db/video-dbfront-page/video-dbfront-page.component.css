@@ -148,12 +148,11 @@
   background-color: #e0e0e000;
 }
 
-/* 背景滑動條的樣式 */
 .slider-background {
   position: absolute;
   top: 0;
   left: 0;
-  width: 33.33%; /* 假設有三個選項，每個占據 1/3 寬度 */
+  width: 50%;
   height: 100%;
   background-color: #1f3f5b;
   border-radius: 50px;
@@ -161,51 +160,37 @@
   line-height: 40px;
   z-index: 1;
   display: flex;
-    align-items: center; /* 確保內容垂直居中 */
+  align-items: center; /* 確保內容垂直居中 */
 }
 
 
-::ng-deep .custom-select-button .p-button {
-  position: relative;
+.custom-buttons {
+  display: flex;
+  justify-content: space-between;
   z-index: 2; /* 保證按鈕在滑動條之上 */
+  position: relative;
+}
+
+.custom-buttons button {
   background-color: transparent;
   border: none;
-  color: #333;
+  padding: 5px 15px;
+  font-size: 14px;
   font-weight: bold;
-  padding: 10px 20px;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+  z-index: 2;
   transition: color 0.3s ease;
-  border-radius: 50px;
-  outline: none; /* 移除點擊時的外框 */
-  box-shadow: none; /* 移除點擊時的陰影 */
-  align-items: center; /* 垂直水平居中對齊 */
-  text-align: center; /* 水平居中 */
 }
 
-/* ::ng-deep .custom-select-button .p-button:hover {
-  background-color: #dcdcdc;
-} */
-
-::ng-deep  .custom-select-button .p-highlight {
-  color: white !important;
-  background-color: transparent;
+.custom-buttons button.active {
+  color: white; /* 選中的按鈕文字顯示為白色 */
 }
 
-::ng-deep  .custom-select-button .p-button:not(.p-highlight) {
-  background-color: transparent;
+.custom-buttons button:not(.active) {
+  color: #333;
 }
-
-.custom-select-button {
-  position: relative;
-    display: flex;
-    justify-content: space-between;
-    width: auto; /* 確保不會被強制設置過大的寬度 */
-    max-width: 300px; /* 可以根據你的實際需求調整寬度 */
-    height: 40px; /* 控制按鈕的高度 */
-    padding: 0; /* 移除多餘的內間距 */
-    border: none; /* 移除邊框 */
-}
-
-
 
   body {
     margin: 0;

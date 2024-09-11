@@ -95,3 +95,34 @@
 ::ng-deep .custom-multiselect .p-multiselect-filter {
   width: calc(100% - 40px) !important; /* 減去 padding 和圖標空間 */
 }
+
+.genre-button-group {
+  margin: 20px 0;
+}
+
+.genre-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-radius: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+button:hover {
+  background-color: #0056b3;
+  color: white;
+}

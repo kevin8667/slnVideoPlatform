@@ -89,33 +89,35 @@
       <h2 class="starring" style="color: black;">主要演員</h2>
       <div class="grid">
         <div *ngFor="let actor of actors" class="card">
+          <a routerLink="/video-db/person/1" style="text-decoration: none;">
           <p-card class="actor-card">
             <ng-template pTemplate="header">
-              <div style="font-size:18px;">{{ actor.name }}</div> <!-- 調整字體大小 -->
+              <div style="font-size:18px;">{{ actor.name }}</div>
             </ng-template>
             <ng-template pTemplate="content">
               <img [src]="actor.imagePath" alt="{{ actor.name }}" class="actor-image">
             </ng-template>
           </p-card>
+          </a>
         </div>
       </div>
     </div>
 
-    <p-carousel 
-  [value]="images" 
-  [numVisible]="3" 
-  [circular]="true" 
-  [autoplayInterval]="3000" 
-  [numScroll]="1"
-  (onPage)="onCarouselPageChange($event)">
-  <ng-template let-image let-index="index" pTemplate="item">
-    <div class="gallery-container" 
-         [ngClass]="{ 'active': index === selectedIndex }" 
-         (click)="onImageClick(index)">
-      <img [src]="image" class="gallery-image" />
-    </div>
-  </ng-template>
-</p-carousel>
+    <p-carousel
+    [value]="images"
+    [numVisible]="3"
+    [circular]="true"
+    [autoplayInterval]="3000"
+    [numScroll]="1"
+    (onPage)="onCarouselPageChange($event)">
+    <ng-template let-image let-index="index" pTemplate="item">
+      <div class="gallery-container"
+          [ngClass]="{ 'active': index === selectedIndex }"
+          (click)="onImageClick(index)">
+        <img [src]="image" class="gallery-image" />
+      </div>
+    </ng-template>
+  </p-carousel>
   </div>
 </div>
 
@@ -149,26 +151,3 @@
     </ng-template>
   </p-carousel>
 </div>
- <!-- <div class="galleria-wrapper">
-    <div class="galleria-container">
-      <p-galleria
-        [value]="images"
-        [responsiveOptions]="responsiveOptions"
-        [containerStyle]="{ 'max-width': '400px', 'max-height': '350px' }"
-        [numVisible]="5"
-        (valueChange)="onValueChange($event)"
-        thumbnailsPosition="left">
-        <ng-template pTemplate="item" let-item>
-          <p-image [src]="'/assets' + item" class="video-image"
-            [preview]="true"
-            width="300px"
-            height="450px"></p-image>
-        </ng-template>
-        <ng-template pTemplate="thumbnail" let-item >
-          <div class="thumbnail-container">
-            <img [src]="'/assets' + item" class="thumbnail-image" />
-          </div>
-        </ng-template>
-      </p-galleria>
-    </div>
-  </div> -->

@@ -46,7 +46,7 @@ export class VideoDbSearchComponent implements OnInit {
   selectedType: VideoType | undefined;
 
   genres :Genre[] =[];
-  selectedGenres : Genre[] =[];
+  selectedGenres : string[] =[];
   urlGenre:string[] |null = null;
 
   videoName: string | null = null;
@@ -80,10 +80,14 @@ export class VideoDbSearchComponent implements OnInit {
 
     this.genreNames = [];
 
+    this.selectedGenres = [];
+
+
     this.videoDbService.getGenresApi().subscribe((genres)=>{
       this.genres=genres;
-      console.log(genres)
     });
+
+
 
     this.route.queryParams.subscribe(params => {
       this.videoName = params['videoName'] || null;
@@ -91,9 +95,11 @@ export class VideoDbSearchComponent implements OnInit {
       this.summary = params['summary'] || null;
 
       // 解析逗號分隔的 genreNames 字符串為數組
-      this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : null;
+      this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : [];
       console.log("類型："+this.genreNames);
       this.urlGenre = this.genreNames;
+      this.selectedGenres = this.genreNames;
+      console.log(this.selectedGenres);
 
       this.seriesName = params['seriesName'] || null;
       this.seasonName = params['seasonName'] || null;
@@ -105,6 +111,21 @@ export class VideoDbSearchComponent implements OnInit {
         this.searchVideos();
       }
     });
+  }
+
+  toggleGenreSelection(genreName: string) {
+    if (this.selectedGenres.length!==null &&this.selectedGenres.includes(genreName)) {
+      // 如果已經選中，則從選中列表中移除
+      this.selectedGenres = this.selectedGenres.filter(name => name !== genreName);
+    } else {
+      // 如果未選中，則添加到選中列表
+      this.selectedGenres.push(genreName);
+    }
+  }
+
+
+  isSelected(genreName: string): boolean {
+    return this.selectedGenres.includes(genreName);
   }
 
 
@@ -122,12 +143,11 @@ export class VideoDbSearchComponent implements OnInit {
 
   searchVideos(): void {
 
-    const genreNames = this.selectedGenres?.map(genre => genre.genreName) || [];
     this.videoDbService.getSearchVideoApi(
       this.videoName,
       this.typeId,
       this.summary,
-      this.urlGenre,
+      this.selectedGenres,
       this.seriesName,
       this.seasonName
     ).subscribe((response) => {

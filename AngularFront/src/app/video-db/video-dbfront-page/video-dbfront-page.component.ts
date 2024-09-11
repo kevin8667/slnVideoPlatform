@@ -34,42 +34,40 @@ export class VideoDBFrontPageComponent implements OnInit{
 
   typeID:any;
 
+  selectedVideoType:any;
+
   videoTypes:any[] = [
     {name: '電影', typeID:'1'},
-    {name: '影集', typeID:'2'},
-    {name: '其他', typeID:'3'}
+    {name: '影集', typeID:'2'}
   ];
 
   responsiveOptions: any[] | undefined;
+
+  selectedOption: number = 1; // 預設選擇 "今日"
+
+
 
   constructor(private videoDbService:VideoDBService){
 
   }
 
-  onSelect(event: any) {
-
-    if (this.typeID === event.value.typeID) {
-      return;
-    }
-    const selectedIndex = this.videoTypes.findIndex(type => type.name === event.value.name);
-    const slider = document.querySelector('.slider-background') as HTMLElement;
-    slider.style.left = `${selectedIndex * 33}%`;
-
-    if (event.value !== null && event.value !== undefined) {
-      this.typeID = event.value.typeID;  // 更新選中的值
-    } else {
-      this.typeID = this.defaultTypeID;  // 如果沒有選擇，使用預設值
-    }
-
-    this.videoDbService.getVideoApiWithTypeID(this.typeID.toString())
+  onOptionSelect(option: number) {
+    if (this.selectedVideoType !== option) {
+      this.selectedVideoType = option;
+      console.log('選中的選項:', this.selectedVideoType);
+      this.videoDbService.getVideoApiWithTypeID(this.selectedVideoType.toString())
       .subscribe((videos) => {
         this.videos = videos;
       });
+    }
   }
 
   ngOnInit() {
     this.defaultTypeID = 1;  // 設置預設的 typeID 為電影
     this.typeID = this.defaultTypeID;
+    this.selectedVideoType = this.defaultTypeID;
+
+    console.log(this.selectedVideoType);
 
     // 預設加載「電影」類型的影片
     this.videoDbService.getVideoApiWithTypeID(this.typeID.toString())
