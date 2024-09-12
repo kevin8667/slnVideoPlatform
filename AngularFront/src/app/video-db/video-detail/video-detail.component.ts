@@ -4,11 +4,15 @@ import { ActivatedRoute } from '@angular/router';
 import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
 import { data } from 'jquery';
+import { ConfirmationService, MessageService  } from 'primeng/api';
+import { RatingRateEvent } from 'primeng/rating';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-video-detail',
   templateUrl: './video-detail.component.html',
   styleUrls: ['./video-detail.component.css'],
+  providers: [ConfirmationService, MessageService]
   // encapsulation:ViewEncapsulation.None
 })
 
@@ -23,6 +27,11 @@ export class VideoDetailComponent implements OnInit{
   responsiveOptions: any[] | undefined;
 
   images:any[] =[];
+
+
+  userRating!:number;
+
+  visible: boolean = false;
 
 
   selectedIndex = 0; // 初始為第一張圖片
@@ -55,7 +64,7 @@ export class VideoDetailComponent implements OnInit{
     }
   ]
 
-  constructor(private route: ActivatedRoute, private videoService: VideoDBService) {
+  constructor(private route: ActivatedRoute, private videoService: VideoDBService, private confirmationService: ConfirmationService, private messageService: MessageService) {
     this.video = {
       videoId: 1,
       videoName: 'Sample Video',
@@ -90,13 +99,34 @@ export class VideoDetailComponent implements OnInit{
 
     // 透過 % 避免溢出，實現無限循環
     this.selectedIndex = (event.page + Math.floor(visibleImagesCount / 2)) % this.images.length;
-    
+
     // 更新選中的圖片
     this.selectedImage = this.images[this.selectedIndex];
   }
   onImageClick(index: number) {
     this.selectedIndex = index;
     this.selectedImage = this.images[index];
+  }
+
+  confirm(event: RatingRateEvent , op: OverlayPanel) {
+
+    op.hide();
+
+    event.originalEvent.stopPropagation();
+
+    if (!this.visible) {
+      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: 'Are you sure?', detail: 'Confirm to proceed' });
+      this.visible = true;
+    }
+  }
+  onConfirm() {
+    this.messageService.clear('confirm');
+    this.visible = false;
+  }
+
+onReject() {
+    this.messageService.clear('confirm');
+    this.visible = false;
   }
 
   ngOnInit() {

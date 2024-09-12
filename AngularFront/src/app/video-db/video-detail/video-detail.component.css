@@ -1,8 +1,3 @@
-/* p {
-    color: black;
-} */
-@import "primeicons/primeicons.css";
-
 .custom-card {
   display: flex;
   flex-direction: column;
@@ -223,4 +218,41 @@ p-carousel {
 
 .p-carousel .p-carousel-items-container .p-carousel-item.active {
   transform: scale(2); /* 中央圖片放大 */
+}
+
+.rating-link {
+  color: yellow; /* 設定文字顏色 */
+  text-decoration: none; /* 去除預設的底線 */
+  font-size: 18px; /* 根據需求設定字體大小 */
+  display: inline-flex; /* 讓圖標和文字在一行 */
+  align-items: center; /* 垂直置中 */
+  cursor: pointer; /* 當滑鼠移上去時顯示手型圖標 */
+  margin-left: 15px;
+}
+
+.rating-link i {
+  margin-right: 5px; /* 設置圖示與文字的間距 */
+}
+
+::ng-deep .p-dialog  {
+  width: 400px !important;  /* 修改寬度 */
+  max-width: 100%;          /* 確保在小螢幕上不會超出 */
+  z-index: 5;
+}
+
+::ng-deep .full-width-btn {
+  width: 100% !important; /* 確保按鈕佔滿父容器的寬度 */
+}
+
+
+::ng-deep .p-button-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+::ng-deep .p-button-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
 }

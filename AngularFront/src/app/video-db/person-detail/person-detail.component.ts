@@ -17,6 +17,7 @@ export class PersonDetailComponent implements OnInit {
 
   responsiveOptions:any[]=[];
 
+
   constructor(private route: ActivatedRoute, private videoService: VideoDBService) {}
 
   ngOnInit(){
