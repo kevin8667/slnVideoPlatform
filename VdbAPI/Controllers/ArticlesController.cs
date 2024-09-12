@@ -168,6 +168,7 @@ namespace VdbAPI.Controllers {
             var sql = @"UPDATE Article SET ArticleContent = @ArticleContent,Title = @Title,
                         ThemeId = @ThemeId WHERE ArticleId = @id";
             using var con = new SqlConnection(_connection);
+            await con.OpenAsync();
             using var transaction = await con.BeginTransactionAsync();
             try {
 
@@ -176,7 +177,7 @@ namespace VdbAPI.Controllers {
                     articleUpdate.Title,
                     articleUpdate.ThemeId,
                     id,
-                });
+                },transaction);
 
                 if(rowsAffected == 0) {
                     return NotFound(new {

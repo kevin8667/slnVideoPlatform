@@ -99,24 +99,24 @@ namespace VdbAPI.Controllers {
 
         // POST: api/Posts
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost(Post post)
+        public async Task<ActionResult<Post>> PostPost(PostDTO postDTO)
         {
             if(!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
-            if(post == null) {
+            if(postDTO == null) {
                 return NotFound(new {
                     error = "找不到post"
                 });
             }
             try {
 
-                post = new Post {
-                    ArticleId = post.ArticleId,
+                var post = new Post {
+                    ArticleId = postDTO.ArticleId,
                     Lock = true,
-                    PostContent = post.PostContent,
+                    PostContent = postDTO.PostContent,
                     PostDate = DateTime.UtcNow,
-                    PosterId = post.PosterId,
+                    PosterId = postDTO.PosterId,
                     PostImage = "",
                     LikeCount = 0,
                     DislikeCount = 0,
@@ -138,8 +138,8 @@ namespace VdbAPI.Controllers {
                 });
             }
             catch(Exception ex) {
-                return StatusCode(StatusCodes.Status500InternalServerError,new {
-                    error = "API發生例外的錯誤:" + ex.Message,
+                return StatusCode(500,new {
+                    error = "發生例外的錯誤:" + ex.Message,
                 });
             }
         }

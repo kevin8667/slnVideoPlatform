@@ -93,8 +93,8 @@ export default class ForumService {
 
     return this.sanitizer.bypassSecurityTrustHtml(data);
   }
-  async getPicture(img: any) {
-    const api = 'https://localhost:7193/api/FourmImg';
+  async getPicture(img: FormData) {
+    const api = 'https://localhost:7193/api/ForumImg';
     const data = await firstValueFrom(this.client.post(api, img));
     return data;
   }
