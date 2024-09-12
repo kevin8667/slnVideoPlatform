@@ -1,11 +1,9 @@
-import { Post } from '../../interfaces/forumnterface/Post';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ArticleView } from 'src/app/interfaces/forumnterface/ArticleView';
-import ForumService from 'src/app/service/forum.service';
-import { MessageService } from 'primeng/api';
-import { ConfirmationService } from 'primeng/api';
-import { MenuItem } from 'primeng/api';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core'; // 引入 ViewEncapsulation
+import { ActivatedRoute, Router } from '@angular/router'; // Angular
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 第三方庫
+import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
+import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
+import ForumService from 'src/app/service/forum.service'; // 自定義模組
 
 @Component({
   selector: 'app-article',
@@ -13,38 +11,6 @@ import { MenuItem } from 'primeng/api';
   styleUrls: ['./article.component.css'],
 })
 export class ArticleComponent implements OnInit {
-  deletePost(postId: number) {
-    if (!confirm('確定要刪除嗎?')) return;
-    this.forumService.deletePost(postId).subscribe({
-      next: (res) => {
-        alert('已刪除成功');
-      },
-      error: (err) => console.error('刪除回文發生例外:', err),
-      complete: () => location.reload(),
-    });
-  }
-  deleteArticle(articleId: number) {
-    this.confirmationService.confirm({
-      message: '確定要刪除這篇文章嗎？',
-      accept: () => {
-        this.forumService.deleteArticle(articleId).subscribe({
-          next: () => {
-            this.messageService.add({severity:'success', summary: '成功', detail: '文章已刪除'});
-            this.router.navigate(['/forum']);
-          },
-          error: (err) => {
-            console.error('刪除文章失敗:', err);
-            this.messageService.add({severity:'error', summary: '錯誤', detail: '刪除文章失敗：' + err});
-          }
-        });
-      }
-    });
-  }
-  NumToString(count: number) {
-    return String(count);
-  }
-
-  // getSafe = (data: string) => this.forumService.getSafe(data);
   article: ArticleView = {} as ArticleView;
   articleId!: number;
   posts: Post[] = [];
@@ -96,6 +62,49 @@ export class ArticleComponent implements OnInit {
     ];
   }
 
+  getPostMenuItems(postId: number): MenuItem[] {
+    return [
+      {
+        label: '編輯',
+        icon: 'pi pi-pencil',
+        command: () => this.edit(postId, 'post')
+      },
+      {
+        label: '刪除',
+        icon: 'pi pi-trash',
+        command: () => this.deletePost(postId)
+      }
+    ];
+  }
+
+  deletePost(postId: number) {
+    this.confirmationService.confirm({
+      message: '確定要刪除這篇回文嗎？',
+      accept: () => {
+        this.forumService.deletePost(postId).subscribe({
+          next: () => this.showMessage('success', '成功', '回文已刪除'),
+          error: (err) => this.handleError('刪除回文失敗', err),
+          complete: () => location.reload()
+        });
+      }
+    });
+  }
+
+  deleteArticle(articleId: number) {
+    this.confirmationService.confirm({
+      message: '確定要刪除這篇文章嗎？',
+      accept: () => {
+        this.forumService.deleteArticle(articleId).subscribe({
+          next: () => {
+            this.showMessage('success', '成功', '文章已刪除');
+            this.router.navigate(['/forum']);
+          },
+          error: (err) => this.handleError('刪除文章失敗', err)
+        });
+      }
+    });
+  }
+
   safeHtml(data: string) {
     return this.forumService.getSafe(data);
   }
@@ -103,6 +112,7 @@ export class ArticleComponent implements OnInit {
   edit(id: number, type: string) {
     this.router.navigate(['/forum', 'ed', type, id]);
   }
+
   navToReply(articleId: number) {
     this.router.navigate(['/forum', 'new', 'post', articleId]);
   }
@@ -114,11 +124,21 @@ export class ArticleComponent implements OnInit {
       detail: '已點踩!',
     });
   }
+
   like() {
-    this.messageService.add({
-      severity: 'success',
-      summary: '成功',
-      detail: '按讚囉!',
-    });
+    this.showMessage('success', '成功', '按讚囉!');
+  }
+
+  private showMessage(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity, summary, detail });
+  }
+
+  private handleError(summary: string, err: any) {
+    console.error(summary, err);
+    this.showMessage('error', '錯誤', `${summary}：${err}`);
+  }
+
+  NumToString(count: number) {
+    return String(count);
   }
 }

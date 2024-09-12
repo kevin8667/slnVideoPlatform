@@ -9,10 +9,10 @@ import {
   throwError,
 } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Theme } from '../interfaces/forumnterface/Theme';
-import { ForumPagingDTO } from '../interfaces/forumnterface/ForumPagingDTO';
-import { ArticleView } from '../interfaces/forumnterface/ArticleView';
-import { Post } from '../interfaces/forumnterface/Post';
+import { Theme } from '../interfaces/forumInterface/Theme';
+import { ForumPagingDTO } from '../interfaces/forumInterface/ForumPagingDTO';
+import { ArticleView } from '../interfaces/forumInterface/ArticleView';
+import { Post } from '../interfaces/forumInterface/Post';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({

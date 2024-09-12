@@ -225,27 +225,31 @@ namespace VdbAPI.Controllers {
         {
             try {
                 using var connection = new SqlConnection(_connection);
-                var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and lock = 1");
+                var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and [lock] = 1");
                 // 篩選條件
                 if(searchDTO.categoryId != 0) {
                     sql.Append(" AND ThemeId = @CategoryId");
                 }
                 // 關鍵字篩選
-
+                // 定義變數
+                string likePattern = "";
+                // 根據條件添加搜尋詞
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
-                    sql.Append(" AND (Title LIKE @Keyword OR ArticleContent LIKE @Keyword OR NickName LIKE @Keyword)");
+                    likePattern = $"%{searchDTO.keyword}%";
+                    sql.Append(" AND ArticleContent LIKE @LikePattern OR Title LIKE @LikePattern OR NickName LIKE @LikePattern");
                 }
+               
                 // 排序
 
                 // 計算總筆數
                 var countSql = $"SELECT COUNT(1) FROM ({sql}) AS CountQuery";
                 var dataCount = await connection.ExecuteScalarAsync<int>(countSql,new {
                     CategoryId = searchDTO.categoryId,
-                    Keyword = $"%{searchDTO.keyword}%"
+                    LikePattern = likePattern
                 });
 
                 // 排序條件
-                sql.Append(" Order By UpdateDate Desc"); // 根據你的排序需求修改
+                sql.Append(" ORDER BY [Lock] DESC, UpdateDate Desc"); // 根據你的排序需求修改
 
                 // 分頁
                 int pageSize = searchDTO.pageSize ?? 10;
@@ -257,7 +261,7 @@ namespace VdbAPI.Controllers {
 
                 var articles = await connection.QueryAsync<ArticleView>(sql.ToString(),new {
                     CategoryId = searchDTO.categoryId,
-                    Keyword = $"%{searchDTO.keyword}%",
+                    LikePattern = likePattern,
                     Offset = (page - 1) * pageSize,
                     PageSize = pageSize
                 });
