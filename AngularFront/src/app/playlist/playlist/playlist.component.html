@@ -8,16 +8,14 @@
   </p-paginator>
 
   <div class="topbar-search">
-    <p-autoComplete [(ngModel)]="videoName"
-                  [suggestions]="filteredVideos"
-                  (completeMethod)="searchVideos($event)"
-                  (onSelect)="addSearchChip($event)"
-                  (keydown)="handleKeydown($event)"
-                  field="videoName"
-                  placeholder="搜尋影片名稱">
+    <p-autoComplete
+        [(ngModel)]="selectedVideos"
+        [suggestions]="filteredVideos"
+        (completeMethod)="searchVideos($event)"
+        field="videoName"
+        [multiple]="true"
+        placeholder="搜尋影片名稱">
     </p-autoComplete>
-
-    <p-chips [(ngModel)]="selectedVideos" field="videoName"></p-chips>
 
     <p-button (click)="searchPlaylists()" icon="pi pi-search" [rounded]="true" [text]="true"></p-button>
   </div>

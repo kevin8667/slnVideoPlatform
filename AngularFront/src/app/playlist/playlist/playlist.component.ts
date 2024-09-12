@@ -3,6 +3,7 @@ import { PlaylistService } from '../../services/playlist.service';
 import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-playlist',
@@ -12,6 +13,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class PlaylistComponent implements OnInit {
   playlists: PlaylistDTO[] = [];
   paginatedPlaylists: PlaylistDTO[] = [];
+  allPlaylists: PlaylistDTO[] = [];
   filteredVideos: PlaylistitemDTO[] = [];
   selectedVideos: PlaylistitemDTO[] = [];
   selectedPlaylistItems: PlaylistitemDTO[] = [];
@@ -20,14 +22,19 @@ export class PlaylistComponent implements OnInit {
   first: number = 0;
   videoName: string = '';
 
-  constructor(private playlistService: PlaylistService) {}
+  constructor(
+    private playlistService: PlaylistService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    this.loadPlaylists();
+  }
+
+  loadPlaylists(): void {
     this.playlistService.getPlaylists().subscribe((data) => {
-      console.log('API Response:', data); // 檢查 API 返回數據
-      this.playlists = data.map((playlist) => {
-        return { ...playlist, showLikeEffect: false };
-      });
+      this.allPlaylists = data;
+      this.playlists = [...this.allPlaylists];
       this.paginate({ first: this.first, rows: this.rows });
     });
   }
@@ -40,67 +47,39 @@ export class PlaylistComponent implements OnInit {
     this.paginatedPlaylists = this.playlists.slice(start, end);
   }
 
-  handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter' && this.videoName.trim()) {
-      const firstSuggestion = this.filteredVideos[0];
-
-      if (firstSuggestion) {
-        this.addSearchChip({ value: firstSuggestion });
-      } else {
-        const newVideo: PlaylistitemDTO = {
-          playListId: 0,
-          videoId: Date.now(),
-          videoPosition: 0,
-          videoName: this.videoName.trim(),
-          thumbnailPath: '',
-          episode: null,
-        };
-
-        this.addSearchChip({ value: newVideo });
-      }
-
-      this.videoName = '';
-    }
-  }
-
-  addSearchChip(event: any): void {
-    const video: PlaylistitemDTO = event.value;
+  addVideoToSelected(video: PlaylistitemDTO): void {
     if (!this.selectedVideos.some((v) => v.videoId === video.videoId)) {
       this.selectedVideos.push(video);
     }
-    console.log('Selected Videos:', this.selectedVideos);
   }
 
   searchVideos(event: any): void {
-    let query = event.query;
+    const query = event.query.toLowerCase();
     this.filteredVideos = [];
 
     this.playlists.forEach((playlist) => {
       if (playlist.videos) {
-        const filtered =
-          playlist.videos.filter((video) => {
-            console.log('Video being checked:', video);
-            return video.videoName && video.videoName.includes(query);
-          }) || [];
+        const filtered = playlist.videos.filter((video) =>
+          video.videoName.toLowerCase().includes(query)
+        );
         this.filteredVideos = [...this.filteredVideos, ...filtered];
       }
     });
-
-    console.log('Filtered Videos:', this.filteredVideos);
   }
 
   searchPlaylists(): void {
-    console.log('Searching with: ', this.selectedVideos);
+    if (!this.selectedVideos || this.selectedVideos.length === 0) {
+      console.log('No selected videos, nothing to search.');
+      return;
+    }
 
-    const filteredPlaylists = this.playlists.filter((playlist) => {
-      console.log('Checking playlist: ', playlist);
+    const filteredPlaylists = this.allPlaylists.filter((playlist) => {
       if (!playlist.videos || playlist.videos.length === 0) {
-        console.log('No videos in this playlist');
         return false;
       }
 
       return this.selectedVideos.every((video) =>
-        playlist.videos?.some(
+        playlist.videos!.some(
           (v) =>
             v.videoName &&
             v.videoName
@@ -110,9 +89,9 @@ export class PlaylistComponent implements OnInit {
         )
       );
     });
-
-    this.paginatedPlaylists = filteredPlaylists.slice(0, this.rows);
-    console.log('Filtered Playlists: ', this.paginatedPlaylists);
+    this.playlists = filteredPlaylists;
+    this.paginate({ first: 0, rows: this.rows });
+    this.cdr.detectChanges();
   }
 
   incrementLike(playlist: PlaylistDTO): void {

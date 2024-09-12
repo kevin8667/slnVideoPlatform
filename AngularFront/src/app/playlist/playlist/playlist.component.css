@@ -114,13 +114,13 @@
   color: #17A2B8;
 }
 
-::ng-deep .p-chips-token {
+::ng-deep .p-autocomplete-token {
   font-size: 16px;
   color: #000;
   background-color: #e6f7ff;
 }
 
-::ng-deep .p-chips-token-icon {
+::ng-deep .p-autocomplete-token .p-autocomplete-token-icon {
   color: #000;
 }
 
@@ -142,8 +142,8 @@
   gap: 10px;
 }
 
-.topbar-search p-autoComplete, .topbar-search p-chips, .topbar-search button {
-  margin-left: 10px;
+.topbar-search p-autocomplete , .topbar-search button {
+  margin-left: 20px;
 }
 
 @media screen and (max-width: 1400px) {
