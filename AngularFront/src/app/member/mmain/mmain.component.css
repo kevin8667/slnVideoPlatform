@@ -1,0 +1,185 @@
+.news-section,h3 {
+  color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+
+  .leftcontainer {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+
+    :is(label) {
+      color: #333;
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+    }
+
+  }
+
+  .rightcontainer {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .small-image {
+    width: 150px;
+    height: 150px;
+  }
+
+}
+/* 最新消息區域的樣式 */
+.news-section {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.news-section h3 {
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.news-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-item {
+  margin-bottom: 15px; /* 每條消息的間距 */
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.news-item:last-child {
+  border-bottom: none;
+}
+
+.news-header {
+  display: flex;
+  cursor: pointer; /* 鼠標懸停顯示指針 */
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #e9ecef; /* 背景顏色 */
+}
+
+.news-header:hover {
+  background-color: #dee2e6; /* 懸停效果 */
+
+}
+
+.news-date {
+  font-size: 0.9em; /* 日期字體大小 */
+  color: #6c757d; /* 日期顏色 */
+}
+
+.news-title {
+  margin-left: 30px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #007bff; /* 標題顏色 */
+}
+
+.news-summary {
+  margin-top: 5px;
+  font-size: 0.95em;
+  color: #333;
+}
+
+
+
+.modify-area {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.profile-header {
+  display: flex;
+  align-items: flex-end; /* 垂直對齊底部 */
+  gap: 10px; /* 圖片和文字之間的間距 */
+}
+
+.rounded-circle {
+  width: 100px; /* 或者你需要的其他尺寸 */
+  height: 100px; /* 或者你需要的其他尺寸 */
+}
+
+.profile-info {
+  display: flex;
+  align-items: flex-end; /* 垂直對齊底部 */
+}
+
+.crown {
+  width: 25px;
+  margin-right: 5px; /* 圖標和文字之間的間距 */
+  margin-bottom: 10px;
+}
+
+.profile-info label {
+  font-size: 1rem; /* 調整文字大小 */
+}
+
+
+.profile-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.rounded-circle {
+  width: 100px; /* 或者你需要的其他尺寸 */
+  height: 100px; /* 或者你需要的其他尺寸 */
+}
+
+.edit-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+  border-radius: 0 0 10px 10px; /* 圓角 */
+  color: white;
+  font-size: 14px; /* 調整文字大小 */
+  visibility: hidden; /* 預設隱藏覆蓋層 */
+}
+
+.profile-image-container:hover .edit-overlay {
+  visibility: visible; /* 滑鼠懸停時顯示覆蓋層 */
+}
+.cat-item {
+  cursor: pointer;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.edit-button img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px; /* 圖標和文字之間的間距 */
+}
+
+.edit-button span {
+  font-size: 14px; /* 調整文字大小 */
+}

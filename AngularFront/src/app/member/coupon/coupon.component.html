@@ -1,0 +1,82 @@
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a (click)="goHome()">Home</a></li>
+      <li class="breadcrumb-item"><a (click)="goMMain()">會員</a></li>
+      <li class="breadcrumb-item active" aria-current="page">我的優惠券</li>
+    </ol>
+  </nav>
+  <div class="container" *ngIf="hasData">
+    <div class="row">
+      <div *ngFor="let coupon of couponData" class="col-md-3 mb-4">
+        <div class="card" style="width: 100%">
+          <div style="text-align: center; margin-top: 10px">
+            <img
+              *ngIf="coupon.type == 'A'"
+              class="card-img-top"
+              src="./../../../assets/IMG/coupon.png"
+              alt="a"
+              style="width: 130px"
+            />
+            <img
+              *ngIf="coupon.type == 'B'"
+              class="card-img-top"
+              src="./../../../assets/IMG/giftbox.png"
+              alt="b"
+              style="width: 130px"
+            />
+            <img
+              *ngIf="coupon.type == 'C'"
+              class="card-img-top"
+              src="./../../../assets/IMG/gift-card.png"
+              alt="c"
+              style="width: 130px"
+            />
+          </div>
+          <div class="card-body" style="height: 210px; text-align: center">
+            <h3 class="card-title">{{ coupon.couponName }}</h3>
+            <p class="card-text">{{ coupon.couponDesc }}</p>
+            <p class="card-text">使用期限: {{ coupon.expireTime }}</p>
+
+            <p-button
+              *ngIf="coupon.type != 'A'"
+              (onClick)="ShowGiftList(coupon.giftListID)"
+              label="贈品清單"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!hasData">
+    <div class="alert alert-success" role="alert">沒有可使用的優惠券</div>
+  </div>
+</div>
+
+<p-dialog
+  header="Gift List"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '600px' }"
+  [closable]="true"
+  [responsive]="true"
+  [styleClass]="'custom-dialog'"
+>
+  <div class="dialog-content">
+    <span class="p-text-secondary block mb-5">贈品清單</span>
+    <div *ngFor="let gift of giftList" class="gift-item">
+      <div class="gift-icon">
+        <img src="./../../../assets/IMG/giftbox.png" alt="Gift Box" class="gift-box-img" />
+      </div>
+      <div class="gift-details">
+        <label class="gift-label">{{gift.giftName}}:</label>
+        <p class="gift-desc">{{gift.giftDesc}}</p>
+        <div class="gift-images">
+          <img *ngIf="(gift.pic == null || gift.pic=='')" src="https://img.cloudimg.in/uploads/shops/22075/products/3b/3bb664126b7bc5e5b8aafb19e9960f2a.jpg" alt="Surprise" class="default-img" />
+          <img *ngIf="(gift.pic != null && gift.pic!='')" [src]="gift.pic" alt="{{gift.giftName}} Image" class="custom-img" />
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
