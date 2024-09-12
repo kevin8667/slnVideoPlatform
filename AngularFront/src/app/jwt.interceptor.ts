@@ -9,11 +9,11 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
+// import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private router: Router, private oauthService: OAuthService) {}
+  constructor(private router: Router,/* private oauthService: OAuthService*/) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -40,7 +40,7 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   private handleUnauthorized() {
-    this.oauthService.logOut(); // Log out using OAuthService
+   /* this.oauthService.logOut(); // Log out using OAuthService  */
     this.router.navigate(['/login']);
   }
 
