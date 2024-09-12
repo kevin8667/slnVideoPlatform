@@ -1,7 +1,7 @@
 .grid-view {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 15px 10px;
+  gap: 20px 10px;
 }
 
 .playlist-card {

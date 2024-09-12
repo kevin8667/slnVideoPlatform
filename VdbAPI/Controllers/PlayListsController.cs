@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VdbAPI.Models;
@@ -74,6 +75,22 @@ namespace VdbAPI.Controllers
             {
                 return NotFound();
             }
+
+            return Ok(playlist);
+        }
+
+        [HttpPatch("{id}/likeCount")]
+        public async Task<IActionResult> UpdateLikeCount(int id, [FromBody] int likeCount)
+        {
+            var playlist = await _context.PlayLists.FindAsync(id);
+            if (playlist == null)
+            {
+                return NotFound();
+            }
+            
+            playlist.LikeCount = likeCount;
+            
+            await _context.SaveChangesAsync();
 
             return Ok(playlist);
         }

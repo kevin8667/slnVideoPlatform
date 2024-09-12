@@ -94,12 +94,18 @@ export class PlaylistComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  incrementLike(playlist: PlaylistDTO): void {
-    playlist.likeCount = (playlist.likeCount ?? 0) + 1;
-    playlist.showLikeEffect = true;
-    setTimeout(() => {
-      playlist.showLikeEffect = false;
-    }, 1000);
+  incrementLike(playlist: PlaylistDTO) {
+    const newLikeCount = (playlist.likeCount ?? 0) + 1;
+    this.playlistService.updateLikeCount(playlist.playListId??0, newLikeCount).subscribe(
+      (updatedPlaylist) => {
+        playlist.likeCount = updatedPlaylist.likeCount;
+        playlist.showLikeEffect = true;
+        setTimeout(() => (playlist.showLikeEffect = false), 1000);
+      },
+      (error) => {
+        console.error('Error updating like count', error);
+      }
+    );
   }
 
   onCardClick(playlistId: number): void {
