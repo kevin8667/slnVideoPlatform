@@ -147,9 +147,10 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.PostDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.ReplyCount).HasDefaultValue(0);
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
-            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(50);
             entity.Property(e => e.UpdateDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -173,9 +174,9 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
-            entity.Property(e => e.MemberName)
+            entity.Property(e => e.NickName)
                 .IsRequired()
-                .HasMaxLength(30);
+                .HasMaxLength(10);
             entity.Property(e => e.PostDate).HasColumnType("datetime");
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
             entity.Property(e => e.ThemeName)
