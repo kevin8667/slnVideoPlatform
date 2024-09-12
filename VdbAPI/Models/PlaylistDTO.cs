@@ -10,5 +10,6 @@
         public int? AddedCount { get; set; }
         public int? SharedCount { get; set; }
         public byte[] ShowImage { get; set; }
+        public List<PlaylistitemDTO> Videos { get; set; }
     }
 }

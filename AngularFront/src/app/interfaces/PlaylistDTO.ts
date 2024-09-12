@@ -1,3 +1,5 @@
+import { PlaylistitemDTO } from "./PlaylistitemDTO";
+
 export interface PlaylistDTO {
   playListId?: number;
   playListName: string;
@@ -12,4 +14,5 @@ export interface PlaylistDTO {
   playListUpdatedAt?: Date;
   analysisTimestamp?: Date;
   showLikeEffect?: boolean;
+  videos?: PlaylistitemDTO[];
 }

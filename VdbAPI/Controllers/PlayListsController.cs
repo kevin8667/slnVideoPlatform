@@ -24,6 +24,8 @@ namespace VdbAPI.Controllers
         public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
         {
             var playlists = await _context.PlayLists
+                .Include(pl => pl.PlayListItems)
+                    .ThenInclude(pli => pli.Video)
                 .Select(pl => new PlaylistDTO
                 {
                     PlayListId = pl.PlayListId,
@@ -33,7 +35,17 @@ namespace VdbAPI.Controllers
                     LikeCount = pl.LikeCount,
                     AddedCount = pl.AddedCount,
                     SharedCount = pl.SharedCount,
-                    ShowImage = pl.ShowImage
+                    ShowImage = pl.ShowImage,
+                    
+                    Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
+                    {
+                        PlayListId = pli.PlayListId,
+                        VideoId = pli.Video.VideoId,
+                        VideoPosition = pli.VideoPosition,
+                        VideoName = pli.Video.VideoName,
+                        ThumbnailPath = pli.Video.ThumbnailPath,
+                        Episode = pli.Video.Episode
+                    }).ToList()
                 })
                 .ToListAsync();
 
@@ -65,6 +77,7 @@ namespace VdbAPI.Controllers
 
             return Ok(playlist);
         }
+
         [HttpPost]
         public async Task<ActionResult<PlayList>> PostPlayList([FromBody] PlayListCreateDTO dto)
         {
@@ -169,17 +182,21 @@ namespace VdbAPI.Controllers
             existingPlayList.LikeCount = playList.LikeCount;
             existingPlayList.AddedCount = playList.AddedCount;
             existingPlayList.SharedCount = playList.SharedCount;
-
+            
             if (!string.IsNullOrEmpty(playList.PlayListImage))
             {
                 try
-                {
+                {                    
                     existingPlayList.ShowImage = Convert.FromBase64String(playList.PlayListImage);
                 }
                 catch (FormatException)
                 {
                     return BadRequest("圖片格式無效");
                 }
+            }
+            else            {
+                
+                existingPlayList.ShowImage = existingPlayList.ShowImage;
             }
 
             existingPlayList.PlayListUpdatedAt = DateTime.UtcNow;
@@ -242,6 +259,28 @@ namespace VdbAPI.Controllers
             return _context.PlayLists.Any(e => e.PlayListId == id);
         }
 
+        // GET: api/PlayList/videos
+        [HttpGet("videos")]
+        public async Task<ActionResult<IEnumerable<VideoListDTO>>> GetAllVideos()
+        {
+            var videos = await _context.VideoLists
+                .Select(v => new VideoListDTO
+                {
+                    VideoId = v.VideoId,
+                    VideoName = v.VideoName,
+                    Episode = v.Episode,
+                    ThumbnailPath = v.ThumbnailPath ?? "/assets/img/movie.png"
+                })
+                .ToListAsync();
+
+            if (videos == null || !videos.Any())
+            {
+                return NotFound("No videos found.");
+            }
+
+            return Ok(videos);
+        }
+
         [HttpGet("{id}/items")]
         public async Task<ActionResult<IEnumerable<PlaylistitemDTO>>> GetPlayListItems(int id)
         {
@@ -267,7 +306,7 @@ namespace VdbAPI.Controllers
                         Episode = _context.VideoLists
                             .Where(v => v.VideoId == p.VideoId)
                             .Select(v => v.Episode)
-                            .FirstOrDefault() ?? 1
+                            .FirstOrDefault()
                     }).ToListAsync();
 
                 if (playListItems == null || !playListItems.Any())

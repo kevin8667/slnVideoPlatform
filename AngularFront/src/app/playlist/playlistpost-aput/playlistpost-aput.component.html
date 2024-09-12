@@ -2,7 +2,7 @@
   [(visible)]="displayDialog"
   [modal]="true"
   [closable]="false"
-  [style]="{ width: '50vw' }"
+  [style]="{ width: '45vw' }"
   [baseZIndex]="10000"
 >
   <ng-template pTemplate="header">
@@ -16,8 +16,8 @@
       [(ngModel)]="playlistCollaborators"
       optionLabel="memberName"
       placeholder="選擇協作者"
-      [showClear]="true"    >
-
+      [showClear]="true"
+    >
       <ng-template let-collaborator pTemplate="item">
         <div class="collaborator-item">
           <img
@@ -53,6 +53,7 @@
           id="playListName"
           [(ngModel)]="playlist.playListName"
           name="playListName"
+          class="form-control"
         />
       </div>
 
@@ -62,6 +63,7 @@
           id="playListDescription"
           [(ngModel)]="playlist.playListDescription"
           name="playListDescription"
+          class="form-control"
         ></textarea>
       </div>
 
@@ -76,34 +78,91 @@
           type="file"
           id="playListImage"
           (change)="onImageSelected($event)"
+          class="form-control"
         />
       </div>
 
       <div class="form-group">
         <label>播放清單內容</label>
-        <div cdkDropListGroup>
+
+        <p-multiSelect
+          [options]="allAvailableVideos"
+          [(ngModel)]="selectedVideos"
+          optionLabel="videoName"
+          placeholder="選擇影片"
+          [showClear]="true"
+        >
+          <ng-template let-video pTemplate="item">
+            <div class="video-item">
+              <img
+                [src]="video.thumbnailPath || '/assets/img/movie.png'"
+                alt="Video Thumbnail"
+                class="thumbnail"
+              />
+              <span>{{ video.videoName }}</span>
+              <span *ngIf="video.episode !== null && video.episode > 0">
+                - 第 {{ video.episode }} 集
+              </span>
+            </div>
+          </ng-template>
+
+          <ng-template let-video pTemplate="selectedItem">
+            <div class="video-item">
+              <img
+                [src]="video.thumbnailPath || '/assets/img/movie.png'"
+                alt="Video Thumbnail"
+                class="thumbnail"
+              />
+              <span>{{ video.videoName }}</span>
+              <span *ngIf="video.episode !== null && video.episode > 0">
+                - 第 {{ video.episode }} 集
+              </span>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+
+        <div class="video-list">
           <div
-            class="video-item"
-            *ngFor="let item of playlistItems; let i = index"
-            cdkDrag
+            cdkDropList
+            (cdkDropListDropped)="drop($event)"
+            class="cdk-drop-list"
           >
-            <div class="card">
-              <div class="card-content">
-                <img
-                  src="{{ item.thumbnailPath }}"
-                  alt="Video Thumbnail"
-                  class="thumbnail"
-                />
-                <span>{{ item.videoName }}</span>
-                <button
-                  pButton
-                  icon="pi pi-trash"
-                  (click)="removePlaylistItem(i)"
-                  class="remove-button"
-                ></button>
-              </div>
-              <div cdkDragHandle class="drag-handle">
-                <i class="pi pi-arrows-alt"></i>
+            <div
+              class="video-item"
+              *ngFor="let video of selectedVideos; let i = index"
+              cdkDrag
+            >
+              <div class="card">
+                <div class="card-content">
+                  <img
+                    [src]="video.thumbnailPath || '/assets/img/movie.png'"
+                    alt="Video Thumbnail"
+                    class="thumbnail"
+                  />
+                  <div>
+                    <span>{{ video.videoName }}</span>
+                    <span *ngIf="video.episode"
+                      >- 第 {{ video.episode }} 集</span
+                    >
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <button
+                    pButton
+                    icon="pi pi-trash"
+                    (click)="removePlaylistItem(i)"
+                    class="remove-button"
+                    pTooltip="刪除影片"
+                  ></button>
+
+                  <button
+                    pButton
+                    icon="pi pi-arrows-v"
+                    class="move-button"
+                    pTooltip="移動影片"
+                    cdkDragHandle
+                  ></button>
+                </div>
               </div>
             </div>
           </div>

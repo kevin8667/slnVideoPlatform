@@ -1,18 +1,21 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
 import { MemberInfoDTO } from '../../interfaces/MemberInfoDTO';
 import { PlaylistService } from '../../services/playlist.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { VideoListDTO } from 'src/app/interfaces/VideoListDTO';
+import { PlayListCreateDTO } from '../../interfaces/PlayListCreateDTO';
 
 @Component({
   selector: 'app-playlistpost-aput',
   templateUrl: './playlistpost-aput.component.html',
-  styleUrls: ['./playlistpost-aput.component.css']
+  styleUrls: ['./playlistpost-aput.component.css'],
 })
-export class PlaylistpostAputComponent {
+export class PlaylistpostAputComponent implements OnInit {
   isEditing: boolean = false;
   displayDialog: boolean = false;
+
   playlist: PlaylistDTO = {
     playListId: 0,
     playListName: '',
@@ -21,18 +24,30 @@ export class PlaylistpostAputComponent {
     likeCount: 100,
     addedCount: 100,
     sharedCount: 100,
-    showImage: null
+    showImage: null,
   };
+
   playlistItems: PlaylistitemDTO[] = [];
   playlistCollaborators: MemberInfoDTO[] = [];
   availableCollaborators: MemberInfoDTO[] = [];
+  allAvailableVideos: VideoListDTO[] = [];
+  selectedVideos: VideoListDTO[] = [];
 
   imagePreview: string | ArrayBuffer | null = '/assets/img/noimageooo.jpg';
 
-  constructor(private cdr: ChangeDetectorRef, private playlistService: PlaylistService) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private playlistService: PlaylistService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadAllAvailableVideos();
+  }
 
   getImagePreview(): string {
-    return this.imagePreview ? this.imagePreview as string : '/assets/img/noimageooo.jpg';
+    return this.imagePreview
+      ? (this.imagePreview as string)
+      : '/assets/img/noimageooo.jpg';
   }
 
   showDialog(isEditing: boolean, playlist?: PlaylistDTO): void {
@@ -41,56 +56,89 @@ export class PlaylistpostAputComponent {
 
     if (isEditing && playlist) {
       this.playlist = { ...playlist };
-      this.imagePreview = this.playlist.showImage ? 'data:image/png;base64,' + this.playlist.showImage : '/assets/img/noimageooo.jpg';
+      this.imagePreview = this.playlist.showImage
+        ? 'data:image/png;base64,' + this.playlist.showImage
+        : '/assets/img/noimageooo.jpg';
       this.loadCollaborators();
       this.loadPlaylistItems();
     } else {
       this.resetForm();
       this.loadCollaborators();
+      this.loadAllAvailableVideos();
     }
     this.cdr.detectChanges();
   }
 
-  loadCollaborators(): void {
-    console.log('協作者加載開始，當前模式:', this.isEditing ? '編輯' : '新增');
-
-    if (this.isEditing && typeof this.playlist.playListId === 'number') {
-      this.playlistService.getCollaborators(this.playlist.playListId).subscribe(
-        (collaborators) => {
-          console.log('協作者資料:', collaborators);
-          this.availableCollaborators = collaborators;
-        },
-        (error) => {
-          console.error('Error loading collaborators', error);
-        }
-      );
-    } else {
-      this.playlistService.getCollaborators().subscribe(
-        (collaborators) => {
-          this.availableCollaborators = collaborators.filter(c => c.memberId !== 5);
-          console.log('過濾後的協作者:', this.availableCollaborators);
-        },
-        (error) => {
-          console.error('Error loading collaborators', error);
-        }
-      );
-    }
+  loadAllAvailableVideos(): void {
+    this.playlistService.getAllVideos().subscribe(
+      (videos: VideoListDTO[]) => {
+        this.allAvailableVideos = videos;
+      },
+      (error) => {
+        console.error('Error loading available videos', error);
+      }
+    );
   }
-
-  onImageError(event: any) {
-    event.target.src = '/assets/img/memberooo.png';
-  }
-
-
-
-
-
 
   loadPlaylistItems(): void {
-    // 假設有 API 來獲取播放清單的影片
-    this.playlistService.getPlaylistItems(this.playlist.playListId??0).subscribe(items => {
-      this.playlistItems = items;
-    });
+    this.playlistService
+      .getPlaylistItems(this.playlist.playListId ?? 0)
+      .subscribe(
+        (items: PlaylistitemDTO[]) => {
+          this.playlistItems = items;
+          this.selectedVideos = this.playlistItems.map((item) => ({
+            videoId: item.videoId,
+            videoName: item.videoName,
+            episode: item.episode,
+            thumbnailPath: item.thumbnailPath ?? '',
+          }));
+
+          this.selectedVideos.forEach((video) => {
+            console.log(
+              'Video Name:',
+              video.videoName,
+              'Episode:',
+              video.episode
+            );
+          });
+        },
+        (error) => {
+          console.error('Error loading playlist items', error);
+        }
+      );
+  }
+
+  loadCollaborators(): void {
+    this.playlistService.getCollaborators().subscribe(
+      (collaborators) => {
+        this.availableCollaborators = collaborators;
+        if (this.isEditing && this.playlist.playListId) {
+          this.playlistService
+            .getCollaborators(this.playlist.playListId)
+            .subscribe(
+              (selectedCollaborators) => {
+                this.playlistCollaborators = this.availableCollaborators.filter(
+                  (collaborator) =>
+                    selectedCollaborators.some(
+                      (sc) => sc.memberId === collaborator.memberId
+                    )
+                );
+              },
+              (error) => {
+                console.error('Error loading selected collaborators', error);
+              }
+            );
+        }
+      },
+      (error) => {
+        console.error('Error loading all collaborators', error);
+      }
+    );
+  }
+
+  onVideoSelectionChange(event: any): void {
+    this.selectedVideos = event.value;
+    this.selectedVideos.forEach((video) => this.onSelectVideo(video));
   }
 
   resetForm(): void {
@@ -102,11 +150,12 @@ export class PlaylistpostAputComponent {
       likeCount: 100,
       addedCount: 100,
       sharedCount: 100,
-      showImage: null
+      showImage: null,
     };
     this.imagePreview = '/assets/img/noimageooo.jpg';
     this.playlistItems = [];
     this.playlistCollaborators = [];
+    this.selectedVideos = [];
   }
 
   onCancel(): void {
@@ -114,36 +163,40 @@ export class PlaylistpostAputComponent {
   }
 
   onSubmit(): void {
-    if (this.playlist.playListName.trim() === '' || this.playlist.playListDescription.trim() === '') {
-      alert('請填寫所有必要的欄位');
+    if (
+      this.playlist.playListName.trim() === '' ||
+      this.playlist.playListDescription.trim() === ''
+    ) {
       return;
     }
 
-    // 提取協作者的 memberId
-    const collaboratorIds = this.playlistCollaborators.map(c => c.memberId);
+    const collaboratorIds = this.playlistCollaborators.map((c) => c.memberId);
+    const videoIds = this.selectedVideos.map((video) => video.videoId);
 
-    // 構建要傳遞給後端的 DTO
-    const playlistDTO = {
-      ...this.playlist,
-      collaboratorIds: collaboratorIds
+    const playListCreateDTO: PlayListCreateDTO = {
+      PlayList: this.playlist,
+      videoIds: videoIds,
+      collaboratorIds: collaboratorIds,
     };
 
     if (this.isEditing) {
-      this.playlistService.editPlaylist(this.playlist.playListId ?? 0, playlistDTO).subscribe(
-        (response) => {
-          console.log('播放清單已更新:', response);
-        },
-        (error) => {
-          console.error('Error editing playlist', error);
-        }
-      );
+      this.playlistService
+        .editPlaylist(this.playlist.playListId ?? 0, playListCreateDTO)
+        .subscribe(
+          (response) => {
+            console.log('播放清單已編輯')
+          },
+          (error) => {
+            console.error('編輯播放清單時發生錯誤', error);
+          }
+        );
     } else {
-      this.playlistService.addNewPlaylist(playlistDTO).subscribe(
+      this.playlistService.addNewPlaylist(playListCreateDTO).subscribe(
         (response) => {
-          console.log('播放清單已新增:', response);
+          console.log('播放清單已新增');
         },
         (error) => {
-          console.error('Error adding playlist', error);
+          console.error('新增播放清單時發生錯誤', error);
         }
       );
     }
@@ -151,6 +204,9 @@ export class PlaylistpostAputComponent {
     this.displayDialog = false;
   }
 
+  onImageError(event: any) {
+    event.target.src = '/assets/img/memberooo.png';
+  }
 
   onImageSelected(event: any): void {
     const file = event.target.files[0];
@@ -158,25 +214,110 @@ export class PlaylistpostAputComponent {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result;
-
         this.cdr.detectChanges();
       };
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        this.playlist.showImage = reader.result as string;
+        const base64String = (reader.result as string).split(',')[1];
+        this.playlist.showImage = base64String;
         this.cdr.detectChanges();
       };
     }
   }
 
-  // 刪除播放清單中的影片
-  removePlaylistItem(index: number): void {
-    this.playlistItems.splice(index, 1);
+  drop(event: CdkDragDrop<PlaylistitemDTO[]>): void {
+    moveItemInArray(
+      this.playlistItems,
+      event.previousIndex,
+      event.currentIndex
+    );
+
+    this.playlistItems.forEach((video, index) => {
+      console.log(
+        `Updating position for videoId: ${video.videoId}, newPosition: ${
+          index + 1
+        }`
+      );
+      this.playlistService
+        .updateVideoPosition(
+          this.playlist.playListId ?? 0,
+          video.videoId,
+          index + 1
+        )
+        .subscribe(
+          () => {
+            console.log('Video position updated');
+          },
+          (error) => {
+            console.error('Error updating video position:', error);
+          }
+        );
+    });
   }
 
-  // 拖曳事件處理
-  drop(event: CdkDragDrop<PlaylistitemDTO[]>): void {
-    moveItemInArray(this.playlistItems, event.previousIndex, event.currentIndex);
+  updateVideoPositions(): void {
+    this.playlistItems.forEach((item, index) => {
+      this.playlistService
+        .updateVideoPosition(
+          this.playlist.playListId ?? 0,
+          item.videoId,
+          index + 1
+        )
+        .subscribe(
+          (response) => {
+            console.log('影片位置已更新', response);
+          },
+          (error) => {
+            console.error('Error updating video position', error);
+          }
+        );
+    });
+  }
+
+  updatePlaylistItems(): void {
+    if (this.playlist.playListId) {
+      this.playlistService
+        .addPlaylistItems(this.playlist.playListId, this.playlistItems)
+        .subscribe(
+          (response) => {
+            console.log('播放清單項目已更新:', response);
+          },
+          (error) => {
+            console.error('Error updating playlist items', error);
+          }
+        );
+    }
+  }
+
+  onSelectVideo(item: VideoListDTO): void {
+    const existingVideo = this.playlistItems.find(
+      (video) => video.videoId === item.videoId
+    );
+
+    if (!existingVideo) {
+      this.playlistItems.push({
+        playListId: this.playlist.playListId ?? 0,
+        videoId: item.videoId,
+        videoPosition: this.playlistItems.length + 1,
+        videoName: item.videoName,
+        thumbnailPath: item.thumbnailPath,
+        episode: item.episode ?? 0,
+      });
+    }
+  }
+
+  removePlaylistItem(index: number): void {
+    const video = this.selectedVideos[index];
+    this.playlistService
+      .removePlaylistItem(this.playlist.playListId ?? 0, video.videoId)
+      .subscribe(
+        () => {
+          this.selectedVideos.splice(index, 1);
+          this.playlistItems.splice(index, 1);
+        },
+        (error) => {
+          console.error('Error removing video from playlist:', error);
+        }
+    );
   }
 }
-

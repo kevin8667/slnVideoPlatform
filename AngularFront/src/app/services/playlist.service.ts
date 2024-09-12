@@ -4,24 +4,28 @@ import { Observable } from 'rxjs';
 import { PlaylistDTO } from '../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../interfaces/PlaylistitemDTO';
 import { MemberInfoDTO } from '../interfaces/MemberInfoDTO';
+import { VideoListDTO } from '../interfaces/VideoListDTO';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlaylistService {
   private apiUrl = 'https://localhost:7193/api/PlayList';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getPlaylists(): Observable<PlaylistDTO[]> {
     return this.http.get<PlaylistDTO[]>(this.apiUrl);
   }
 
-  addNewPlaylist(playlist: PlaylistDTO): Observable<PlaylistDTO> {
+  addNewPlaylist(playlist: { PlayList: PlaylistDTO }): Observable<PlaylistDTO> {
     return this.http.post<PlaylistDTO>(this.apiUrl, playlist);
   }
 
-  editPlaylist(playlistId: number, playlist: PlaylistDTO): Observable<void> {
+  editPlaylist(
+    playlistId: number,
+    playlist: { PlayList: PlaylistDTO }
+  ): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${playlistId}`, playlist);
   }
 
@@ -39,38 +43,82 @@ export class PlaylistService {
   }
 
   getMemberCollaboratorPlaylists(memberId: number): Observable<PlaylistDTO[]> {
-    return this.http.get<PlaylistDTO[]>(`${this.apiUrl}/collaborator/${memberId}`);
+    return this.http.get<PlaylistDTO[]>(
+      `${this.apiUrl}/collaborator/${memberId}`
+    );
   }
 
   getPlaylistItems(playlistId: number): Observable<PlaylistitemDTO[]> {
-    return this.http.get<PlaylistitemDTO[]>(`${this.apiUrl}/${playlistId}/items`);
+    return this.http.get<PlaylistitemDTO[]>(
+      `${this.apiUrl}/${playlistId}/items`
+    );
   }
 
-  addVideoToPlaylist(playlistId: number, video: PlaylistitemDTO): Observable<void> {
+  getAllVideos(): Observable<VideoListDTO[]> {
+    return this.http.get<VideoListDTO[]>(
+      'https://localhost:7193/api/PlayList/videos'
+    );
+  }
+
+  addPlaylistItems(
+    playListId: number,
+    playlistItems: PlaylistitemDTO[]
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/playlists/${playListId}/items`,
+      playlistItems
+    );
+  }
+
+  addVideoToPlaylist(
+    playlistId: number,
+    video: PlaylistitemDTO
+  ): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${playlistId}/items`, video);
   }
 
   removePlaylistItem(playlistId: number, videoId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${playlistId}/items/${videoId}`);
+    return this.http.delete<void>(
+      `${this.apiUrl}/${playlistId}/items/${videoId}`
+    );
   }
 
-  updateVideoPosition(playlistId: number, videoId: number, newPosition: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${playlistId}/items/${videoId}/position`, { newPosition });
+  updateVideoPosition(
+    playlistId: number,
+    videoId: number,
+    newPosition: number
+  ): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/${playlistId}/items/${videoId}/position`,
+      { newPosition }
+    );
   }
 
   getCollaborators(playlistId?: number): Observable<MemberInfoDTO[]> {
     if (playlistId) {
-      return this.http.get<MemberInfoDTO[]>(`${this.apiUrl}/collaborators/${playlistId}`);
+      return this.http.get<MemberInfoDTO[]>(
+        `${this.apiUrl}/collaborators/${playlistId}`
+      );
     } else {
       return this.http.get<MemberInfoDTO[]>(`${this.apiUrl}/collaborators`);
     }
   }
 
-  addCollaboratorToPlaylist(playlistId: number, memberId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${playlistId}/collaborators`, { memberId });
+  addCollaboratorToPlaylist(
+    playlistId: number,
+    memberId: number
+  ): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${playlistId}/collaborators`, {
+      memberId,
+    });
   }
 
-  removeCollaboratorFromPlaylist(playlistId: number, memberId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${playlistId}/collaborators/${memberId}`);
+  removeCollaboratorFromPlaylist(
+    playlistId: number,
+    memberId: number
+  ): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${playlistId}/collaborators/${memberId}`
+    );
   }
 }
