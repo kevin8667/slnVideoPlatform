@@ -94,7 +94,7 @@ export class PlaylistService {
   ): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/${playlistId}/items/${videoId}/position`,
-      { newPosition }
+      newPosition
     );
   }
 

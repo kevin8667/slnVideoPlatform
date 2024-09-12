@@ -3,7 +3,7 @@ import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
 import { MemberInfoDTO } from '../../interfaces/MemberInfoDTO';
 import { PlaylistService } from '../../services/playlist.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { VideoListDTO } from 'src/app/interfaces/VideoListDTO';
 import { PlayListCreateDTO } from '../../interfaces/PlayListCreateDTO';
 
@@ -85,7 +85,8 @@ export class PlaylistpostAputComponent implements OnInit {
       .getPlaylistItems(this.playlist.playListId ?? 0)
       .subscribe(
         (items: PlaylistitemDTO[]) => {
-          this.playlistItems = items;
+          this.playlistItems = items.sort((a, b) => a.videoPosition - b.videoPosition);
+
           this.selectedVideos = this.playlistItems.map((item) => ({
             videoId: item.videoId,
             videoName: item.videoName,
@@ -94,12 +95,7 @@ export class PlaylistpostAputComponent implements OnInit {
           }));
 
           this.selectedVideos.forEach((video) => {
-            console.log(
-              'Video Name:',
-              video.videoName,
-              'Episode:',
-              video.episode
-            );
+            console.log('Video Name:', video.videoName, 'Episode:', video.episode);
           });
         },
         (error) => {
@@ -226,43 +222,52 @@ export class PlaylistpostAputComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<PlaylistitemDTO[]>): void {
-    moveItemInArray(
-      this.playlistItems,
-      event.previousIndex,
-      event.currentIndex
-    );
+    console.log('Previous Index:', event.previousIndex);
+    console.log('Current Index:', event.currentIndex);
+
+    const movedVideo = this.playlistItems.splice(event.previousIndex, 1)[0];
+    this.playlistItems.splice(event.currentIndex, 0, movedVideo);
 
     this.playlistItems.forEach((video, index) => {
-      console.log(
-        `Updating position for videoId: ${video.videoId}, newPosition: ${
-          index + 1
-        }`
+      video.videoPosition = index + 1;
+      console.log(`Updating position for videoId: ${video.videoId}, newPosition: ${video.videoPosition}`);
+
+      this.playlistService.updateVideoPosition(
+        this.playlist.playListId ?? 0,
+        video.videoId,
+        video.videoPosition
+      ).subscribe(
+        () => {
+          console.log('Video position updated');
+        },
+        (error) => {
+          console.error('Error updating video position:', error);
+        }
       );
-      this.playlistService
-        .updateVideoPosition(
-          this.playlist.playListId ?? 0,
-          video.videoId,
-          index + 1
-        )
-        .subscribe(
-          () => {
-            console.log('Video position updated');
-          },
-          (error) => {
-            console.error('Error updating video position:', error);
-          }
-        );
     });
+
+    this.playlistItems.sort((a, b) => a.videoPosition - b.videoPosition);
+
+    this.selectedVideos = this.playlistItems.map((item) => ({
+      videoId: item.videoId,
+      videoName: item.videoName,
+      episode: item.episode,
+      thumbnailPath: item.thumbnailPath ?? '',
+    }));
+
+    this.cdr.detectChanges();
   }
 
   updateVideoPositions(): void {
+    if (!this.playlist.playListId) {
+      console.error('Invalid playlist ID');
+      return;
+    }
+
     this.playlistItems.forEach((item, index) => {
+      console.log(`Updating videoId: ${item.videoId}, newPosition: ${index + 1}`);
       this.playlistService
-        .updateVideoPosition(
-          this.playlist.playListId ?? 0,
-          item.videoId,
-          index + 1
-        )
+        .updateVideoPosition(this.playlist.playListId??0, item.videoId, index + 1)
         .subscribe(
           (response) => {
             console.log('影片位置已更新', response);
@@ -286,8 +291,8 @@ export class PlaylistpostAputComponent implements OnInit {
             console.error('Error updating playlist items', error);
           }
         );
+      }
     }
-  }
 
   onSelectVideo(item: VideoListDTO): void {
     const existingVideo = this.playlistItems.find(
@@ -318,6 +323,6 @@ export class PlaylistpostAputComponent implements OnInit {
         (error) => {
           console.error('Error removing video from playlist:', error);
         }
-    );
+      );
+    }
   }
-}
