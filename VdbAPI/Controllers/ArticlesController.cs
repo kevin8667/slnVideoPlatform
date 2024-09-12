@@ -232,7 +232,7 @@ namespace VdbAPI.Controllers {
                 }
                 // 關鍵字篩選
                 // 定義變數
-                string likePattern = "";
+                string likePattern = $"%{searchDTO.keyword}%";
                 // 根據條件添加搜尋詞
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
                     likePattern = $"%{searchDTO.keyword}%";
