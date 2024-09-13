@@ -19,8 +19,6 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<ArticleView> ArticleViews { get; set; }
 
-    public virtual DbSet<ArticleView> ArticleViews { get; set; }
-
     public virtual DbSet<BlackList> BlackLists { get; set; }
 
     public virtual DbSet<CastList> CastLists { get; set; }
