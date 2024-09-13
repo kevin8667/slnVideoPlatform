@@ -57,6 +57,8 @@ public partial class VideoList
 
     public virtual GenreList MainGenre { get; set; }
 
+    public virtual ICollection<MemberRating> MemberRatings { get; set; } = new List<MemberRating>();
+
     public virtual ICollection<NowShowingTheater> NowShowingTheaters { get; set; } = new List<NowShowingTheater>();
 
     public virtual ICollection<PlayListItem> PlayListItems { get; set; } = new List<PlayListItem>();

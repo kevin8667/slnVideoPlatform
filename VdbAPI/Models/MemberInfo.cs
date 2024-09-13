@@ -100,6 +100,10 @@ public partial class MemberInfo
 
     public virtual ICollection<BlackList> BlackListMembers { get; set; } = new List<BlackList>();
 
+    public virtual ICollection<FriendChat> FriendChatReceivers { get; set; } = new List<FriendChat>();
+
+    public virtual ICollection<FriendChat> FriendChatSenders { get; set; } = new List<FriendChat>();
+
     public virtual ICollection<FriendList> FriendListFriends { get; set; } = new List<FriendList>();
 
     public virtual ICollection<FriendList> FriendListMembers { get; set; } = new List<FriendList>();
@@ -115,6 +119,8 @@ public partial class MemberInfo
     public virtual ICollection<MemberNotice> MemberNotices { get; set; } = new List<MemberNotice>();
 
     public virtual ICollection<MemberPlayList> MemberPlayLists { get; set; } = new List<MemberPlayList>();
+
+    public virtual ICollection<MemberRating> MemberRatings { get; set; } = new List<MemberRating>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 

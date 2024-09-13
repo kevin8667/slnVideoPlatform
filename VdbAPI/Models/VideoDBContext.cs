@@ -33,6 +33,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<DirectorList> DirectorLists { get; set; }
 
+    public virtual DbSet<FriendChat> FriendChats { get; set; }
+
     public virtual DbSet<FriendList> FriendLists { get; set; }
 
     public virtual DbSet<GenreList> GenreLists { get; set; }
@@ -64,6 +66,8 @@ public partial class VideoDBContext : DbContext
     public virtual DbSet<MemberNotice> MemberNotices { get; set; }
 
     public virtual DbSet<MemberPlayList> MemberPlayLists { get; set; }
+
+    public virtual DbSet<MemberRating> MemberRatings { get; set; }
 
     public virtual DbSet<NowShowingTheater> NowShowingTheaters { get; set; }
 
@@ -121,6 +125,8 @@ public partial class VideoDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
+
         modelBuilder.Entity<ActorList>(entity =>
         {
             entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
@@ -145,7 +151,7 @@ public partial class VideoDBContext : DbContext
                 .IsDescending(true, true, false, false, false)
                 .IsClustered();
 
-            entity.HasIndex(e => new { e.Lock, e.UpdateDate, e.ArticleId, e.Title, e.ThemeId }, "NonClusteredIndex-20240815-155924").IsDescending(true, true, false, false, false);
+            entity.HasIndex(e => new { e.ArticleId, e.ThemeId, e.AuthorId, e.Title, e.PostDate, e.Lock }, "NonClusteredIndex-20240815-155924");
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
@@ -153,10 +159,9 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.PostDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.ReplyCount).HasDefaultValue(0);
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
-            entity.Property(e => e.Title)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.Title).HasMaxLength(50);
             entity.Property(e => e.UpdateDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -180,9 +185,9 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
-            entity.Property(e => e.NickName)
+            entity.Property(e => e.MemberName)
                 .IsRequired()
-                .HasMaxLength(10);
+                .HasMaxLength(30);
             entity.Property(e => e.PostDate).HasColumnType("datetime");
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
             entity.Property(e => e.ThemeName)
@@ -253,9 +258,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ChatMessage)
                 .IsRequired()
                 .HasMaxLength(2000);
-            entity.Property(e => e.SendTime)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.SendTime).HasColumnType("datetime");
             entity.Property(e => e.SenderId).HasColumnName("SenderID");
         });
 
@@ -337,6 +340,33 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.DirectorName)
                 .IsRequired()
                 .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<FriendChat>(entity =>
+        {
+            entity.HasKey(e => e.FriendChatId).HasName("PK_FriendChat_1");
+
+            entity.ToTable("FriendChat");
+
+            entity.Property(e => e.FriendChatId).HasColumnName("FriendChatID");
+            entity.Property(e => e.FriendChat1)
+                .IsRequired()
+                .HasColumnName("FriendChat");
+            entity.Property(e => e.ReceiverId).HasColumnName("ReceiverID");
+            entity.Property(e => e.SendTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.SenderId).HasColumnName("SenderID");
+
+            entity.HasOne(d => d.Receiver).WithMany(p => p.FriendChatReceivers)
+                .HasForeignKey(d => d.ReceiverId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FriendChat_MemberInfo1");
+
+            entity.HasOne(d => d.Sender).WithMany(p => p.FriendChatSenders)
+                .HasForeignKey(d => d.SenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FriendChat_MemberInfo");
         });
 
         modelBuilder.Entity<FriendList>(entity =>
@@ -753,6 +783,26 @@ public partial class VideoDBContext : DbContext
                 .HasConstraintName("FK_MemberPlayList_PlayList");
         });
 
+        modelBuilder.Entity<MemberRating>(entity =>
+        {
+            entity.HasKey(e => e.RatingId);
+
+            entity.ToTable("MemberRating");
+
+            entity.Property(e => e.RatingId).HasColumnName("RatingID");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.Rating).HasColumnType("decimal(2, 1)");
+            entity.Property(e => e.VideoId).HasColumnName("VideoID");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.MemberRatings)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("FK_MemberRating_MemberInfo");
+
+            entity.HasOne(d => d.Video).WithMany(p => p.MemberRatings)
+                .HasForeignKey(d => d.VideoId)
+                .HasConstraintName("FK_MemberRating_VideoList");
+        });
+
         modelBuilder.Entity<NowShowingTheater>(entity =>
         {
             entity.HasKey(e => e.CombinationId);
@@ -914,9 +964,7 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.PostId)
-                .HasName("PK__Post__AA126038B6A21AA1")
-                .IsClustered(false);
+            entity.HasKey(e => e.PostId).IsClustered(false).HasName("PK_Post");
 
             entity.ToTable("Post");
 
@@ -1164,9 +1212,7 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<UserReaction>(entity =>
         {
-            entity.HasKey(e => e.CountId).HasName("PK__UserReac__06678B7C5DB7CB87");
-
-            entity.HasIndex(e => new { e.MemberId, e.ArticleId }, "UQ_UserReactions_MemberArticle").IsUnique();
+            entity.HasKey(e => e.CountId).HasName("PK__UserReac__06678B7C84F67D45");
 
             entity.HasOne(d => d.Article).WithMany(p => p.UserReactions)
                 .HasForeignKey(d => d.ArticleId)

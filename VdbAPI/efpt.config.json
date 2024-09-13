@@ -51,6 +51,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[FriendChat]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[FriendList]",
          "ObjectType": 0
       },
@@ -112,6 +116,10 @@
       },
       {
          "Name": "[dbo].[MemberPlayList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberRating]",
          "ObjectType": 0
       },
       {
@@ -220,10 +228,6 @@
       },
       {
          "Name": "[dbo].[VideoStreamingLinkList]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ViedoPlanList]",
          "ObjectType": 0
       },
       {
