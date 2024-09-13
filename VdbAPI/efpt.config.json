@@ -99,6 +99,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[MemberCreatedPlayList]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[MemberInfo]",
          "ObjectType": 0
       },
@@ -215,8 +219,8 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[ViedoPlanList]",
-         "ObjectType": 0
+         "Name": "[dbo].[ArticleView]",
+         "ObjectType": 3
       }
    ],
    "UiHint": null,

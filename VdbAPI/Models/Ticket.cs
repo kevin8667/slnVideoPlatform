@@ -19,8 +19,6 @@ public partial class Ticket
 
     public decimal? Price { get; set; }
 
-    public virtual ReservationDetail Reservation { get; set; }
-
     public virtual Seat Seat { get; set; }
 
     public virtual Showtime Showtime { get; set; }

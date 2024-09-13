@@ -13,7 +13,7 @@ public partial class FriendChat
 
     public int ReceiverId { get; set; }
 
-    public DateTime? SendTime { get; set; }
+    public DateTime SendTime { get; set; }
 
     public string FriendChat1 { get; set; }
 

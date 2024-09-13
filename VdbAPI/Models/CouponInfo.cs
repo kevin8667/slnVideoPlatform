@@ -53,6 +53,4 @@ public partial class CouponInfo
     public DateTime CreTime { get; set; }
 
     public virtual ICollection<MemberCoupon> MemberCoupons { get; set; } = new List<MemberCoupon>();
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

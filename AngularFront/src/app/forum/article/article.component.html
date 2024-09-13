@@ -1,0 +1,96 @@
+<div class="container">
+  <button (click)="navToReply(articleId)" class="reply-button">
+    <i class="pi pi-reply"></i> 回覆
+  </button>
+
+  <!-- 文章內容 -->
+  <div class="reply">
+    <div class="article-header">
+      <h1 class="article-title">{{ article.title }}</h1>
+      <div class="article-info">
+        <span class="article-author">作者: {{ article.nickName }}</span>
+        <span class="article-date"
+          >發表時間：{{ article.postDate | forumDate }}
+        </span>
+      </div>
+    </div>
+    <div class="ql-snow">
+      <div
+        class="ql-editor article-content"
+        [innerHTML]="safeHtml(article.articleContent)"
+      ></div>
+    </div>
+    <div class="article-actions">
+      <div>
+        <p-button
+          [label]="'讚(' + NumToString(article.likeCount) + ')'"
+          (onClick)="like()"
+          styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
+          [raised]="true"
+          severity="success"
+        ></p-button>
+        <p-button
+          [label]="'踩(' + NumToString(article.dislikeCount) + ')'"
+          (onClick)="dislike(0)"
+          styleClass="p-button-outlined p-button-danger action-btn mr-2 mb-2"
+          [raised]="true"
+          severity="Warn"
+        ></p-button>
+      </div>
+      <div>
+        <p-button
+          styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
+          label="編輯"
+          (onClick)="edit(article.articleId, 'article')"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+  <p-toast
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'500ms'"
+    [showTransformOptions]="'translateX(100%)'"
+    position="top-center"
+  ></p-toast>
+  <!-- 回覆內容 -->
+  <div>
+    <div class="reply" *ngFor="let post of posts">
+      <div class="reply-header">
+        <span class="reply-author">{{ post.nickName }}</span>
+        <span class="reply-date">{{ post.postDate | forumDate }}</span>
+      </div>
+      <div class="ql-snow">
+        <div
+          class="ql-editor reply-content"
+          [innerHTML]="safeHtml(post.postContent)"
+        ></div>
+      </div>
+      <div class="reply-actions">
+        <div>
+          <p-button
+            [label]="'讚(' + NumToString(post.likeCount) + ')'"
+            (onClick)="like()"
+            styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
+            [raised]="true"
+            severity="success"
+          ></p-button>
+          <p-button
+            [label]="'踩(' + NumToString(post.dislikeCount) +')'"
+            (onClick)="dislike(post.dislikeCount)"
+            styleClass="p-button-outlined p-button-danger  action-btn mr-2 mb-2"
+            [raised]="true"
+            severity="Warn"
+          ></p-button>
+        </div>
+        <div class="right">
+          <p-button
+            styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
+            label="編輯"
+            (onClick)="edit(post.postId, 'post')"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

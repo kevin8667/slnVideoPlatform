@@ -1,0 +1,48 @@
+ <div class="card search-container flex flex-row md:flex-row gap-3 p-3">
+
+</div>
+
+<div class="container flex">
+  <!-- 左側篩選器 -->
+  <div class="filters">
+    <div class="p-inputgroup" >
+      <input type="text" pInputText placeholder="Title" [(ngModel)]="inputName" />
+      <button type="button" pButton label="Search" (click)="searchVideoByFilters()" class="p-button-primary"></button>
+    </div>
+    <div>
+      <p-chips [(ngModel)]="keyword" placeholder="keyword"></p-chips>
+    </div>
+    <div class="flex justify-content-center">
+      <p-dropdown [options]="types" [(ngModel)]="selectedType" optionLabel="typeName"
+                  [showClear]="true" placeholder="Select a Type"
+                  (onChange)="searchVideoByFilters()"></p-dropdown>
+    </div>
+    <div>
+      <p-autoComplete [(ngModel)]="selectedGenres" [suggestions]="filteredGenres" (completeMethod)="filterGenre($event)" [multiple]="true" [dropdown]="true" placeholder="Genre Name" field="genreName" ></p-autoComplete>
+    </div>
+  </div>
+
+    <!-- 右側電影卡片列表 -->
+    <div class="movie-list">
+        <p-dataView #dv [value]="videos" [rows]="pageSize" [paginator]="true"  [rowsPerPageOptions]="pageSizeOptions" [totalRecords]="totalRecords" paginatorDropdownAppendTo="body"  layout="grid" >
+            <!-- 網格佈局 -->
+            <ng-template let-video pTemplate="gridItem">
+                <div class="col-12 sm:col-6 lg:col-4 xl:col-2 p-2"> <!-- 每行顯示 5 個卡片 -->
+                    <a [routerLink]='"/video-db/details/"+video.videoId' style="text-decoration: none;">
+                    <div class="p-4 border-1 surface-border surface-card border-round movie-card">
+                        <div class="image-container">
+                            <img class="thumbnail" 
+                                 [src]="video.thumbnailPath" 
+                                 [alt]="video.videoName" />
+                        </div>
+                        <div class="flex flex-column align-items-center gap-3 py-4">
+                            <div class="text-2xl font-bold" >{{ video.videoName }}</div>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </ng-template>
+
+        </p-dataView>
+      </div>
+</div>

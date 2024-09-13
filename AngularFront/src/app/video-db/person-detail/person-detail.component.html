@@ -1,0 +1,30 @@
+<div class="actor-page-container">
+  <!-- 左側演員圖片和社交媒體 -->
+  <div class="left-section">
+    <img [src]="actor?.actorImgPath" alt="{{ actor?.actorName }}" class="actor-image" />
+    <!-- <div class="social-icons">
+      <a href="https://www.facebook.com" target="_blank"><i class="pi pi-facebook"></i></a>
+      <a href="https://www.twitter.com" target="_blank"><i class="pi pi-twitter"></i></a>
+      <a href="https://www.instagram.com" target="_blank"><i class="pi pi-instagram"></i></a>
+      <a href="https://www.tiktok.com" target="_blank"><i class="pi pi-tiktok"></i></a>
+    </div> -->
+  </div>
+
+  <!-- 右側演員詳細信息和相關電影 -->
+  <div class="right-section">
+    <h1>{{ actor?.actorName }}</h1>
+    <h2>個人簡介</h2>
+    <p class="actor-description">
+      {{ actor?.actorDescription }}
+    </p>
+
+    <!-- 電影列表 -->
+    <h3>聞名於</h3>
+    <div class="movies-list">
+      <div class="movie" *ngFor="let video of videos">
+        <img [src]="video.thumbnailPath" alt="{{ video.videoName }}" class="movie-poster" />
+        <p>{{ video.videoName }}</p>
+      </div>
+    </div>
+  </div>
+</div>

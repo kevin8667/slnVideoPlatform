@@ -2,14 +2,13 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Backstage.Models;
 
 public partial class ImageList
 {
     public int ImageId { get; set; }
-    [Display(Name ="圖片路徑")]
+
     public string ImagePath { get; set; }
 
     public virtual ICollection<ImageForVideoList> ImageForVideoLists { get; set; } = new List<ImageForVideoList>();

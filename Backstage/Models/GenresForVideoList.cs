@@ -2,16 +2,15 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Backstage.Models;
 
 public partial class GenresForVideoList
 {
     public int SerialId { get; set; }
-    [Display(Name ="影片名稱")]
+
     public int? VideoId { get; set; }
-    [Display(Name ="類型名稱")]
+
     public int? GenreId { get; set; }
 
     public virtual GenreList Genre { get; set; }

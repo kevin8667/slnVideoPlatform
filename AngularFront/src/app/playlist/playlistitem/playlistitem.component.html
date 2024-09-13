@@ -1,0 +1,14 @@
+<div class="playlist-item" [attr.data-id]="item.videoId" cdkDrag>
+  <img [src]="getThumbnailUrl(item.thumbnailPath)" alt="{{ item.videoName }}" class="playlist-thumbnail">
+
+  <div class="playlist-item-info">
+    <h4>{{ item.videoName }}</h4>
+    <p *ngIf="item.episode">集數: {{ item.episode }}</p>
+  </div>
+
+  <div class="playlist-item-actions">
+    <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="removeItem()"></button>
+    <i class="pi pi-arrows-alt draggable-handle" cdkDragHandle></i>
+  </div>
+</div>
+

@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Backstage.Models;
 
@@ -14,25 +13,15 @@ public partial class Ticket
 
     public int? TypeOfTicket { get; set; }
 
-   
     public int? ShowtimeId { get; set; }
 
     public int? SeatId { get; set; }
 
-    [DisplayName("價錢")]
     public decimal? Price { get; set; }
-
-    [DisplayName("訂單編號")]
-    public virtual ReservationDetail Reservation { get; set; }
-
-    [DisplayName("座位")]
 
     public virtual Seat Seat { get; set; }
 
-    [DisplayName("播映時間")]
-
     public virtual Showtime Showtime { get; set; }
 
-    [DisplayName("票券種類")]
     public virtual TypeOfTicket TypeOfTicketNavigation { get; set; }
 }
