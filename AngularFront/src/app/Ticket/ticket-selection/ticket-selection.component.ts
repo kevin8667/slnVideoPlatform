@@ -1,6 +1,7 @@
 // import { TicketSelectionComponent } from './../../ticket-selection/ticket-selection.component';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+
 @Component({
   selector: 'app-ticket-selection',
   templateUrl: './ticket-selection.component.html',

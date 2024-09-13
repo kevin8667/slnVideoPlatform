@@ -19,18 +19,18 @@ namespace VdbAPI.Controllers
         {
             // 使用 LINQ 查詢，從 NowShowingTheaters 表中找到符合指定 videoId 的所有影院。
             var cinemas = (from nst in _context.NowShowingTheaters
-                           join cinema in _context.Cinemas on nst.CinemaId equals cinema.CinemaId
+                           join cinema in _context.Cinemas on nst.CinemaId equals cinema.CinemaId 
                            where nst.VideoId == videoId // 過濾條件，查找符合指定 VideoID 的紀錄。
-                           select new
+                           select new 
                            {
-                               cinema.CinemaId,
-                               cinema.CinemaName,
-                               cinema.CinemaAddress
+                               cinema.CinemaId, 
+                               cinema.CinemaName, 
+                               cinema.CinemaAddress  
                            }).ToList(); // 執行查詢並轉換成列表。
 
-
+            
             if (!cinemas.Any()) // 如果查詢結果為空
-                return NotFound("沒有找到相關的上映影院");
+                return NotFound("沒有找到相關的上映影院"); 
 
             // 如果有查詢結果，返回 200 狀態碼以及查詢結果的列表。
             return Ok(cinemas); // 返回 200 OK，並將查詢結果 cinemas 以 JSON 格式返回給用戶端。
