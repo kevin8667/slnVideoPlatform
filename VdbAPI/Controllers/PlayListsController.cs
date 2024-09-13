@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VdbAPI.Models;
@@ -74,6 +75,22 @@ namespace VdbAPI.Controllers
             {
                 return NotFound();
             }
+
+            return Ok(playlist);
+        }
+
+        [HttpPatch("{id}/likeCount")]
+        public async Task<IActionResult> UpdateLikeCount(int id, [FromBody] int likeCount)
+        {
+            var playlist = await _context.PlayLists.FindAsync(id);
+            if (playlist == null)
+            {
+                return NotFound();
+            }
+            
+            playlist.LikeCount = likeCount;
+            
+            await _context.SaveChangesAsync();
 
             return Ok(playlist);
         }
@@ -341,7 +358,7 @@ namespace VdbAPI.Controllers
 
         [HttpPut("{id}/items/{videoId}/position")]
         public async Task<IActionResult> UpdateVideoPosition(int id, int videoId, [FromBody] int newPosition)
-        {
+        {            
             var playListItem = await _context.PlayListItems
                 .FirstOrDefaultAsync(p => p.PlayListId == id && p.VideoId == videoId);
 
@@ -350,8 +367,35 @@ namespace VdbAPI.Controllers
                 return NotFound();
             }
 
-            playListItem.VideoPosition = newPosition;
+            int originalPosition = playListItem.VideoPosition;
+            
+            if (newPosition < originalPosition)
+            {                
+                var itemsToUpdate = await _context.PlayListItems
+                    .Where(p => p.PlayListId == id && p.VideoPosition >= newPosition && p.VideoPosition < originalPosition)
+                    .ToListAsync();
 
+                foreach (var item in itemsToUpdate)
+                {
+                    item.VideoPosition += 1;
+                }
+            }
+            
+            else if (newPosition > originalPosition)
+            {
+                
+                var itemsToUpdate = await _context.PlayListItems
+                    .Where(p => p.PlayListId == id && p.VideoPosition <= newPosition && p.VideoPosition > originalPosition)
+                    .ToListAsync();
+
+                foreach (var item in itemsToUpdate)
+                {
+                    item.VideoPosition -= 1;
+                }
+            }
+            
+            playListItem.VideoPosition = newPosition;
+            
             try
             {
                 await _context.SaveChangesAsync();

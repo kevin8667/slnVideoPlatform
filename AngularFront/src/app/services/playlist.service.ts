@@ -18,6 +18,10 @@ export class PlaylistService {
     return this.http.get<PlaylistDTO[]>(this.apiUrl);
   }
 
+  updateLikeCount(playlistId: number, likeCount: number): Observable<PlaylistDTO> {
+    return this.http.patch<PlaylistDTO>(`${this.apiUrl}/${playlistId}/likeCount`, likeCount);
+  }
+
   addNewPlaylist(playlist: { PlayList: PlaylistDTO }): Observable<PlaylistDTO> {
     return this.http.post<PlaylistDTO>(this.apiUrl, playlist);
   }
@@ -56,7 +60,7 @@ export class PlaylistService {
 
   getAllVideos(): Observable<VideoListDTO[]> {
     return this.http.get<VideoListDTO[]>(
-      'https://localhost:7193/api/PlayList/videos'
+      `${this.apiUrl}/videos`
     );
   }
 
@@ -90,7 +94,7 @@ export class PlaylistService {
   ): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/${playlistId}/items/${videoId}/position`,
-      { newPosition }
+      newPosition
     );
   }
 
