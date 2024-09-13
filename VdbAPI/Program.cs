@@ -16,11 +16,7 @@ builder.Services.AddCors(options =>
 
 });
 
-//builder.Services.AddControllers()
-//    .AddJsonOptions(options =>
-//    {
-//        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-//    });
+builder.Services.AddHttpClient();
 
 builder.Services.AddControllersWithViews();
 
@@ -41,7 +37,7 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles(new StaticFileOptions {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.ContentRootPath,"img")),
-    RequestPath = "/img"  // URL «eºó
+    RequestPath = "/img"  // URL ï¿½eï¿½ï¿½
 });
 app.UseHttpsRedirection();
 
