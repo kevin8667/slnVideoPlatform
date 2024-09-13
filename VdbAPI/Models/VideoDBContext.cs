@@ -137,11 +137,15 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<Article>(entity =>
         {
-            entity.HasKey(e => e.ArticleId).HasName("PK__Article__9C6270C8A7594F7D");
+            entity.HasKey(e => e.ArticleId).IsClustered(false);
 
             entity.ToTable("Article");
 
-            entity.HasIndex(e => new { e.Title, e.AuthorId, e.ThemeId }, "NonClusteredIndex-20240815-155924");
+            entity.HasIndex(e => new { e.Lock, e.UpdateDate, e.ThemeId, e.ArticleId, e.Title }, "Cluster_Article")
+                .IsDescending(true, true, false, false, false)
+                .IsClustered();
+
+            entity.HasIndex(e => new { e.Lock, e.UpdateDate, e.ArticleId, e.Title, e.ThemeId }, "NonClusteredIndex-20240815-155924").IsDescending(true, true, false, false, false);
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
@@ -910,9 +914,15 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Post__AA126038B6A21AA1");
+            entity.HasKey(e => e.PostId)
+                .HasName("PK__Post__AA126038B6A21AA1")
+                .IsClustered(false);
 
             entity.ToTable("Post");
+
+            entity.HasIndex(e => new { e.Lock, e.PostDate, e.ArticleId, e.PosterId, e.PostId }, "IX_Post")
+                .IsDescending(true, false, false, false, false)
+                .IsClustered();
 
             entity.Property(e => e.PostId).HasColumnName("PostID");
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
@@ -1162,6 +1172,11 @@ public partial class VideoDBContext : DbContext
                 .HasForeignKey(d => d.ArticleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserReactions_Article");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.UserReactions)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserReactions_MemberInfo");
         });
 
         modelBuilder.Entity<ValidCode>(entity =>

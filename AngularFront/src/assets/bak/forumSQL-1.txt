@@ -1,0 +1,346 @@
+USE [VideoDB]
+GO
+/****** Object:  Table [dbo].[Article]    Script Date: 2024/9/13 下午 09:12:17 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Article]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Article](
+	[ArticleID] [int] IDENTITY(1,1) NOT NULL,
+	[ThemeID] [int] NOT NULL,
+	[AuthorID] [int] NOT NULL,
+	[Title] [nvarchar](50) NOT NULL,
+	[ArticleContent] [nvarchar](max) NULL,
+	[PostDate] [datetime] NOT NULL,
+	[UpdateDate] [datetime] NOT NULL,
+	[ReplyCount] [int] NOT NULL,
+	[Lock] [bit] NOT NULL,
+	[ArticleImage] [nvarchar](max) NULL,
+	[LikeCount] [int] NOT NULL,
+	[DislikeCount] [int] NOT NULL,
+ CONSTRAINT [PK_Article] PRIMARY KEY NONCLUSTERED 
+(
+	[ArticleID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [Cluster_Article]    Script Date: 2024/9/13 下午 09:12:17 ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Article]') AND name = N'Cluster_Article')
+CREATE CLUSTERED INDEX [Cluster_Article] ON [dbo].[Article]
+(
+	[Lock] DESC,
+	[UpdateDate] DESC,
+	[ThemeID] ASC,
+	[ArticleID] ASC,
+	[Title] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[ArticleView]    Script Date: 2024/9/13 下午 09:12:17 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[ArticleView]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[ArticleView]
+AS
+SELECT          dbo.Article.ArticleID, dbo.Article.AuthorID, dbo.Article.Title, dbo.Article.ThemeID, dbo.Article.ArticleContent, 
+                            dbo.Article.PostDate, dbo.Article.UpdateDate, dbo.Article.ReplyCount, dbo.Article.Lock, dbo.Article.ArticleImage, 
+                            dbo.Article.LikeCount, dbo.Article.DislikeCount, dbo.Theme.ThemeName, dbo.MemberInfo.NickName
+FROM              dbo.Article INNER JOIN
+                            dbo.MemberInfo ON dbo.Article.AuthorID = dbo.MemberInfo.MemberID INNER JOIN
+                            dbo.Theme ON dbo.Article.ThemeID = dbo.Theme.ThemeID
+' 
+GO
+/****** Object:  Table [dbo].[ChatRoom]    Script Date: 2024/9/13 下午 09:12:17 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ChatRoom]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[ChatRoom](
+	[ChatRoomID] [int] IDENTITY(1,1) NOT NULL,
+	[SenderID] [int] NOT NULL,
+	[SendTime] [datetime] NOT NULL,
+	[ChatMessage] [nvarchar](2000) NOT NULL,
+ CONSTRAINT [PK_ChatRoom] PRIMARY KEY NONCLUSTERED 
+(
+	[ChatRoomID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/****** Object:  Index [IX_ChatRoom_SendTime]    Script Date: 2024/9/13 下午 09:12:17 ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[ChatRoom]') AND name = N'IX_ChatRoom_SendTime')
+CREATE CLUSTERED INDEX [IX_ChatRoom_SendTime] ON [dbo].[ChatRoom]
+(
+	[SendTime] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Post]    Script Date: 2024/9/13 下午 09:12:17 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Post]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Post](
+	[PostID] [int] IDENTITY(1,1) NOT NULL,
+	[ArticleID] [int] NOT NULL,
+	[PosterID] [int] NOT NULL,
+	[PostContent] [nvarchar](max) NOT NULL,
+	[PostDate] [datetime] NOT NULL,
+	[Lock] [bit] NOT NULL,
+	[PostImage] [nvarchar](max) NULL,
+	[LikeCount] [int] NOT NULL,
+	[DislikeCount] [int] NOT NULL,
+ CONSTRAINT [PK__Post__AA126038B6A21AA1] PRIMARY KEY NONCLUSTERED 
+(
+	[PostID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Index [IX_Post]    Script Date: 2024/9/13 下午 09:12:17 ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Post]') AND name = N'IX_Post')
+CREATE CLUSTERED INDEX [IX_Post] ON [dbo].[Post]
+(
+	[Lock] DESC,
+	[PostDate] ASC,
+	[ArticleID] ASC,
+	[PosterID] ASC,
+	[PostID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [NonClusteredIndex-20240815-155924]    Script Date: 2024/9/13 下午 09:12:17 ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Article]') AND name = N'NonClusteredIndex-20240815-155924')
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20240815-155924] ON [dbo].[Article]
+(
+	[Lock] DESC,
+	[UpdateDate] DESC,
+	[ArticleID] ASC,
+	[Title] ASC,
+	[ThemeID] ASC
+)
+INCLUDE([PostDate],[ReplyCount],[ArticleImage],[LikeCount],[DislikeCount]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_Article_PostDate]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Article] ADD  CONSTRAINT [DF_Article_PostDate]  DEFAULT (getdate()) FOR [PostDate]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_Article_UpdateDate]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Article] ADD  CONSTRAINT [DF_Article_UpdateDate]  DEFAULT (getdate()) FOR [UpdateDate]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF__Article__ReplyCo__6383C8BA]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Article] ADD  CONSTRAINT [DF__Article__ReplyCo__6383C8BA]  DEFAULT ((0)) FOR [ReplyCount]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_Article_Online]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Article] ADD  CONSTRAINT [DF_Article_Online]  DEFAULT ((1)) FOR [Lock]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_FriendChat_SendTime]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[ChatRoom] ADD  CONSTRAINT [DF_FriendChat_SendTime]  DEFAULT (getdate()) FOR [SendTime]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_Post_PostDate]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Post] ADD  CONSTRAINT [DF_Post_PostDate]  DEFAULT (getdate()) FOR [PostDate]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_Post_Online]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Post] ADD  CONSTRAINT [DF_Post_Online]  DEFAULT ((1)) FOR [Lock]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Article_MemberInfo]') AND parent_object_id = OBJECT_ID(N'[dbo].[Article]'))
+ALTER TABLE [dbo].[Article]  WITH CHECK ADD  CONSTRAINT [FK_Article_MemberInfo] FOREIGN KEY([AuthorID])
+REFERENCES [dbo].[MemberInfo] ([MemberID])
+GO
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Article_MemberInfo]') AND parent_object_id = OBJECT_ID(N'[dbo].[Article]'))
+ALTER TABLE [dbo].[Article] CHECK CONSTRAINT [FK_Article_MemberInfo]
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Article_Theme]') AND parent_object_id = OBJECT_ID(N'[dbo].[Article]'))
+ALTER TABLE [dbo].[Article]  WITH CHECK ADD  CONSTRAINT [FK_Article_Theme] FOREIGN KEY([ThemeID])
+REFERENCES [dbo].[Theme] ([ThemeID])
+GO
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Article_Theme]') AND parent_object_id = OBJECT_ID(N'[dbo].[Article]'))
+ALTER TABLE [dbo].[Article] CHECK CONSTRAINT [FK_Article_Theme]
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Post_Article]') AND parent_object_id = OBJECT_ID(N'[dbo].[Post]'))
+ALTER TABLE [dbo].[Post]  WITH CHECK ADD  CONSTRAINT [FK_Post_Article] FOREIGN KEY([ArticleID])
+REFERENCES [dbo].[Article] ([ArticleID])
+GO
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Post_Article]') AND parent_object_id = OBJECT_ID(N'[dbo].[Post]'))
+ALTER TABLE [dbo].[Post] CHECK CONSTRAINT [FK_Post_Article]
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Post_MemberInfo]') AND parent_object_id = OBJECT_ID(N'[dbo].[Post]'))
+ALTER TABLE [dbo].[Post]  WITH CHECK ADD  CONSTRAINT [FK_Post_MemberInfo] FOREIGN KEY([PosterID])
+REFERENCES [dbo].[MemberInfo] ([MemberID])
+GO
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Post_MemberInfo]') AND parent_object_id = OBJECT_ID(N'[dbo].[Post]'))
+ALTER TABLE [dbo].[Post] CHECK CONSTRAINT [FK_Post_MemberInfo]
+GO
+IF NOT EXISTS (SELECT * FROM sys.fn_listextendedproperty(N'MS_DiagramPane1' , N'SCHEMA',N'dbo', N'VIEW',N'ArticleView', NULL,NULL))
+	EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPane1', @value=N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[42] 4[11] 2[20] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "Article"
+            Begin Extent = 
+               Top = 9
+               Left = 57
+               Bottom = 196
+               Right = 285
+            End
+            DisplayFlags = 280
+            TopColumn = 5
+         End
+         Begin Table = "MemberInfo"
+            Begin Extent = 
+               Top = 9
+               Left = 342
+               Bottom = 196
+               Right = 583
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "Theme"
+            Begin Extent = 
+               Top = 9
+               Left = 640
+               Bottom = 146
+               Right = 859
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 15
+         Width = 284
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1005
+         Width = 1605
+         Width = 1005
+         Width = 1005
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 900
+         Table = 1170
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'ArticleView'
+GO
+IF NOT EXISTS (SELECT * FROM sys.fn_listextendedproperty(N'MS_DiagramPaneCount' , N'SCHEMA',N'dbo', N'VIEW',N'ArticleView', NULL,NULL))
+	EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'ArticleView'
+GO

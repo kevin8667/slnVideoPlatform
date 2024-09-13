@@ -16,7 +16,6 @@ namespace VdbAPI.Controllers {
     public class PostsController : ControllerBase {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
-        private int _replyCount = 0;
 
         public PostsController(VideoDBContext context,IConfiguration configuration)
         {
