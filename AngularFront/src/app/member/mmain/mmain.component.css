@@ -3,10 +3,19 @@
   font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
 }
-
+.mai{
+  /* background-image: url('/assets/img/Member/STARcircle.jpg'); /* 使用相對路徑指定背景圖片 */
+  /* background-size: cover; 確保圖片覆蓋整個視口 */
+  /* background-repeat: no-repeat; 防止圖片重複 */
+  /* background-position: center; 將圖片置中 */
+}
 .main {
   display: flex;
   flex-direction: row;
+  background-image: url('/assets/img/Member/STARcircle.jpg'); /* 使用相對路徑指定背景圖片 */
+  background-size: cover; /* 確保圖片覆蓋整個視口 */
+  background-repeat: no-repeat; /* 防止圖片重複 */
+  background-position: center; /* 將圖片置中 */
 
   .leftcontainer {
     display: flex;
@@ -24,7 +33,7 @@
   .rightcontainer {
     display: flex;
     flex-direction: column;
-    text-align: left;
+    text-align: center;
   }
 
   .small-image {
@@ -183,3 +192,5 @@
 .edit-button span {
   font-size: 14px; /* 調整文字大小 */
 }
+
+

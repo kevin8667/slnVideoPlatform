@@ -51,6 +51,7 @@ namespace VdbAPI.Controllers
             return rtn;
         }
 
+     
         [HttpGet("memberId")]
         public IActionResult GetMemberId()
         {
