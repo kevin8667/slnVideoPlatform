@@ -30,4 +30,12 @@ public partial class ArticleView
     public bool? Lock { get; set; }
 
     public string ArticleImage { get; set; }
+
+    public int? LikeCount { get; set; }
+
+    public int? DislikeCount { get; set; }
+
+    public string ThemeName { get; set; }
+
+    public string NickName { get; set; }
 }

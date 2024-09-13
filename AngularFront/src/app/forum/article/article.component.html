@@ -10,8 +10,8 @@
       <div class="article-info">
         <span class="article-author">作者: {{ article.nickName }}</span>
         <span class="article-date"
-          >發表時間：{{ article.postDate | forumDate }}
-        </span>
+          >發表時間：{{ article.postDate | forumDate }}</span
+        >
       </div>
     </div>
     <div class="ql-snow">
@@ -28,21 +28,26 @@
           styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
           [raised]="true"
           severity="success"
-        ></p-button>
+        >
+        </p-button>
         <p-button
           [label]="'踩(' + NumToString(article.dislikeCount) + ')'"
-          (onClick)="dislike(0)"
+          (onClick)="dislike()"
           styleClass="p-button-outlined p-button-danger action-btn mr-2 mb-2"
           [raised]="true"
           severity="Warn"
-        ></p-button>
+        >
+        </p-button>
       </div>
       <div>
-        <p-button
-          styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
-          label="編輯"
-          (onClick)="edit(article.articleId, 'article')"
-        ></p-button>
+        <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-ellipsis-v"
+          (click)="menu.toggle($event)"
+          class="p-button-text custom-menu-button"
+        ></button>
       </div>
     </div>
   </div>
@@ -73,24 +78,32 @@
             (onClick)="like()"
             styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
             [raised]="true"
-            severity="success"
-          ></p-button>
+          >
+          </p-button>
           <p-button
-            [label]="'踩(' + NumToString(post.dislikeCount) +')'"
-            (onClick)="dislike(post.dislikeCount)"
+            [label]="'踩(' + NumToString(post.dislikeCount) + ')'"
+            (onClick)="dislike()"
             styleClass="p-button-outlined p-button-danger  action-btn mr-2 mb-2"
             [raised]="true"
-            severity="Warn"
-          ></p-button>
+          >
+          </p-button>
         </div>
-        <div class="right">
-          <p-button
-            styleClass="p-button-outlined p-button-primary action-btn editor-button mb-2"
-            label="編輯"
-            (onClick)="edit(post.postId, 'post')"
-          ></p-button>
+        <div>
+          <p-menu
+            #postMenu
+            [popup]="true"
+            [model]="getPostMenuItems(post.postId)"
+          ></p-menu>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-ellipsis-v"
+            (click)="postMenu.toggle($event)"
+            class="p-button-text custom-menu-button"
+          ></button>
         </div>
       </div>
     </div>
   </div>
+  <p-confirmDialog></p-confirmDialog>
 </div>

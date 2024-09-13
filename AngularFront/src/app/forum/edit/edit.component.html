@@ -87,13 +87,13 @@
 
       <!-- 提交按鈕 -->
       <div class="submitBtn">
-        <button
+        <p-button
           type="submit"
-          class="btn btn-primary"
+          label="提交"
+          [text]="true"
           [disabled]="articleForm.invalid"
-        >
-          提交
-        </button>
+          [raised]="true"
+        />
       </div>
     </form>
   </main>

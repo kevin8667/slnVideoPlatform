@@ -1,10 +1,10 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuillEditorComponent } from 'ngx-quill';
-import { ArticleView } from 'src/app/interfaces/forumnterface/ArticleView';
-import { Post } from 'src/app/interfaces/forumnterface/Post';
-import { Theme } from 'src/app/interfaces/forumnterface/Theme';
+import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView';
+import { Post } from 'src/app/interfaces/forumInterface/Post';
+import { Theme } from 'src/app/interfaces/forumInterface/Theme';
 import ForumService from 'src/app/service/forum.service';
 
 @Component({
@@ -13,10 +13,13 @@ import ForumService from 'src/app/service/forum.service';
   styleUrls: ['./edit.component.css'],
 })
 export class EditComponent implements OnInit {
+  isSubmitting: boolean = false;
+  isLoading: boolean = false;
+  formSubmitted: boolean = false;
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
-    if (this.articleForm.touched) {
-      $event.returnValue = true; // 這裡的訊息大多數瀏覽器不會顯示，會顯示預設提示
+    if (this.shouldShowWarning()) {
+      $event.returnValue = true;
     }
   }
   @ViewChild('quillEditor') quillEditor!: QuillEditorComponent;
@@ -28,31 +31,16 @@ export class EditComponent implements OnInit {
   id?: number | null;
   type!: string;
   themeTag: Theme[] = [];
-  /*
-  {
-    "articleId": 18,
-    "dislikeCount": 0,
-    "likeCount": 0,
-    "lock": true,
-    "nickName": "",
-    "postContent": "<p><img src=\"https://localhost:7193/img/0d23e5c5-9391-4cfd-9fb2-4e7b9589018b.jpg\"></p><p><br></p><p><br></p><p><br></p><p>52415545241554524155452415545241554</p>",
-    "postDate": "2024-09-10T04:06:35.208Z",
-    "postId": 0,
-    "postImage": "",
-    "posterId": 5
-  }
-  */
+
   constructor(
     private fb: FormBuilder,
     private forumService: ForumService,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    const idRoute = this.actRoute.snapshot.paramMap.get('id');
-    this.id = idRoute ? Number(idRoute) : null;
-    this.articleId = Number(this.actRoute.snapshot.paramMap.get('articleId'));
-    this.type = String(this.actRoute.snapshot.paramMap.get('type'));
+    this.initializeParams();
 
     this.initializeForm();
     if (this.type === 'post') {
@@ -61,6 +49,13 @@ export class EditComponent implements OnInit {
 
     this.loadingContent();
   }
+  private initializeParams() {
+    const idRoute = this.actRoute.snapshot.paramMap.get('id');
+    this.id = idRoute ? Number(idRoute) : null;
+    this.articleId = Number(this.actRoute.snapshot.paramMap.get('articleId'));
+    this.type = String(this.actRoute.snapshot.paramMap.get('type'));
+  }
+
   private initializeForm() {
     this.articleForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(20)]],
@@ -75,26 +70,45 @@ export class EditComponent implements OnInit {
   }
 
   private loadingContent() {
-    this.forumService.themeTag$.subscribe((data) => (this.themeTag = data));
-    if (!this.id) return;
+    this.isLoading = true;
+    this.forumService.themeTag$.subscribe({
+      next: (data) => (this.themeTag = data),
+      error: (err) => this.handleError(err),
+      complete: () => (this.isLoading = false),
+    });
+
+    if (!this.id) {
+      this.isLoading = false;
+      return;
+    }
 
     if (this.type === 'post') {
-      this.forumService.getPost(this.id).subscribe((data: Post) => {
-        this.post = data;
-        this.articleForm.patchValue({
-          content: data.postContent,
-        });
-      });
+      this.loadPost();
     } else {
-      this.forumService.getArticle(this.id).subscribe((data) => {
-        this.article = data;
-        this.articleForm.patchValue({
-          content: data.articleContent,
-          title: data.title,
-          theme: data.themeId,
-        });
-      });
+      this.loadArticle();
     }
+  }
+
+  private loadPost() {
+    this.forumService.getPost(this.id!).subscribe({
+      next: (data: Post) => {
+        this.post = data;
+        this.articleForm.patchValue({ content: data.postContent });
+      },
+      error: (err) => this.handleError(err),
+      complete: () => (this.isLoading = false),
+    });
+  }
+
+  private loadArticle() {
+    this.forumService.getArticle(this.id!).subscribe((data) => {
+      this.article = data;
+      this.articleForm.patchValue({
+        content: data.articleContent,
+        title: data.title,
+        theme: data.themeId,
+      });
+    });
   }
 
   safeHtml(data: string) {
@@ -103,111 +117,99 @@ export class EditComponent implements OnInit {
 
   onSubmit(): void {
     if (this.articleForm.invalid) return;
-    const articleValue = this.articleForm.getRawValue();
-    const postValue = this.articleForm.getRawValue();
+    this.isSubmitting = true;
 
-    try {
-      if (this.id) {
-        if (this.type === 'article') {
-          const updatedData: Partial<ArticleView> = {
-            articleContent: articleValue['content'],
-            themeId: articleValue['theme'],
-            title: articleValue['title'],
-          };
+    const formData = this.articleForm.getRawValue();
+    const action = this.id ? this.updateContent : this.createContent;
 
-          this.forumService.updateArticle(this.id, updatedData).subscribe({
-            next: (response) => console.log(response),
-            error: (err) => console.error('傳送資料發生意外:', err),
-            complete: () => history.back(),
-          });
-        } else {
-          const updatedData: Partial<Post> = {
-            postContent: postValue['content'],
-          };
+    action.call(this, formData).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.formSubmitted = true;
+        this.articleForm.markAsPristine();
+      },
+      error: (err) => this.handleError(err),
+      complete: () => {
+        this.isSubmitting = false;
+        this.navigateBack();
+      },
+    });
+  }
 
-          this.forumService.updatePost(this.id, updatedData).subscribe({
-            next: (response) => console.log(response),
-            error: (err) => console.error(err),
-            complete: () => history.back(),
-          });
-        }
-      } else {
-        if (this.type === 'article') {
-          // 新增文章
-          const updatedData: ArticleView = {
-            articleContent: articleValue['content'],
-            themeId: articleValue['theme'],
-            title: articleValue['title'],
-            articleImage: '',
-            authorId: 2,
-            lock: true,
-            nickName: '',
-            postDate: new Date(),
-            replyCount: 0,
-            themeName: '',
-            updateDate: new Date(),
-            articleId: 0,
-            likeCount: 0,
-            dislikeCount: 0,
-          };
-          this.forumService.createArticle(updatedData).subscribe({
-            next: (response) => console.log(response),
-            error: (err) => console.error('傳送資料發生意外:', err),
-            complete: () => history.back(),
-          });
-        } else {
-          // 新增回文
-          if (this.articleId === 0) return;
-          const updatedData: Post = {
-            postContent: postValue['content'],
-            articleId: this.articleId,
-            postId: 0,
-            posterId: 5,
-            postDate: new Date(),
-            lock: true,
-            postImage: '',
-            nickName: '',
-            likeCount: 0,
-            dislikeCount: 0,
-          };
-          this.forumService.createPost(updatedData).subscribe({
-            next: (response) => console.log(response),
-            error: (err) => console.error('傳送資料發生意外:', err),
-            complete: () => history.back(),
-          });
-        }
-      }
-    } catch (error) {
-      console.error('發生例外的錯誤:', error);
-      return;
+  private updateContent(formData: any) {
+    if (this.type === 'article') {
+      return this.forumService.updateArticle(this.id!, {
+        articleContent: formData.content,
+        themeId: formData.theme,
+        title: formData.title,
+      });
+    } else {
+      return this.forumService.updatePost(this.id!, {
+        postContent: formData.content,
+      });
     }
+  }
+
+  private createContent(formData: any) {
+    if (this.type === 'article') {
+      return this.forumService.createArticle({
+        articleContent: formData.content,
+        themeId: formData.theme,
+        title: formData.title,
+        articleImage: '',
+        authorId: this.getCurrentUserId(), // 使用方法獲取當前用戶ID
+        lock: true,
+        nickName: '',
+        postDate: new Date(),
+        replyCount: 0,
+        themeName: '',
+        updateDate: new Date(),
+        articleId: 0,
+        likeCount: 0,
+        dislikeCount: 0,
+      } as ArticleView);
+    } else {
+      return this.forumService.createPost({
+        postContent: formData.content,
+        articleId: this.articleId,
+        postId: 0, // 新帖子ID由後端生成
+        posterId: this.getCurrentUserId(), // 使用方法獲取當前用戶ID
+        postDate: new Date(),
+        lock: true,
+        postImage: '',
+        nickName: '', // 這可能需要從用戶服務取得
+        likeCount: 0,
+        dislikeCount: 0,
+      } as Post);
+    }
+  }
+
+  private getCurrentUserId(): number {
+    // TODO: 實現獲取當前用戶ID的邏輯
+    return 2; // 暫時返回固定值
   }
 
   openFile() {
     this.fileInput.nativeElement.click();
   }
-  onFileSelected(event: any) {
-    const selectValue = event.target.files[0];
-    const imageType = /image.*/;
-
-    if (!selectValue.type.match(imageType) || selectValue.size === 0) {
+  public async onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!this.isValidImage(file)) {
       event.target.value = '';
-      alert('請選擇圖片');
+      alert('請選擇有效的圖片檔案');
       return;
     }
+
     const formData = new FormData();
-    formData.append('UserPhoto', selectValue);
-
-    this.uploadImg(formData);
-    // const reader = new FileReader();
-
-    // reader.onload = () => {
-    //   this.uploadImg(reader.result);
-    // };
-    // reader.readAsDataURL(selectValue)
+    formData.append('UserPhoto', file);
+    await this.uploadImg(formData);
   }
 
-  async uploadImg(formData: FormData) {
+  private isValidImage(file: File): boolean {
+    return file && file.type.startsWith('image/') && file.size > 0;
+  }
+
+  private async uploadImg(formData: FormData) {
     try {
       // 調用服務上傳圖片，這裡假設後端返回一個圖片 URL
       const response: any = await this.forumService.getPicture(formData); // 上傳文件
@@ -235,5 +237,28 @@ export class EditComponent implements OnInit {
     } catch (error) {
       console.error('圖片上傳發生錯誤:', error);
     }
+  }
+
+  private handleError(error: any) {
+    console.error('發生錯誤:', error);
+    this.isSubmitting = false;
+    // TODO: 添加顯示錯誤訊息給用戶的邏輯
+  }
+
+  private navigateBack(): void {
+    setTimeout(() => {
+      if (this.type === 'post' && this.articleId) {
+        this.router.navigate(['/forum', this.articleId]);
+      } else {
+        this.router.navigate(['/forum']);
+      }
+    }, 0);
+  }
+  private shouldShowWarning(): boolean {
+    return this.articleForm.dirty && !this.isSubmitting && !this.formSubmitted;
+  }
+
+  canDeactivate(): boolean {
+    return !this.shouldShowWarning() || window.confirm('您有未保存的更改。確定要離開嗎？');
   }
 }

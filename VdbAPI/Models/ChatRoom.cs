@@ -5,19 +5,13 @@ using System.Collections.Generic;
 
 namespace VdbAPI.Models;
 
-public partial class FriendChat
+public partial class ChatRoom
 {
-    public int FriendChatId { get; set; }
+    public int ChatRoomId { get; set; }
 
     public int SenderId { get; set; }
 
-    public int ReceiverId { get; set; }
-
     public DateTime SendTime { get; set; }
 
-    public string FriendChat1 { get; set; }
-
-    public virtual MemberInfo Receiver { get; set; }
-
-    public virtual MemberInfo Sender { get; set; }
+    public string ChatMessage { get; set; }
 }

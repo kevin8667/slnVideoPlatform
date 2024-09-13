@@ -42,6 +42,15 @@ namespace VdbAPI.MetaData {
         public required bool Lock {
             get; set;
         }
+        [Required(ErrorMessage = "LikeCount為必填")]
+        public int LikeCount {
+            get; set;
+        }
+
+        [Required(ErrorMessage = "DislikeCount為必填")]
+        public int DislikeCount {
+            get; set;
+        }
 
     }
 }

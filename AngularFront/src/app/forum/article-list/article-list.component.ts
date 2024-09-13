@@ -1,9 +1,9 @@
-import { ArticleView } from '../../interfaces/forumnterface/ArticleView';
+import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
-import { ForumPagingDTO } from 'src/app/interfaces/forumnterface/ForumPagingDTO';
-import { Theme } from 'src/app/interfaces/forumnterface/Theme';
+import { ForumPagingDTO } from 'src/app/interfaces/forumInterface/ForumPagingDTO';
+import { Theme } from 'src/app/interfaces/forumInterface/Theme';
 import ForumService from 'src/app/service/forum.service';
 
 @Component({
@@ -34,9 +34,9 @@ export class ArticleListComponent implements OnInit {
     {
       pic: '/assets/images/forumAd.png',
     },
-    {
-      pic: '/assets/images/forumAd2.png',
-    },
+    // {
+    //   pic: '/assets/images/forumAd2.png',
+    // },
     {
       pic: '/assets/images/forumAd3.png',
     },

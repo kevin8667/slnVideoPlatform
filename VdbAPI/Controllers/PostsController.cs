@@ -16,7 +16,6 @@ namespace VdbAPI.Controllers {
     public class PostsController : ControllerBase {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
-        private int _replyCount = 0;
 
         public PostsController(VideoDBContext context,IConfiguration configuration)
         {
@@ -99,28 +98,28 @@ namespace VdbAPI.Controllers {
 
         // POST: api/Posts
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost(Post post)
+        public async Task<ActionResult<Post>> PostPost(PostDTO postDTO)
         {
             if(!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
-            if(post == null) {
+            if(postDTO == null) {
                 return NotFound(new {
                     error = "找不到post"
                 });
             }
             try {
-     
-                post = new Post {
-                    ArticleId = post.ArticleId,
+
+                var post = new Post {
+                    ArticleId = postDTO.ArticleId,
                     Lock = true,
-                    PostContent = post.PostContent,
+                    PostContent = postDTO.PostContent,
                     PostDate = DateTime.UtcNow,
-                    PosterId = post.PosterId,
+                    PosterId = postDTO.PosterId,
                     PostImage = "",
                     LikeCount = 0,
                     DislikeCount = 0,
-                    
+
                 };
                 _context.Posts.Add(post);
 
@@ -138,8 +137,8 @@ namespace VdbAPI.Controllers {
                 });
             }
             catch(Exception ex) {
-                return StatusCode(StatusCodes.Status500InternalServerError,new {
-                    error = "API發生例外的錯誤:" + ex.Message,
+                return StatusCode(500,new {
+                    error = "發生例外的錯誤:" + ex.Message,
                 });
             }
         }
@@ -150,33 +149,22 @@ namespace VdbAPI.Controllers {
         {
             var post = await _context.Posts.FindAsync(id);
             if(post == null) {
-                return NotFound();
+                return NotFound(new {
+                    error = "沒有符合此ID的POST"
+                });
             }
 
             _context.Posts.Remove(post);
-            var article = await _context.Articles.FirstOrDefaultAsync(c => c.ArticleId == post.PostId);
+            var article = await _context.Articles.FirstOrDefaultAsync(c => c.ArticleId == post.ArticleId);
             if(article != null) {
                 article.ReplyCount--;
-                // 查找該文章的最新回覆時間
-                var latestPost = await _context.Posts
-                    .Where(p => p.ArticleId == article.ArticleId)
-                    .OrderByDescending(p => p.PostDate)  // 根據回覆日期降序排序
-                    .FirstOrDefaultAsync();  // 取得最新的回覆
-
-                // 如果還有其他回覆，更新文章的最新回覆時間，否則保持文章的發布時間或其它邏輯
-                if(latestPost != null) {
-                    article.UpdateDate = latestPost.PostDate;
-                }
-                else {
-                    // 如果沒有回覆，這裡可以選擇保持文章的初始發布時間或設置為其它值
-                    article.UpdateDate = article.PostDate;  // 或者保持不變
-                }
-
                 _context.Articles.Update(article);
             }
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new {
+                success = "已完成刪除作業"
+            });
         }
 
         private bool PostExists(int id)

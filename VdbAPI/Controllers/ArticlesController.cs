@@ -22,40 +22,106 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        [HttpGet("React")]
+        public async Task<IActionResult> React(int memberId,int articleId,int reactionType)
+        {
+            // 驗證 reactionType 參數
+            if(reactionType != -1 && reactionType != 0 && reactionType != 1) {
+                return BadRequest("無效的反應類型。必須是 -1, 0 或 1。");
+            }
 
-        // GET: api/Articles
+            // 驗證文章是否存在
+            var article = await _context.Articles.FindAsync(articleId);
+            if(article == null)
+                return NotFound("文章不存在");
+
+            using var connection = new SqlConnection(_connection);
+
+            try {
+                // SQL 處理 UserReactions
+            var sqlUserReaction = @"
+                IF EXISTS (SELECT 1 FROM UserReactions WHERE MemberId = @MemberId AND ArticleId = @ArticleId)
+                BEGIN
+                    UPDATE UserReactions SET ReactionType = @ReactionType 
+                    WHERE MemberId = @MemberId AND ArticleId = @ArticleId;
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO UserReactions (MemberId, ArticleId, ReactionType)
+                    VALUES (@MemberId, @ArticleId, @ReactionType);
+                END";
+
+                await connection.ExecuteAsync(sqlUserReaction,new UserReaction{
+                    MemberId = memberId,
+                    ArticleId = articleId,
+                    ReactionType = (short?)reactionType
+                });
+
+                var sqlGetCounts = @"
+            SELECT 
+                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
+                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = -1) AS DislikeCount";
+
+        var counts = await connection.QueryFirstAsync(sqlGetCounts, new { ArticleId = articleId });
+
+        // 更新文章的計數
+        article.LikeCount = counts.LikeCount;
+        article.DislikeCount = counts.DislikeCount;
+        await _context.SaveChangesAsync();
+
+        return Ok(counts);
+            }
+            catch(Exception ex) {
+                return StatusCode(500,"錯誤原因: " + ex.Message);
+            }
+        }
+
+
+
+        // GET: api/Articles  取得主題標籤
         [HttpGet("Theme")]
         public ActionResult<IEnumerable<Theme>> GetThemes()
         {
             return _context.Themes;
         }
 
-        // GET: api/Articles/5
+        // GET: api/Articles/5 取得文章內文
         [HttpGet("{id}")]
         public async Task<ActionResult<ArticleView>> GetArticle(int id)
         {
+            var article = await _context.Articles.FindAsync(id);
+            if(article == null) {
+                return NotFound(new {
+                    message = "找不到指定的文章"
+                });
+            }
+
             const string sql = "SELECT * FROM ArticleView WHERE ArticleId = @Id ";
 
             using var connection = new SqlConnection(_connection);
-            var article = await connection.QueryFirstOrDefaultAsync<ArticleView>(sql,new {
+            var articleView = await connection.QueryFirstOrDefaultAsync<ArticleView>(sql,new {
                 Id = id
             });
-            if(article == null) {
+            if(articleView == null) {
                 return NotFound();
             }
-            return Ok(article);
+            return Ok(articleView);
         }
+        //新增
         [HttpPost]
         public async Task<IActionResult> CreateArticle(ArticleView articleView)
         {
+
             if(articleView == null) {
                 return BadRequest(new {
                     error = "沒收到封包"
                 });
             }
             if(!ModelState.IsValid) {
-                return BadRequest(ModelState);
+                return BadRequest("傳入值不符合規範" + ModelState);
             }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try {
                 var article = new Article {
                     AuthorId = articleView.AuthorId,
@@ -67,29 +133,32 @@ namespace VdbAPI.Controllers {
                     PostDate = DateTime.UtcNow,
                     UpdateDate = DateTime.UtcNow,
                     ReplyCount = 0,
+                    LikeCount = 0,
+                    DislikeCount = 0,
                 };
-
-
 
                 _context.Articles.Add(article);
                 await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
 
                 return Ok(new {
                     OK = "新增文章成功"
                 });
             }
             catch(Exception ex) {
+                await transaction.RollbackAsync();
                 return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
 
             }
 
         }
-
+        //編輯
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchArticle(int id,ArtcleUpdate artcleUpdate)
+        public async Task<IActionResult> PatchArticle(int id,ArticleUpdate articleUpdate)
         {
-            if(artcleUpdate.ArticleContent.Length < 40)
-                return BadRequest("文章內容長度必須至少 40 個字元。");
+            if(articleUpdate.ArticleContent.Length < 10)
+                return BadRequest("文章內容長度必須至少 10 個字元。");
 
             if(!ArticleExists(id))
                 return NotFound(new {
@@ -98,14 +167,17 @@ namespace VdbAPI.Controllers {
 
             var sql = @"UPDATE Article SET ArticleContent = @ArticleContent,Title = @Title,
                         ThemeId = @ThemeId WHERE ArticleId = @id";
+            using var con = new SqlConnection(_connection);
+            await con.OpenAsync();
+            using var transaction = await con.BeginTransactionAsync();
             try {
-                using var con = new SqlConnection(_connection);
+
                 var rowsAffected = await con.ExecuteAsync(sql,new {
-                    artcleUpdate.ArticleContent,
-                    artcleUpdate.Title,
-                    artcleUpdate.ThemeId,
+                    articleUpdate.ArticleContent,
+                    articleUpdate.Title,
+                    articleUpdate.ThemeId,
                     id,
-                });
+                },transaction);
 
                 if(rowsAffected == 0) {
                     return NotFound(new {
@@ -113,59 +185,72 @@ namespace VdbAPI.Controllers {
                     });
 
                 }
-
+                await transaction.CommitAsync();
                 return Ok(new {
                     Message = "修改文章成功"
                 });
             }
             catch(Exception ex) {
+                await transaction.RollbackAsync();
                 return StatusCode(StatusCodes.Status500InternalServerError,new {
                     Message = "內部服務器錯誤",
                     Details = ex.Message
                 });
             }
         }
-        // DELETE: api/Articles/5
+
+        // DELETE: api/Articles/5 刪除
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {
             var article = await _context.Articles.FindAsync(id);
+            var trans = await _context.Database.BeginTransactionAsync();
             if(article == null) {
                 return NotFound();
             }
+            try {
+                await trans.CommitAsync();
+                _context.Articles.Remove(article);
+                await _context.SaveChangesAsync();
 
-            _context.Articles.Remove(article);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                return NoContent();
+            }
+            catch(Exception ex) {
+                await trans.RollbackAsync();
+                return StatusCode(500,"錯誤原因: " + ex.Message);
+            }
         }
-
+        // 文章列表
         [HttpPost("LoadIndex")]
         public async Task<ActionResult<forumDto>> LoadIndex(forumDto searchDTO)
         {
             try {
                 using var connection = new SqlConnection(_connection);
-                var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and lock = 1");
+                var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and [lock] = 1");
                 // 篩選條件
                 if(searchDTO.categoryId != 0) {
                     sql.Append(" AND ThemeId = @CategoryId");
                 }
                 // 關鍵字篩選
-
+                // 定義變數
+                string likePattern = $"%{searchDTO.keyword}%";
+                // 根據條件添加搜尋詞
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
-                    sql.Append(" AND (Title LIKE @Keyword OR ArticleContent LIKE @Keyword OR NickName LIKE @Keyword)");
+                    likePattern = $"%{searchDTO.keyword}%";
+                    sql.Append(" AND ArticleContent LIKE @LikePattern OR Title LIKE @LikePattern OR NickName LIKE @LikePattern");
                 }
+               
                 // 排序
 
                 // 計算總筆數
                 var countSql = $"SELECT COUNT(1) FROM ({sql}) AS CountQuery";
                 var dataCount = await connection.ExecuteScalarAsync<int>(countSql,new {
                     CategoryId = searchDTO.categoryId,
-                    Keyword = $"%{searchDTO.keyword}%"
+                    LikePattern = likePattern
                 });
 
                 // 排序條件
-                sql.Append(" Order By UpdateDate Desc"); // 根據你的排序需求修改
+                sql.Append(" ORDER BY [Lock] DESC, UpdateDate Desc"); // 根據你的排序需求修改
 
                 // 分頁
                 int pageSize = searchDTO.pageSize ?? 10;
@@ -177,7 +262,7 @@ namespace VdbAPI.Controllers {
 
                 var articles = await connection.QueryAsync<ArticleView>(sql.ToString(),new {
                     CategoryId = searchDTO.categoryId,
-                    Keyword = $"%{searchDTO.keyword}%",
+                    LikePattern = likePattern,
                     Offset = (page - 1) * pageSize,
                     PageSize = pageSize
                 });
@@ -203,9 +288,10 @@ namespace VdbAPI.Controllers {
         {
             return _context.Articles.Any(e => e.ArticleId == id);
         }
+
     }
 
-    public class ArtcleUpdate {
+    public class ArticleUpdate {
         public required string ArticleContent {
             get;
             set;

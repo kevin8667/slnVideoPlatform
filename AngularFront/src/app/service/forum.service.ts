@@ -9,10 +9,10 @@ import {
   throwError,
 } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Theme } from '../interfaces/forumnterface/Theme';
-import { ForumPagingDTO } from '../interfaces/forumnterface/ForumPagingDTO';
-import { ArticleView } from '../interfaces/forumnterface/ArticleView';
-import { Post } from '../interfaces/forumnterface/Post';
+import { Theme } from '../interfaces/forumInterface/Theme';
+import { ForumPagingDTO } from '../interfaces/forumInterface/ForumPagingDTO';
+import { ArticleView } from '../interfaces/forumInterface/ArticleView';
+import { Post } from '../interfaces/forumInterface/Post';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({
@@ -82,31 +82,19 @@ export default class ForumService {
   }
   deleteArticle(id: number) {
     const api = `https://localhost:7193/api/Articles/${id}`;
-    return this.client
-      .delete(api)
-      .pipe(
-        catchError(() =>
-          throwError(() => new Error('服務異常:刪除單筆文章發生例外'))
-        )
-      );
+    return this.client.delete(api);
   }
   deletePost(id: number) {
     const api = `https://localhost:7193/api/Posts/${id}`;
-    return this.client
-      .delete<Post>(api)
-      .pipe(
-        catchError(() =>
-          throwError(() => new Error('服務異常:獲取單筆回文發生例外'))
-        )
-      );
+    return this.client.delete(api);
   }
   getSafe(data: string): SafeHtml {
     if (!data) return '此文章並無內容，請盡速修改!';
 
     return this.sanitizer.bypassSecurityTrustHtml(data);
   }
-  async getPicture(img: any) {
-    const api = 'https://localhost:7193/api/FourmImg';
+  async getPicture(img: FormData) {
+    const api = 'https://localhost:7193/api/ForumImg';
     const data = await firstValueFrom(this.client.post(api, img));
     return data;
   }
