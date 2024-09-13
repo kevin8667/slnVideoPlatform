@@ -6,7 +6,7 @@ import { TestComponent } from './test/test.component';
 import { FormsModule } from '@angular/forms';
 import { CarouselModule } from 'primeng/carousel';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule ,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
@@ -24,8 +24,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
-
-
+import { JwtInterceptor } from './jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -34,7 +33,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     NavBarComponent,
     FooterComponent,
     ErrorPageComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +41,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+
     // CarouselModule,
     // CardModule,
     // ButtonModule,
@@ -57,7 +57,11 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     // GalleriaModule,
     // AutoCompleteModule,
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: JwtInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

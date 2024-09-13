@@ -63,7 +63,7 @@ export class MemberService {
     const formData = new FormData();
     formData.append('file', file); // 'file' 是後端預期的字段名
 
-    return this.http.post(this.apiUrl + 'Member/PutMemberPic', formData);
+    return this.http.post(this.apiUrl + 'Member/UpdateMemberPic', formData);
     }
 
   GetMemberCoupon(): Observable<any> {
@@ -78,12 +78,12 @@ export class MemberService {
     return this.http.get(this.apiUrl + 'Member/GetFriendList' );
   }
   GetMemberInfo(friendId:string): Observable<any>{
-    debugger;
+
     return this.http.get(this.apiUrl + 'Member/GetMemberById/'+friendId );
   }
 
   InviteFriend(friendId:string,message:string): Observable<any>{
-    debugger;
+
     return this.http.post(this.apiUrl + 'Member/InviteFriends?friendId='+friendId+'&message='+message ,{});
   }
 

@@ -134,8 +134,7 @@ public partial class VideoDBContext : DbContext
             entity.ToTable("ActorList");
 
             entity.Property(e => e.ActorId).HasColumnName("ActorID");
-            entity.Property(e => e.ActorDescription).HasMaxLength(500);
-            entity.Property(e => e.ActorImgPath).HasMaxLength(300);
+            //entity.Property(e => e.ActorImage).HasColumnType("image");
             entity.Property(e => e.ActorName)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -335,8 +334,7 @@ public partial class VideoDBContext : DbContext
             entity.ToTable("DirectorList");
 
             entity.Property(e => e.DirectorId).HasColumnName("DirectorID");
-            entity.Property(e => e.DirectorDescription).HasMaxLength(500);
-            entity.Property(e => e.DirectorImgPath).HasMaxLength(300);
+            //entity.Property(e => e.DirectorImage).HasColumnType("image");
             entity.Property(e => e.DirectorName)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -981,10 +979,10 @@ public partial class VideoDBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.PosterId).HasColumnName("PosterID");
 
-            entity.HasOne(d => d.Article).WithMany(p => p.Posts)
-                .HasForeignKey(d => d.ArticleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Post_Article");
+            ////entity.HasOne(d => d.Article).WithMany(p => p.Posts)
+            //    .HasForeignKey(d => d.ArticleId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_Post_Article");
 
             entity.HasOne(d => d.Poster).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.PosterId)

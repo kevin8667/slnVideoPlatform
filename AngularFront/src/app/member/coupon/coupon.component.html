@@ -14,21 +14,21 @@
             <img
               *ngIf="coupon.type == 'A'"
               class="card-img-top"
-              src="./../../../assets/IMG/coupon.png"
+              src="./../../../assets/img/Member/coupon.png"
               alt="a"
               style="width: 130px"
             />
             <img
               *ngIf="coupon.type == 'B'"
               class="card-img-top"
-              src="./../../../assets/IMG/giftbox.png"
+              src="./../../../assets/img/Member/giftbox.png"
               alt="b"
               style="width: 130px"
             />
             <img
               *ngIf="coupon.type == 'C'"
               class="card-img-top"
-              src="./../../../assets/IMG/gift-card.png"
+              src="./../../../assets/img/Member/gift-card.png"
               alt="c"
               style="width: 130px"
             />
@@ -67,7 +67,7 @@
     <span class="p-text-secondary block mb-5">贈品清單</span>
     <div *ngFor="let gift of giftList" class="gift-item">
       <div class="gift-icon">
-        <img src="./../../../assets/IMG/giftbox.png" alt="Gift Box" class="gift-box-img" />
+        <img src="./../../../assets/img/Member/giftbox.png" alt="Gift Box" class="gift-box-img" />
       </div>
       <div class="gift-details">
         <label class="gift-label">{{gift.giftName}}:</label>
