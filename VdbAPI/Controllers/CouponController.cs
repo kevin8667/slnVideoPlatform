@@ -12,17 +12,17 @@ namespace VdbAPI.Controllers
     public class CouponController : BaseController
     {
        
-        [Route("api/[controller]/[action]")]
-        [HttpGet]
-        public ReturnResult<mCoupondata> GetCouponData()
-        {
-            ReturnResult<mCoupondata> rtn = new ReturnResult<mCoupondata>();
-            CouponHelper CHelper = new CouponHelper(ConnString);
-            var mCoupon = CHelper.GetCouponData(new mCoupondata { MemberID = MemberId });
-            rtn.Datas = mCoupon;
-            rtn.IsSuccess = true;
-            return rtn;
-        }
+        //[Route("api/[controller]/[action]")]
+        //[HttpGet]
+        //public ReturnResult<mCoupondata> GetCouponData()
+        //{
+        //    ReturnResult<mCoupondata> rtn = new ReturnResult<mCoupondata>();
+        //    CouponHelper CHelper = new CouponHelper(ConnString);
+        //    var mCoupon = CHelper.GetCouponData(new mCoupondata { MemberID = MemberId });
+        //    rtn.Datas = mCoupon;
+        //    rtn.IsSuccess = true;
+        //    return rtn;
+        //}
 
         [Route("api/[controller]/[action]/{giftListId?}")]
         [HttpGet("{giftListId?}")]
