@@ -24,10 +24,10 @@ namespace VdbAPI.Member.Helper
 
         }
 
-        public void UpdateMember(RegisterViewModel input)
+        public void InsertMember(RegisterViewModel input)
         {
             MemberDao dao = new MemberDao(_connectionString);
-            dao.UpdateMember(input);
+            dao.InsertMember(input);
 
         }
 
@@ -70,22 +70,18 @@ namespace VdbAPI.Member.Helper
             return dao.GetFriendList(memberId);
         }
 
-        public mMemberInfo GetMemberInfo(string friendId)
+
+
+        public void InviteFriend(int memberId, int friendId, string message, string status)
         {
             MemberDao dao = new MemberDao(_connectionString);
-            return dao.GetMemberInfo(friendId);
+            dao.InviteFriend(memberId, friendId, message, status);
         }
 
-        public void InviteFriend(int memberId, string friendId, string message)
+        public void AddFriend(int memberId, int friendId,string status)
         {
             MemberDao dao = new MemberDao(_connectionString);
-            dao.InviteFriend(memberId, friendId, message);
-        }
-
-        public void AddFriend(int memberId, string friendId)
-        {
-            MemberDao dao = new MemberDao(_connectionString);
-            dao.AddFriend(memberId, friendId);
+            dao.AddFriend(memberId, friendId, status);
         }
 
         public List<mMemberNotice> GetMemberNotice(mMemberNotice input = null)
@@ -99,10 +95,11 @@ namespace VdbAPI.Member.Helper
             return dao.GetMemberNotice(input);
         }
 
-        public void DeleteFriend(int memberId, string friendId, string action)
+        public void DeleteFriend(int memberId, int friendId)
         {
             MemberDao dao = new MemberDao(_connectionString);
-            dao.DeleteFriend(memberId, friendId, action);
+            dao.DeleteFriend(memberId, friendId);
+            dao.DeleteFriend(friendId, memberId);
         }
 
         public bool UpdatePWD(string email, string newPwd)

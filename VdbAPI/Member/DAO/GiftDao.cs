@@ -207,7 +207,7 @@ namespace VdbAPI.Member.Dao
             {
                 mGiftListInfo giftList = new mGiftListInfo();
                 giftList.GiftListID = Convert.ToInt32(row["GiftListID"]);
-                giftList.GiftID = Convert.ToInt32(row["GiftID"].ToString());
+                giftList.GiftID = Convert.ToInt32(row["GiftID"]);
                 GiftList.Add(giftList);
             }
             return GiftList;

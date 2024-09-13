@@ -53,7 +53,7 @@
                   label="刪除好友"
                   [raised]="true"
                   severity="danger"
-                  (click)="removeFriend(friend.friendId,action='刪除好友')"
+                  (click)="removeFriend(friend.friendId)"
                 ></p-button>
               </ng-template>
             </p-card>
@@ -101,7 +101,7 @@
                   label="取消邀請"
                   [raised]="true"
                   severity="danger"
-                  (click)="removeFriend(friend.friendId,action='取消邀請')"
+                  (click)="removeFriend(friend.friendId)"
                 ></p-button>
               </ng-template>
             </p-card>
@@ -149,7 +149,7 @@
                   label="拒絕邀請"
                   [raised]="true"
                   severity="danger"
-                  (click)="removeFriend(friend.friendId,action='拒絕好友邀請')"
+                  (click)="removeFriend(friend.friendId)"
                 ></p-button>&nbsp;
                 <p-button
                 label="接受邀請"

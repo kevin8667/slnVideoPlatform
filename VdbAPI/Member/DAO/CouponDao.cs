@@ -21,7 +21,7 @@ namespace VdbAPI.Member.Dao
         {
             using var connection = new SqlConnection(_connectionString);
 
-            string sqlQuery = @"SELECT C.CouponID, C.CouponName, C.CouponDesc,
+            string sqlQuery = @"SELECT C.CouponID, C.CouponName, C.CouponDesc,c.GiftListId,
             C.Type, C.ExpireDate, MC.MemberID FROM CouponInfo C INNER JOIN MemberCoupon MC ON C.CouponID = MC.CouponID WHERE 1=1 ";
             List<SqlParameter> pars = new List<SqlParameter>();
             if (data.MemberID != null)
@@ -92,6 +92,7 @@ namespace VdbAPI.Member.Dao
                 coupon.CouponDesc = row["CouponDesc"].ToString();
                 coupon.Type = row["Type"].ToString();
                 coupon.ExpireDate = Convert.ToInt32(row["ExpireDate"]);
+                coupon.GiftListID = Convert.ToInt32(row["GiftListId"]);
                 mCoupondatas.Add(coupon);
             }
             return mCoupondatas;

@@ -56,7 +56,10 @@ export class MemberService {
   }
 
   updatememberdata(memberData: any): Observable<any> {
+    debugger;
     return this.http.put(this.apiUrl + 'Member/PutMemberData', memberData);
+
+
   }
 
   updatememberPic( file: File ): Observable<any>{
@@ -70,7 +73,8 @@ export class MemberService {
     return this.http.get(this.apiUrl + 'Coupon/GetCouponData');
   }
 
-  GetGiftList(giftListId: string): Observable<any> {
+  GetGiftList(giftListId: number): Observable<any> {
+    debugger;
     return this.http.get(this.apiUrl + 'Coupon/GetGiftList/' + giftListId);
   }
 
@@ -79,7 +83,7 @@ export class MemberService {
   }
   GetMemberInfo(friendId:string): Observable<any>{
 
-    return this.http.get(this.apiUrl + 'Member/GetMemberById/'+friendId );
+    return this.http.get(this.apiUrl + 'Member/GetMemberDataById/'+friendId );
   }
 
   InviteFriend(friendId:string,message:string): Observable<any>{
@@ -87,8 +91,8 @@ export class MemberService {
     return this.http.post(this.apiUrl + 'Member/InviteFriends?friendId='+friendId+'&message='+message ,{});
   }
 
-  DeleteFriend(friendId:string ,action:string): Observable<any>{
-    return this.http.delete(this.apiUrl + 'Member/DeleteFriend?friendId=' +friendId+'&action='+action );
+  DeleteFriend(friendId:number): Observable<any>{
+    return this.http.delete(this.apiUrl + 'Member/DeleteFriend?friendId=' +friendId );
   }
 
   addFriend(friendId:string): Observable<any>{
