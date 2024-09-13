@@ -16,6 +16,7 @@ namespace VdbAPI.Controllers
         [HttpGet]
         public ReturnResult<mCoupondata> GetCouponData()
         {
+            //1123123213
             ReturnResult<mCoupondata> rtn = new ReturnResult<mCoupondata>();
             CouponHelper CHelper = new CouponHelper(ConnString);
             var mCoupon = CHelper.GetCouponData(new mCoupondata { MemberID = MemberId });
