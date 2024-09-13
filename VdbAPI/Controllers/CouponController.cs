@@ -8,12 +8,13 @@ using VdbAPI.Models;
 
 namespace VdbAPI.Controllers
 {
-    public class CouponController :BaseController
+    [JwtActionFilter]
+    public class CouponController : BaseController
     {
-        [JwtActionFilter]
+       
         [Route("api/[controller]/[action]")]
         [HttpGet]
-        public ReturnResult<mCoupondata> GetCouponData()  
+        public ReturnResult<mCoupondata> GetCouponData()
         {
             ReturnResult<mCoupondata> rtn = new ReturnResult<mCoupondata>();
             CouponHelper CHelper = new CouponHelper(ConnString);
@@ -23,17 +24,28 @@ namespace VdbAPI.Controllers
             return rtn;
         }
 
-        //[Route("api/[controller]/[action]/{giftListId?}")]
-        //[HttpGet]
-        //public ReturnResult<mGiftListInfo> GetGiftList(string giftListId = null)
-        //{
-        //    ReturnResult<mGiftListInfo> rtn = new ReturnResult<mGiftListInfo>();
-        //    CouponHelper CHelper = new CouponHelper(ConnString);
-        //    var mGift = CHelper.GetGiftList();
-        //    rtn.Datas = mGift;
-        //    rtn.IsSuccess = true;
-        //    return rtn;
-        //}
+        //    [Route("api/[controller]/[action]/{giftListId?}")]
+        //    [HttpGet("{giftListId?}")]
+        //    public ReturnResult<List<string>> GetGiftList(string giftListId = null)
+        //    {
+        //        ReturnResult<List<string>> rtn = new ReturnResult<List<string>>();
+        //        GiftRelatedHelper GRHelper = new GiftRelatedHelper(ConnString);
 
+        //        try
+        //        {
+        //            // 確保 GRHelper.GetSelectedGifts 返回 List<string>
+        //            rtn.Datas = GRHelper.GetSelectedGifts(giftListId);
+        //            rtn.IsSuccess = true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            rtn.IsSuccess = false;
+        //            rtn.AlertMsg = "發生錯誤: " + ex.Message;
+        //        }
+
+        //        return rtn;
+        //    }
+        //}
     }
 }
+

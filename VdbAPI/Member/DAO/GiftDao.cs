@@ -25,9 +25,9 @@ namespace VdbAPI.Member.Dao
                 string sqlQuery = @"SELECT GiftID,GiftName ,GiftDesc,Qty ,Pic  FROM GiftInfo where 1=1  
                  ";
                 List<SqlParameter> pars = new List<SqlParameter>();
-                if (data.GiftID!=null)
+                if (data.GiftID != null)
                 {
-                    sqlQuery +=@"  and giftId=@giftId";
+                    sqlQuery += @"  and giftId=@giftId";
                     pars.Add(new SqlParameter("giftId", data.GiftID));
                 }
 
@@ -61,7 +61,7 @@ namespace VdbAPI.Member.Dao
                 giftList.GiftName = row["GiftName"].ToString();
                 giftList.GiftDesc = row["GiftDesc"].ToString();
                 giftList.Qty = Convert.ToInt32(row["Qty"]);
-                giftList.Pic =row["Pic"].ToString();
+                giftList.Pic = row["Pic"].ToString();
 
 
                 GiftList.Add(giftList);

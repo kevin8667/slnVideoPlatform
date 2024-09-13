@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VdbAPI.Member.Model;
 
 namespace VdbAPI.Member.Helper
 {
@@ -15,10 +16,11 @@ namespace VdbAPI.Member.Helper
             _connectionString = connection;
         }
 
-        public void GetSelectedGifts(string giftID)
+        public List<string> GetSelectedGifts(string giftlistID)
         {
             GiftRelatedDao dao = new GiftRelatedDao(_connectionString);
-            dao.GetSelectedGifts(giftID);
+            // 確保這裡調用的 dao.GetSelectedGifts 返回 List<string>
+            return dao.GetSelectedGifts(giftlistID); // 確保返回值正確
         }
     }
 }

@@ -118,8 +118,8 @@ namespace VdbAPI.Controllers {
                     PostDate = DateTime.UtcNow,
                     PosterId = post.PosterId,
                     PostImage = "",
-                    LikeCount = 0,
-                    DislikeCount = 0,
+                    //LikeCount = 0,
+                    //DislikeCount = 0,
                     
                 };
                 _context.Posts.Add(post);

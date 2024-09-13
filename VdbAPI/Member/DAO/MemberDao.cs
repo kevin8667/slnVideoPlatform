@@ -13,6 +13,8 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics.Metrics;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace VdbAPI.Member.Dao
 {
@@ -43,16 +45,6 @@ namespace VdbAPI.Member.Dao
                 {
                     sqlQuery += @" and MemberNoticeID = @MemberNoticeID ";
                     pars.Add(new SqlParameter("MemberNoticeID", data.MemberNoticeID));
-                }
-                if (data.RefNo != null)
-                {
-                    sqlQuery += @" and RefNo = @RefNo ";
-                    pars.Add(new SqlParameter("RefNo", data.RefNo));
-                }
-                if (data.CreTime <= DateTime.Now)
-                {
-                    sqlQuery += @" and CreTime = @CreTime ";
-                    pars.Add(new SqlParameter("CreTime", data.CreTime));
                 }
                 if (!string.IsNullOrEmpty(data.Action))
                 {
@@ -174,16 +166,6 @@ namespace VdbAPI.Member.Dao
                     sqlQuery += @" and Point = @Point ";
                     pars.Add(new SqlParameter("Point", data.Point));
                 }
-                if (data.LastLoginDate <= DateTime.Now)
-                {
-                    sqlQuery += @" and LastLoginDate = @LastLoginDate ";
-                    pars.Add(new SqlParameter("LastLoginDate", data.LastLoginDate));
-                }
-                if (data.RegisterDate <= DateTime.Now)
-                {
-                    sqlQuery += @" and RegisterDate = @RegisterDate ";
-                    pars.Add(new SqlParameter("RegisterDate", data.RegisterDate));
-                }
                 if (!string.IsNullOrEmpty(data.Grade))
                 {
                     sqlQuery += @" and Grade = @Grade ";
@@ -206,135 +188,145 @@ namespace VdbAPI.Member.Dao
                 }
             }
         }
-        internal List<memberFriends> GetFriendList(memberFriends data)
+        internal void InviteFriend(int memberId, string friendId, string message)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
+                connection.Open();
 
-                string sqlQuery = @"SELECT F.FriendID, F.CreationDate, F.FriendStatus, F.InvitedMessage, 
-                                    M.NickName, M.MemberName, M.PhotoPath, M.MemberID FROM FriendList F , MemberInfo M where 1=1 ";
-                List<SqlParameter> pars = new List<SqlParameter>();
-                if (!string.IsNullOrEmpty(data.InvitedMessage))
-                {
-                    sqlQuery += @" and InvitedMessage like @InvitedMessage ";
-                    pars.Add(new SqlParameter("InvitedMessage", "%" + data.InvitedMessage + "%"));
-                }
-                if (!string.IsNullOrEmpty(data.FriendStatus))
-                {
-                    sqlQuery += @" and FriendStatus = @FriendStatus ";
-                    pars.Add(new SqlParameter("FriendStatus", data.FriendStatus));
-                }
-                if (data.CreationDate <= DateTime.MinValue || data.CreationDate > DateTime.Now)
-                {
-                    data.CreationDate = new DateTime(2020, 1, 1);
-                }
+                string sqlQuery = @"
+            INSERT INTO FriendList (FriendListID, MemberID, FriendID, CreationDate, FriendStatus, InvitedMessage)
+            SELECT ISNULL(MAX(FriendListID), 0) + 1, @MemberID, @FriendID, GETDATE(), '邀請中', @InvitedMessage
+            FROM FriendList";
 
-                if (data.CreationDate <= DateTime.Now)
-                {
-                    sqlQuery += @" and CreationDate = @CreationDate ";
-                    pars.Add(new SqlParameter("CreationDate", data.CreationDate));
-                }
-                if (data.FriendID != null)
-                {
-                    sqlQuery += @" and FriendID = @FriendID ";
-                    pars.Add(new SqlParameter("FriendID", data.FriendID));
-                }
-                if (data.MemberID != null)
-                {
-                    sqlQuery += @" and M.MemberID = @MemberID ";
-                    pars.Add(new SqlParameter("MemberID", data.MemberID));
-                }
-                if (!string.IsNullOrEmpty(data.PhotoPath))
-                {
-                    sqlQuery += @" and PhotoPath = @PhotoPath ";
-                    pars.Add(new SqlParameter("PhotoPath", data.PhotoPath));
-                }
-                if (!string.IsNullOrEmpty(data.MemberName))
-                {
-                    sqlQuery += @" and MemberName = @MemberName ";
-                    pars.Add(new SqlParameter("MemberName", data.MemberName));
-                }
-                if (!string.IsNullOrEmpty(data.NickName))
-                {
-                    sqlQuery += @" and NickName = @NickName ";
-                    pars.Add(new SqlParameter("NickName", data.NickName));
-                }
+                List<SqlParameter> pars = new List<SqlParameter>
+        {
+            new SqlParameter("@MemberID", memberId),
+            new SqlParameter("@FriendID", friendId),
+            new SqlParameter("@InvitedMessage", message)
+        };
 
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
+                    command.Parameters.AddRange(pars.ToArray());
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+        internal mMemberInfo GetEmail(string email)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = @"SELECT * FROM MemberInfo WHERE Email = @Email";
 
+                SqlParameter parameter = new SqlParameter("@Email", email);
+
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.Add(parameter);
+
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        // 創建 mMemberInfo 對象並填充數據
+                        mMemberInfo memberInfo = new mMemberInfo
+                        {
+                            Email = reader["Email"].ToString(),
+                            // 填充其他屬性
+                        };
+
+                        return memberInfo;
+                    }
+                    else
+                    {
+                        return null; // 未找到匹配的電子郵件地址
+                    }
+                }
+            }
+        }
+
+
+
+
+
+        internal List<memberFriends> GetFriendList(int memberId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = @"SELECT F.FriendID, F.CreationDate, F.FriendStatus, F.InvitedMessage, 
+                                    M.NickName, M.MemberName, M.PhotoPath, M.MemberID 
+                                    FROM FriendList F 
+                                    JOIN MemberInfo M ON F.FriendID = M.MemberID
+                                    WHERE F.MemberID = @MemberID";
+
+                List<SqlParameter> pars = new List<SqlParameter>
+                {
+                    new SqlParameter("@MemberID", memberId)
+                };
+
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
                     connection.Open();
                     command.Parameters.AddRange(pars.ToArray());
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
                         DataSet dataSet = new DataSet();
-
-
                         adapter.Fill(dataSet);
-
 
                         return BindingFriendList(dataSet.Tables[0]);
                     }
                 }
             }
         }
-        internal List<mMemberInfo> SelectMemberInfo(mMemberInfo data)
+        internal mMemberInfo GetMemberInfo(string friendId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-
-                string sqlQuery = "SELECT * FROM MemberInfo where 1=1 ";
-                List<SqlParameter> pars = new List<SqlParameter>();
-                if (!string.IsNullOrEmpty(data.MemberName))
+                string sqlQuery = "SELECT * FROM MemberInfo WHERE MemberID = @MemberID";
+                List<SqlParameter> pars = new List<SqlParameter>
                 {
-                    sqlQuery += @" and name like @name ";
-                    pars.Add(new SqlParameter("name", "%" + data.MemberName + "%"));
-                }
-                if (!string.IsNullOrEmpty(data.Phone))
-                {
-                    sqlQuery += @" and Phone = @Phone ";
-                    pars.Add(new SqlParameter("Phone", data.Phone));
-                }
-                if (!string.IsNullOrEmpty(data.Status))
-                {
-                    sqlQuery += @" and Status = @Status ";
-                    pars.Add(new SqlParameter("Status", data.Status));
-                }
-
-                if (!string.IsNullOrEmpty(data.Email))
-                {
-                    sqlQuery += @" and Email = @Email ";
-                    pars.Add(new SqlParameter("Email", data.Email));
-                }
-                if (!string.IsNullOrEmpty(data.Password))
-                {
-                    sqlQuery += @" and Password = @Password ";
-                    pars.Add(new SqlParameter("Password", data.Password));
-                }
-                if (data.MemberID != null)
-                {
-                    sqlQuery += @" and MemberID = @MemberID ";
-                    pars.Add(new SqlParameter("MemberID", data.MemberID));
-                }
-
+                    new SqlParameter("@MemberID", friendId)
+                };
 
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
-
                     connection.Open();
                     command.Parameters.AddRange(pars.ToArray());
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
                         DataSet dataSet = new DataSet();
-
-
                         adapter.Fill(dataSet);
 
-
-                        return BindingMemberInfo(dataSet.Tables[0]);
+                        return BindingMemberInfo(dataSet.Tables[0]).FirstOrDefault();
                     }
+                }
+            }
+        }
+        internal void AddFriend(int memberId, string friendId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string sqlQuery = @"
+            INSERT INTO FriendList (FriendListID, MemberID, FriendID, CreationDate, FriendStatus, InvitedMessage)
+            SELECT ISNULL(MAX(FriendListID), 0) + 1, @MemberID, @FriendID, GETDATE(), '已添加', NULL
+            FROM FriendList";
+
+                List<SqlParameter> pars = new List<SqlParameter>
+        {
+            new SqlParameter("@MemberID", memberId),
+            new SqlParameter("@FriendID", friendId)
+        };
+
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddRange(pars.ToArray());
+                    command.ExecuteNonQuery();
                 }
             }
         }
@@ -406,6 +398,120 @@ namespace VdbAPI.Member.Dao
             }
             return members;
         }
+        internal void UpdatePWD(string email, string newPwd)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                List<SqlParameter> pars = new List<SqlParameter>();
+
+                string sqlQuery = "Update MemberInfo set ";
+                {
+                    sqlQuery += @" password=@password where email=@email  ";
+                    pars.Add(new SqlParameter("password", newPwd));
+                    pars.Add(new SqlParameter("email", email));
+                }
+
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+
+                    connection.Open();
+                    command.Parameters.AddRange(pars.ToArray());
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+        internal List<mMemberInfo> SelectMemberInfo(mMemberInfo data)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+
+                string sqlQuery = "SELECT * FROM MemberInfo where 1=1 ";
+                List<SqlParameter> pars = new List<SqlParameter>();
+                if (!string.IsNullOrEmpty(data.MemberName))
+                {
+                    sqlQuery += @" and name like @name ";
+                    pars.Add(new SqlParameter("name", "%" + data.MemberName + "%"));
+                }
+                if (!string.IsNullOrEmpty(data.Phone))
+                {
+                    sqlQuery += @" and Phone = @Phone ";
+                    pars.Add(new SqlParameter("Phone", data.Phone));
+                }
+                if (!string.IsNullOrEmpty(data.Status))
+                {
+                    sqlQuery += @" and Status = @Status ";
+                    pars.Add(new SqlParameter("Status", data.Status));
+                }
+
+                if (!string.IsNullOrEmpty(data.Email))
+                {
+                    sqlQuery += @" and Email = @Email ";
+                    pars.Add(new SqlParameter("Email", data.Email));
+                }
+                if (!string.IsNullOrEmpty(data.Password))
+                {
+                    sqlQuery += @" and Password = @Password ";
+                    pars.Add(new SqlParameter("Password", data.Password));
+                }
+                if (data.MemberID != null)
+                {
+                    sqlQuery += @" and MemberID = @MemberID ";
+                    pars.Add(new SqlParameter("MemberID", data.MemberID));
+                }
+
+
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+
+                    connection.Open();
+                    command.Parameters.AddRange(pars.ToArray());
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        DataSet dataSet = new DataSet();
+
+
+                        adapter.Fill(dataSet);
+
+
+                        return BindingMemberInfo(dataSet.Tables[0]);
+                    }
+                }
+            }
+        }
+        internal void UpdateMember(RegisterViewModel info)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                List<SqlParameter> pars = new List<SqlParameter>();
+
+                string sqlQuery = @"Update MemberInfo set 
+                    email=@email, nickname=@nickname, MemberName=@name, birth=@birth, phone=@phone, 
+                    address=@address, gender=@gender,photoPath=@photoPath  WHERE memberId = (SELECT ISNULL(MAX(memberId), 0) + 1 FROM MemberInfo)";
+                pars.Add(new SqlParameter("email", info.Email));
+                pars.Add(new SqlParameter("nickname", info.NickName));
+                pars.Add(new SqlParameter("name", info.MemberName));
+                pars.Add(new SqlParameter("birth", info.Birth));
+                pars.Add(new SqlParameter("phone", info.Phone));
+                pars.Add(new SqlParameter("address", info.Address));
+                pars.Add(new SqlParameter("gender", info.Gender));
+                pars.Add(new SqlParameter("photoPath", info.PhotoPath));
+
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+
+                    connection.Open();
+                    command.Parameters.AddRange(pars.ToArray());
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+
+
         internal void UpdateMemberInfo(mMemberInfo info)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -449,6 +555,21 @@ namespace VdbAPI.Member.Dao
                     connection.Open();
                     command.Parameters.AddRange(pars.ToArray());
 
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+        internal void DeleteFriend(int memberId, string friendId, string action)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = @"UPDATE FriendList SET Status = @Action WHERE MemberID = @MemberID AND FriendID = @FriendID";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Action", action);
+                    command.Parameters.AddWithValue("@MemberID", memberId);
+                    command.Parameters.AddWithValue("@FriendID", friendId);
+                    connection.Open();
                     command.ExecuteNonQuery();
                 }
             }

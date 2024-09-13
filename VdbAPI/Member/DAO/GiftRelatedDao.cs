@@ -15,7 +15,7 @@ namespace VdbAPI.Member.Dao
         {
             _connectionString = connection;
         }
-        internal List<string> GetSelectedGifts(string giftID)
+        internal List<string> GetSelectedGifts(string giftlistID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -24,7 +24,7 @@ namespace VdbAPI.Member.Dao
 ";
                 List<SqlParameter> pars = new List<SqlParameter>();
 
-                pars.Add(new SqlParameter("giftlistid", giftID));
+                pars.Add(new SqlParameter("giftlistid", giftlistID));
 
 
                 // 使用 SqlCommand 對象執行 SQL 查詢

@@ -16,6 +16,26 @@ namespace VdbAPI.Member.Helper
         {
             _connectionString = connection;
         }
+
+        public void UpdateMemberInfo(mMemberInfo input)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.UpdateMemberInfo(input);
+
+        }
+
+        public void UpdateMember(RegisterViewModel input)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.UpdateMember(input);
+
+        }
+
+        public void UpdateMemberPic(mMemberInfo input)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.UpdateMemberPic(input);
+        }
         public List<mMemberInfo> SelectMemberInfo(mMemberInfo input = null)
         {
             if (input == null)
@@ -25,19 +45,6 @@ namespace VdbAPI.Member.Helper
 
             MemberDao dao = new MemberDao(_connectionString);
             return dao.SelectMemberInfo(input);
-        }
-
-        public void UpdateMemberInfo(mMemberInfo input)
-        {
-            MemberDao dao = new MemberDao(_connectionString);
-            dao.UpdateMemberInfo(input);
-
-        }
-
-        public void UpdateMemberPic(mMemberInfo input)
-        {
-            MemberDao dao = new MemberDao(_connectionString);
-            dao.UpdateMemberPic(input);
         }
 
         public List<mMemberInfo> GetMemberData(mMemberInfo input = null)
@@ -51,15 +58,34 @@ namespace VdbAPI.Member.Helper
             return dao.GetMemberData(input);
         }
 
-        public List<memberFriends> GetFriendList(memberFriends input = null)
+        public mMemberInfo GetEmail(string Email)
         {
-            if (input == null)
-            {
-                input = new memberFriends();
-            }
-
             MemberDao dao = new MemberDao(_connectionString);
-            return dao.GetFriendList(input);
+            return dao.GetEmail(Email);
+        }
+
+        public List<memberFriends> GetFriendList(int memberId)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            return dao.GetFriendList(memberId);
+        }
+
+        public mMemberInfo GetMemberInfo(string friendId)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            return dao.GetMemberInfo(friendId);
+        }
+
+        public void InviteFriend(int memberId, string friendId, string message)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.InviteFriend(memberId, friendId, message);
+        }
+
+        public void AddFriend(int memberId, string friendId)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.AddFriend(memberId, friendId);
         }
 
         public List<mMemberNotice> GetMemberNotice(mMemberNotice input = null)
@@ -73,6 +99,18 @@ namespace VdbAPI.Member.Helper
             return dao.GetMemberNotice(input);
         }
 
-       
+        public void DeleteFriend(int memberId, string friendId, string action)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.DeleteFriend(memberId, friendId, action);
+        }
+
+        public bool UpdatePWD(string email, string newPwd)
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.UpdatePWD(email, newPwd);
+            return true;
+        }
+
     }
 }

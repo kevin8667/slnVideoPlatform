@@ -56,5 +56,6 @@ namespace VdbAPI.Member.Helper
             CouponDao dao = new CouponDao(_connectionString);
             dao.DeleteCouponInfo(input);
         }
+
     }
 }

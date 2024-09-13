@@ -54,7 +54,7 @@ label{
 }
 
 :host::ng-deep {
-  background-image: url('/assets/IMG/Member/STARcircle.jpg'); /* 使用相對路徑指定背景圖片 */
+  background-image: url('/assets/img/Member/STARcircle.jpg'); /* 使用相對路徑指定背景圖片 */
   background-size: cover; /* 確保圖片覆蓋整個視口 */
   background-repeat: no-repeat; /* 防止圖片重複 */
   background-position: center; /* 將圖片置中 */

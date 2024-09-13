@@ -22,13 +22,7 @@ namespace VdbAPI.Member.Dao
             using var connection = new SqlConnection(_connectionString);
 
             string sqlQuery = @"SELECT C.CouponID, C.CouponName, C.CouponDesc,
-            C.DiscountFormula, C.ExpireDate, G.GiftID, G.GiftName, G.GiftDesc, G.Qty, G.Pic,
-            MC.MemberID FROM CouponInfo C INNER JOIN MemberCoupon MC ON C.CouponID = MC.CouponID 
-            LEFT JOIN GiftList GL 
-            ON C.GiftListID = GL.GiftListID
-            LEFT JOIN GiftInfo G 
-            ON GL.GiftID = G.GiftID 
-            WHERE 1=1 ";
+            C.Type, C.ExpireDate, MC.MemberID FROM CouponInfo C INNER JOIN MemberCoupon MC ON C.CouponID = MC.CouponID WHERE 1=1 ";
             List<SqlParameter> pars = new List<SqlParameter>();
             if (data.MemberID != null)
             {
@@ -97,22 +91,7 @@ namespace VdbAPI.Member.Dao
                 coupon.CouponName = row["CouponName"].ToString();
                 coupon.CouponDesc = row["CouponDesc"].ToString();
                 coupon.Type = row["Type"].ToString();
-                coupon.DiscountFormula = row["DiscountFormula"].ToString();
-
-                if (row["GiftListID"] != DBNull.Value)
-                {
-                    coupon.GiftListID = Convert.ToInt32(row["GiftListID"]);
-                }
-
                 coupon.ExpireDate = Convert.ToInt32(row["ExpireDate"]);
-                coupon.Remark = row["Remark"].ToString();
-                coupon.CreTime = Convert.ToDateTime(row["CreTime"]);
-                coupon.GiftID = Convert.ToInt32(row["GiftID"]);
-                coupon.GiftName = row["GiftName"].ToString();
-                coupon.GiftDesc = row["GiftDesc"].ToString();
-                coupon.Qty = Convert.ToInt32(row["Qty"]);
-                coupon.Pic = row["Pic"].ToString();
-
                 mCoupondatas.Add(coupon);
             }
             return mCoupondatas;

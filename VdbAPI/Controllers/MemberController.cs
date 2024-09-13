@@ -5,15 +5,16 @@ using VdbAPI.Member.Helper;
 using VdbAPI.Member.Model;
 using VdbAPI.Member.ViewModel;
 using VdbAPI.Models;
+using VdbAPI.Member.Service;
 
 namespace VdbAPI.Controllers
 {
+    [JwtActionFilter]
     public class MemberController : BaseController
     {
-        [JwtActionFilter]
         [Route("api/[controller]/[action]")]
         [HttpGet]
-        public ReturnResult<mMemberInfo> GetMemberData()
+        public ReturnResult<mMemberInfo> GetMemberData(int MemberID)
         {
             ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
             MemberHelper mHelper = new MemberHelper(ConnString);
@@ -23,27 +24,34 @@ namespace VdbAPI.Controllers
             return rtn;
         }
 
-        [Route("api/[controller]/[action]")]
-        [HttpGet]
-        public ReturnResult<memberFriends> GetFriendList()
+        [HttpGet("memberId")]
+        public IActionResult GetMemberId()
         {
-            ReturnResult<memberFriends> rtn = new ReturnResult<memberFriends>();
-            MemberHelper mHelper = new MemberHelper(ConnString);
-            var mInfo = mHelper.GetFriendList(new memberFriends { FriendID = MemberId });
-            if (mInfo != null)
-            {
-                rtn.Datas = mInfo;
-                rtn.IsSuccess = true;
-                return rtn;
-            }
-            else
-            {
-                rtn.Data = null;
-                rtn.IsSuccess = false;
-                rtn.AlertMsg = "無好友";
-                return rtn;
-            }
+            int memberId = MemberId; // 從 BaseController 獲取 MemberId
+            return Ok(new { MemberId = memberId });
         }
+
+        //[Route("api/[controller]/[action]")]
+        //[HttpGet]
+        //public ReturnResult<memberFriends> GetFriendList()
+        //{
+        //    ReturnResult<memberFriends> rtn = new ReturnResult<memberFriends>();
+        //    MemberHelper mHelper = new MemberHelper(ConnString);
+        //    var mInfo = mHelper.GetFriendList(new memberFriends { FriendID = MemberId });
+        //    if (mInfo != null)
+        //    {
+        //        rtn.Datas = mInfo;
+        //        rtn.IsSuccess = true;
+        //        return rtn;
+        //    }
+        //    else
+        //    {
+        //        rtn.Data = null;
+        //        rtn.IsSuccess = false;
+        //        rtn.AlertMsg = "無好友";
+        //        return rtn;
+        //    }
+        //}
 
         [Route("api/[controller]/[action]")]
         [HttpGet]
@@ -67,58 +75,41 @@ namespace VdbAPI.Controllers
             }
         }
 
-  //      [Route("api/[controller]/[action]")]
-  //      [HttpGet]
-  //      public ReturnResult<mMemberInfo> GetMemberInfo(string friendId)
-  //      {
-  //          ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
-  //          MemberHelper mHelper = new MemberHelper(ConnString);
-  //          var mInfo = mHelper.GetMemberInfo(new mMemberInfo { MemberID = MemberId });
-  //          if (mInfo != null)
-  //          {
-  //              rtn.Datas = mInfo;
-  //              rtn.IsSuccess = true;
-  //              return rtn;
-  //          }
-  //          else
-  //          {
-  //              rtn.Data = null;
-  //              rtn.IsSuccess = false;
-  //              rtn.AlertMsg = "無好友";
-  //              return rtn;
-  //          }
-  //      }
+        [Route("api/[controller]/[action]")]
+        [HttpGet]
+        public ReturnResult<mMemberInfo> GetMemberInfo(string friendId)
+        {
+            ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
+            MemberHelper mHelper = new MemberHelper(ConnString);
+            var mInfo = mHelper.GetMemberData(new mMemberInfo { MemberID = MemberId });
+            if (mInfo != null)
+            {
+                rtn.Datas = mInfo;
+                rtn.IsSuccess = true;
+                return rtn;
+            }
+            else
+            {
+                rtn.Data = null;
+                rtn.IsSuccess = false;
+                rtn.AlertMsg = "無好友";
+                return rtn;
+            }
+        }
 
-  //    [Route("api/[controller]/[action]")]
-  //      [HttpGet]
-  //      public ReturnResult<memberFriends> InviteFriend(string friendId,string message)
-  //      {
-  //          ReturnResult<memberFriends> rtn = new ReturnResult<memberFriends>();
-  //          MemberHelper mHelper = new MemberHelper(ConnString);
-  //          var mInfo = mHelper.InviteFriend(new memberFriends { FriendID = MemberId, Message = message });
-  //          if (mInfo != null)
-  //          {
-  //              rtn.Datas = mInfo;
-  //              rtn.IsSuccess = true;
-  //              return rtn;
-  //          }
-  //      }
+        //[Route("api/[controller]/[action]")]
+        //[HttpPost]
+        //public ReturnResult<memberFriends> InviteFriend(string friendId, string message)
+        //{
+        //    ReturnResult<memberFriends> rtn = new ReturnResult<memberFriends>();
+        //    MemberHelper mHelper = new MemberHelper(ConnString);
+        //    mHelper.InviteFriend(new memberFriends { FriendID = MemberId, Message = message });
+
+        //    rtn.IsSuccess = true;  // 假設執行成功
+        //    return rtn;
+        //}
 
 
-  //[Route("api/[controller]/[action]")]
-  //      [HttpDelete]
-  //      public ReturnResult<memberFriends> DeleteFriend(string friendId,string action)
-  //      {
-  //          ReturnResult<memberFriends> rtn = new ReturnResult<memberFriends>();
-  //          MemberHelper mHelper = new MemberHelper(ConnString);
-  //          var mInfo = mHelper.DeleteFriend(new memberFriends { FriendID = MemberId, Action = action });
-  //          if (mInfo != null)
-  //          {
-  //              rtn.Datas = mInfo;
-  //              rtn.IsSuccess = true;
-  //              return rtn;
-  //          }
-  //      }
 
         [Route("api/[controller]/[action]")]
         [HttpGet]
@@ -141,91 +132,99 @@ namespace VdbAPI.Controllers
                 return rtn;
             }
         }
-        
+
         [Route("api/[controller]/[action]")]
         [HttpPost]
-         public ReturnResult<mMemberInfo> UpdateMemberPic(mMemberInfo input) 
+        public ReturnResult<mMemberInfo> UpdateMemberPic(IFormFile file)
         {
             ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
-            if (input == null)
+            if (file != null && file.Length > 0)
             {
-                rtn.IsSuccess = false;
-                rtn.AlertMsg = "請上傳照片";
-                return rtn;
-            }
-            try
-            {
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                string filePath = Path.Combine("uploads", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                mMemberInfo memberInfo = new mMemberInfo
+                {
+                    MemberID = MemberId,
+                    PhotoPath = filePath
+                };
+
+
                 MemberHelper mHelper = new MemberHelper(ConnString);
-                mHelper.UpdateMemberPic(input);
-
-
-                bool isUpdated = VerifyUpdateSuccess(input);
-                if (isUpdated)
-                {
-                    rtn.IsSuccess = true;
-                    rtn.Data = input;
-                }
-                else
-                {
-                    rtn.IsSuccess = false;
-                    rtn.AlertMsg = "更新圖片時發生錯誤";
-                }
+                mHelper.UpdateMemberPic(memberInfo);
+                rtn.IsSuccess = true;
             }
-            catch (Exception ex)
+            else
             {
                 rtn.IsSuccess = false;
-                rtn.AlertMsg = "發生錯誤: " + ex.Message;
+                rtn.AlertMsg = "無效的文件";
             }
-
             return rtn;
         }
 
         [Route("api/[controller]/[action]")]
         [HttpPut]
-        public ReturnResult<mMemberInfo> PutMemberData(mMemberInfo input)
+        public ReturnResult<mMemberInfo> PutMemberData(mMemberInfo memberData)
         {
             ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
-            if (input == null)
-            {
-                rtn.IsSuccess = false;
-                rtn.AlertMsg = "提供的資料無效";
-                return rtn;
-            }
-            try
-            {
-                MemberHelper mHelper = new MemberHelper(ConnString);
-                mHelper.UpdateMemberInfo(input);
+            AccountService aS = new AccountService();
 
-                
-                bool isUpdated = VerifyUpdateSuccess(input); 
-                if (isUpdated)
+            if (aS.ModifyCheck(memberData, out string errMsg))
+            {
+                try
                 {
+                    MemberHelper mHelper = new MemberHelper(ConnString);
+                    mHelper.UpdateMemberInfo(memberData);
+
                     rtn.IsSuccess = true;
-                    rtn.Data = input;
+                    rtn.Data = memberData;
                 }
-                else
+                catch (Exception ex)
                 {
                     rtn.IsSuccess = false;
-                    rtn.AlertMsg = "更新資料時發生錯誤";
+                    rtn.AlertMsg = "發生錯誤: " + ex.Message;
                 }
             }
-            catch (Exception ex)
+            else
             {
                 rtn.IsSuccess = false;
-                rtn.AlertMsg = "發生錯誤: " + ex.Message;
+                rtn.AlertMsg = errMsg;
             }
 
             return rtn;
         }
 
-       
+
         private bool VerifyUpdateSuccess(mMemberInfo input)
         {
-           
-            return true; 
+
+            return true;
+        }
+
+        [HttpPost]
+        public ReturnResult<string> AddFriend(string friendId)
+        {
+            ReturnResult<string> rtn = new ReturnResult<string>();
+            MemberHelper mHelper = new MemberHelper(ConnString);
+            mHelper.AddFriend(MemberId, friendId);
+            rtn.IsSuccess = true;
+            rtn.AlertMsg = "好友添加成功";
+            return rtn;
+        }
+
+        [Route("api/[controller]/[action]")]
+        [HttpDelete]
+        public ReturnResult<string> DeleteFriend(string friendId, string action)
+        {
+            ReturnResult<string> rtn = new ReturnResult<string>();
+            MemberHelper mHelper = new MemberHelper(ConnString);
+            mHelper.DeleteFriend(MemberId, friendId, action);
+            rtn.IsSuccess = true;
+            return rtn;
         }
     }
-
-
 
 }

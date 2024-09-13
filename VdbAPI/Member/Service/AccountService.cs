@@ -6,78 +6,73 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Net.Mail;
+using System.Net;
 
 namespace VdbAPI.Member.Service
 {
     public class AccountService
     {
-        private string Conn { get; set; }
-        public AccountService(string conn)
-        {
-            Conn = conn;
-        }
+     
         //檢查註冊資訊
-        public void RegisterCheck(string email, string nickname, string name, string phone, string password, DateTime? birthday, string gender, string? photoPath)
+        public bool RegisterCheck(string Email, string NickName, string MemberName, string Phone, string Password, DateTime? Birth, string Gender, string? PhotoPath, string? Address, out string errorMessage)
         {
-            if (!IsValidEmail(email))
+            errorMessage = string.Empty;
+
+            if (!IsValidEmail(Email))
             {
-                Console.WriteLine("電子郵件格式不正確。");
-                return;
+                errorMessage = "電子郵件格式不正確。";
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(nickname))
+            if (string.IsNullOrWhiteSpace(NickName))
             {
-                Console.WriteLine("暱稱不能為空。");
-                return;
+                errorMessage = "暱稱不能為空。";
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(MemberName))
             {
-                Console.WriteLine("姓名不能為空。");
-                return;
+                errorMessage = "姓名不能為空。";
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(phone) || !IsValidPhone(phone))
+            if (string.IsNullOrWhiteSpace(Phone) || !IsValidPhone(Phone))
             {
-                Console.WriteLine("手機號碼不正確。");
-                return;
+                errorMessage = "手機號碼不正確。";
+                return false;
             }
 
-            if (!IsPasswordValid(password))
+            if (!IsPasswordValid(Password))
             {
-                Console.WriteLine("密碼格式不符合要求。");
-                return;
+                errorMessage = "密碼格式不符合要求。";
+                return false;
             }
 
-            if (!birthday.HasValue)
+            if (!Birth.HasValue)
             {
-                Console.WriteLine("生日不能為空。");
-                return;
+                errorMessage = "生日不能為空。";
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(gender))
+            if (string.IsNullOrWhiteSpace(Gender))
             {
-                Console.WriteLine("性別不能為空。");
-                return;
+                errorMessage = "性別不能為空。";
+                return false;
             }
 
-            if (!string.IsNullOrEmpty(photoPath) && !IsValidImageFile(photoPath))
+            if (!string.IsNullOrEmpty(PhotoPath) && !IsValidImageFile(PhotoPath))
             {
-                Console.WriteLine("圖片檔類型不正確。");
-                return;
+                errorMessage = "圖片檔類型不正確。";
+                return false;
             }
 
-            Console.WriteLine("註冊資訊檢查通過！");
+            return true; // 所有檢查通過
         }
 
         public bool ModifyCheck(mMemberInfo model, out string errMsg)
         {
             errMsg = string.Empty;
-            if (!IsValidEmail(model.Email))
-            {
-                errMsg = "電子信箱格式不正確。";
-                return false;
-            }
 
             if (string.IsNullOrWhiteSpace(model.NickName))
             {
@@ -100,7 +95,7 @@ namespace VdbAPI.Member.Service
 
             if (model.Birth > DateTime.Now && model.Birth < DateTime.Now.AddYears(-120))
             {
-                errMsg = "生日區間異常。";
+                errMsg = "生日區間異。";
                 return false;
             }
 
@@ -119,10 +114,10 @@ namespace VdbAPI.Member.Service
         }
 
         //檢查登入資訊
-        public bool LoginCheck(string email, string password, out mMemberInfo memberInfo, out string rtnMsg)
+        public bool LoginCheck(string email, string password, out string rtnMsg)
         {
             rtnMsg = string.Empty;
-            memberInfo = new mMemberInfo();
+           
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 rtnMsg = "請輸入電子信箱及密碼";
@@ -134,24 +129,9 @@ namespace VdbAPI.Member.Service
                 return false;
 
             }
-
+           return true ;
             // 假設這裡有一個方法來檢查密碼是否正確
             //todo 是否要加密?
-
-            MemberDao dao = new MemberDao(Conn);
-            var memberData = dao.SelectMemberInfo(new Model.mMemberInfo { Email = email, Password = password });
-            if (memberData.Any())
-            {
-                memberInfo = memberData.FirstOrDefault();
-                rtnMsg = "登入成功！";
-                return true;
-            }
-            else
-            {
-                rtnMsg = "密碼不正確。";
-                return false;
-            }
-
         }
         // 驗證電子郵件格式的方法
         private bool IsValidEmail(string email)
@@ -202,5 +182,8 @@ namespace VdbAPI.Member.Service
             string phonePattern = @"^\d{10}$"; // 假設手機號碼為10位數字
             return Regex.IsMatch(phone, phonePattern);
         }
+
+
+     
     }
 }
