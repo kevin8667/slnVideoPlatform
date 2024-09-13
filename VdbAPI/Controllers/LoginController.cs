@@ -1,15 +1,12 @@
 ﻿using Jose;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using VdbAPI.Member.Helper;
 using VdbAPI.Member.Model;
-using VdbAPI.Member.ViewModel;
 using VdbAPI.Member.Service;
-using Microsoft.AspNetCore.Identity;
-using System.Net.Mail;
-using System.Net;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using VdbAPI.Member.ViewModel;
 
 
 namespace VdbAPI.Controllers
