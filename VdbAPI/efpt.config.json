@@ -51,6 +51,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[FIDOCredential]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[FriendChat]",
          "ObjectType": 0
       },
@@ -176,6 +180,10 @@
       },
       {
          "Name": "[dbo].[SeriesList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SessionSeats]",
          "ObjectType": 0
       },
       {

@@ -25,7 +25,7 @@ public partial class Post
 
     public int? DislikeCount { get; set; }
 
-    public virtual Article Article { get; set; }
+    public virtual Article PostNavigation { get; set; }
 
     public virtual MemberInfo Poster { get; set; }
 }

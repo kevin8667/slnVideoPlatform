@@ -100,6 +100,10 @@ public partial class MemberInfo
 
     public virtual ICollection<BlackList> BlackListMembers { get; set; } = new List<BlackList>();
 
+    public virtual Fidocredential Fidocredential { get; set; }
+
+    public virtual ICollection<Fidocredential> Fidocredentials { get; set; } = new List<Fidocredential>();
+
     public virtual ICollection<FriendChat> FriendChatReceivers { get; set; } = new List<FriendChat>();
 
     public virtual ICollection<FriendChat> FriendChatSenders { get; set; } = new List<FriendChat>();
