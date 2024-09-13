@@ -82,7 +82,7 @@ export class FriendsComponent implements OnInit {
             friendStatus: data.friendStatus,
             memberName: data.memberName,
             photoPath: data.photoPath,
-          })).filter((friend: any) => friend.friendStatus === '已發出邀請');
+          })).filter((friend: any) => friend.friendStatus === '邀請中');
           this.pendingFriends = response.datas.map((data: any) => ({
             friendId: data.friendId,
             nickName: data.nickName,
@@ -91,7 +91,7 @@ export class FriendsComponent implements OnInit {
             friendStatus: data.friendStatus,
             memberName: data.memberName,
             photoPath: data.photoPath,
-          })).filter((friend: any) => friend.friendStatus === '尚未回覆');
+          })).filter((friend: any) => friend.friendStatus === '待回覆');
         }
 
         if (response.hasAlertMsg) {
@@ -135,8 +135,9 @@ export class FriendsComponent implements OnInit {
     });
   }
 
-  removeFriend(friendId: string,action: string) {
-    this.memberService.DeleteFriend(friendId,action).subscribe({
+  removeFriend(friendId: number) {
+    debugger;
+    this.memberService.DeleteFriend(friendId).subscribe({
       next: (response) => {
         if (response.isSuccess) {
         }
@@ -183,6 +184,11 @@ export class FriendsComponent implements OnInit {
     });
   }
   sendInvitation(){
+    if(!this.sendMsg || this.sendMsg.trim() === ''){
+      alert('請輸入邀請訊息。');
+      return;
+    }
+
     this.memberService.InviteFriend(this.friendId,this.sendMsg).subscribe({
       next: (response) => {
         debugger;

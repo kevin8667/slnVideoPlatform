@@ -5,6 +5,8 @@ namespace VdbAPI.Controllers
     public class BaseController : ControllerBase
     {
         public string ConnString = @"Data Source=.;Initial Catalog=VideoDB;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
+        public string MemberPhotoPath = @"C:\Users\jarry\source\repos\slnVideoPlatform\AngularFront\src\assets\img\Member";
+        public string FileSavePath = @"..\assets\img\Member";
         public int MemberId
         {
             get

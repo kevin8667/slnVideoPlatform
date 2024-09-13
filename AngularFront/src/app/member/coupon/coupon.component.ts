@@ -46,7 +46,7 @@ export class CouponComponent {
     this.router.navigateByUrl('login/mmain');
   }
 
-  ShowGiftList(giftlistid: string) {
+  ShowGiftList(giftlistid: number) {
     this.visible = true;
     this.memberService.GetGiftList(giftlistid).subscribe({
       next: (response) => {

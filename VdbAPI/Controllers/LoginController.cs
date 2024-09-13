@@ -66,9 +66,9 @@ namespace VdbAPI.Controllers
 
         [Route("api/[controller]/[action]")]
         [HttpPost]
-        public ReturnResult<string> Register([FromBody] RegisterViewModel input)
+        public ReturnResult Register([FromBody] RegisterViewModel input)
         {
-            ReturnResult<string> rtn = new ReturnResult<string>();
+            ReturnResult rtn = new ReturnResult();
             AccountService aS = new AccountService();
             MemberHelper mHelper = new MemberHelper(ConnString);
 
@@ -86,16 +86,16 @@ namespace VdbAPI.Controllers
             {
                 // 註冊成功的邏輯
                 var mInfo = mHelper.SelectMemberInfo(new mMemberInfo { Email = input.Email });
-                if (mInfo != null)
+                if (mInfo.Any())
                 {
                     rtn.IsSuccess = false;
                     rtn.AlertMsg = "電子信箱重複註冊";
                 }
                 else
                 {
-                    mHelper.UpdateMember(input);
+                    mHelper.InsertMember(input);
                     rtn.IsSuccess = true;
-                    rtn.Data = "註冊成功";
+                    rtn.AlertMsg = "註冊成功";
                 }
             }
             else
@@ -105,98 +105,98 @@ namespace VdbAPI.Controllers
             }
             return rtn;
         }
-        
+
         [HttpPost]
-    public ReturnResult<string> Forgetpwd(string email)
-    {
-        ReturnResult<string> rtn = new ReturnResult<string>();
-
-        // 檢查電子郵件是否有效
-        if (string.IsNullOrEmpty(email))
+        public ReturnResult<string> Forgetpwd(string email)
         {
-            rtn.IsSuccess = false;
-            rtn.AlertMsg = "電子郵件地址無效。";
+            ReturnResult<string> rtn = new ReturnResult<string>();
+
+            // 檢查電子郵件是否有效
+            if (string.IsNullOrEmpty(email))
+            {
+                rtn.IsSuccess = false;
+                rtn.AlertMsg = "電子郵件地址無效。";
+                return rtn;
+            }
+
+            // 使用 AccountService 來處理密碼重置邏輯
+            MemberHelper mHelper = new MemberHelper(ConnString);
+            var user = mHelper.GetEmail(email); // 假設有這個方法來查找用戶
+
+            if (user == null)
+            {
+                rtn.IsSuccess = false;
+                rtn.AlertMsg = "查無此信箱";
+                return rtn;
+            }
+
+            // 生成隨機密碼
+            string newPwd = GenerateRandomPassword(12); // 生成12位隨機密碼
+
+            // 更新會員密碼
+            bool updateResult = mHelper.UpdatePWD(email, newPwd); // 假設 UpdatePWD 方法已經修改以接受用戶對象和新密碼
+
+            if (updateResult)
+            {
+                // 發送驗證郵件，包含新密碼
+                bool emailSent = SendValidateMail(email, newPwd); // 修改 SendValidateMail 方法以返回發送結果
+                rtn.IsSuccess = emailSent;
+                rtn.AlertMsg = emailSent ? "密碼重置郵件已發送" : "發送郵件失敗，請重試。";
+            }
+            else
+            {
+                rtn.IsSuccess = false;
+                rtn.AlertMsg = "更新密碼失敗，請重試。";
+            }
+
             return rtn;
         }
 
-        // 使用 AccountService 來處理密碼重置邏輯
-        MemberHelper mHelper = new MemberHelper(ConnString);
-        var user = mHelper.GetEmail(email); // 假設有這個方法來查找用戶
-
-        if (user == null)
+        // 發送驗證郵件方法，接收新密碼作為參數
+        private bool SendValidateMail(string email, string newPwd)
         {
-            rtn.IsSuccess = false;
-            rtn.AlertMsg = "查無此信箱";
-            return rtn;
-        }
+            string fromEmail = "jarry6304@gmail.com";
+            string password = "mlqr qyss afwq vahj"; // 請考慮將密碼存儲在安全的位置
 
-        // 生成隨機密碼
-        string newPwd = GenerateRandomPassword(12); // 生成12位隨機密碼
+            // 設置收件人郵箱
+            string toEmail = "littletree04240@gmail.com";
 
-        // 更新會員密碼
-        bool updateResult = mHelper.UpdatePWD(email, newPwd); // 假設 UpdatePWD 方法已經修改以接受用戶對象和新密碼
-
-        if (updateResult)
-        {
-            // 發送驗證郵件，包含新密碼
-            bool emailSent = SendValidateMail(email, newPwd); // 修改 SendValidateMail 方法以返回發送結果
-            rtn.IsSuccess = emailSent;
-            rtn.AlertMsg = emailSent ? "密碼重置郵件已發送" : "發送郵件失敗，請重試。";
-        }
-        else
-        {
-            rtn.IsSuccess = false;
-            rtn.AlertMsg = "更新密碼失敗，請重試。";
-        }
-
-        return rtn;
-    }
-
-    // 發送驗證郵件方法，接收新密碼作為參數
-    private bool SendValidateMail(string email, string newPwd)
-    {
-        string fromEmail = "jarry6304@gmail.com";
-        string password = "mlqr qyss afwq vahj"; // 請考慮將密碼存儲在安全的位置
-
-        // 設置收件人郵箱
-        string toEmail = "littletree04240@gmail.com";
-
-        // 創建郵件實例
-        MailMessage mail = new MailMessage
-        {
-            From = new MailAddress(fromEmail),
-            Subject = "重設密碼通知",
-            IsBodyHtml = true,
-            Body = GenerateEmailBody(newPwd) // 使用生成的 HTML 內容
-        };
-        mail.To.Add(new MailAddress(toEmail));
-
-        // 設置SMTP服務器地址和端口，例如Gmail的SMTP設置
-        using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
-        {
-            // 設置客戶端身份驗證 (Your credentials)
-            smtpClient.Credentials = new NetworkCredential(fromEmail, password);
-            smtpClient.EnableSsl = true;
-
-            try
+            // 創建郵件實例
+            MailMessage mail = new MailMessage
             {
-                // 發送郵件
-                smtpClient.Send(mail);
-                return true;
-            }
-            catch (Exception ex)
+                From = new MailAddress(fromEmail),
+                Subject = "重設密碼通知",
+                IsBodyHtml = true,
+                Body = GenerateEmailBody(newPwd) // 使用生成的 HTML 內容
+            };
+            mail.To.Add(new MailAddress(toEmail));
+
+            // 設置SMTP服務器地址和端口，例如Gmail的SMTP設置
+            using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
             {
-                Console.WriteLine("發送郵件時發生錯誤：" + ex.Message);
-                return false;
+                // 設置客戶端身份驗證 (Your credentials)
+                smtpClient.Credentials = new NetworkCredential(fromEmail, password);
+                smtpClient.EnableSsl = true;
+
+                try
+                {
+                    // 發送郵件
+                    smtpClient.Send(mail);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("發送郵件時發生錯誤：" + ex.Message);
+                    return false;
+                }
             }
+
         }
 
-    }
-
-    // 生成郵件內容的 HTML
-    private string GenerateEmailBody(string newPwd)
-    {
-        return $@"
+        // 生成郵件內容的 HTML
+        private string GenerateEmailBody(string newPwd)
+        {
+            return $@"
     <!DOCTYPE html>
     <html lang=""en"">
     <head>
@@ -214,24 +214,24 @@ namespace VdbAPI.Controllers
         <p>謝謝！</p>
     </body>
     </html>";
-    }
+        }
 
-    // 生成隨機密碼方法，接收長度作為參數
-    private string GenerateRandomPassword(int length)
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
-        Random random = new Random();
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
+        // 生成隨機密碼方法，接收長度作為參數
+        private string GenerateRandomPassword(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
 
-    // 假設的 UpdatePWD 方法範例
-    private bool UpdatePWD(mMemberInfo info, string newPwd)
-    {
-        // 更新會員密碼的邏輯
-        // 返回 true 表示成功，false 表示失敗
-        return true; // 這裡應該替換為實際的更新邏輯
-    }
+        // 假設的 UpdatePWD 方法範例
+        private bool UpdatePWD(mMemberInfo info, string newPwd)
+        {
+            // 更新會員密碼的邏輯
+            // 返回 true 表示成功，false 表示失敗
+            return true; // 這裡應該替換為實際的更新邏輯
+        }
 
-}
+    }
 }

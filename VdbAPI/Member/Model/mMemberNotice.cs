@@ -2,7 +2,7 @@
 {
     public class mMemberNotice
     {
-        public int MemberNoticeID { get; set; }
+        public int? MemberNoticeID { get; set; }
 
         public int MemberID { get; set; }
 

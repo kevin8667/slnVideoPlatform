@@ -6,7 +6,7 @@
 
         public int MemberID { get; set; }
 
-        public int FriendID { get; set; }
+        public int FriendId { get; set; }
 
         public DateTime CreationDate { get; set; }
 

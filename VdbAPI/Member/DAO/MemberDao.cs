@@ -188,21 +188,22 @@ namespace VdbAPI.Member.Dao
                 }
             }
         }
-        internal void InviteFriend(int memberId, string friendId, string message)
+        internal void InviteFriend(int memberId, int friendId, string message, string status)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
                 string sqlQuery = @"
-            INSERT INTO FriendList (FriendListID, MemberID, FriendID, CreationDate, FriendStatus, InvitedMessage)
-            SELECT ISNULL(MAX(FriendListID), 0) + 1, @MemberID, @FriendID, GETDATE(), '邀請中', @InvitedMessage
-            FROM FriendList";
+            INSERT INTO FriendList ( MemberID, FriendID, CreationDate, FriendStatus, InvitedMessage)
+values
+            (@MemberID,@FriendID,getdate(),@status,@InvitedMessage)";
 
                 List<SqlParameter> pars = new List<SqlParameter>
         {
             new SqlParameter("@MemberID", memberId),
             new SqlParameter("@FriendID", friendId),
+            new SqlParameter("@status", status),
             new SqlParameter("@InvitedMessage", message)
         };
 
@@ -281,46 +282,20 @@ namespace VdbAPI.Member.Dao
                 }
             }
         }
-        internal mMemberInfo GetMemberInfo(string friendId)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string sqlQuery = "SELECT * FROM MemberInfo WHERE MemberID = @MemberID";
-                List<SqlParameter> pars = new List<SqlParameter>
-                {
-                    new SqlParameter("@MemberID", friendId)
-                };
-
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
-                    connection.Open();
-                    command.Parameters.AddRange(pars.ToArray());
-
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        DataSet dataSet = new DataSet();
-                        adapter.Fill(dataSet);
-
-                        return BindingMemberInfo(dataSet.Tables[0]).FirstOrDefault();
-                    }
-                }
-            }
-        }
-        internal void AddFriend(int memberId, string friendId)
+        internal void AddFriend(int memberId, int friendId, string status)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
                 string sqlQuery = @"
-            INSERT INTO FriendList (FriendListID, MemberID, FriendID, CreationDate, FriendStatus, InvitedMessage)
-            SELECT ISNULL(MAX(FriendListID), 0) + 1, @MemberID, @FriendID, GETDATE(), '已添加', NULL
-            FROM FriendList";
+           update friendlist set friendstatus=@status where MemberId=@MemberID and FriendID=@FriendID";
 
                 List<SqlParameter> pars = new List<SqlParameter>
         {
             new SqlParameter("@MemberID", memberId),
-            new SqlParameter("@FriendID", friendId)
+            new SqlParameter("@FriendID", friendId),
+            new SqlParameter("@status", status)
         };
 
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
@@ -338,10 +313,9 @@ namespace VdbAPI.Member.Dao
                 memberFriends mfriend = new memberFriends();
                 mfriend.InvitedMessage = row["InvitedMessage"].ToString();
                 mfriend.FriendStatus = row["FriendStatus"].ToString();
-                mfriend.FriendID = Convert.ToInt32(row["FriendID"]);
+                mfriend.FriendId = Convert.ToInt32(row["FriendID"]);
                 mfriend.CreationDate = Convert.ToDateTime(row["CreationDate"]);
                 mfriend.MemberID = Convert.ToInt32(row["MemberID"]);
-                mfriend.FriendListID = Convert.ToInt32(row["FriendListID"]);
                 mfriend.NickName = row["NickName"].ToString();
                 mfriend.MemberName = row["MemberName"].ToString();
                 mfriend.PhotoPath = row["PhotoPath"].ToString();
@@ -363,7 +337,6 @@ namespace VdbAPI.Member.Dao
                 member.MemberNoticeID = Convert.ToInt32(row["MemberNoticeID"]);
                 member.CreTime = Convert.ToDateTime(row["CreTime"]);
                 member.MemberID = Convert.ToInt32(row["MemberID"]);
-                member.RefNo = Convert.ToInt32(row["RefNo"]);
 
                 members.Add(member);
             }
@@ -386,11 +359,8 @@ namespace VdbAPI.Member.Dao
                 member.Gender = row["Gender"].ToString();
                 member.RegisterDate = Convert.ToDateTime(row["RegisterDate"]);
                 member.Password = row["Password"].ToString();
-                member.LastLoginDate = Convert.ToDateTime(row["LastLoginDate"]);
                 member.Grade = row["Grade"].ToString();
                 member.Point = Convert.ToInt32(row["Point"]);
-                member.UpdateUser = row["UpdateUser"].ToString();
-                member.UpdateTime = Convert.ToDateTime(row["UpdateTime"]);
                 member.Status = row["Status"].ToString();
                 member.PhotoPath = row["PhotoPath"].ToString();
 
@@ -480,23 +450,38 @@ namespace VdbAPI.Member.Dao
                 }
             }
         }
-        internal void UpdateMember(RegisterViewModel info)
+        internal void InsertMember(RegisterViewModel info)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 List<SqlParameter> pars = new List<SqlParameter>();
 
-                string sqlQuery = @"Update MemberInfo set 
-                    email=@email, nickname=@nickname, MemberName=@name, birth=@birth, phone=@phone, 
-                    address=@address, gender=@gender,photoPath=@photoPath  WHERE memberId = (SELECT ISNULL(MAX(memberId), 0) + 1 FROM MemberInfo)";
-                pars.Add(new SqlParameter("email", info.Email));
-                pars.Add(new SqlParameter("nickname", info.NickName));
-                pars.Add(new SqlParameter("name", info.MemberName));
-                pars.Add(new SqlParameter("birth", info.Birth));
-                pars.Add(new SqlParameter("phone", info.Phone));
-                pars.Add(new SqlParameter("address", info.Address));
-                pars.Add(new SqlParameter("gender", info.Gender));
-                pars.Add(new SqlParameter("photoPath", info.PhotoPath));
+                string sqlQuery = @"INSERT INTO dbo.MemberInfo
+           (MemberId, Email,NickName,MemberName,Birth,Phone,Address,Gender,RegisterDate,Password,Grade,Point,Status,FIDOEnabled)
+     VALUES
+           ((select max(memberId)+1 from memberInfo ),@Email,
+           @NickName,
+           @MemberName,
+           @Birth,
+           @Phone,
+           @Address,
+           @Gender,
+           getdate(),
+           @Password,
+'A',
+0,
+'Y',
+0
+          )
+";
+                pars.Add(new SqlParameter("@Email", info.Email));
+                pars.Add(new SqlParameter("@NickName", info.NickName));
+                pars.Add(new SqlParameter("@MemberName", info.MemberName));
+                pars.Add(new SqlParameter("@Birth", info.Birth));
+                pars.Add(new SqlParameter("@Phone", info.Phone));
+                pars.Add(new SqlParameter("@Address", info.Address));
+                pars.Add(new SqlParameter("@Gender", info.Gender));
+                pars.Add(new SqlParameter("@Password", info.Password));
 
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
@@ -559,14 +544,13 @@ namespace VdbAPI.Member.Dao
                 }
             }
         }
-        internal void DeleteFriend(int memberId, string friendId, string action)
+        internal void DeleteFriend(int memberId, int friendId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string sqlQuery = @"UPDATE FriendList SET Status = @Action WHERE MemberID = @MemberID AND FriendID = @FriendID";
+                string sqlQuery = @"delete FriendList WHERE MemberID = @MemberID AND FriendID = @FriendID";
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
-                    command.Parameters.AddWithValue("@Action", action);
                     command.Parameters.AddWithValue("@MemberID", memberId);
                     command.Parameters.AddWithValue("@FriendID", friendId);
                     connection.Open();
