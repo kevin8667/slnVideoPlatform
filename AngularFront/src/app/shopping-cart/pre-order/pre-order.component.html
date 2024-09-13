@@ -69,7 +69,8 @@
           </div>
         </div>
         <div>
-          <button class="red-button" [routerLink]="['/shoppingCart/order']">下一步</button>
+          <!-- [routerLink]="['/shoppingCart/order']" -->
+          <button class="red-button" (click)="toLinePay()">下一步</button>
         </div>
       </div>
   </div>

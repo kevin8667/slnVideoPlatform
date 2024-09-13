@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PreOrderService } from './pre-order.service';
 import { preOrder } from './pre-order.model';
 import { ActivatedRoute } from '@angular/router';
+import { linePay } from './line-pay.model';
 
 @Component({
   selector: 'app-pre-order',
@@ -25,7 +26,7 @@ export class PreOrderComponent {
 
   constructor(
     private PreOrderService: PreOrderService,
-    private ActivatedRoute: ActivatedRoute
+    private ActivatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -72,5 +73,21 @@ export class PreOrderComponent {
   }
   // 切換加購狀態
   product.isAdded = !product.isAdded;
-}
+  }
+  linePay: linePay ={
+    orderId : "4",
+    amount: 100
+  }
+
+  toLinePay(){
+    this.PreOrderService.linePayService(this.linePay).subscribe(
+      response => {
+        if (response.paymentUrl) {
+          window.location.href = response.paymentUrl;  // 導向 LINE Pay 支付頁面
+        }
+      },
+      error => {
+        console.error('Error in payment request', error);
+      });
+  }
 }
