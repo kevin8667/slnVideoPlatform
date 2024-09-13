@@ -174,9 +174,9 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
-            entity.Property(e => e.NickName)
+            entity.Property(e => e.MemberName)
                 .IsRequired()
-                .HasMaxLength(10);
+                .HasMaxLength(30);
             entity.Property(e => e.PostDate).HasColumnType("datetime");
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
             entity.Property(e => e.ThemeName)

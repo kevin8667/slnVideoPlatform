@@ -119,6 +119,7 @@ namespace VdbAPI.Controllers
                     MainGenreName = v.MainGenre.GenreName,
                     ThumbnailPath = v.ThumbnailPath,
                     Bgpath = v.Bgpath
+
                 }).ToListAsync();
 
             return Ok(videoListDTOs);

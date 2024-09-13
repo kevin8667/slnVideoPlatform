@@ -45,9 +45,9 @@ export class VideoDbSearchComponent implements OnInit {
   types: VideoType[] | undefined;
   selectedType: VideoType | undefined;
 
-  genres :Genre[] |undefined;
-  selectedGenres : Genre[] =[];
-  filteredGenres : any[] = [];
+  genres :Genre[] =[];
+  selectedGenres : string[] =[];
+  urlGenre:string[] |null = null;
 
   videoName: string | null = null;
   typeId: number | null = null;
@@ -60,7 +60,7 @@ export class VideoDbSearchComponent implements OnInit {
   pageSize: number = 15;
 
   totalRecords:number=0;
-  
+
 
   videos!: Video[];
 
@@ -80,10 +80,14 @@ export class VideoDbSearchComponent implements OnInit {
 
     this.genreNames = [];
 
+    this.selectedGenres = [];
+
+
     this.videoDbService.getGenresApi().subscribe((genres)=>{
       this.genres=genres;
-      console.log(genres)
     });
+
+
 
     this.route.queryParams.subscribe(params => {
       this.videoName = params['videoName'] || null;
@@ -91,26 +95,40 @@ export class VideoDbSearchComponent implements OnInit {
       this.summary = params['summary'] || null;
 
       // 解析逗號分隔的 genreNames 字符串為數組
-      this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : null;
-      console.log(this.genreNames);
+      this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : [];
+      console.log("類型："+this.genreNames);
+      this.urlGenre = this.genreNames;
+      this.selectedGenres = this.genreNames;
+      console.log(this.selectedGenres);
 
       this.seriesName = params['seriesName'] || null;
       this.seasonName = params['seasonName'] || null;
 
+
+           // 如果有任何查詢參數存在，則執行搜索
       if (this.videoName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || this.seriesName || this.seasonName) {
-
-        if(this.genreNames !== null)
-          {
-            this.selectedGenres = [{genreId:0, genreName:this.genreNames[0]}];
-
-            this.videoDbService.getGenreIdWithName(this.genreNames[0]).subscribe((data)=>this.selectedGenres[0].genreId=data);
-          }
-          
-
-          this.searchVideos();
+        // 執行搜索操作
+        this.searchVideos();
       }
     });
   }
+
+  toggleGenreSelection(genreName: string) {
+    if (this.selectedGenres.length!==null &&this.selectedGenres.includes(genreName)) {
+      // 如果已經選中，則從選中列表中移除
+      this.selectedGenres = this.selectedGenres.filter(name => name !== genreName);
+    } else {
+      // 如果未選中，則添加到選中列表
+      this.selectedGenres.push(genreName);
+    }
+  }
+
+
+  isSelected(genreName: string): boolean {
+    return this.selectedGenres.includes(genreName);
+  }
+
+
 
 
   searchVideoByFilters() {
@@ -125,12 +143,11 @@ export class VideoDbSearchComponent implements OnInit {
 
   searchVideos(): void {
 
-    const genreNames = this.selectedGenres?.map(genre => genre.genreName) || [];
     this.videoDbService.getSearchVideoApi(
       this.videoName,
       this.typeId,
       this.summary,
-      genreNames,
+      this.selectedGenres,
       this.seriesName,
       this.seasonName
     ).subscribe((response) => {
@@ -138,30 +155,5 @@ export class VideoDbSearchComponent implements OnInit {
       this.totalRecords = this.videos.length;
       console.log(this.videos);
     });
-  }
-
-  filterGenre(event: AutoCompleteCompleteEvent) {
-    let filtered: Genre[] = [];
-    let query = event.query;
-
-    if (this.genres) {
-      for (let i = 0; i < this.genres.length; i++) {
-        let genre = this.genres[i];
-        if (genre.genreName.indexOf(query) === 0) {
-          filtered.push(genre);
-        }
-      }
-    }
-
-    this.filteredGenres = filtered;
-  }
-
-  handleGenreSelection(genre: Genre) {
-    if (this.genreNames) {
-      this.genreNames.push(genre.genreName);
-    } else {
-      this.genreNames = [genre.genreName];
-    }
-    this.searchVideos();
   }
 }

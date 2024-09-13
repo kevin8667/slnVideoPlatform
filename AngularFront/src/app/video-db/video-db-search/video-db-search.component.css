@@ -79,3 +79,50 @@
   font-size: 14px;
 }
 
+::ng-deep .custom-multiselect {
+  width: 200px !important; /* 確保覆蓋掉默認的寬度樣式 */
+}
+
+::ng-deep .custom-multiselect .p-multiselect-panel {
+  min-width: 300px !important; /* 確保下拉面板也有相應的寬度 */
+  width: auto;
+}
+
+::ng-deep .custom-multiselect .p-multiselect-filter-container {
+  width: 100% !important; /* 確保搜尋框容器佔滿可用空間 */
+}
+
+::ng-deep .custom-multiselect .p-multiselect-filter {
+  width: calc(100% - 40px) !important; /* 減去 padding 和圖標空間 */
+}
+
+.genre-button-group {
+  margin: 20px 0;
+}
+
+.genre-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-radius: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+button:hover {
+  background-color: #0056b3;
+  color: white;
+}

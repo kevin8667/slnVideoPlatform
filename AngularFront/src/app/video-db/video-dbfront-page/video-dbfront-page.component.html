@@ -22,27 +22,18 @@
 
 <h3 style="color: black;">推薦影片</h3>
 <div class="card flex justify-content-center" style="width: fit-content; position: relative;">
-    <div class="slider-background"></div>
-    <p-selectButton [options]="videoTypes" [multiple]="false" optionLabel="name"
-    (onChange)="onSelect($event)" class="custom-select-button"></p-selectButton>
+  <div class="slider-background" [ngStyle]="{ 'left': selectedVideoType === 1 ? '0%' : '50%' }"></div>
+
+  <div class="custom-buttons">
+    <button [ngClass]="{'active': selectedVideoType === 1}" (click)="onOptionSelect(1)">
+      電影
+    </button>
+    <button [ngClass]="{'active': selectedVideoType === 2}" (click)="onOptionSelect(2)">
+      影集
+    </button>
+  </div>
 </div>
 
-<!-- <div class="card special-carousel">
-    <p-carousel [value]="videos" [numVisible]="5" [numScroll]="3" [responsiveOptions]="responsiveOptions">
-      <ng-template let-video pTemplate="item">
-        <div class="border-1 surface-border border-round m-2 text-center py-5 px-3 img-box">
-          <div class="mb-3 thumbnail-container">
-            <a [routerLink]="['/details', video.videoId]">
-              <img [src]="video.thumbnailPath" [alt]="video.name" class="w-6 shadow-2 uniform-thumbnail" />
-            </a>
-          </div>
-          <div>
-            <h4 class="video-title" style="color: black;" class="mb-1">{{ video.videoName }}</h4>
-          </div>
-        </div>
-      </ng-template>
-    </p-carousel>
-</div> -->
 <div class="trending-carousel">
     <p-carousel [value]="videos" [numVisible]="videos.length >= 7 ? 7 : videos.length" [numScroll]="3" [circular]="true" [responsiveOptions]="responsiveOptions">
       <ng-template let-video pTemplate="item">

@@ -20,11 +20,27 @@
 
     <!-- 電影列表 -->
     <h3>聞名於</h3>
-    <div class="movies-list">
+    <!-- <div class="movies-list">
       <div class="movie" *ngFor="let video of videos">
         <img [src]="video.thumbnailPath" alt="{{ video.videoName }}" class="movie-poster" />
         <p>{{ video.videoName }}</p>
       </div>
-    </div>
+    </div> -->
+    <p-carousel [value]="videos" [numVisible]="videos.length >= 7 ? 7 : videos.length" [numScroll]="3" [circular]="true" [responsiveOptions]="responsiveOptions">
+      <ng-template let-video pTemplate="item">
+        <div class="video-card">
+          <div class="video-thumbnail">
+            <a [routerLink]="['/video-db/details', video.videoId]">
+              <img [src]="video.thumbnailPath" [alt]="video.videoName" class="video-image" />
+            </a>
+            <!-- <div class="rating-indicator">{{ video.rating }}</div> -->
+          </div>
+          <div class="video-details">
+            <h4 style="color: black;">{{ video.videoName }}</h4>
+            <!-- <p>{{ video.releaseDate | date: 'yyyy年MM月dd日' }}</p> -->
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
   </div>
 </div>

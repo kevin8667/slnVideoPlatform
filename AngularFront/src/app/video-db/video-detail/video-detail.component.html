@@ -1,3 +1,5 @@
+
+
 <div class="custom-card"  [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
   <div class="card-body">
     <div class="image-container">
@@ -65,7 +67,37 @@
         <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
         <p><strong>片長:</strong> {{ video.runningTime }}</p>
         <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
-        <p><strong>評分:</strong> 4.7 / 5</p>
+        <p><strong>評分:</strong> 4.7 / 5<a (click)="op.toggle($event)" class="rating-link">
+          <i class="pi pi-star-fill"></i> 留下評分
+        </a></p>
+        <p-toast position="center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
+          <ng-template let-message pTemplate="message">
+              <div class="flex flex-column" style="flex: 1">
+                  <div class="text-center">
+                      <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+                      <h4>{{message.summary}}</h4>
+                      <p>{{message.detail}}</p>
+                  </div>
+                  <div class="grid p-fluid">
+                      <div>
+                          <button type="button" pButton (click)="onConfirm()" label="Yes" class="p-button-success  full-width-btn"></button>
+                      </div>
+                      <div>
+                          <button type="button" pButton (click)="onReject()" label="No" class="p-button-secondary full-width-btn"></button>
+                      </div>
+                  </div>
+              </div>
+          </ng-template>
+      </p-toast>
+        <p-overlayPanel #op>
+          <ng-template pTemplate="content">
+              <h4>Custom Content</h4>
+              <div class="card flex justify-content-center">
+                <p-rating [(ngModel)]="userRating" (onRate)="confirm($event, op)" [stars]="10"></p-rating>
+              </div>
+          </ng-template>
+        </p-overlayPanel>
+
         <p><strong>語言:</strong> {{ video.lang }}</p>
         <p><strong>簡介:</strong> 一場盛大熱鬧的婚禮派對即將展開，這是黑手黨黨魁唐柯里昂尼（馬龍白蘭度 飾）為女兒舉行的婚禮。當年由西西里隻身流浪到美國的唐，步步為營成為黑幫大亨，然而歲月不饒人讓他疲態盡現，所以想將衣缽傳承給兒子。老大桑尼（詹姆士肯恩 飾）衝動暴躁，老二佛雷多（約翰卡佐爾 飾）懦弱無能，老三麥可（艾爾帕西諾 飾）是戰爭英雄，卻不願捲入黑社會是非。<br>
         由於唐堅持不和其它幫派合作毒品買賣，得罪對他心生不滿已久的其它幫派，更對他的家族展開一連串狙殺行動，以致桑尼和麥可的新婚妻子遭致殺害，而唐竟姑息此事，不願讓事情越演越烈。身體精神狀況不如從前的唐，與孫兒嬉戲時遏然過世，逃亡在外的三子麥可得知消息後，毅然返回美國接掌父業，更因而成為黑手黨教父，開始籌畫報仇大業…</p>
@@ -89,33 +121,35 @@
       <h2 class="starring" style="color: black;">主要演員</h2>
       <div class="grid">
         <div *ngFor="let actor of actors" class="card">
+          <a routerLink="/video-db/person/1" style="text-decoration: none;">
           <p-card class="actor-card">
             <ng-template pTemplate="header">
-              <div style="font-size:18px;">{{ actor.name }}</div> <!-- 調整字體大小 -->
+              <div style="font-size:18px;">{{ actor.name }}</div>
             </ng-template>
             <ng-template pTemplate="content">
               <img [src]="actor.imagePath" alt="{{ actor.name }}" class="actor-image">
             </ng-template>
           </p-card>
+          </a>
         </div>
       </div>
     </div>
 
-    <p-carousel 
-  [value]="images" 
-  [numVisible]="3" 
-  [circular]="true" 
-  [autoplayInterval]="3000" 
-  [numScroll]="1"
-  (onPage)="onCarouselPageChange($event)">
-  <ng-template let-image let-index="index" pTemplate="item">
-    <div class="gallery-container" 
-         [ngClass]="{ 'active': index === selectedIndex }" 
-         (click)="onImageClick(index)">
-      <img [src]="image" class="gallery-image" />
-    </div>
-  </ng-template>
-</p-carousel>
+    <p-carousel
+    [value]="images"
+    [numVisible]="3"
+    [circular]="true"
+    [autoplayInterval]="3000"
+    [numScroll]="1"
+    (onPage)="onCarouselPageChange($event)">
+    <ng-template let-image let-index="index" pTemplate="item">
+      <div class="gallery-container"
+          [ngClass]="{ 'active': index === selectedIndex }"
+          (click)="onImageClick(index)">
+        <img [src]="image" class="gallery-image" />
+      </div>
+    </ng-template>
+  </p-carousel>
   </div>
 </div>
 
@@ -149,26 +183,3 @@
     </ng-template>
   </p-carousel>
 </div>
- <!-- <div class="galleria-wrapper">
-    <div class="galleria-container">
-      <p-galleria
-        [value]="images"
-        [responsiveOptions]="responsiveOptions"
-        [containerStyle]="{ 'max-width': '400px', 'max-height': '350px' }"
-        [numVisible]="5"
-        (valueChange)="onValueChange($event)"
-        thumbnailsPosition="left">
-        <ng-template pTemplate="item" let-item>
-          <p-image [src]="'/assets' + item" class="video-image"
-            [preview]="true"
-            width="300px"
-            height="450px"></p-image>
-        </ng-template>
-        <ng-template pTemplate="thumbnail" let-item >
-          <div class="thumbnail-container">
-            <img [src]="'/assets' + item" class="thumbnail-image" />
-          </div>
-        </ng-template>
-      </p-galleria>
-    </div>
-  </div> -->

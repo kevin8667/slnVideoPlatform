@@ -13,12 +13,34 @@ import { Video } from '../interfaces/video';
 export class PersonDetailComponent implements OnInit {
 
   actor:Actor|undefined;
-  videos:Video[]|undefined;
+  videos:Video[] =[];
+
+  responsiveOptions:any[]=[];
+
 
   constructor(private route: ActivatedRoute, private videoService: VideoDBService) {}
 
   ngOnInit(){
     var actorId:string|null;
+
+    this.responsiveOptions = [
+      {
+        breakpoint: '1400px',
+        numVisible: 5,
+        numScroll: 2
+      },
+      {
+        breakpoint: '1024px',
+        numVisible: 3,
+        numScroll: 1
+      },
+      {
+        breakpoint: '768px',
+        numVisible: 1,
+        numScroll: 1
+      }
+    ];
+
     this.route.paramMap.subscribe(params => {
       actorId = params.get('id');
 
@@ -32,7 +54,10 @@ export class PersonDetailComponent implements OnInit {
         this.videos = data;
         console.log(data);
       });
+
+      // this.videoService.getVideoApi().subscribe(data=>{this.videos=data})
     }
+
     });
   }
 

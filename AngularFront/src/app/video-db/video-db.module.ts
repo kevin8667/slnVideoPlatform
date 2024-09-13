@@ -23,7 +23,12 @@ import { ImageModule } from 'primeng/image';
 import { GalleriaModule } from 'primeng/galleria';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { RatingModule } from 'primeng/rating';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -52,7 +57,12 @@ import { CarouselModule } from 'primeng/carousel';
     ImageModule,
     GalleriaModule,
     AutoCompleteModule,
-    CarouselModule
+    CarouselModule,
+    MultiSelectModule,
+    OverlayPanelModule,
+    RatingModule,
+    ToastModule,
+    ConfirmDialogModule
   ]
 })
 export class VideoDbModule { }
