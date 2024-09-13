@@ -75,7 +75,7 @@ export class PreOrderComponent {
   product.isAdded = !product.isAdded;
   }
   linePay: linePay ={
-    orderId : "4",
+    orderId : "9",
     amount: 100
   }
 
