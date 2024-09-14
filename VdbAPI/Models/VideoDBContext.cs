@@ -133,7 +133,7 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<ActorList>(entity =>
         {
-            entity.HasKey(e => e.CountId).HasName("PK__PostUserReac");
+            entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
 
             entity.ToTable("ActorList");
 
@@ -834,11 +834,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.HallsId).HasColumnName("HallsID");
             entity.Property(e => e.RowNumber).HasMaxLength(50);
-
-            entity.HasOne(d => d.Halls).WithMany(p => p.Seats)
-                .HasForeignKey(d => d.HallsId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_Seat_Hall");
+            entity.Property(e => e.SeatStatus).HasMaxLength(50);
         });
 
         modelBuilder.Entity<SeriesList>(entity =>
