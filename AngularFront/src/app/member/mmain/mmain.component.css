@@ -3,43 +3,112 @@
   font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
 }
-.mai{
-  /* background-image: url('/assets/img/Member/STARcircle.jpg'); /* 使用相對路徑指定背景圖片 */
-  /* background-size: cover; 確保圖片覆蓋整個視口 */
-  /* background-repeat: no-repeat; 防止圖片重複 */
-  /* background-position: center; 將圖片置中 */
+
+.leftcontainer {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
-.main {
+
+.rightcontainer {
+  width: 50%;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.brick{
+  padding: 20PX;
+}
+
+.btncorner{
+padding:5px;
+display: flex;
+flex-direction: row;
+text-align: center;
+}
+
+.btnedit{
+border-radius: 0%;
+}
+
+.btncancel{
+  background:  #17a2b8;
+  width:106px;
+  height:47px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  h4{
+    color:  #4a525c ;
+  }
+}
+
+.btncancel:active{
+  transform: scale(0.95);
+}
+
+.btncancel:hover ,:focus{
+  cursor: pointer ;
+  background: #00c8d6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+  h4{
+    color:  #212529;
+  }
+}
+
+.txtbtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #333;
+  background: linear-gradient(to right, #00c8d6, #17a2b8);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+}
+
+.txtbtn:active {
+  transform: scale(0.95);
+}
+
+.link:hover ,:focus{
+  text-decoration: none;
+  h2{
+    color: #212529;
+  }
+}
+
+.link{
+  h2{
+    color: #4a525c ;
+  }
+}
+
+.txtbtn:hover, .txtbtn:focus {
+  cursor: pointer ;
+  background: linear-gradient(to right, #17a2b8, #00c8d6);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+}
+
+.small-image {
+  width: 150px;
+  height: 150px;
+}
+
+.tree{
   display: flex;
   flex-direction: row;
-  background-image: url('/assets/img/Member/STARcircle.jpg'); /* 使用相對路徑指定背景圖片 */
-  background-size: cover; /* 確保圖片覆蓋整個視口 */
-  background-repeat: no-repeat; /* 防止圖片重複 */
-  background-position: center; /* 將圖片置中 */
-
-  .leftcontainer {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-
-    :is(label) {
-      color: #333;
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: uppercase;
-    }
-
-  }
-
-  .rightcontainer {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .small-image {
-    width: 150px;
-    height: 150px;
-  }
+  text-align: center;
+  max-height: 150px;
+}
+.secend {
+  display: flex;
+  flex-direction: row;
+  padding-top: 3rem;
 
 }
 /* 最新消息區域的樣式 */
@@ -49,6 +118,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
+  max-height: 300px;
 }
 
 .news-section h3 {
@@ -103,8 +173,6 @@
   font-size: 0.95em;
   color: #333;
 }
-
-
 
 .modify-area {
   background: #f9f9f9;

@@ -31,6 +31,10 @@ export class MmainComponent implements OnInit {
     this.canSee = !this.canSee;
     this.cantSee = !this.cantSee;
   }
+  Return(){
+    this.canSee = !this.canSee;
+    this.cantSee = !this.cantSee;
+  }
 
   SaveData() {
     this.memberService.updatememberdata(this.memberData).subscribe({
