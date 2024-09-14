@@ -40,5 +40,6 @@ export const forumGuard: CanActivateFn = (route, state) => {
     }
   }
 
+
   return true;
 };

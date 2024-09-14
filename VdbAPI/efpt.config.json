@@ -225,22 +225,6 @@
       {
          "Name": "[dbo].[UserReactions]",
          "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ValidCode]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[VideoList]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[VideoStreamingLinkList]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ArticleView]",
-         "ObjectType": 3
       }
    ],
    "UiHint": null,

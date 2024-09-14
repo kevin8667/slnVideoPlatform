@@ -63,6 +63,8 @@ export class ArticleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.forumService.loadQuill();
+    this.currentUserId = this.forumService.getCurrentUserId();
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
 
     this.forumService.user$.subscribe((data) => {
@@ -357,7 +359,6 @@ export class ArticleComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
   private showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity, summary, detail });
   }
