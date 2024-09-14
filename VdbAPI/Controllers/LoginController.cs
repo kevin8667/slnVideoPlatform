@@ -102,7 +102,7 @@ namespace VdbAPI.Controllers
             }
             return rtn;
         }
-
+        [Route("api/[controller]/[action]")]
         [HttpPost]
         public ReturnResult<string> Forgetpwd(string email)
         {

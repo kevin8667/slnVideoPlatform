@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MemberService } from './../member.service';
 import { Router } from '@angular/router';
 
@@ -16,7 +16,8 @@ export class MmainComponent implements OnInit {
   memberId: number = 10;
   memberData: any = {};
   latestNews: any[] = [];
-
+  password='';
+  canSeepwd: boolean = false;
   constructor(
     private memberService: MemberService,
     private router: Router
@@ -27,6 +28,14 @@ export class MmainComponent implements OnInit {
     this.loadLatestNews();
   }
 
+  seepwd(){
+    this.canSeepwd = true;
+  }
+
+  cantseepwd(){
+    this.canSeepwd = false;
+  }
+
   modifyClick() {
     this.canSee = !this.canSee;
     this.cantSee = !this.cantSee;
@@ -34,6 +43,7 @@ export class MmainComponent implements OnInit {
   Return(){
     this.canSee = !this.canSee;
     this.cantSee = !this.cantSee;
+    this.readMemberData()
   }
 
   SaveData() {
