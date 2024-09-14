@@ -14,24 +14,28 @@ const routes: Routes = [
     component: EditComponent,
     canActivate: [forumGuard],
     canDeactivate: [unsavedChangesGuard],
+    data: { requiresAuth: true },
   },
   {
     path: 'new/:type/:articleId',
     component: EditComponent,
     canActivate: [forumGuard],
     canDeactivate: [unsavedChangesGuard],
+    data: { requiresAuth: true },
   },
   {
     path: 'ed/:type',
     component: EditComponent,
     canActivate: [forumGuard],
     canDeactivate: [unsavedChangesGuard],
+    data: { requiresAuth: true }
   },
   {
     path: 'ed/:type/:id',
     component: EditComponent,
     canActivate: [forumGuard],
     canDeactivate: [unsavedChangesGuard],
+    data: { requiresAuth: true }
   },
   { path: '**', redirectTo: '/error' },
 ];

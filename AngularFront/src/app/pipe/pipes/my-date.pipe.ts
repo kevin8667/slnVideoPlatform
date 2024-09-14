@@ -8,8 +8,8 @@ export class forumDatePipe implements PipeTransform {
     const updateTime = new Date(value);
     const now = new Date();
 
-    // 調整為 UTC+8
-    updateTime.setHours(updateTime.getUTCHours() + 8);
+    // 手動加上 8 小時來調整到台灣時間
+    updateTime.setHours(updateTime.getHours() + 8);
 
     // 檢查年份是否需要顯示
     const year = updateTime.getFullYear() !== now.getFullYear() ? `${updateTime.getFullYear()}-` : '';
@@ -23,4 +23,5 @@ export class forumDatePipe implements PipeTransform {
     // 組合格式化字串
     return `${year}${month}-${day} ${hour}:${minutes}`;
   }
+
 }
