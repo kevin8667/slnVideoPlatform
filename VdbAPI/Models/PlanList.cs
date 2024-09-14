@@ -10,6 +10,4 @@ public partial class PlanList
     public int PlanId { get; set; }
 
     public string PlanName { get; set; }
-
-    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
 }

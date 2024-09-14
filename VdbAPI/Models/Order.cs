@@ -28,10 +28,4 @@ public partial class Order
     public int? DeliveryStatus { get; set; }
 
     public DateTime? LastEditTime { get; set; }
-
-    public virtual MemberInfo Driver { get; set; }
-
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
-    public virtual ShoppingCart ShoppingCart { get; set; }
 }

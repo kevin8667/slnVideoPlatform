@@ -30,12 +30,4 @@ public partial class PlayList
     public DateTime? PlayListUpdatedAt { get; set; }
 
     public DateTime? AnalysisTimestamp { get; set; }
-
-    public virtual ICollection<MemberCreatedPlayList> MemberCreatedPlayLists { get; set; } = new List<MemberCreatedPlayList>();
-
-    public virtual ICollection<MemberPlayList> MemberPlayLists { get; set; } = new List<MemberPlayList>();
-
-    public virtual ICollection<PlayListCollaborator> PlayListCollaborators { get; set; } = new List<PlayListCollaborator>();
-
-    public virtual ICollection<PlayListItem> PlayListItems { get; set; } = new List<PlayListItem>();
 }
