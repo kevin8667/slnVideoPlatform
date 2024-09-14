@@ -18,12 +18,23 @@ export class PlaylistService {
     return this.http.get<PlaylistDTO[]>(this.apiUrl);
   }
 
-  updateLikeCount(playlistId: number, likeCount: number): Observable<PlaylistDTO> {
-    return this.http.patch<PlaylistDTO>(`${this.apiUrl}/${playlistId}/likeCount`, likeCount);
+  updateLikeCount(
+    playlistId: number,
+    likeCount: number
+  ): Observable<PlaylistDTO> {
+    return this.http.patch<PlaylistDTO>(
+      `${this.apiUrl}/${playlistId}/likeCount`,
+      likeCount
+    );
   }
 
   addNewPlaylist(playlist: { PlayList: PlaylistDTO }): Observable<PlaylistDTO> {
     return this.http.post<PlaylistDTO>(this.apiUrl, playlist);
+  }
+
+  addToFavorites(playlistId: number): Observable<any> {
+    const url = `${this.apiUrl}/add-to-favorites?playListId=${playlistId}`;
+    return this.http.post(url, {});
   }
 
   editPlaylist(
@@ -59,9 +70,7 @@ export class PlaylistService {
   }
 
   getAllVideos(): Observable<VideoListDTO[]> {
-    return this.http.get<VideoListDTO[]>(
-      `${this.apiUrl}/videos`
-    );
+    return this.http.get<VideoListDTO[]>(`${this.apiUrl}/videos`);
   }
 
   addPlaylistItems(

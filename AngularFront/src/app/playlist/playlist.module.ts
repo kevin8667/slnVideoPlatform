@@ -12,6 +12,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { PlaylistMemberComponent } from './playlistmember/playlistmember.component';
 import { PlaylistpostAputComponent } from './playlistpost-aput/playlistpost-aput.component';
 
@@ -40,8 +43,11 @@ const routes: Routes = [
     DragDropModule,
     PanelModule,
     MultiSelectModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    ConfirmPopupModule,
+    ToastModule
   ],
+  providers: [ConfirmationService, MessageService],
   exports: [RouterModule],
 })
 export class PlaylistModule { }

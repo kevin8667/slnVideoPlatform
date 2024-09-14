@@ -39,7 +39,7 @@
           <span class="info-item">
             <i class="pi pi-eye"></i> {{ playlist.viewCount }}
           </span>
-          <span class="info-item">
+          <span class="info-item" (click)="checkAndConfirmAddToFavorites($event, playlist)">
             <i class="pi pi-plus-circle"></i> {{ playlist.addedCount }}
           </span>
           <span class="info-item">
@@ -54,6 +54,9 @@
     </p-card>
   </div>
 </div>
+
+<p-confirmPopup></p-confirmPopup>
+<p-toast></p-toast>
 
 <p-dialog [(visible)]="displayModal" [modal]="true" header="播放清單內容" (onHide)="closeModal()">
   <div cdkDropList (cdkDropListDropped)="drop($event)">
