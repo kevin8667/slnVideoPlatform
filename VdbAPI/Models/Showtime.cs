@@ -14,14 +14,4 @@ public partial class Showtime
     public int? HallsId { get; set; }
 
     public DateTime? ShowTimeDatetime { get; set; }
-
-    public virtual Hall Halls { get; set; }
-
-    public virtual ShowingHall HallsNavigation { get; set; }
-
-    public virtual ICollection<ReservationDetail> ReservationDetails { get; set; } = new List<ReservationDetail>();
-
-    public virtual ICollection<SessionSeat> SessionSeats { get; set; } = new List<SessionSeat>();
-
-    public virtual VideoList Viedo { get; set; }
 }

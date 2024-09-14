@@ -45,8 +45,4 @@ public partial class Invite
     /// 狀態時間
     /// </summary>
     public DateTime StatusTime { get; set; }
-
-    public virtual MemberInfo InvitedMember { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
 }

@@ -14,8 +14,4 @@ public partial class UserReaction
     public int ArticleId { get; set; }
 
     public short? ReactionType { get; set; }
-
-    public virtual Article Article { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
 }

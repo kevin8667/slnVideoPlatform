@@ -16,8 +16,4 @@ public partial class BlackList
     public DateTime? CreationDate { get; set; }
 
     public string Reason { get; set; }
-
-    public virtual MemberInfo BlockedMember { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
 }

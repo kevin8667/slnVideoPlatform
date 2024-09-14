@@ -18,8 +18,4 @@ public partial class PlayListCollaborator
     public string CollaboratorActionType { get; set; }
 
     public DateTime? ActionTimestamp { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
-
-    public virtual PlayList PlayList { get; set; }
 }
