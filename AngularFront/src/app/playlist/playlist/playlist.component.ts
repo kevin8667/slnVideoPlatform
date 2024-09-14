@@ -4,11 +4,13 @@ import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-playlist',
   templateUrl: './playlist.component.html',
   styleUrls: ['./playlist.component.css'],
+  providers: [ConfirmationService, MessageService],
 })
 export class PlaylistComponent implements OnInit {
   playlists: PlaylistDTO[] = [];
@@ -24,11 +26,108 @@ export class PlaylistComponent implements OnInit {
 
   constructor(
     private playlistService: PlaylistService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.loadPlaylists();
+  }
+
+  isProcessing: boolean = false;
+
+  checkAndConfirmAddToFavorites(event: Event, playlist: PlaylistDTO): void {
+    event.stopPropagation();
+
+    if (this.isProcessing) {
+      console.log('操作正在進行中，無法再次點擊');
+      return;
+    }
+
+    if (playlist.playListId !== undefined) {
+      this.showConfirmation(event, playlist);
+    } else {
+      console.log('播放清單 ID 未定義');
+      this.messageService.add({
+        severity: 'error',
+        summary: '錯誤',
+        detail: '播放清單 ID 未定義',
+      });
+    }
+  }
+
+  showConfirmation(event: Event, playlist: PlaylistDTO): void {
+    const target = event?.target as EventTarget | null;
+
+    this.confirmationService.confirm({
+      target: target || undefined,
+      message: '確定要將這個播放清單加入收藏嗎？',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isProcessing = true;
+        this.finalizeAddToFavorites(playlist);
+      },
+      reject: () => {
+        console.log('用戶取消操作');
+        this.isProcessing = false;
+      },
+    });
+  }
+
+  finalizeAddToFavorites(playlist: PlaylistDTO): void {
+    this.playlistService.addToFavorites(playlist.playListId!).subscribe(
+      () => {
+        playlist.addedCount = (playlist.addedCount ?? 0) + 1;
+        this.messageService.add({
+          severity: 'success',
+          summary: '成功',
+          detail: '成功將播放清單添加到收藏！',
+        });
+        this.isProcessing = false;
+      },
+      (error) => {
+        console.log('最終添加失敗，進入錯誤處理：', error);
+        this.handleError(error);
+      }
+    );
+  }
+
+  private handleError(error: any): void {
+    console.log('錯誤回應訊息', error);
+
+    this.isProcessing = false;
+
+    let errorMessage =
+      error?.error?.message || error?.message || '發生未知錯誤';
+
+    if (error.status === 400) {
+      if (errorMessage.includes('已經被添加')) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: '提示',
+          detail: '該播放清單已經被添加到收藏中。',
+        });
+      } else if (errorMessage.includes('無法添加')) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: '提示',
+          detail: '無法添加您自己創建的播放清單。',
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: '錯誤',
+          detail: errorMessage,
+        });
+      }
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: '錯誤',
+        detail: '發生未知錯誤，請稍後再試。',
+      });
+    }
   }
 
   loadPlaylists(): void {
@@ -96,16 +195,18 @@ export class PlaylistComponent implements OnInit {
 
   incrementLike(playlist: PlaylistDTO) {
     const newLikeCount = (playlist.likeCount ?? 0) + 1;
-    this.playlistService.updateLikeCount(playlist.playListId??0, newLikeCount).subscribe(
-      (updatedPlaylist) => {
-        playlist.likeCount = updatedPlaylist.likeCount;
-        playlist.showLikeEffect = true;
-        setTimeout(() => (playlist.showLikeEffect = false), 1000);
-      },
-      (error) => {
-        console.error('Error updating like count', error);
-      }
-    );
+    this.playlistService
+      .updateLikeCount(playlist.playListId ?? 0, newLikeCount)
+      .subscribe(
+        (updatedPlaylist) => {
+          playlist.likeCount = updatedPlaylist.likeCount;
+          playlist.showLikeEffect = true;
+          setTimeout(() => (playlist.showLikeEffect = false), 1000);
+        },
+        (error) => {
+          console.error('Error updating like count', error);
+        }
+      );
   }
 
   onCardClick(playlistId: number): void {
