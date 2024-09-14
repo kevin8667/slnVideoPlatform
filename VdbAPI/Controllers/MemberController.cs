@@ -231,8 +231,10 @@ namespace VdbAPI.Controllers
         {
             ReturnResult<string> rtn = new ReturnResult<string>();
             MemberHelper mHelper = new MemberHelper(ConnString);
+            var friendInfo = mHelper.SelectMemberInfo(new mMemberInfo { MemberID = Convert.ToInt32(friendId) });
             mHelper.AddFriend(MemberId, friendId, "已接受");
             mHelper.AddFriend(friendId, MemberId, "已接受");
+            mHelper.SetNoticeMessage(MemberId.ToString(), "好友接受訊息", friendInfo.FirstOrDefault().MemberName + "已經接受你的好友邀請，恭喜你又多一位朋友囉", "Friend");
             rtn.IsSuccess = true;
             rtn.AlertMsg = "已成為好友";
             return rtn;
@@ -245,6 +247,7 @@ namespace VdbAPI.Controllers
             ReturnResult<string> rtn = new ReturnResult<string>();
             MemberHelper mHelper = new MemberHelper(ConnString);
             mHelper.DeleteFriend(MemberId, friendId);
+            mHelper.SetNoticeMessage(friendId.ToString(), "好友刪除訊息", "你有一位好友默默地離開了你的朋友圈", "Friend");
             rtn.IsSuccess = true;
             return rtn;
         }
@@ -267,6 +270,7 @@ namespace VdbAPI.Controllers
 
                 mHelper.InviteFriend(MemberId, Convert.ToInt32(friendId), message, "邀請中");
                 mHelper.InviteFriend(Convert.ToInt32(friendId), MemberId, message, "待回覆");
+                mHelper.SetNoticeMessage(friendId, "好友邀請訊息", friendInfo.FirstOrDefault().MemberName + "正對你發出好友邀請，請到會員好友回覆邀請", "Friend");
                 rtn.IsSuccess = true;
                 rtn.AlertMsg = $"已發送好友邀請給{friendInfo.FirstOrDefault().MemberName}";
             }
@@ -277,7 +281,8 @@ namespace VdbAPI.Controllers
 
             return rtn;
         }
-
     }
+
+
 
 }

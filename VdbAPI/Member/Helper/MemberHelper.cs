@@ -24,6 +24,12 @@ namespace VdbAPI.Member.Helper
 
         }
 
+        public void SetNoticeMessage(string memberid, string title, string content, string action) 
+        {
+            MemberDao dao = new MemberDao(_connectionString);
+            dao.SetNoticeMessage(memberid, title, content, action);
+        }
+
         public void InsertMember(RegisterViewModel input)
         {
             MemberDao dao = new MemberDao(_connectionString);

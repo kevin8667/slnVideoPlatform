@@ -19,13 +19,11 @@
               [src]="memberData.photoPath"
             />
 
-            <div class="mpicdiv">
+            <div class="mpicdiv"  (click)="onEditClick()">
               <button class="edit-button">
                 <img
                   src="./../../../assets/img/Member/edit.png"
-                  alt="Edit"
-                  (click)="onEditClick()"
-                />
+                  alt="Edit" />
                 <span>上傳圖片</span>
               </button>
             </div>

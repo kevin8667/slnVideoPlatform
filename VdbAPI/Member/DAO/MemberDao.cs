@@ -25,6 +25,30 @@ namespace VdbAPI.Member.Dao
         {
             _connectionString = connection;
         }
+        internal void SetNoticeMessage(string memberid, string title, string content, string action)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = @"INSERT INTO MemberNotice ( MemberNoticeID, MemberID, Title, NoticeContent, Status, CreTime, Action )
+                SELECT ISNULL(MAX(MemberNoticeID), 0) + 1, @MemberID, @Title, @NoticeContent, 'N', GETDATE(), @Action FROM MemberNotice; ";
+                List<SqlParameter> pars = new List<SqlParameter>();
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@MemberID", memberid);
+                    command.Parameters.AddWithValue("@Title", title);
+                    command.Parameters.AddWithValue("@NoticeContent", content);
+                    command.Parameters.AddWithValue("@Action", action);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+
+
+
         internal List<mMemberNotice> GetMemberNotice(mMemberNotice data)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

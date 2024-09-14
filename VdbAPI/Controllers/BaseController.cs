@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using VdbAPI.Member.Helper;
+using VdbAPI.Member.ViewModel;
 
 namespace VdbAPI.Controllers
 {
@@ -18,6 +21,12 @@ namespace VdbAPI.Controllers
                 }
                 return 0;  // 如果 MemberId 不存在，則返回 0 或其他合適的值
             }
+        }
+
+        public void SetNoticeMessage(string memberid, string title, string content, string action) 
+        {
+            MemberHelper mHelper = new MemberHelper(memberid);
+            mHelper.SetNoticeMessage(memberid, title, content, action);
         }
     }
 }
