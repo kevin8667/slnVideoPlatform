@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,OnInit} from '@angular/core';
 import { MemberService } from './../member.service';
 import { Router } from '@angular/router';
 
@@ -8,19 +8,28 @@ import { Router } from '@angular/router';
   styleUrls: ['./coupon.component.css'],
   providers: [MemberService],
 })
-export class CouponComponent {
+export class CouponComponent implements OnInit{
   constructor(private memberService: MemberService, private router: Router) {}
   memberId: number = 1;
   couponData: any = [];
   giftList: any = [];
   hasData = false;
   visible: boolean = false;
+  items: any[] = [];
+  home: any;
 
   ngOnInit() {
     this.GetMemberCoupon();
+    this.items = [
+      { label: '會員首頁', url: 'login/mmain' },
+      { label: '我的優惠券', url: 'login/friends' },
+    ];
+
+    this.home = { icon: 'pi pi-home', url: 'login' };
   }
 
   GetMemberCoupon() {
+    debugger;
     this.memberService.GetMemberCoupon().subscribe({
       next: (response) => {
         if (response.hasAlertMsg) {
@@ -47,6 +56,7 @@ export class CouponComponent {
   }
 
   ShowGiftList(giftlistid: number) {
+    debugger;
     this.visible = true;
     this.memberService.GetGiftList(giftlistid).subscribe({
       next: (response) => {

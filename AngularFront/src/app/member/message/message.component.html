@@ -1,11 +1,5 @@
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a (click)="goHome()" style="color: #333;">Home</a></li>
-      <li class="breadcrumb-item"><a (click)="goMMain()" style="color: #333;">會員</a></li>
-      <li class="breadcrumb-item active" aria-current="page">我的訊息</li>
-    </ol>
-  </nav><br>
+  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
   <div class="p-float-label">
     <input pInputText id="searchbar" (change)="searchMessages($event)" />
     <label htmlFor="searchbar">搜尋訊息</label>

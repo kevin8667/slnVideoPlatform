@@ -1,15 +1,5 @@
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a (click)="goHome()" style="color: #333">Home</a>
-      </li>
-      <li class="breadcrumb-item">
-        <a (click)="goMMain()" style="color: #333">會員</a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">購物紀錄</li>
-    </ol>
-  </nav>
+  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
   <table
     class="orderSearch"
     cellspacing="0"

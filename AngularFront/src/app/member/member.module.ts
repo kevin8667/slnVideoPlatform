@@ -14,6 +14,7 @@ import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -60,7 +61,8 @@ const routes: Routes = [
     CardModule,
     CarouselModule,
     RadioButtonModule,
-    InputTextareaModule
+    InputTextareaModule,
+    BreadcrumbModule
   ],
   exports: [RouterModule],
 

@@ -8,17 +8,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./history.component.css'],
   providers: [MemberService]
 })
-export class HistoryComponent  {
+export class HistoryComponent  implements OnInit{
 
-  memberId: number | null = null;
+
   error: boolean = false;
+  items: any[] = [];
+  home: any;
 
   constructor(private memberService: MemberService,private router: Router){
   }
 
+  ngOnInit() {
+  this.items = [
+    { label: '會員首頁', url: 'login/mmain' },
+    { label: '購物紀錄', url: 'login/friends' },
+  ];
 
-
-
+  this.home = { icon: 'pi pi-home', url: 'login' };
+  }
 
 
   points='5';

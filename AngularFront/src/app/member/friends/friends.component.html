@@ -1,19 +1,8 @@
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a (click)="goHome()" style="color: #333">首頁</a>
-      </li>
-      <li class="breadcrumb-item">
-        <a (click)="goMMain()" style="color: #333">會員</a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">我的好友</li>
-    </ol>
-  </nav>
-
+   <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
   <div *ngIf="isLoading">正在加载好友信息...</div>
   <button class="btn btn-outline-secondary" (click)="AddFriendClick()">
-    <img src="./../../../assets/IMG/add-user.png" alt="Edit" />新增好友
+    <img src="./../../../assets/img/Member/edit.png" alt="Edit" />新增好友
   </button>
   <div *ngIf="!isLoading">
     <p-carousel *ngIf="friends.length>0"
@@ -41,7 +30,7 @@
                     alt="Card"
                     [src]="
                       friend.photoPath == null || friend.photoPath == ''
-                        ? './../../../assets/IMG/Member/defaultMember.png'
+                        ? './../../../assets/img/Member/defaultMember.png'
                         : friend.photoPath
                     "
                   />
@@ -88,7 +77,7 @@
                     alt="Card"
                     [src]="
                       friend.photoPath == null || friend.photoPath == ''
-                        ? './../../../assets/IMG/Member/defaultMember.png'
+                        ? './../../../assets/img/Member/defaultMember.png'
                         : friend.photoPath
                     "
                   />
@@ -136,7 +125,7 @@
                     alt="Card"
                     [src]="
                       friend.photoPath == null || friend.photoPath == ''
-                        ? './../../../assets/IMG/Member/defaultMember.png'
+                        ? './../../../assets/img/Member/defaultMember.png'
                         : friend.photoPath
                     "
                   />
@@ -185,7 +174,7 @@
         [(ngModel)]="friendId"
       />
       <button class="btn" (click)="fetchFriendDetails()">
-        <img src="./../../../assets/IMG/search.png" alt="Edit" />
+        <img src="./../../../assets/img/Member/search.png" alt="Edit" />
       </button>
     </div>
 
@@ -195,7 +184,7 @@
         alt="Card"
         [src]="
           fetchFriendData.photoPath == null || fetchFriendData.photoPath == ''
-            ? './../../../assets/IMG/Member/defaultMember.png'
+            ? './../../../assets/img/Member/defaultMember.png'
             : fetchFriendData.photoPath
         "
       />

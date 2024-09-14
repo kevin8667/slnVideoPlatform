@@ -29,8 +29,8 @@ namespace VdbAPI.Member.Dao
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string sqlQuery = @"INSERT INTO MemberNotice ( MemberNoticeID, MemberID, Title, NoticeContent, Status, CreTime, Action )
-                SELECT ISNULL(MAX(MemberNoticeID), 0) + 1, @MemberID, @Title, @NoticeContent, 'N', GETDATE(), @Action FROM MemberNotice; ";
+                string sqlQuery = @"INSERT INTO MemberNotice ( MemberID, Title, NoticeContent, Status, CreTime, Action )
+               VALUES ( @MemberID, @Title, @NoticeContent, 'N', GETDATE(), @Action ) ";
                 List<SqlParameter> pars = new List<SqlParameter>();
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {

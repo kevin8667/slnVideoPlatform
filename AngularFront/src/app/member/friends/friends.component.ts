@@ -24,6 +24,8 @@ export class FriendsComponent implements OnInit {
   action:string='';
   invitingFriends:Friend[]=[];
   pendingFriends:Friend[]=[];
+  items: any[] = [];
+  home: any;
 
   responsiveOptions: any[] | undefined;
   isLoading: boolean = true;
@@ -35,7 +37,8 @@ export class FriendsComponent implements OnInit {
   DeleteFriend: string ='';
 
 
-  constructor(private memberService: MemberService, private router: Router) {}
+  constructor(private memberService: MemberService, private router: Router) {
+  }
 
   ngOnInit() {
     this.loadFriends();
@@ -56,6 +59,13 @@ export class FriendsComponent implements OnInit {
         numScroll: 1,
       },
     ];
+
+    this.items = [
+      { label: '會員首頁', url: 'login/mmain' },
+      { label: '我的好友', url: 'login/friends' },
+    ];
+
+    this.home = { icon: 'pi pi-home', url: 'login' };
   }
 
   loadFriends() {
@@ -106,14 +116,6 @@ export class FriendsComponent implements OnInit {
         this.isLoading = false;
       },
     });
-  }
-
-  goHome() {
-    this.router.navigateByUrl('login');
-  }
-
-  goMMain() {
-    this.router.navigateByUrl('login/mmain');
   }
 
   addFriend(friendId:string) {
