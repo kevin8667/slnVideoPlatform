@@ -1,10 +1,14 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core'; // 引入 ViewEncapsulation
+import { LikeDTO } from './../../interfaces/forumInterface/LikeDTO';
+import {
+  Component,
+  HostListener,
+  OnInit
+} from '@angular/core'; // 引入 ViewEncapsulation
 import { ActivatedRoute, Router } from '@angular/router'; // Angular
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 第三方庫
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
 import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
-import ForumService from 'src/app/service/forum.service'; // 自定義模組
-
+import ForumService from 'src/app/services/forumService/forum.service'; // 自定義模組
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
@@ -15,6 +19,8 @@ export class ArticleComponent implements OnInit {
   articleId!: number;
   posts: Post[] = [];
   menuItems: MenuItem[] = [];
+  debounceTimer!: number;
+  currentUserId!: number;
 
   constructor(
     private router: Router,
@@ -23,8 +29,16 @@ export class ArticleComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private actRoute: ActivatedRoute
   ) {}
-
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    if (this.debounceTimer !== 0) {
+      clearTimeout(this.debounceTimer);
+      this.sendLikeStatus(); // 提交當前點讚狀態
+    }
+  }
   ngOnInit(): void {
+    this.forumService.loadQuill();
+    this.currentUserId = this.forumService.getCurrentUserId();
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
     if (isNaN(this.articleId)) {
       this.router.navigateByUrl('forum');
@@ -52,13 +66,13 @@ export class ArticleComponent implements OnInit {
       {
         label: '編輯',
         icon: 'pi pi-pencil',
-        command: () => this.edit(this.articleId, 'article')
+        command: () => this.edit(this.articleId, 'article'),
       },
       {
         label: '刪除',
         icon: 'pi pi-trash',
-        command: () => this.deleteArticle(this.articleId)
-      }
+        command: () => this.deleteArticle(this.articleId),
+      },
     ];
   }
 
@@ -67,13 +81,13 @@ export class ArticleComponent implements OnInit {
       {
         label: '編輯',
         icon: 'pi pi-pencil',
-        command: () => this.edit(postId, 'post')
+        command: () => this.edit(postId, 'post'),
       },
       {
         label: '刪除',
         icon: 'pi pi-trash',
-        command: () => this.deletePost(postId)
-      }
+        command: () => this.deletePost(postId),
+      },
     ];
   }
 
@@ -84,9 +98,9 @@ export class ArticleComponent implements OnInit {
         this.forumService.deletePost(postId).subscribe({
           next: () => this.showMessage('success', '成功', '回文已刪除'),
           error: (err) => this.handleError('刪除回文失敗', err),
-          complete: () => location.reload()
+          complete: () => location.reload(),
         });
-      }
+      },
     });
   }
 
@@ -99,9 +113,9 @@ export class ArticleComponent implements OnInit {
             this.showMessage('success', '成功', '文章已刪除');
             this.router.navigate(['/forum']);
           },
-          error: (err) => this.handleError('刪除文章失敗', err)
+          error: (err) => this.handleError('刪除文章失敗', err),
         });
-      }
+      },
     });
   }
 
@@ -116,19 +130,60 @@ export class ArticleComponent implements OnInit {
   navToReply(articleId: number) {
     this.router.navigate(['/forum', 'new', 'post', articleId]);
   }
+  ArticleLike = false;
+  ArticleDislike = false;
 
-  dislike() {
-    this.messageService.add({
-      severity: 'warn',
-      summary: '注意',
-      detail: '已點踩!',
+  toggleLike() {
+    this.ArticleLike = !this.ArticleLike;
+    if (this.ArticleLike) {
+      this.ArticleDislike = false; // 取消踩
+    }
+  }
+
+  toggleDislike() {
+    this.ArticleDislike = !this.ArticleDislike;
+    if (this.ArticleDislike) {
+      this.ArticleLike = false; // 取消讚
+    }
+  }
+  dislike(type: string) {
+    if (type !== 'article') return;
+    if (this.debounceTimer !== 0) {
+      clearTimeout(this.debounceTimer);
+    }
+    this.toggleDislike();
+    this.showMessage('warn', '注意', '已點踩!');
+    this.debounceTimer = window.setTimeout(() => {
+      this.sendLikeStatus();
+    }, 5000);
+  }
+  like(type: string) {
+    if (type !== 'article') return;
+    if (this.debounceTimer !== 0) {
+      clearTimeout(this.debounceTimer);
+    }
+    this.toggleLike();
+
+    this.showMessage('success', '成功', '按讚囉!');
+    this.debounceTimer = window.setTimeout(() => {
+      this.sendLikeStatus();
+    }, 5000);
+  }
+  private sendLikeStatus() {
+    let reaction = 0;
+    if (this.ArticleLike) reaction = 1;
+    else if (this.ArticleDislike) reaction = -1;
+    else reaction = 0;
+    const likeDTO: LikeDTO = {
+      memberId: this.currentUserId,
+      contentId: this.articleId,
+      reactionType: reaction,
+    };
+    this.forumService.ArticleCount(likeDTO).subscribe({
+      next: (data) => console.log(data),
+      error: (err) => this.handleError('錯誤原因:', err),
     });
   }
-
-  like() {
-    this.showMessage('success', '成功', '按讚囉!');
-  }
-
   private showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity, summary, detail });
   }

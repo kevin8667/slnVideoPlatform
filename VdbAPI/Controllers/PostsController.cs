@@ -22,6 +22,62 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        [HttpPost("React")]
+        public async Task<IActionResult> React(LikeDTO likeDTO)
+        {
+            // 驗證 reactionType 參數
+            if(likeDTO.reactionType != -1 && likeDTO.reactionType != 0 && likeDTO.reactionType != 1) {
+                return BadRequest("無效的反應類型。必須是 -1, 0 或 1。");
+            }
+
+            // 驗證文章是否存在
+            var article = await _context.Posts.FindAsync(likeDTO.ContentId);
+            if(article == null)
+                return NotFound("回文不存在");
+
+            using var connection = new SqlConnection(_connection);
+
+            try {
+                // SQL 處理 UserReactions
+                var sqlUserReaction = @"
+                IF EXISTS (SELECT 1 FROM PostUserReactions WHERE MemberId = @MemberId AND PostId = @PostId)
+                BEGIN
+                    UPDATE PostUserReactions SET ReactionType = @ReactionType 
+                    WHERE MemberId = @MemberId AND PostId = @PostId;
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO PostUserReactions (MemberId, ArticleId, ReactionType)
+                    VALUES (@MemberId, @ArticleId, @ReactionType);
+                END";
+
+                await connection.ExecuteAsync(sqlUserReaction,new UserReaction {
+                    MemberId = likeDTO.MemberId,
+                    ArticleId = likeDTO.ContentId,
+                    ReactionType = (short?)likeDTO.reactionType
+                });
+
+                var sqlGetCounts = @"
+            SELECT 
+                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
+                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = -1) AS DislikeCount";
+
+                var counts = await connection.QueryFirstAsync(sqlGetCounts,new {
+                    ArticleId = likeDTO
+                .ContentId
+                });
+
+                // 更新文章的計數
+                article.LikeCount = counts.LikeCount;
+                article.DislikeCount = counts.DislikeCount;
+                await _context.SaveChangesAsync();
+
+                return Ok(counts);
+            }
+            catch(Exception ex) {
+                return StatusCode(500,"錯誤原因: " + ex.Message);
+            }
+        }
 
         // GET: api/Posts
         [HttpGet("{id}")]
@@ -117,9 +173,9 @@ namespace VdbAPI.Controllers {
                     PostDate = DateTime.UtcNow,
                     PosterId = postDTO.PosterId,
                     PostImage = "",
-                    //LikeCount = 0,
-                    //DislikeCount = 0,
-                    
+                    LikeCount = 0,
+                    DislikeCount = 0,
+
                 };
                 _context.Posts.Add(post);
 
@@ -127,6 +183,7 @@ namespace VdbAPI.Controllers {
                 if(article != null) {
 
                     article.ReplyCount++;                  // 回覆次數增加 1
+                    article.UpdateDate = DateTime.UtcNow;
                     _context.Articles.Update(article);
                 }
 

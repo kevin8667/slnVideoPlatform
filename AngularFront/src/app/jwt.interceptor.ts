@@ -19,7 +19,6 @@ export class JwtInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    debugger;
     //const token = this.oauthService.getAccessToken(); // Use OAuthService to get token
     const token = this.getCookie('JwtToken');
     if (token) {

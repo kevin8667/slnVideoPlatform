@@ -4,15 +4,15 @@ import { HttpClient } from '@angular/common/http';
 import {
   BehaviorSubject,
   firstValueFrom,
-  lastValueFrom,
   Observable,
   throwError,
 } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Theme } from '../interfaces/forumInterface/Theme';
-import { ForumPagingDTO } from '../interfaces/forumInterface/ForumPagingDTO';
-import { ArticleView } from '../interfaces/forumInterface/ArticleView';
-import { Post } from '../interfaces/forumInterface/Post';
+import { Theme } from '../../interfaces/forumInterface/Theme';
+import { ForumPagingDTO } from '../../interfaces/forumInterface/ForumPagingDTO';
+import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
+import { Post } from '../../interfaces/forumInterface/Post';
+import { LikeDTO } from '../../interfaces/forumInterface/LikeDTO';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({
@@ -21,11 +21,13 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export default class ForumService {
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
-
   constructor(private client: HttpClient, private sanitizer: DomSanitizer) {
     this.loadThemeTags();
   }
 
+  getCurrentUserId(): number {
+    return 1
+  }
   loadThemeTags(): void {
     const api = 'https://localhost:7193/api/Articles/Theme';
     this.client.get<Theme[]>(api).subscribe({
@@ -105,5 +107,15 @@ export default class ForumService {
   createPost(data: Post) {
     const api = 'https://localhost:7193/api/Posts';
     return this.client.post(api, data);
+  }
+  loadQuill() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '../../../assets/css/quill.snow.css';
+    document.head.appendChild(link);
+  }
+  ArticleCount(data:LikeDTO){
+    const api = 'https://localhost:7193/api/Articles/React'
+    return this.client.post(api,data)
   }
 }
