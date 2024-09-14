@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ForumPagingDTO } from 'src/app/interfaces/forumInterface/ForumPagingDTO';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
-import ForumService from 'src/app/service/forum.service';
+import ForumService from 'src/app/services/forumService/forum.service';
+
 
 @Component({
   selector: 'app-article-list',
@@ -119,7 +120,6 @@ export class ArticleListComponent implements OnInit {
 
   search() {
     this.load();
-    this.forumDto.keyword = '';
   }
   openCreateArticleDialog() {
     this.route.navigateByUrl('forum/new/article');

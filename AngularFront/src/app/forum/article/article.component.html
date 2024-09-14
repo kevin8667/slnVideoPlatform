@@ -23,23 +23,34 @@
     <div class="article-actions">
       <div>
         <p-button
-          [label]="'讚(' + NumToString(article.likeCount) + ')'"
-          (onClick)="like()"
+          [icon]="ArticleLike ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"
+          [label]="
+            '讚(' +
+            (ArticleLike ? article.likeCount + 1 : article.likeCount) +
+            ')'
+          "
           styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
-          [raised]="true"
-          severity="success"
+          (click)="like('article')"
+          [disabled]="ArticleDislike"
         >
         </p-button>
+
         <p-button
-          [label]="'踩(' + NumToString(article.dislikeCount) + ')'"
-          (onClick)="dislike()"
+          [icon]="
+            ArticleDislike ? 'pi pi-thumbs-down-fill' : 'pi pi-thumbs-down'
+          "
+          [label]="
+            '踩(' +
+            (ArticleDislike ? article.dislikeCount + 1 : article.dislikeCount) +
+            ')'
+          "
           styleClass="p-button-outlined p-button-danger action-btn mr-2 mb-2"
-          [raised]="true"
-          severity="Warn"
+          (click)="dislike('article')"
+          [disabled]="ArticleLike"
         >
         </p-button>
       </div>
-      <div>
+      <div *ngIf="currentUserId === article.authorId || currentUserId === 1">
         <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
         <button
           pButton
@@ -75,20 +86,20 @@
         <div>
           <p-button
             [label]="'讚(' + NumToString(post.likeCount) + ')'"
-            (onClick)="like()"
+            (onClick)="like('post')"
             styleClass="p-button-outlined p-button-success action-btn mr-2 mb-2"
             [raised]="true"
           >
           </p-button>
           <p-button
             [label]="'踩(' + NumToString(post.dislikeCount) + ')'"
-            (onClick)="dislike()"
+            (onClick)="dislike('post')"
             styleClass="p-button-outlined p-button-danger  action-btn mr-2 mb-2"
             [raised]="true"
           >
           </p-button>
         </div>
-        <div>
+        <div *ngIf="currentUserId === post.posterId || currentUserId === 1">
           <p-menu
             #postMenu
             [popup]="true"

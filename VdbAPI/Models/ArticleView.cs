@@ -7,10 +7,6 @@ namespace VdbAPI.Models;
 
 public partial class ArticleView
 {
-    public string ThemeName { get; set; }
-
-    public string MemberName { get; set; }
-
     public int ArticleId { get; set; }
 
     public int AuthorId { get; set; }
@@ -34,4 +30,8 @@ public partial class ArticleView
     public int? LikeCount { get; set; }
 
     public int? DislikeCount { get; set; }
+
+    public string ThemeName { get; set; }
+
+    public string NickName { get; set; }
 }
