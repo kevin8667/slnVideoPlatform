@@ -24,6 +24,15 @@
 
 }
 
+.light:hover, :focus{
+  cursor: pointer ;
+  transform: scale(1.05);
+}
+
+.light:active{
+  transform: scale(0.95);
+}
+
 .brick{
   padding: 20PX;
 }

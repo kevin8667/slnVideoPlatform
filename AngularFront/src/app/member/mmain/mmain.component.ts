@@ -12,12 +12,13 @@ import { Router } from '@angular/router';
 })
 export class MmainComponent implements OnInit {
   cantSee = true;
-  canSee = false;
   memberId: number = 10;
   memberData: any = {};
   latestNews: any[] = [];
   password='';
-  canSeepwd: boolean = false;
+  canSee: boolean = false; // 控制顯示輸入框或標籤
+  canSeepwd: boolean = false; // 控制密碼的顯示/隱藏
+
   constructor(
     private memberService: MemberService,
     private router: Router
@@ -37,9 +38,11 @@ export class MmainComponent implements OnInit {
   }
 
   modifyClick() {
-    this.canSee = !this.canSee;
+    this.canSee = !this.canSee;// 切換 canSee
     this.cantSee = !this.cantSee;
-  }
+    if (!this.canSee) {
+      this.canSeepwd = false; // 如果隱藏輸入框，則隱藏密碼
+    }}
   Return(){
     this.canSee = !this.canSee;
     this.cantSee = !this.cantSee;

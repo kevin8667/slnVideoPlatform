@@ -7,30 +7,40 @@
         <div class="picdiv p-grid">
           <div class="profile-image-container">
             <img
-                *ngIf="!memberData.photoPath"
-                class="mpic"
-                alt="avatar2"
-                src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp" />
-            <img *ngIf="memberData.photoPath" class="mpic" alt="avatar2" [src]="memberData.photoPath" />
+              *ngIf="!memberData.photoPath"
+              class="mpic"
+              alt="avatar2"
+              src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+            />
+            <img
+              *ngIf="memberData.photoPath"
+              class="mpic"
+              alt="avatar2"
+              [src]="memberData.photoPath"
+            />
 
             <div class="mpicdiv">
-                <button class="edit-button">
-                    <img src="./../../../assets/img/Member/edit.png" alt="Edit" (click)="onEditClick()"  />
-                    <span>上傳圖片</span>
-                </button>
+              <button class="edit-button">
+                <img
+                  src="./../../../assets/img/Member/edit.png"
+                  alt="Edit"
+                  (click)="onEditClick()"
+                />
+                <span>上傳圖片</span>
+              </button>
             </div>
-
-
+          </div>
+          <div class="gradediv">
+            <img
+              class="gradepic"
+              src="./../../../assets/img/Member/crown.png"
+              alt="crown"
+            />
+            <label class="gradetxt"
+              >會員等級: {{ getMemberGradeDescription() }}</label
+            >
+          </div>
         </div>
-        <div class="gradediv">
-          <img
-            class="gradepic"
-            src="./../../../assets/img/Member/crown.png"
-            alt="crown"
-          />
-          <label class="gradetxt">會員等級: {{ getMemberGradeDescription() }}</label>
-        </div>
-      </div>
         <table>
           <tr>
             <td><label>電子信箱:</label></td>
@@ -57,25 +67,23 @@
           <tr>
             <td><label>密碼:</label></td>
             <td>
-              <ng-container *ngIf="canSee"><ng-container *ngIf="canSeepwd">
+              <ng-container *ngIf="canSee">
                 <input
                   pInputText
                   id="inputpwd"
-                  class="p-inputtext-sm "
+                  class="p-inputtext-sm"
                   [(ngModel)]="memberData.password"
-                  type="password"
-                /><img [src]="canSeepwd ? './../../../assets/img/Member/light-off.png' : './../../../assets/img/Member/light-on.png'" (click)="seepwd()">
-              </ng-container><ng-container *ngIf="!canSeepwd">
-                <input
-                pInputText
-                id="inputpwd"
-                class="p-inputtext-sm "
-                [(ngModel)]="memberData.password"
-                type="text"
-              />
-
-                <img  [src]="canSeepwd ? './../../../assets/img/Member/light-off.png' : './../../../assets/img/Member/light-on.png'" (click)="cantseepwd()">
-              </ng-container>
+                  [attr.type]="canSeepwd ? 'text' : 'password'"
+                />
+                <img
+                class="light"
+                  [src]="
+                    canSeepwd
+                      ? './../../../assets/img/Member/light-off.png'
+                      : './../../../assets/img/Member/light-on.png'
+                  "
+                  (click)="canSeepwd ? cantseepwd() : seepwd()"
+                />
               </ng-container>
               <ng-container *ngIf="!canSee">
                 <label>{{ memberData.password }}</label>
@@ -195,34 +203,22 @@
             <td>
               <label>{{ memberData.registerDate | date : "yyyy-MM-dd" }}</label>
             </td>
-            <div class="btncorner">
-
-              <div
-              class="btncancel"
-                *ngIf="cantSee"
-                (click)="modifyClick()"
-              ><h4>
-                修改會員資料</h4>
-              </div>
-
-              <div class="btncancel"
-                *ngIf="canSee"
-                (click)="SaveData()"><h4>
-                確認修改</h4>
-            </div>
-              <div
-              class="btncancel"
-              *ngIf="canSee"
-              (click)="Return()"><h4>
-              取消修改</h4>
-            </div>
-            </div>
           </tr>
         </table>
+        <div class="btncorner">
+          <div class="btncancel" *ngIf="cantSee" (click)="modifyClick()">
+            <h4>修改會員資料</h4>
+          </div>
+
+          <div class="btncancel" *ngIf="canSee" (click)="SaveData()">
+            <h4>確認修改</h4>
+          </div>
+          <div class="btncancel" *ngIf="canSee" (click)="Return()">
+            <h4>取消修改</h4>
+          </div>
+        </div>
       </div>
-
-
-  </div>
+    </div>
     <div class="rightcontainer col-6 row-12">
       <div class="tree">
         <div class="brick col-6">
