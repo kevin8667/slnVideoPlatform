@@ -26,6 +26,7 @@ import { FooterComponent } from './footer/footer.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { JwtInterceptor } from './jwt.interceptor';
 
+
 @NgModule({
   declarations: [
     AppComponent,

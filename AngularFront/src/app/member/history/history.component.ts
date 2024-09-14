@@ -1,15 +1,25 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { MemberService } from './../member.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css'],
   providers: [MemberService]
 })
-export class HistoryComponent {
+export class HistoryComponent  {
+
+  memberId: number | null = null;
+  error: boolean = false;
+
   constructor(private memberService: MemberService,private router: Router){
   }
+
+
+
+
+
 
   points='5';
   quantity='10';

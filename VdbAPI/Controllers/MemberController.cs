@@ -51,8 +51,8 @@ namespace VdbAPI.Controllers
             return rtn;
         }
 
-     
-        [HttpGet("memberId")]
+        [Route("api/[controller]/[action]")]
+        [HttpGet]
         public IActionResult GetMemberId()
         {
             int memberId = MemberId; // 從 BaseController 獲取 MemberId
