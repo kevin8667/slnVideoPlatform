@@ -15,8 +15,232 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "[dbo].[ActorList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Article]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BlackList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CastList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ChatRoom]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Cinema]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CouponInfo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DirectorForVideoList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DirectorList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FIDOCredential]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FriendList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GenreList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GenresForVideoList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GiftInfo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GiftList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Hall]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ImageForVideoList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ImageList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Invite]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KeywordForVideoList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KeywordList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberCoupon]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberCreatedPlayList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberInfo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberNotice]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberPlayList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberRating]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NowShowingTheater]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Order]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PlanList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PlayList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PlayListCollaborator]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PlayListItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PointHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Post]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PostUserReactions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReservationDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SeasonList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Seat]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SeriesList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SessionSeats]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShoppingCart]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowingHall]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Showtime]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StreamingPlatformList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TheaterList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Theme]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Ticket]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TypeList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TypeOfTicket]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[UserReactions]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ValidCode]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VideoList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VideoStreamingLinkList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ArticleView]",
+         "ObjectType": 3
       }
    ],
    "UiHint": null,

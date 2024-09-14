@@ -5,11 +5,13 @@ using System.Collections.Generic;
 
 namespace VdbAPI.Models;
 
-public partial class OrderDetail
+public partial class PostUserReaction
 {
-    public int OrderDetailId { get; set; }
+    public int CountId { get; set; }
 
-    public int? OrderId { get; set; }
+    public int MemberId { get; set; }
 
-    public int? ProductId { get; set; }
+    public int PostId { get; set; }
+
+    public short? ReactionType { get; set; }
 }

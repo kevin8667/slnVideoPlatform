@@ -16,6 +16,4 @@ public partial class GiftList
     /// 贈品編號
     /// </summary>
     public int GiftId { get; set; }
-
-    public virtual GiftInfo Gift { get; set; }
 }
