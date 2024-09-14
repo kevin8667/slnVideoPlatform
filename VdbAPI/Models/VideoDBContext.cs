@@ -133,7 +133,7 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<ActorList>(entity =>
         {
-            entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
+            entity.HasKey(e => e.CountId).HasName("PK__PostUserReac");
 
             entity.ToTable("ActorList");
 
