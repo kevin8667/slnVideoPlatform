@@ -21,6 +21,7 @@ import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
   declarations: [
     AppComponent,
     TestComponent,
+    TicketReservationComponent,
   ],
   imports: [
     BrowserModule,
