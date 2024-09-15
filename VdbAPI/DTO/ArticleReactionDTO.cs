@@ -1,9 +1,9 @@
 ﻿namespace VdbAPI.DTO {
     public class ArticleReactionDTO {
-        public int MemberId {
+        public required int MemberId {
             get; set;
         }
-        public int ArticleId {
+        public required int ArticleId {
             get; set;
         }
     }

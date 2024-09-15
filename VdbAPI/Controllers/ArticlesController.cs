@@ -26,25 +26,40 @@ namespace VdbAPI.Controllers {
         public async Task<ActionResult<AllReactionsDTO>> GetUserReactions(ArticleReactionDTO dTO)
         {
             using var connection = new SqlConnection(_connection);
-            var sql = @"
-                        SELECT MemberId, ArticleId AS ContentId, ReactionType
-            FROM UserReactions
-            WHERE MemberId = @MemberId and ArticleId = @ArticleId;
+            // 第一次查詢 - 查詢文章反應
+            var articleReactionSql = @"
+        SELECT * 
+        FROM UserReactions
+        WHERE MemberId = @MemberId AND ArticleId = @ArticleId";
 
-            SELECT MemberId, PostId AS ContentId, ReactionType
-            FROM PostUserReactions
-            WHERE ArticleId = @ArticleId and MemberId = @MemberId";
-
-            using var multi = await connection.QueryMultipleAsync(sql,new {
+            var articleReaction = await connection.QueryFirstOrDefaultAsync<UserReaction>(articleReactionSql,new {
                 ArticleId = dTO.ArticleId,
                 MemberId = dTO.MemberId
             });
-            var articleReaction = await multi.ReadFirstOrDefaultAsync<LikeDTO>();
-            var postReactions = await multi.ReadAsync<LikeDTO>();
+            var postReactionsSql = @"
+                SELECT * 
+                FROM PostUserReactions
+                WHERE ArticleId = @ArticleId AND MemberId = @MemberId";
 
+            var postReactions = await connection.QueryAsync<PostUserReaction>(postReactionsSql,new {
+                ArticleId = dTO.ArticleId,
+                MemberId = dTO.MemberId
+            });
+            // 檢查 articleReaction 是否為 null，確保有反應結果
+            var article = articleReaction != null ? new LikeDTO {
+                ContentId = articleReaction.ArticleId,  // 確認使用正確的屬性名稱
+                MemberId = articleReaction.MemberId,
+                ReactionType = articleReaction.ReactionType,
+            } : null;
+            // 將 postReactions 中的每個 PostUserReaction 轉換為 PostDTO
+            var posts = postReactions.Select(pr => new LikeDTO {
+                ContentId = pr.PostId,
+                MemberId = pr.MemberId,
+                ReactionType = pr.ReactionType
+            });
             var result = new AllReactionsDTO {
-                ArticleReaction = articleReaction,
-                PostReactions = postReactions.ToList()
+                ArticleReaction = article,
+                PostReactions = posts.ToList()
             };
 
             return Ok(result);
