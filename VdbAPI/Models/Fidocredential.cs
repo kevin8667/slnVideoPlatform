@@ -26,8 +26,4 @@ public partial class Fidocredential
     public DateTime RegDateTime { get; set; }
 
     public DateTime? LastUsedDateTime { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
-
-    public virtual ICollection<MemberInfo> MemberInfos { get; set; } = new List<MemberInfo>();
 }

@@ -26,8 +26,4 @@ public partial class ReservationDetail
     public int? CouponId { get; set; }
 
     public int? TicketCount { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
-
-    public virtual Showtime Showtime { get; set; }
 }

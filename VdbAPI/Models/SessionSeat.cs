@@ -16,8 +16,4 @@ public partial class SessionSeat
     public byte? SeatStatus { get; set; }
 
     public int? ReservationId { get; set; }
-
-    public virtual Seat Seat { get; set; }
-
-    public virtual Showtime Showtime { get; set; }
 }
