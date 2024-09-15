@@ -73,7 +73,8 @@ const routes: Routes = [
     RadioButtonModule,
     InputTextareaModule,
     BreadcrumbModule,
-    CheckboxModule
+    CheckboxModule,
+    MessagesModule
   ],
   exports: [RouterModule],
 
