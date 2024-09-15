@@ -101,16 +101,19 @@ export class AuthService {
 
 
 
-  loginWithLine(binding: boolean) {
+  loginWithLine(binding:boolean) {
     debugger;
     const lineLoginUrl = 'https://access.line.me/oauth2/v2.1/authorize';
-    const clientId = '2006329488';
+    const clientId = '2006327640';
     const redirectUri = encodeURIComponent('http://localhost:4200/#/auth/callback');
     const state = '3'; // 生成一個隨機的 state 參數
     const scope = 'openid profile';
 
     const authUrl = `${lineLoginUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
-    this.setCookie("Binding", binding ? "Y" : "N", 1);
+    this.setCookie("Binding",binding?"Y":"N",1);
+
+
+
     window.location.href = authUrl;
   }
 
@@ -121,5 +124,8 @@ export class AuthService {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
+  
+  }
 
+  
 }

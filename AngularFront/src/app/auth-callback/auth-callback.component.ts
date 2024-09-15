@@ -68,12 +68,24 @@ if(this.authService.getCookie("Binding")=="Y")
           this.authService.SetLoginValue();
           this.authService.SetMemberData(response.data);
 
-        // Redirect to the home page or dashboard after successful login
-      //  this.router.navigate(['/']);
-      }, error => {
-        console.error('Error exchanging code for token', error);
-       // this.router.navigate(['./login']); // Redirect to login page or error page
-      });
+        }
+        if (response.isSuccess) {
+          if(response.data!="Binding"){
+          this.setCookie('JwtToken', response.data, 1);
+          this.authService.SetLoginValue();
+          }
+          this.router.navigateByUrl('login/mmain');
+        }else{
+          this.router.navigateByUrl('login');
+        }
+      },
+      error: (error) => {
+        console.error('Login error:', error);
+        alert('登入失敗');
+        // 刷新頁面
+        window.location.reload();
+      },
+    });
   }
 
   setCookie(name: string, value: string, days: number) {

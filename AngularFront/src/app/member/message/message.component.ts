@@ -27,7 +27,12 @@ export class MessageComponent implements OnInit {
       { label: '會員首頁', url: 'http://localhost:4200/login#/login/mmain' },
       { label: '我的通知', url: 'http://localhost:4200/login#/login/message' },
     ];
-    this.home = { icon: 'pi pi-home', url: 'login' };
+  onCheckedAllChange(event: boolean) {
+    this.checkedAll = event;
+    this.checkedAllTxt = this.checkedAll ? "取消全選" : "全選";
+    
+    // 根據 checkedAll 的狀態設置 checked 陣列
+    this.checked = this.checked.map(() => this.checkedAll);
   }
 
   toggleCheckbox(index: number) {
