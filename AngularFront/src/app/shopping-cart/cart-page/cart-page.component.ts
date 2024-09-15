@@ -14,12 +14,17 @@ export class CartPageComponent {
   sc: cartPage[] = []; //用model定義介面數據
   filterMemberId: number = 2;
 
+
   constructor(
     private CartPageService: CartPageService,
     private router: Router  // 注入 Angular 的 Router
-    ){}
+  ){}
 
   ngOnInit(): void {
+    this.loadshoppingCart();
+  }
+
+  loadshoppingCart(){
     // 訂閱服務返回的數據
     this.CartPageService.GetShoppingCarts().subscribe(
       data => {
@@ -74,8 +79,9 @@ export class CartPageComponent {
         console.error('Error fetching shopping carts:', error);
       }
     );
-
   }
+
+
   // 選擇購物車資料，傳到結帳頁面
   selectedItem: any;
   // 選擇某一行資料
@@ -99,6 +105,57 @@ export class CartPageComponent {
         console.error('Error navigating:', error);
       }
     }
+  }
 
+  //購物車model
+  newShoppingCart = {
+    memberId : 2,
+    planId: null,
+    videoId: null
+  };
+
+  //新增購物車(提交表單)
+  onSubmit(): void {
+    this.CartPageService.createShoppingCart(this.newShoppingCart)
+      .subscribe(
+        response => {
+          console.log('Shopping cart added:', response);
+          this.loadshoppingCart();
+          // 可以在這裡加入跳轉或成功訊息提示
+        },
+        error => {
+          console.error('Error adding shopping cart:', error);
+        }
+      );
+  }
+
+  //開關表單
+  showForm = false;  // 控制表單顯示狀態的布林變數
+  // 按鈕點擊事件處理方法，用於切換表單顯示狀態
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+  }
+
+  //刪除購物車
+  deleteShoppingCart(id: number): void {
+
+    // this.CartPageService.deleteShoppingCart(id).subscribe(() => {
+    //   console.log(`購物車 ${id} 已刪除`);
+    //   this.loadshoppingCart();// 刪除後重新載入資料
+    // }, error => {
+    //   console.error('刪除失敗:', error);
+    // });
+
+    // 顯示確認訊息
+    const confirmed = window.confirm('確定要刪除嗎？');
+
+    if (confirmed) {
+      this.CartPageService.deleteShoppingCart(id).subscribe(() => {
+        console.log(`購物車 ${id} 已刪除`);
+        this.loadshoppingCart(); // 刪除後重新載入資料
+      }, error => {
+        console.error('刪除失敗:', error);
+      });
+    }
   }
 }
