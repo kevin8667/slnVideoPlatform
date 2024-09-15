@@ -7,11 +7,11 @@ namespace VdbAPI.Models;
 
 public partial class ChatRoom
 {
-    public int ChatRoomId { get; set; }
+    public int? ChatRoomId { get; set; }
 
     public int SenderId { get; set; }
 
-    public DateTime SendTime { get; set; }
+    public DateTime? SendTime { get; set; }
 
     public string ChatMessage { get; set; }
 }

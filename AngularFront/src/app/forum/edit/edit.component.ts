@@ -157,7 +157,7 @@ export class EditComponent implements OnInit {
         themeId: formData.theme,
         title: formData.title,
         articleImage: '',
-        authorId: this.forumService.getCurrentUserId(), // 使用方法獲取當前用戶ID
+        authorId: this.forumService.getCurrentUser().id, // 使用方法獲取當前用戶ID
         lock: true,
         nickName: '',
         postDate: new Date(),
@@ -173,7 +173,7 @@ export class EditComponent implements OnInit {
         postContent: formData.content,
         articleId: this.articleId,
         postId: 0, // 新帖子ID由後端生成
-        posterId: this.forumService.getCurrentUserId(), // 使用方法獲取當前用戶ID
+        posterId: this.forumService.getCurrentUser().id, // 使用方法獲取當前用戶ID
         postDate: new Date(),
         lock: true,
         postImage: '',
