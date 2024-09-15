@@ -1,7 +1,9 @@
-<div class="container">
+<div class="main flex justify-content-center">
+  <div class="cornercontainer col-1"></div>
+<div class="maincontainer col-10">
    <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
   <div *ngIf="isLoading">正在加载好友信息...</div>
-  <button class="btn btn-outline-secondary" (click)="AddFriendClick()">
+  <button class="btnadd" (click)="AddFriendClick()">
     <img src="./../../../assets/img/Member/edit.png" alt="Edit" />新增好友
   </button>
   <div *ngIf="!isLoading">
@@ -28,11 +30,7 @@
                   <img
                     class="rounded-circle shadow-4-strong small-image img-fluid"
                     alt="Card"
-                    [src]="
-                      friend.photoPath == null || friend.photoPath == ''
-                        ? './../../../assets/img/Member/defaultMember.png'
-                        : friend.photoPath
-                    "
+                    [src]="friend.photoPath == null || friend.photoPath == '' ? './../../../assets/img/Member/defaultMember.png' : friend.photoPath "
                   />
                 </div>
               </ng-template>
@@ -153,7 +151,7 @@
       </ng-template>
     </p-carousel>
   </div>
-</div>
+
 
 <p-dialog
   header="邀請好友"
@@ -215,6 +213,10 @@
           (click)="hideDialog()"
         ></p-button>
       </p-footer>
-    </div>
+   </div>
   </div>
 </p-dialog>
+</div>
+
+<div class="cornercontainer col-1"></div>
+</div>

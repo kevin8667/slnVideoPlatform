@@ -4,15 +4,36 @@ h1,h2,h3,h4,h5,label,div {
   text-transform: uppercase;
 }
 
+div{
+  margin-top: 20px;
+}
+
 a {
   cursor: pointer;
 }
-.table{
+
+table {
   margin-top: 20px;
-padding: 10px;
-border: 1px solid #ddd;
-border-radius: 8px;
-background-color: #f9f9f9;
+  border-collapse: collapse; /* 合并边框 */
+  width: 100%; /* 确保表格宽度为100% */
 }
 
+table, th, td {
+  border: 2px solid #000000; /* 设定较细的边框 */
+  background-color: #f9f9f9; /* 背景色 */
+}
 
+th, td {
+  padding: 10px; /* 添加内边距 */
+  text-align: left; /* 左对齐 */
+}
+
+thead th {
+  background-color: #17a2b8;
+  ; /* 表头背景色 */
+}
+
+tr:hover td {
+  cursor: pointer;
+  background-color: #00c8d6; /* 鼠标悬停时的背景色 */
+}
