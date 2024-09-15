@@ -76,7 +76,18 @@ height:40px;
   transform: scale(0.95);
 }
 
-.btncancel:hover ,:focus{
+button{
+  height: 28px; border: 0; background-color: #17a2b8;
+}
+
+
+button:hover , :focus {
+  background-color: #00c8d6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+  cursor: pointer ;
+}
+
+.btncancel:hover ,:focus {
   cursor: pointer ;
   background: #00c8d6;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);

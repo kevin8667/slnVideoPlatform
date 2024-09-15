@@ -30,7 +30,7 @@ namespace VdbAPI.Controllers
                 }
                 else
                 {
-                    string jwtToken = CreateJwtToken(mInfo.FirstOrDefault());
+                    string jwtToken = AccountService.CreateJwtToken(mInfo.FirstOrDefault());
                     rtn.IsSuccess = true;
                     rtn.Data = jwtToken;
                     return rtn;
@@ -43,23 +43,7 @@ namespace VdbAPI.Controllers
                 return rtn;
             }
         }
-        //create jwt token 
-        private string CreateJwtToken(mMemberInfo mInfo)
-        {
-            string secretKey = "JarryYa";
-            byte[] secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-
-            // 使用 HMAC SHA-256 加密方式生成 JWT
-            JwtAuthObject jwtObj = new JwtAuthObject();
-            jwtObj.Email = mInfo.Email;
-            jwtObj.MemberId = (int)mInfo.MemberID;
-            jwtObj.ExpiredTime = DateTime.Now.AddMinutes(10).ToFileTime();
-
-            string token = JWT.Encode(jwtObj, secretKeyBytes, JwsAlgorithm.HS256);
-
-            return token;
-        }
-
+       
 
         [Route("api/[controller]/[action]")]
         [HttpPost]

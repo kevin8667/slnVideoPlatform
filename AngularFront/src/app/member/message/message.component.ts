@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MemberService } from './../member.service';
 import { Router } from '@angular/router';
-
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-message',
@@ -13,7 +13,11 @@ export class MessageComponent implements OnInit {
   messages: any[] = [];
   items: any[] = [];
   home: any;
-
+  checked: boolean[] = [];
+  checkedAll: boolean = false;
+  checkedAllTxt: string = '全選';
+  searchTerm: string = '';
+  filteredMessages: any[] = [];
 
   constructor(private memberService: MemberService, private router: Router) {}
 
@@ -23,21 +27,36 @@ export class MessageComponent implements OnInit {
       { label: '會員首頁', url: 'login/mmain' },
       { label: '我的通知', url: 'login/friends' },
     ];
-
     this.home = { icon: 'pi pi-home', url: 'login' };
   }
-  filteredMessages = [...this.messages]; // 初始化為所有訊息
+
+  toggleCheckbox(index: number) {
+    // 切換特定行的複選框狀態
+    this.checked[index] = !this.checked[index];
+    this.updateSelectAllCheckbox();
+  }
+
+  onCheckedAllChange(event: boolean) {
+    this.checkedAll = event;
+    this.checkedAllTxt = this.checkedAll ? "取消全選" : "全選";
+    
+    // 根據 checkedAll 的狀態設置 checked 陣列
+    this.checked = this.checked.map(() => this.checkedAll);
+  }
+
+  updateSelectAllCheckbox() {
+    this.checkedAll = this.checked.every(checked => checked);
+    this.checkedAllTxt = this.checkedAll ? "取消全選" : "全選";
+  }
+
   readmessages() {
     this.memberService.readmemberNoticeAll().subscribe({
       next: (response) => {
-        console.log('response:', response);
-
         if (response.hasAlertMsg) {
           alert(response.alertMsg);
         }
 
         if (response.isSuccess) {
-          // 直接使用 response.datas 而不是 response.data.datas
           if (Array.isArray(response.datas)) {
             this.messages = response.datas;
 
@@ -48,12 +67,13 @@ export class MessageComponent implements OnInit {
               }
             });
 
-            // 初始化 filteredMessages
+            // 初始化 filteredMessages 和 checked
             this.filteredMessages = [...this.messages];
+            this.checked = new Array(this.filteredMessages.length).fill(false);
           } else {
             console.error('返回的數據不是一個有效的陣列:', response.datas);
-            this.messages = []; // 或者根据需要进行其他处理
-            this.filteredMessages = []; // 更新 filteredMessages
+            this.messages = [];
+            this.filteredMessages = [];
           }
         }
       },
@@ -65,13 +85,54 @@ export class MessageComponent implements OnInit {
     });
   }
 
-  searchMessages(event: Event) {
-    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase(); // 獲取搜尋詞
+  searchMessages() {
+    const searchTerm = this.searchTerm.toLowerCase();
+  
+    // 檢查 searchTerm 是否為 null 或者是否只包含空白字符
+    if (!searchTerm || searchTerm.trim() === '') {
+      alert('請輸入文字');
+      return; // 退出方法
+    }
+  
+    // 根據 searchTerm 過濾消息
     this.filteredMessages = this.messages.filter(message =>
       message.title.toLowerCase().includes(searchTerm) ||
       message.noticeContent.toLowerCase().includes(searchTerm)
     );
+
+    // 更新 checked 陣列的長度
+    this.checked = new Array(this.filteredMessages.length).fill(false);
   }
+
+  deleteMessages() {
+    const selectedMessages = this.filteredMessages.filter((_, index) => this.checked[index]);
+
+    if (selectedMessages.length === 0) {
+        alert('请选中要删除的消息');
+        return;
+    }
+
+    const confirmDelete = confirm('您确定要删除所选的消息吗？');
+    if (!confirmDelete) {
+        return;
+    }
+
+    const deleteRequests = selectedMessages.map(message => {
+        console.log(`尝试删除消息 ID: ${message.memberNoticeID}`);
+        return this.memberService.DeleteMemberNotice(message.memberNoticeID);
+    });
+
+    forkJoin(deleteRequests).subscribe({
+        next: responses => {
+            alert('选定的消息已成功删除。'); // 提供成功反馈
+            this.readmessages(); // 刷新消息列表
+        },
+        error: error => {
+            console.error('删除消息时发生错误:', error);
+            alert('删除消息时发生错误，请稍后再试。');
+        }
+    });
+}
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);

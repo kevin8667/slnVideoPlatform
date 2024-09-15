@@ -24,9 +24,10 @@ namespace VdbAPI.Controllers {
             }
         }
 
-
-        //create jwt token 
-
-
+        public void SetNoticeMessage(string memberid, string title, string content, string action) 
+        {
+            MemberHelper mHelper = new MemberHelper(memberid);
+            mHelper.SetNoticeMessage(memberid, title, content, action);
+        }
     }
 }
