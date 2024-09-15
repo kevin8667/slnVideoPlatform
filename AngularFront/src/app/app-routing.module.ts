@@ -4,10 +4,12 @@ import { AppComponent } from './app.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./video-db/video-db.module').then(m => m.VideoDbModule)  },
   { path: 'login', loadChildren: () => import('./member/member.module').then(m => m.MemberModule)},
+  { path: 'auth/callback', component: AuthCallbackComponent },
   {
     path: 'playlist',
     loadChildren: () =>

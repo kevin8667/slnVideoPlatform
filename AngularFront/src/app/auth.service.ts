@@ -72,4 +72,32 @@ export class AuthService {
       })
     );
   }
+
+
+  private lineAuthUrl = 'https://access.line.me/oauth2/v2.1/authorize';
+  private clientId = '2006327640';
+  private redirectUri = 'http://localhost:4200/auth/callback';
+
+
+  loginWithLine() {
+    debugger;
+    const lineLoginUrl = 'https://access.line.me/oauth2/v2.1/authorize';
+    const clientId = '2006327640';
+    const redirectUri = encodeURIComponent('http://localhost:4200/#/auth/callback');
+    const state = '3'; // 生成一個隨機的 state 參數
+    const scope = 'openid profile';
+
+const authUrl = `${lineLoginUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
+
+
+
+
+    window.location.href = authUrl;
+  }
+
+  handleCallback() {
+    // Handle the callback, extract authorization code, and exchange it for a token.
+  }
+
+  
 }

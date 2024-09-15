@@ -33,7 +33,9 @@ export class LoginComponent implements AfterViewInit {
     console.log('Login()');
     /* this.oauthService.initLoginFlow();*/
   }
-
+  LineLogin() {
+    this.authService.loginWithLine();
+  }
   ngAfterViewInit() {
     if (typeof grecaptcha === 'undefined') {
       // 動態加載 reCAPTCHA 腳本
