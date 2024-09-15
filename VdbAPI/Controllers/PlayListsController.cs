@@ -483,33 +483,33 @@ namespace VdbAPI.Controllers
             return Ok(playlists);
         }
 
-        //[HttpGet("collaborators/{playlistId?}")]
-        //public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int? playlistId)
-        //{
-        //    if (playlistId.HasValue)
-        //    {                
-        //        var collaborators = await _context.PlayListCollaborators
-        //            .Where(c => c.PlayListId == playlistId.Value)
-        //            .Select(c => new MemberInfoDTO
-        //            {
-        //                MemberId = c.Member.MemberId,
-        //                MemberName = c.Member.MemberName,
-        //                PhotoPath = c.Member.PhotoPath ?? "/assets/img/memberooo.png"
-        //            })
-        //            .ToListAsync();
+        [HttpGet("collaborators/{playlistId?}")]
+        public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int? playlistId)
+        {
+            if (playlistId.HasValue)
+            {
+                var collaborators = await _context.PlayListCollaborators
+                    .Where(c => c.PlayListId == playlistId.Value)
+                    .Select(c => new MemberInfoDTO
+                    {
+                        MemberId = c.Member.MemberId,
+                        MemberName = c.Member.MemberName,
+                        PhotoPath = c.Member.PhotoPath ?? "/assets/img/memberooo.png"
+                    })
+                    .ToListAsync();
 
-        //        return Ok(collaborators);
-        //    }
-        //    else
-        //    {                
-        //        var allCollaborators = await _context.MemberInfos
-        //            .Select(m => new MemberInfoDTO
-        //            {
-        //                MemberId = m.MemberId,
-        //                MemberName = m.MemberName,
-        //                PhotoPath = m.PhotoPath ?? "/assets/img/memberooo.png"
-        //            })
-        //            .ToListAsync();
+                return Ok(collaborators);
+            }
+            else
+            {
+                var allCollaborators = await _context.MemberInfos
+                    .Select(m => new MemberInfoDTO
+                    {
+                        MemberId = m.MemberId,
+                        MemberName = m.MemberName,
+                        PhotoPath = m.PhotoPath ?? "/assets/img/memberooo.png"
+                    })
+                    .ToListAsync();
 
         //        return Ok(allCollaborators);
         //    }
