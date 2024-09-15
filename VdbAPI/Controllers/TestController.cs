@@ -61,23 +61,23 @@ namespace VdbAPI.Controllers
             return await _dbContext.VideoLists.ToListAsync();
         }
 
-        [HttpGet("cinemas")]
-        public async Task<ActionResult<IEnumerable<Cinema>>> GetCinemas()
-        {
-            var cinemas = await _dbContext.Cinemas
-                .Include(c => c.Halls)
-                .Include(c => c.NowShowingTheaters)
-                .ToListAsync();
+        //[HttpGet("cinemas")]
+        //public async Task<ActionResult<IEnumerable<Cinema>>> GetCinemas()
+        //{
+        //    var cinemas = await _dbContext.Cinemas
+        //        ////.Include(c => c.Halls)
+        //        //.Include(c => c.NowShowingTheaters)
+        //        //.ToListAsync();
 
-            // Use ReferenceHandler.Preserve to handle object cycles
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve,
-                WriteIndented = true
-            };
+        //    // Use ReferenceHandler.Preserve to handle object cycles
+        //    var options = new JsonSerializerOptions
+        //    {
+        //        ReferenceHandler = ReferenceHandler.Preserve,
+        //        WriteIndented = true
+        //    };
 
-            return new JsonResult(cinemas, options);
-        }
+        //    return new JsonResult(cinemas, options);
+        //}
 
     }
 }

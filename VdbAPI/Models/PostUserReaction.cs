@@ -9,9 +9,11 @@ public partial class PostUserReaction
 {
     public int CountId { get; set; }
 
-    public int MemberId { get; set; }
+    public int ArticleId { get; set; }
 
     public int PostId { get; set; }
 
-    public short? ReactionType { get; set; }
+    public int MemberId { get; set; }
+
+    public bool ReactionType { get; set; }
 }
