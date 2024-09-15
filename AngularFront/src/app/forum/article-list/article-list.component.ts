@@ -20,6 +20,7 @@ import { SignalRService } from 'src/app/services/forumService/signal-r.service';
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.css'],
+  providers: [SignalRService],
 })
 export class ArticleListComponent implements OnInit, AfterViewChecked {
   articles: ArticleView[] = [];
@@ -32,6 +33,10 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   messages: Chatroom[] = [];
   private messageSubscription?: Subscription;
 
+  message = '';
+  messages: Chatroom[] = [];
+  private messageSubscription?: Subscription;
+  currentUserId = 0;
   forumDto = {
     categoryId: 0,
     keyword: '',
@@ -86,6 +91,9 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     this.scrollToBottom();
   }
   ngOnInit(): void {
+    this.currentUserId = this.forumService.getCurrentUser().id
+      ? this.forumService.getCurrentUser().id
+      : 0;
     this.load();
     this.forumService.user$.subscribe((data) => {
       if (data) this.user = data;
