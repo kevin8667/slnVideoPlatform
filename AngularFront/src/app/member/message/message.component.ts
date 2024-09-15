@@ -24,8 +24,8 @@ export class MessageComponent implements OnInit {
   ngOnInit() {
     this.readmessages();
     this.items = [
-      { label: '會員首頁', url: 'login/mmain' },
-      { label: '我的通知', url: 'login/friends' },
+      { label: '會員首頁', url: 'http://localhost:4200/login#/login/mmain' },
+      { label: '我的通知', url: 'http://localhost:4200/login#/login/message' },
     ];
     this.home = { icon: 'pi pi-home', url: 'login' };
   }
@@ -108,28 +108,28 @@ export class MessageComponent implements OnInit {
     const selectedMessages = this.filteredMessages.filter((_, index) => this.checked[index]);
 
     if (selectedMessages.length === 0) {
-        alert('请选中要删除的消息');
+        alert('請選擇要刪除的訊息');
         return;
     }
 
-    const confirmDelete = confirm('您确定要删除所选的消息吗？');
+    const confirmDelete = confirm('確定要刪除訊息嗎');
     if (!confirmDelete) {
         return;
     }
 
     const deleteRequests = selectedMessages.map(message => {
-        console.log(`尝试删除消息 ID: ${message.memberNoticeID}`);
+        console.log(`嘗試刪除訊息 ID: ${message.memberNoticeID}`);
         return this.memberService.DeleteMemberNotice(message.memberNoticeID);
     });
 
     forkJoin(deleteRequests).subscribe({
         next: responses => {
-            alert('选定的消息已成功删除。'); // 提供成功反馈
+            alert('成功刪除訊息'); // 提供成功反馈
             this.readmessages(); // 刷新消息列表
         },
         error: error => {
-            console.error('删除消息时发生错误:', error);
-            alert('删除消息时发生错误，请稍后再试。');
+            console.error('刪除訊息時發生錯誤:', error);
+            alert('刪除訊息時發生錯誤，請稍後再試');
         }
     });
 }

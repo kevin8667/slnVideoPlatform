@@ -61,8 +61,8 @@ export class FriendsComponent implements OnInit {
     ];
 
     this.items = [
-      { label: '會員首頁', url: 'login/mmain' },
-      { label: '我的好友', url: 'login/friends' },
+      { label: '會員首頁', url: 'http://localhost:4200/#/login/mmain' },
+      { label: '我的好友', url: 'http://localhost:4200/#/login/friends' },
     ];
 
     this.home = { icon: 'pi pi-home', url: 'login' };
@@ -132,29 +132,39 @@ export class FriendsComponent implements OnInit {
 
       error: (error) => {
         console.error('addFriend error:', error);
-        alert('addFriend error');
+        alert('新增好友失敗');
       },
     });
   }
 
   removeFriend(friendId: number) {
-    debugger;
-    this.memberService.DeleteFriend(friendId).subscribe({
-      next: (response) => {
-        if (response.isSuccess) {
-        }
-        if (response.hasAlertMsg) {
-          alert(response.alertMsg);
-        }
+    // 顯示確認對話框
+    const isConfirmed = confirm("您確定要刪除這個好友嗎?");
 
-        this.loadFriends();
-      },
+    // 如果用戶確認,則繼續刪除
+    if (isConfirmed) {
+        this.memberService.DeleteFriend(friendId).subscribe({
+            next: (response) => {
+                if (response.isSuccess) {
+                    // 可選,您可以在此顯示成功消息
+                    alert('好友刪除成功。');
+                }
+                if (response.hasAlertMsg) {
+                    alert(response.alertMsg);
+                }
 
-      error: (error) => {
-        console.error('removeFriends error:', error);
-        alert('removeFriends error');
-      },
-    });
+                // 刪除後重新加載好友列表
+                this.loadFriends();
+            },
+            error: (error) => {
+                console.error('removeFriends error:', error);
+                alert('刪除好友時發生錯誤。');
+            },
+        });
+    } else {
+        // 用戶取消了操作
+        alert('取消刪除好友。');
+    }
 }
 
   AddFriendClick() {
@@ -178,7 +188,7 @@ export class FriendsComponent implements OnInit {
       },
       error: (error) => {
         console.error('loadFriends error:', error);
-        alert('loadFriends error');
+        alert('請輸入好友編號');
       },
       complete: () => {
         this.isLoading = false;
@@ -187,7 +197,7 @@ export class FriendsComponent implements OnInit {
   }
   sendInvitation(){
     if(!this.sendMsg || this.sendMsg.trim() === ''){
-      alert('請輸入邀請訊息。');
+      alert('請輸入邀請訊息');
       return;
     }
 
@@ -205,10 +215,10 @@ export class FriendsComponent implements OnInit {
       },
       error: (error) => {
         if(!this.sendMsg || this.sendMsg.trim() === ''){
-          alert('請輸入邀請訊息。')
+          alert('請輸入邀請訊息')
         }
         console.error('loadFriends error:', error);
-        alert('sendInvitation error');
+        alert('寄送邀請訊息失敗');
       },
       complete: () => {
         this.isLoading = false;

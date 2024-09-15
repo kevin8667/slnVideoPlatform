@@ -71,7 +71,7 @@ export class MmainComponent implements OnInit {
       },
       error: (error) => {
         console.error('SaveData error:', error);
-        alert('SaveData 失敗');
+        alert('儲存資料失敗');
       },
     });
   }
@@ -173,7 +173,7 @@ export class MmainComponent implements OnInit {
             },
             error: (error) => {
               console.error('SaveData error:', error);
-              alert('保存資料失敗');
+              alert('儲存資料失敗');
             },
           });
         } else {

@@ -20,8 +20,8 @@ export class HistoryComponent  implements OnInit{
 
   ngOnInit() {
   this.items = [
-    { label: '會員首頁', url: 'login/mmain' },
-    { label: '購物紀錄', url: 'login/friends' },
+    { label: '會員首頁', url: 'http://localhost:4200/login#/login/mmain' },
+    { label: '購物紀錄', url: 'http://localhost:4200/#/login/history' },
   ];
 
   this.home = { icon: 'pi pi-home', url: 'login' };
