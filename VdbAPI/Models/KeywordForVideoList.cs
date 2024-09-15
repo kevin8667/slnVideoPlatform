@@ -12,8 +12,4 @@ public partial class KeywordForVideoList
     public int? KeywordId { get; set; }
 
     public int? VideoId { get; set; }
-
-    public virtual KeywordList Keyword { get; set; }
-
-    public virtual VideoList Video { get; set; }
 }

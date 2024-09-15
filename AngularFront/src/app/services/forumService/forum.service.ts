@@ -1,31 +1,35 @@
 // forum.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  firstValueFrom,
-  lastValueFrom,
-  Observable,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Theme } from '../interfaces/forumInterface/Theme';
-import { ForumPagingDTO } from '../interfaces/forumInterface/ForumPagingDTO';
-import { ArticleView } from '../interfaces/forumInterface/ArticleView';
-import { Post } from '../interfaces/forumInterface/Post';
+import { Theme } from '../../interfaces/forumInterface/Theme';
+import { ForumPagingDTO } from '../../interfaces/forumInterface/ForumPagingDTO';
+import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
+import { Post } from '../../interfaces/forumInterface/Post';
+import { LikeDTO } from '../../interfaces/forumInterface/LikeDTO';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
 @Injectable({
   providedIn: 'root',
 })
 export default class ForumService {
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
-
+  private userSubject: BehaviorSubject<{ id: number; name: string }>;
+  public user$: Observable<{ id: number; name: string }>;
   constructor(private client: HttpClient, private sanitizer: DomSanitizer) {
     this.loadThemeTags();
+    this.userSubject = new BehaviorSubject<{ id: number; name: string }>({
+      id: 1,
+      name: '管理員',
+    });
+    this.user$ = this.userSubject.asObservable();
   }
 
+  getCurrentUser() {
+    return this.userSubject.value;
+  }
   loadThemeTags(): void {
     const api = 'https://localhost:7193/api/Articles/Theme';
     this.client.get<Theme[]>(api).subscribe({
@@ -105,5 +109,24 @@ export default class ForumService {
   createPost(data: Post) {
     const api = 'https://localhost:7193/api/Posts';
     return this.client.post(api, data);
+  }
+  loadQuill() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '../../../assets/css/quill.snow.css';
+    document.head.appendChild(link);
+  }
+  ArticleCount(data: LikeDTO) {
+    const api = 'https://localhost:7193/api/Articles/React';
+    return this.client.post(api, data);
+  }
+  PostCount(data: LikeDTO) {
+    const api = 'https://localhost:7193/api/Posts/React';
+    return this.client.post(api, data);
+  }
+  getUserReaction(memberId: number, articleId: number) {
+    const api = 'https://localhost:7193/api/Articles/UserReactions';
+    const ArticleReactionDTO = { memberId: memberId, articleId: articleId };
+    return this.client.post<AllReactionsDTO>(api, ArticleReactionDTO);
   }
 }

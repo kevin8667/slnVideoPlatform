@@ -57,73 +57,73 @@ namespace VdbAPI.Controllers
             return Ok(videoList);
         }
 
-        [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<VideoListDTO>>> SearchVideos(
-            string? videoName,
-            int? typeId,
-            string? summary,
-            [FromQuery(Name = "genreNames")] List<string>? genreNames,
-            string? seriesName,
-            string? seasonName)
-        {
-            var query = _context.VideoLists
-                .Include(v => v.MainGenre)
-                .Include(v => v.Series)
-                .Include(v => v.Season)
-                .Include(v => v.Type)
-                .AsQueryable();
+        //[HttpGet("search")]
+        //public async Task<ActionResult<IEnumerable<VideoListDTO>>> SearchVideos(
+        //    string? videoName,
+        //    int? typeId,
+        //    string? summary,
+        //    [FromQuery(Name = "genreNames")] List<string>? genreNames,
+        //    string? seriesName,
+        //    string? seasonName)
+        //{
+        //    var query = _context.VideoLists
+        //        .Include(v => v.MainGenre)
+        //        .Include(v => v.Series)
+        //        .Include(v => v.Season)
+        //        .Include(v => v.Type)
+        //        .AsQueryable();
 
-            if (!string.IsNullOrEmpty(videoName))
-            {
-                query = query.Where(v => v.VideoName.Contains(videoName));
-            }
+        //    if (!string.IsNullOrEmpty(videoName))
+        //    {
+        //        query = query.Where(v => v.VideoName.Contains(videoName));
+        //    }
 
-            if (typeId.HasValue)
-            {
-                query = query.Where(v => v.TypeId == typeId);
-            }
+        //    if (typeId.HasValue)
+        //    {
+        //        query = query.Where(v => v.TypeId == typeId);
+        //    }
 
-            if (!string.IsNullOrEmpty(summary))
-            {
-                query = query.Where(v => v.Summary.Contains(summary));
-            }
+        //    if (!string.IsNullOrEmpty(summary))
+        //    {
+        //        query = query.Where(v => v.Summary.Contains(summary));
+        //    }
 
-            if (genreNames != null && genreNames.Any())
-            {
-                query = query.Where(v => genreNames.Contains(v.MainGenre.GenreName));
-            }
+        //    if (genreNames != null && genreNames.Any())
+        //    {
+        //        query = query.Where(v => genreNames.Contains(v.MainGenre.GenreName));
+        //    }
 
-            if (!string.IsNullOrEmpty(seriesName))
-            {
-                query = query.Where(v => v.Series.SeriesName.Contains(seriesName));
-            }
+        //    if (!string.IsNullOrEmpty(seriesName))
+        //    {
+        //        query = query.Where(v => v.Series.SeriesName.Contains(seriesName));
+        //    }
 
-            if (!string.IsNullOrEmpty(seasonName))
-            {
-                query = query.Where(v => v.Season.SeasonName.Contains(seasonName));
-            }
+        //    if (!string.IsNullOrEmpty(seasonName))
+        //    {
+        //        query = query.Where(v => v.Season.SeasonName.Contains(seasonName));
+        //    }
 
-            var videoListDTOs = await query
-                .Select(v => new VideoListDTO
-                {
-                    VideoId = v.VideoId,
-                    VideoName = v.VideoName,
-                    TypeId = v.TypeId,
-                    TypeName = v.Type.TypeName,
-                    Summary = v.Summary,
-                    SeriesId = v.SeriesId,
-                    SeriesName = v.Series.SeriesName,
-                    SeasonId = v.SeasonId,
-                    SeasonName = v.Season.SeasonName,
-                    MainGenreId = v.MainGenreId,
-                    MainGenreName = v.MainGenre.GenreName,
-                    ThumbnailPath = v.ThumbnailPath,
-                    Bgpath = v.Bgpath
+        //    var videoListDTOs = await query
+        //        .Select(v => new VideoListDTO
+        //        {
+        //            VideoId = v.VideoId,
+        //            VideoName = v.VideoName,
+        //            TypeId = v.TypeId,
+        //            TypeName = v.Type.TypeName,
+        //            Summary = v.Summary,
+        //            SeriesId = v.SeriesId,
+        //            SeriesName = v.Series.SeriesName,
+        //            SeasonId = v.SeasonId,
+        //            SeasonName = v.Season.SeasonName,
+        //            MainGenreId = v.MainGenreId,
+        //            MainGenreName = v.MainGenre.GenreName,
+        //            ThumbnailPath = v.ThumbnailPath,
+        //            Bgpath = v.Bgpath
 
-                }).ToListAsync();
+        //        }).ToListAsync();
 
-            return Ok(videoListDTOs);
-        }
+        //    return Ok(videoListDTOs);
+        //}
 
         // PUT: api/VideoList/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

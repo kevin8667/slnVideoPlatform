@@ -5,7 +5,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView';
 import { Post } from 'src/app/interfaces/forumInterface/Post';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
-import ForumService from 'src/app/service/forum.service';
+import ForumService from 'src/app/services/forumService/forum.service';
 
 @Component({
   selector: 'app-edit',
@@ -18,7 +18,8 @@ export class EditComponent implements OnInit {
   formSubmitted: boolean = false;
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
-    if (this.shouldShowWarning()) {
+    // 只有當表單已修改且未提交時，才顯示提示
+    if (this.articleForm.dirty) {
       $event.returnValue = true;
     }
   }
@@ -40,6 +41,7 @@ export class EditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.forumService.loadQuill();
     this.initializeParams();
 
     this.initializeForm();
@@ -117,6 +119,7 @@ export class EditComponent implements OnInit {
 
   onSubmit(): void {
     if (this.articleForm.invalid) return;
+
     this.isSubmitting = true;
 
     const formData = this.articleForm.getRawValue();
@@ -125,12 +128,9 @@ export class EditComponent implements OnInit {
     action.call(this, formData).subscribe({
       next: (response) => {
         console.log(response);
-        this.formSubmitted = true;
-        this.articleForm.markAsPristine();
       },
       error: (err) => this.handleError(err),
       complete: () => {
-        this.isSubmitting = false;
         this.navigateBack();
       },
     });
@@ -157,7 +157,7 @@ export class EditComponent implements OnInit {
         themeId: formData.theme,
         title: formData.title,
         articleImage: '',
-        authorId: this.getCurrentUserId(), // 使用方法獲取當前用戶ID
+        authorId: this.forumService.getCurrentUser().id, // 使用方法獲取當前用戶ID
         lock: true,
         nickName: '',
         postDate: new Date(),
@@ -173,7 +173,7 @@ export class EditComponent implements OnInit {
         postContent: formData.content,
         articleId: this.articleId,
         postId: 0, // 新帖子ID由後端生成
-        posterId: this.getCurrentUserId(), // 使用方法獲取當前用戶ID
+        posterId: this.forumService.getCurrentUser().id, // 使用方法獲取當前用戶ID
         postDate: new Date(),
         lock: true,
         postImage: '',
@@ -184,10 +184,6 @@ export class EditComponent implements OnInit {
     }
   }
 
-  private getCurrentUserId(): number {
-    // TODO: 實現獲取當前用戶ID的邏輯
-    return 2; // 暫時返回固定值
-  }
 
   openFile() {
     this.fileInput.nativeElement.click();
@@ -253,12 +249,5 @@ export class EditComponent implements OnInit {
         this.router.navigate(['/forum']);
       }
     }, 0);
-  }
-  private shouldShowWarning(): boolean {
-    return this.articleForm.dirty && !this.isSubmitting && !this.formSubmitted;
-  }
-
-  canDeactivate(): boolean {
-    return !this.shouldShowWarning() || window.confirm('您有未保存的更改。確定要離開嗎？');
   }
 }

@@ -1,8 +1,7 @@
 ﻿using Dapper;
-
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 using System.Text;
@@ -21,6 +20,71 @@ namespace VdbAPI.Controllers {
         {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
+        }
+        [HttpPost("React")]
+        public async Task<IActionResult> React(LikeDTO likeDTO)
+        {
+            var post = await _context.Posts.FindAsync(likeDTO.ContentId);
+            if(post == null)
+                return NotFound("回文不存在");
+
+            using var connection = new SqlConnection(_connection);
+
+            try {
+                // SQL 處理 UserReactions
+                var postUserReaction = await _context.PostUserReactions
+                            .FirstOrDefaultAsync(ur => ur.PostId == likeDTO.ContentId);
+                string sql = @"select articleId from post where PostId = @PostId";
+                int? articleId = await connection.QueryFirstOrDefaultAsync<int?>(sql,new {
+                    PostId = likeDTO.ContentId
+                });
+
+                if(!articleId.HasValue)
+                    return NotFound("回文不存在");
+
+                if(likeDTO.ReactionType.HasValue) {
+                    if(postUserReaction == null) {
+                        postUserReaction = new PostUserReaction {
+                            MemberId = likeDTO.MemberId,
+                            ArticleId = articleId.Value,
+                            ReactionType = likeDTO.ReactionType.Value,
+                            PostId = likeDTO.ContentId,
+                        };
+                        // 沒有紀錄就加一筆
+                        _context.PostUserReactions.Add(postUserReaction);
+                    }
+                    else {
+                        postUserReaction.ReactionType = likeDTO.ReactionType.Value; //有紀錄就改值
+                    }
+                }
+                else {
+                    if(postUserReaction != null) {
+                        _context.PostUserReactions.Remove(postUserReaction); //被取消就刪掉舊紀錄
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                var sqlGetCounts = @"
+                SELECT 
+                (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 1) AS LikeCount,
+                (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 0) AS DislikeCount";
+
+                var counts = await connection.QueryFirstAsync(sqlGetCounts,new {
+                    PostId = likeDTO
+                .ContentId
+                });
+
+                // 更新文章的計數
+                post.LikeCount = counts.LikeCount;
+                post.DislikeCount = counts.DislikeCount;
+                await _context.SaveChangesAsync();
+
+                return Ok(counts);
+            }
+            catch(Exception ex) {
+                return StatusCode(500,"錯誤原因: " + ex.Message);
+            }
         }
 
         // GET: api/Posts
@@ -117,9 +181,9 @@ namespace VdbAPI.Controllers {
                     PostDate = DateTime.UtcNow,
                     PosterId = postDTO.PosterId,
                     PostImage = "",
-                    //LikeCount = 0,
-                    //DislikeCount = 0,
-                    
+                    LikeCount = 0,
+                    DislikeCount = 0,
+
                 };
                 _context.Posts.Add(post);
 
@@ -127,6 +191,7 @@ namespace VdbAPI.Controllers {
                 if(article != null) {
 
                     article.ReplyCount++;                  // 回覆次數增加 1
+                    article.UpdateDate = DateTime.UtcNow;
                     _context.Articles.Update(article);
                 }
 

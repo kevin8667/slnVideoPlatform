@@ -21,37 +21,37 @@ namespace VdbAPI.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
-        {
-            var playlists = await _context.PlayLists
-                .Include(pl => pl.PlayListItems)
-                    .ThenInclude(pli => pli.Video)
-                .Select(pl => new PlaylistDTO
-                {
-                    PlayListId = pl.PlayListId,
-                    PlayListName = pl.PlayListName,
-                    PlayListDescription = pl.PlayListDescription,
-                    ViewCount = pl.ViewCount,
-                    LikeCount = pl.LikeCount,
-                    AddedCount = pl.AddedCount,
-                    SharedCount = pl.SharedCount,
-                    ShowImage = pl.ShowImage,
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
+        //{
+        //    var playlists = await _context.PlayLists
+        //        .Include(pl => pl.PlayListItems)
+        //            .ThenInclude(pli => pli.Video)
+        //        .Select(pl => new PlaylistDTO
+        //        {
+        //            PlayListId = pl.PlayListId,
+        //            PlayListName = pl.PlayListName,
+        //            PlayListDescription = pl.PlayListDescription,
+        //            ViewCount = pl.ViewCount,
+        //            LikeCount = pl.LikeCount,
+        //            AddedCount = pl.AddedCount,
+        //            SharedCount = pl.SharedCount,
+        //            ShowImage = pl.ShowImage,
                     
-                    Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
-                    {
-                        PlayListId = pli.PlayListId,
-                        VideoId = pli.Video.VideoId,
-                        VideoPosition = pli.VideoPosition,
-                        VideoName = pli.Video.VideoName,
-                        ThumbnailPath = pli.Video.ThumbnailPath,
-                        Episode = pli.Video.Episode
-                    }).ToList()
-                })
-                .ToListAsync();
+        //            Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
+        //            {
+        //                PlayListId = pli.PlayListId,
+        //                VideoId = pli.Video.VideoId,
+        //                VideoPosition = pli.VideoPosition,
+        //                VideoName = pli.Video.VideoName,
+        //                ThumbnailPath = pli.Video.ThumbnailPath,
+        //                Episode = pli.Video.Episode
+        //            }).ToList()
+        //        })
+        //        .ToListAsync();
 
-            return Ok(playlists);
-        }
+        //    return Ok(playlists);
+        //}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PlaylistDTO>> GetPlayList(int id)
@@ -483,33 +483,33 @@ namespace VdbAPI.Controllers
             return Ok(playlists);
         }
 
-        [HttpGet("collaborators/{playlistId?}")]
-        public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int? playlistId)
-        {
-            if (playlistId.HasValue)
-            {                
-                var collaborators = await _context.PlayListCollaborators
-                    .Where(c => c.PlayListId == playlistId.Value)
-                    .Select(c => new MemberInfoDTO
-                    {
-                        MemberId = c.Member.MemberId,
-                        MemberName = c.Member.MemberName,
-                        PhotoPath = c.Member.PhotoPath ?? "/assets/img/memberooo.png"
-                    })
-                    .ToListAsync();
+        //[HttpGet("collaborators/{playlistId?}")]
+        //public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int? playlistId)
+        //{
+        //    if (playlistId.HasValue)
+        //    {                
+        //        var collaborators = await _context.PlayListCollaborators
+        //            .Where(c => c.PlayListId == playlistId.Value)
+        //            .Select(c => new MemberInfoDTO
+        //            {
+        //                MemberId = c.Member.MemberId,
+        //                MemberName = c.Member.MemberName,
+        //                PhotoPath = c.Member.PhotoPath ?? "/assets/img/memberooo.png"
+        //            })
+        //            .ToListAsync();
 
-                return Ok(collaborators);
-            }
-            else
-            {                
-                var allCollaborators = await _context.MemberInfos
-                    .Select(m => new MemberInfoDTO
-                    {
-                        MemberId = m.MemberId,
-                        MemberName = m.MemberName,
-                        PhotoPath = m.PhotoPath ?? "/assets/img/memberooo.png"
-                    })
-                    .ToListAsync();
+        //        return Ok(collaborators);
+        //    }
+        //    else
+        //    {                
+        //        var allCollaborators = await _context.MemberInfos
+        //            .Select(m => new MemberInfoDTO
+        //            {
+        //                MemberId = m.MemberId,
+        //                MemberName = m.MemberName,
+        //                PhotoPath = m.PhotoPath ?? "/assets/img/memberooo.png"
+        //            })
+        //            .ToListAsync();
 
                 return Ok(allCollaborators);
             }

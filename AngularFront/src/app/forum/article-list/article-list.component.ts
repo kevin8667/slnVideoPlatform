@@ -1,23 +1,35 @@
 import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
+import { Chatroom } from 'src/app/interfaces/forumInterface/Chatroom';
 import { ForumPagingDTO } from 'src/app/interfaces/forumInterface/ForumPagingDTO';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
-import ForumService from 'src/app/service/forum.service';
+import ForumService from 'src/app/services/forumService/forum.service';
+import { SignalRService } from 'src/app/services/forumService/signal-r.service';
 
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.css'],
+  providers: [SignalRService],
 })
-export class ArticleListComponent implements OnInit {
-  // getSafe = (data: string) => this.forumService.getSafe(data);
+export class ArticleListComponent implements OnInit, AfterViewChecked {
   articles: ArticleView[] = [];
   themeTag: Theme[] = [];
   debounceTimer!: number;
   forumPagingDTO: ForumPagingDTO | undefined;
 
+  message = '';
+  messages: Chatroom[] = [];
+  private messageSubscription?: Subscription;
+  currentUserId = 0;
   forumDto = {
     categoryId: 0,
     keyword: '',
@@ -62,16 +74,48 @@ export class ArticleListComponent implements OnInit {
       numVisible: 1,
     },
   ];
-  constructor(private route: Router, private forumService: ForumService) {}
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  constructor(
+    private route: Router,
+    private forumService: ForumService,
+    private signalRService: SignalRService
+  ) {}
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
   loading = false;
   ngOnInit(): void {
+    this.currentUserId = this.forumService.getCurrentUser().id
+      ? this.forumService.getCurrentUser().id
+      : 0;
     this.load();
-
+    this.messageSubscription = this.signalRService.messages$.subscribe({
+      next: (data: Chatroom[]) => {
+        this.messages = data
+      },
+      error: (err) => console.error('接收訊息發生例外:', err),
+    });
     this.forumService.themeTag$.subscribe((data) => {
       this.themeTag = data;
     });
   }
-
+  private scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop =
+        this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+  sendMessage(message: string) {
+    if (!message.trim()) return;
+    const chatroom: Chatroom = {
+      senderId: this.forumService.getCurrentUser().id,
+      chatMessage: message,
+      nickname: this.forumService.getCurrentUser().name,
+    };
+    this.signalRService.sendMessage(chatroom);
+    this.scrollToBottom();
+    this.message = '';
+  }
   private async load() {
     this.loading = true;
     try {
@@ -119,7 +163,6 @@ export class ArticleListComponent implements OnInit {
 
   search() {
     this.load();
-    this.forumDto.keyword = '';
   }
   openCreateArticleDialog() {
     this.route.navigateByUrl('forum/new/article');

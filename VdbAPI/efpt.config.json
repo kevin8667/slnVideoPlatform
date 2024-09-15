@@ -55,10 +55,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[FriendChat]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[FriendList]",
          "ObjectType": 0
       },
@@ -163,6 +159,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[PostUserReactions]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ProductList]",
          "ObjectType": 0
       },
@@ -258,7 +258,7 @@
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
    "UseNoDefaultConstructor": false,
-   "UseNoNavigations": false,
+   "UseNoNavigations": true,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,

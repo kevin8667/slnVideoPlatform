@@ -14,12 +14,4 @@ public partial class ShoppingCart
     public int? PlanId { get; set; }
 
     public int? VideoId { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
-    public virtual PlanList Plan { get; set; }
-
-    public virtual VideoList Video { get; set; }
 }
