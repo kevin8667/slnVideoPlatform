@@ -19,8 +19,7 @@ import { SignalRService } from 'src/app/services/forumService/signal-r.service';
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
-  styleUrls: ['./article-list.component.css'],
-  providers: [SignalRService],
+  styleUrls: ['./article-list.component.css']
 })
 export class ArticleListComponent implements OnInit, AfterViewChecked {
   articles: ArticleView[] = [];
