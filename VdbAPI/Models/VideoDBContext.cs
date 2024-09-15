@@ -855,14 +855,6 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.ShowtimeId).HasColumnName("ShowtimeID");
-
-            entity.HasOne(d => d.Seat).WithMany(p => p.SessionSeats)
-                .HasForeignKey(d => d.SeatId)
-                .HasConstraintName("FK_SessionSeats_Seat");
-
-            entity.HasOne(d => d.Showtime).WithMany(p => p.SessionSeats)
-                .HasForeignKey(d => d.ShowtimeId)
-                .HasConstraintName("FK_SessionSeats_Showtime");
         });
 
         modelBuilder.Entity<ShoppingCart>(entity =>
@@ -939,19 +931,6 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.ShowtimeId).HasColumnName("ShowtimeID");
-
-            entity.HasOne(d => d.Seat).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.SeatId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK_Ticket_Seat1");
-
-            entity.HasOne(d => d.Showtime).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.ShowtimeId)
-                .HasConstraintName("FK_Ticket_Showtime");
-
-            entity.HasOne(d => d.TypeOfTicketNavigation).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.TypeOfTicket)
-                .HasConstraintName("FK_Ticket_TypeOfTicket");
         });
 
         modelBuilder.Entity<TypeList>(entity =>
