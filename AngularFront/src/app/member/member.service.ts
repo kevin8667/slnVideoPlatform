@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable  } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,13 @@ export class MemberService {
   private apiUrl = 'https://localhost:7193/api/'; // API 端點
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string, recaptchaResponse: string): Observable<any> {
+
+
+  login(
+    email: string,
+    password: string,
+    recaptchaResponse: string
+  ): Observable<any> {
     const body = { email, password, recaptchaResponse };
     return this.http.post(this.apiUrl + 'Login/AccountLogin', body);
   }
@@ -56,42 +62,54 @@ export class MemberService {
   }
 
   updatememberdata(memberData: any): Observable<any> {
+    debugger;
     return this.http.put(this.apiUrl + 'Member/PutMemberData', memberData);
   }
 
-  updatememberPic( file: File ): Observable<any>{
+  updatememberPic(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file); // 'file' 是後端預期的字段名
 
     return this.http.post(this.apiUrl + 'Member/UpdateMemberPic', formData);
-    }
+  }
 
   GetMemberCoupon(): Observable<any> {
     return this.http.get(this.apiUrl + 'Coupon/GetCouponData');
   }
 
-  GetGiftList(giftListId: string): Observable<any> {
+  GetGiftList(giftListId: number): Observable<any> {
+    debugger;
     return this.http.get(this.apiUrl + 'Coupon/GetGiftList/' + giftListId);
   }
 
-  GetFriendList(): Observable<any>{
-    return this.http.get(this.apiUrl + 'Member/GetFriendList' );
+  GetFriendList(): Observable<any> {
+    return this.http.get(this.apiUrl + 'Member/GetFriendList');
   }
-  GetMemberInfo(friendId:string): Observable<any>{
-
-    return this.http.get(this.apiUrl + 'Member/GetMemberById/'+friendId );
-  }
-
-  InviteFriend(friendId:string,message:string): Observable<any>{
-
-    return this.http.post(this.apiUrl + 'Member/InviteFriends?friendId='+friendId+'&message='+message ,{});
+  GetMemberInfo(friendId: string): Observable<any> {
+    return this.http.get(this.apiUrl + 'Member/GetMemberDataById/' + friendId);
   }
 
-  DeleteFriend(friendId:string ,action:string): Observable<any>{
-    return this.http.delete(this.apiUrl + 'Member/DeleteFriend?friendId=' +friendId+'&action='+action );
+  InviteFriend(friendId: string, message: string): Observable<any> {
+    return this.http.post(
+      this.apiUrl +
+        'Member/InviteFriends?friendId=' +
+        friendId +
+        '&message=' +
+        message,
+      {}
+    );
   }
 
-  addFriend(friendId:string): Observable<any>{
-    return this.http.post(this.apiUrl + 'Member/AddFriend?friendId=' +friendId,{});
+  DeleteFriend(friendId: number): Observable<any> {
+    return this.http.delete(
+      this.apiUrl + 'Member/DeleteFriend?friendId=' + friendId
+    );
+  }
+
+  addFriend(friendId: string): Observable<any> {
+    return this.http.post(
+      this.apiUrl + 'Member/AddFriend?friendId=' + friendId,
+      {}
+    );
   }
 }

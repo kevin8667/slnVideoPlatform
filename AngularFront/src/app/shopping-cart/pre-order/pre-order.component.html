@@ -49,11 +49,11 @@
             </div>
             <div class="textLeftValueRight">
               <span class="up-Text">折價券</span>
-              <input type="text" class="up-Value" value="-10%">
+              <input type="text" class="up-Value" value={{discountCode}}>
             </div>
             <div class="textLeftValueRight">
               <span class="up-Text finalPrice">總額</span>
-              <span class="up-Value finalPrice">$350</span>
+              <span class="up-Value finalPrice">${{finalPrice}}</span>
             </div>
         </div>
         <!-- 收件資料填寫 -->
@@ -71,6 +71,7 @@
         <div>
           <!-- [routerLink]="['/shoppingCart/order']" -->
           <button class="red-button" (click)="toLinePay()">下一步</button>
+          <button [routerLink]="['/shoppingCart/finish']">回首頁</button>
         </div>
       </div>
   </div>

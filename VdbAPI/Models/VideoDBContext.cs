@@ -129,6 +129,8 @@ public partial class VideoDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
+
         modelBuilder.Entity<ActorList>(entity =>
         {
             entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
@@ -148,12 +150,6 @@ public partial class VideoDBContext : DbContext
             entity.HasKey(e => e.ArticleId).IsClustered(false);
 
             entity.ToTable("Article");
-
-            entity.HasIndex(e => new { e.Lock, e.UpdateDate, e.ThemeId, e.ArticleId, e.Title }, "Cluster_Article")
-                .IsDescending(true, true, false, false, false)
-                .IsClustered();
-
-            entity.HasIndex(e => new { e.Lock, e.UpdateDate, e.ArticleId, e.Title, e.ThemeId }, "NonClusteredIndex-20240815-155924").IsDescending(true, true, false, false, false);
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
@@ -186,7 +182,9 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ThemeName)
                 .IsRequired()
                 .HasMaxLength(50);
-            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(50);
             entity.Property(e => e.UpdateDate).HasColumnType("datetime");
         });
 
@@ -223,10 +221,6 @@ public partial class VideoDBContext : DbContext
             entity.HasKey(e => e.ChatRoomId).IsClustered(false);
 
             entity.ToTable("ChatRoom");
-
-            entity.HasIndex(e => e.SendTime, "IX_ChatRoom_SendTime")
-                .IsDescending()
-                .IsClustered();
 
             entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
             entity.Property(e => e.ChatMessage)
@@ -776,10 +770,6 @@ public partial class VideoDBContext : DbContext
 
             entity.ToTable("Post");
 
-            entity.HasIndex(e => new { e.Lock, e.PostDate, e.ArticleId, e.PosterId, e.PostId }, "IX_Post")
-                .IsDescending(true, false, false, false, false)
-                .IsClustered();
-
             entity.Property(e => e.PostId).HasColumnName("PostID");
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.Lock).HasDefaultValue(true);
@@ -968,8 +958,6 @@ public partial class VideoDBContext : DbContext
         modelBuilder.Entity<UserReaction>(entity =>
         {
             entity.HasKey(e => e.CountId).HasName("PK__UserReac");
-
-            entity.HasIndex(e => new { e.MemberId, e.ArticleId }, "UQ_UserReactions_MemberArticle").IsUnique();
         });
 
         modelBuilder.Entity<ValidCode>(entity =>

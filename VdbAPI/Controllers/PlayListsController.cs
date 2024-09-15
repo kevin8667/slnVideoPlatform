@@ -483,36 +483,72 @@ namespace VdbAPI.Controllers
             return Ok(playlists);
         }
 
-        //[HttpGet("collaborators/{playlistId?}")]
-        //public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int? playlistId)
-        //{
-        //    if (playlistId.HasValue)
-        //    {                
-        //        var collaborators = await _context.PlayListCollaborators
-        //            .Where(c => c.PlayListId == playlistId.Value)
-        //            .Select(c => new MemberInfoDTO
-        //            {
-        //                MemberId = c.Member.MemberId,
-        //                MemberName = c.Member.MemberName,
-        //                PhotoPath = c.Member.PhotoPath ?? "/assets/img/memberooo.png"
-        //            })
-        //            .ToListAsync();
+        [HttpGet("collaborators/{playlistId?}")]
+        public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int? playlistId)
+        {
+            if (playlistId.HasValue)
+            {
+                var collaborators = await _context.PlayListCollaborators
+                    .Where(c => c.PlayListId == playlistId.Value)
+                    .Select(c => new MemberInfoDTO
+                    {
+                        MemberId = c.Member.MemberId,
+                        MemberName = c.Member.MemberName,
+                        PhotoPath = c.Member.PhotoPath ?? "/assets/img/memberooo.png"
+                    })
+                    .ToListAsync();
 
-        //        return Ok(collaborators);
-        //    }
-        //    else
-        //    {                
-        //        var allCollaborators = await _context.MemberInfos
-        //            .Select(m => new MemberInfoDTO
-        //            {
-        //                MemberId = m.MemberId,
-        //                MemberName = m.MemberName,
-        //                PhotoPath = m.PhotoPath ?? "/assets/img/memberooo.png"
-        //            })
-        //            .ToListAsync();
+                return Ok(collaborators);
+            }
+            else
+            {
+                var allCollaborators = await _context.MemberInfos
+                    .Select(m => new MemberInfoDTO
+                    {
+                        MemberId = m.MemberId,
+                        MemberName = m.MemberName,
+                        PhotoPath = m.PhotoPath ?? "/assets/img/memberooo.png"
+                    })
+                    .ToListAsync();
 
-        //        return Ok(allCollaborators);
-        //    }
-        //}
+                return Ok(allCollaborators);
+            }
+        }
+
+        [HttpPost("add-to-favorites")]
+        public async Task<IActionResult> AddToFavorites(int playListId)
+        {
+            int memberId = 5;
+            
+            var existingFavorite = await _context.MemberPlayLists
+                .Where(mpl => mpl.PlayListId == playListId && mpl.MemberId == memberId)
+                .FirstOrDefaultAsync();
+
+            if (existingFavorite != null)
+            {
+                return BadRequest(new { message = "該播放清單已經被添加到收藏中。" });
+            }
+            
+            var createdByMember = await _context.MemberCreatedPlayLists
+                .Where(mcpl => mcpl.PlayListId == playListId && mcpl.MemberId == memberId)
+                .FirstOrDefaultAsync();
+
+            if (createdByMember != null)
+            {
+                return BadRequest(new { message = "無法添加您自己創建的播放清單。" });
+            }
+            
+            var newFavorite = new MemberPlayList
+            {
+                MemberId = memberId,
+                PlayListId = playListId,
+                AddedOtherMemberPlayListAt = DateTime.Now
+            };
+
+            _context.MemberPlayLists.Add(newFavorite);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "成功將播放清單添加到收藏！" });
+        }
     }
 }

@@ -2,7 +2,7 @@
   [(visible)]="displayDialog"
   [modal]="true"
   [closable]="false"
-  [style]="{ width: '45vw' }"
+  [style]="{ width: '35vw' }"
   [baseZIndex]="10000"
 >
   <ng-template pTemplate="header">
@@ -154,14 +154,11 @@
                     class="remove-button"
                     pTooltip="刪除影片"
                   ></button>
-
-                  <button
-                    pButton
-                    icon="pi pi-arrows-v"
-                    class="move-button"
-                    pTooltip="移動影片"
+                  <i
+                    class="pi pi-arrows-alt drag-handle"
                     cdkDragHandle
-                  ></button>
+                    pTooltip="移動影片"
+                  ></i>
                 </div>
               </div>
             </div>
