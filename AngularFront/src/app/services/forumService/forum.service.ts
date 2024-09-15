@@ -10,19 +10,25 @@ import { Post } from '../../interfaces/forumInterface/Post';
 import { LikeDTO } from '../../interfaces/forumInterface/LikeDTO';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
-
 @Injectable({
   providedIn: 'root',
 })
 export default class ForumService {
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
+  private userSubject: BehaviorSubject<{ id: number; name: string }>;
+  public user$: Observable<{ id: number; name: string }>;
   constructor(private client: HttpClient, private sanitizer: DomSanitizer) {
     this.loadThemeTags();
+    this.userSubject = new BehaviorSubject<{ id: number; name: string }>({
+      id: 1,
+      name: '管理員',
+    });
+    this.user$ = this.userSubject.asObservable();
   }
 
-  getCurrentUserId(): number {
-    return 1;
+  getCurrentUser() {
+    return this.userSubject.value;
   }
   loadThemeTags(): void {
     const api = 'https://localhost:7193/api/Articles/Theme';

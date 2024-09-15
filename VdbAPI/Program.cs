@@ -22,7 +22,7 @@ builder.Services.AddAuthentication(options =>
     options.AuthorizationEndpoint = "https://access.line.me/oauth2/v2.1/authorize";
     options.TokenEndpoint = "https://api.line.me/oauth2/v2.1/token";
     options.UserInformationEndpoint = "https://api.line.me/v2/profile";
-    options.CallbackPath = "/auth/callback"; // é€™è£¡è¨­ç½® CallbackPath
+    options.CallbackPath = "/auth/callback"; // ³o¸Ì³]¸m CallbackPath
 
     options.Scope.Add("profile");
     options.Scope.Add("openid");
@@ -51,11 +51,16 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddDbContext<VideoDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("VideoDB")));
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowSpecificOrigin",builder =>
+        builder.WithOrigins("http://localhost:4200")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials()
+    );
 });
+
+builder.Services.AddSignalR();
 
 builder.Services.AddHttpClient();
 
@@ -68,20 +73,20 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigin");
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if(app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 app.UseStaticFiles(new StaticFileOptions {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.ContentRootPath,"img")),
-    RequestPath = "/img"  // URL ï¿½eï¿½ï¿½
+    RequestPath = "/img"
 });
 app.UseHttpsRedirection();
-
+app.MapHub<ChatHub>("/chathub");
 app.UseAuthorization();
 
 app.MapControllers();
