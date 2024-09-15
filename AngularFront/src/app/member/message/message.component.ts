@@ -99,40 +99,7 @@ export class MessageComponent implements OnInit {
       message.title.toLowerCase().includes(searchTerm) ||
       message.noticeContent.toLowerCase().includes(searchTerm)
     );
-
-    // 更新 checked 陣列的長度
-    this.checked = new Array(this.filteredMessages.length).fill(false);
   }
-
-  deleteMessages() {
-    const selectedMessages = this.filteredMessages.filter((_, index) => this.checked[index]);
-
-    if (selectedMessages.length === 0) {
-        alert('請選擇要刪除的訊息');
-        return;
-    }
-
-    const confirmDelete = confirm('確定要刪除訊息嗎');
-    if (!confirmDelete) {
-        return;
-    }
-
-    const deleteRequests = selectedMessages.map(message => {
-        console.log(`嘗試刪除訊息 ID: ${message.memberNoticeID}`);
-        return this.memberService.DeleteMemberNotice(message.memberNoticeID);
-    });
-
-    forkJoin(deleteRequests).subscribe({
-        next: responses => {
-            alert('成功刪除訊息'); // 提供成功反馈
-            this.readmessages(); // 刷新消息列表
-        },
-        error: error => {
-            console.error('刪除訊息時發生錯誤:', error);
-            alert('刪除訊息時發生錯誤，請稍後再試');
-        }
-    });
-}
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);

@@ -67,9 +67,7 @@ const routes: Routes = [
     CarouselModule,
     RadioButtonModule,
     InputTextareaModule,
-    BreadcrumbModule,
-    CheckboxModule,
-    MessagesModule
+    BreadcrumbModule
   ],
   exports: [RouterModule],
 
