@@ -72,11 +72,7 @@ const routes: Routes = [
     CarouselModule,
     RadioButtonModule,
     InputTextareaModule,
-    BreadcrumbModule,
-    CheckboxModule,
-    MessagesModule,
-    // LuckyGrid,
-    // LuckyWheel
+    BreadcrumbModule
   ],
   exports: [RouterModule],
 

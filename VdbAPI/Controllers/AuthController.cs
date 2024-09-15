@@ -16,46 +16,7 @@ namespace VdbAPI.Controllers
     public class AuthController : BaseController
     {
         [HttpPost("callback")]
-        public async Task<ReturnResult<mMemberInfo>> HandleCallback([FromBody] AuthCallbackRequest request)
-        {
-            var code = request.Code;
-            ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
-            // 交換授權碼為 access token
-            var accessToken = await ExchangeCodeForTokenAsync(code);
-
-            // 使用 access token 獲取使用者資訊
-            var userInfo = await GetUserInfoAsync(accessToken);
-            if (userInfo != null && !string.IsNullOrEmpty(userInfo.userId))
-            {
-                MemberHelper mHelper = new MemberHelper(ConnString);
-                var memberInfo = mHelper.SelectMemberInfo(new Member.Model.mMemberInfo { LineUserId = userInfo.userId, BindingLine = "Y" });
-
-                if (memberInfo.Any())
-                {
-
-                    string jwtToken = AccountService.CreateJwtToken(memberInfo.FirstOrDefault());
-                    rtn.IsSuccess = true;
-                    rtn.Data = memberInfo.FirstOrDefault();
-                    rtn.Data.JwtToken = jwtToken;
-                    return rtn;
-
-                }
-                else
-                {
-                    rtn.AlertMsg = "尚未綁定LINE";
-                    return rtn;
-                }
-
-            }
-
-            rtn.AlertMsg = "登入失敗!!";
-            return rtn;
-
-        }
-
-        [JwtActionFilter]
-        [HttpPost("BindingLine")]
-        public async Task<ReturnResult<string>> HandleCallbackBinding([FromBody] AuthCallbackRequest request)
+        public async Task<IActionResult> HandleCallback([FromBody] AuthCallbackRequest request)
         {
             var code = request.Code;
             ReturnResult<string> rtn = new ReturnResult<string>();
@@ -90,64 +51,33 @@ namespace VdbAPI.Controllers
                     return rtn;
                 }
 
-            }
+            // Example response
+            var token = await ExchangeCodeForTokenAsync(code);
 
-            rtn.AlertMsg = "登入失敗!!";
-            return rtn;
-
+            return Ok(new { Token = token });
         }
 
 
 
         private async Task<string> ExchangeCodeForTokenAsync(string code)
         {
-            var tokenUrl = "https://api.line.me/oauth2/v2.1/token";
-            var clientId = "2006329488"; // 從 LINE 開發者控制台取得
-            var clientSecret = "9d8c1d8fb3d8387734d75a2263ae03a6"; // 從 LINE 開發者控制台取得
-            var redirectUri = "http://localhost:4200/#/auth/callback"; // 必須與 LINE 開發者控制台設定一致
+            // Implement the logic to exchange the code for an access token
+            // with the Line API and return the token
+            // For demonstration purposes, returning a dummy token
+            return "dummy-access-token";
+        }
+    }
 
-            var parameters = new Dictionary<string, string>
+
+    }
+    public class TokenResponse
     {
-        { "grant_type", "authorization_code" },
-        { "code", code },
-        { "redirect_uri", redirectUri },
-        { "client_id", clientId },
-        { "client_secret", clientSecret }
-    };
-
-            using var httpClient = new HttpClient();
-            var requestContent = new FormUrlEncodedContent(parameters);
-            var response = await httpClient.PostAsync(tokenUrl, requestContent);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Failed to exchange authorization code for access token.");
-            }
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var tokenResponse = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(responseContent);
-
-            return tokenResponse.access_token;
-        }
-
-
-        private async Task<LineUser> GetUserInfoAsync(string accessToken)
-        {
-            var userInfoUrl = "https://api.line.me/v2/profile";
-
-            using var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-            var response = await httpClient.GetAsync(userInfoUrl);
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Failed to retrieve user info.");
-            }
-
-            var userInfo = await response.Content.ReadAsStringAsync();
-            return System.Text.Json.JsonSerializer.Deserialize<LineUser>(userInfo);
-        }
-
+        public string access_token { get; set; }
+        public string TokenType { get; set; }
+        public string Scope { get; set; }
+        public string ExpiresIn { get; set; }
+        public string RefreshToken { get; set; }
+    }
     public class AuthCallbackRequest
     {
         public string Code { get; set; }
