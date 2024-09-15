@@ -83,8 +83,8 @@ if(this.authService.getCookie("Binding")=="Y")
       },
       error: (error) => {
         console.error('Login error:', error);
-        alert('µn¤J¥¢±Ñ');
-        // ¨ê·s­¶­±
+        alert('ç™»å…¥å¤±æ•—');
+        // åˆ·æ–°é é¢
         window.location.reload();
       },
     });

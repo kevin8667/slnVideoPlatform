@@ -45,6 +45,24 @@ button {
   animation: shine 3s infinite linear;
 }
 
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+       left:-100%;
+  }
+}
+
 button:hover, button:focus{
   background-color:  #00c8d6
 } 
