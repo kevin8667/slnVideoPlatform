@@ -77,33 +77,56 @@
                       friend.photoPath == null || friend.photoPath == ''
                         ? './../../../assets/img/Member/defaultMember.png'
                         : friend.photoPath
-                    " />
-                  </div>
-                </ng-template>
-                <p>{{ friend.invitedMessage }}</p>
-                <p>{{ friend.creationDate }}</p>
-                <ng-template pTemplate="footer">
-                  <button class="shine-button" (click)="removeFriend(friend.friendId)">拒絕邀請</button>&nbsp;
-                  <button class="shine-button" (click)="addFriend(friend.friendId)">接受邀請</button>
-                </ng-template>
-              </p-card>
-            </div>
+                    "
+                  />
+                </div>
+              </ng-template>
+              <p>{{ friend.invitedMessage }}</p>
+              <p>{{ friend.creationDate }}</p>
+              <ng-template pTemplate="footer">
+                <p-button
+                  label="拒絕邀請"
+                  [raised]="true"
+                  severity="danger"
+                  (click)="removeFriend(friend.friendId)"
+                ></p-button>&nbsp;
+                <p-button
+                label="接受邀請"
+                [raised]="true"
+                severity="success"
+                (click)="addFriend(friend.friendId)"
+              ></p-button>
+              </ng-template>
+            </p-card>
           </div>
-        </ng-template>
-      </p-carousel>
-    </div>
-
-
-    <p-dialog header="邀請好友" [modal]="true" [(visible)]="visible" [style]="{ width: '600px' }" [closable]="true"
-      [responsive]="true" [styleClass]="'custom-dialog'">
-      <div class="dialog-content" style="text-align: center">
-        <div class="flex flex-column gap-2">
-          <label for="username" style="margin-right: 20px">好友 ID : </label>
-          <input pInputText id="username" aria-describedby="username-help" [(ngModel)]="friendId" />
-          <button class="btn" style="width: 80px;" (click)="fetchFriendDetails()">
-            <img src="./../../../assets/img/Member/search.png" style="height: 20px; margin: 0;" alt="Edit" />
-          </button>
         </div>
+      </ng-template>
+    </p-carousel>
+  </div>
+</div>
+
+<p-dialog
+  header="邀請好友"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '600px' }"
+  [closable]="true"
+  [responsive]="true"
+  [styleClass]="'custom-dialog'"
+>
+  <div class="dialog-content" style="text-align: center">
+    <div class="flex flex-column gap-2">
+      <label for="username" style="margin-right: 20px">好友 ID : </label>
+      <input
+        pInputText
+        id="username"
+        aria-describedby="username-help"
+        [(ngModel)]="friendId"
+      />
+      <button class="btn" (click)="fetchFriendDetails()">
+        <img src="./../../../assets/img/Member/search.png" alt="Edit" />
+      </button>
+    </div>
 
         <div *ngIf="loadFriend" class="friend-details" style="margin-top: 10px">
           <img class="rounded-circle shadow-4-strong small-image img-fluid" alt="Card" [src]="
@@ -117,21 +140,27 @@
           </div>
         </div>
 
-        <span class="p-float-label" style="margin-top: 20px">
-          <textarea id="float-input" rows="5" pInputTextarea [(ngModel)]="sendMsg" style="width: 100%"
-            rows="5"></textarea>
-          <label for="float-input">邀請訊息</label>
-        </span>
-        <div style="text-align: center">
-          <p-footer>
-            <button class="shine-button" style="margin-right: 10px;" (click)="sendInvitation()">發送</button>
-       
-            <button class="shine-button" (click)="hideDialog()">取消</button>
-          </p-footer>
-        </div>
-      </div>
-    </p-dialog>
+    <span class="p-float-label" style="margin-top: 20px">
+      <textarea
+        id="float-input"
+        rows="5"
+        pInputTextarea
+        [(ngModel)]="sendMsg"
+        style="width: 100%"
+        rows="5"
+      ></textarea>
+      <label for="float-input">邀請訊息</label>
+    </span>
+    <div style="text-align: center">
+      <p-footer>
+        <p-button label="發送" (click)="sendInvitation()"></p-button>
+        &nbsp;
+        <p-button
+          label="取消"
+          severity="warning"
+          (click)="hideDialog()"
+        ></p-button>
+      </p-footer>
+    </div>
   </div>
-
-  <div class="cornercontainer col-1"></div>
-</div>
+</p-dialog>
