@@ -96,7 +96,7 @@
         <p-dataView [value]="articles" layout="list" [paginator]="false">
           <!-- Grid Item 模板 -->
           <ng-template pTemplate="listItem" let-article>
-            <div class="p-card1 ">
+            <div class="p-card1">
               <div class="card-content">
                 <!-- 圖片 -->
                 <div class="card-image">
@@ -154,19 +154,19 @@
         <div class="chat-header">
           <h1>聊天室</h1>
         </div>
-        <div class="chat-messages">
-          <div class="message">
-            <div class="message-user">用戶1:</div>
-            <div class="message-text">你好！</div>
+        <div class="chat-messages" #chatContainer>
+          <div class="" *ngFor="let msg of messages.reverse()">
+            <span class="sender">{{ msg.nickname }}：</span>
+            <span class="message">{{ msg.chatMessage }}</span>
           </div>
-          <div class="message">
-            <div class="message-user">用戶2:</div>
-            <div class="message-text">嗨，你好！</div>
-          </div>
-          <!-- 更多消息可以添加在這裡 -->
         </div>
-        <div class="chat-input">
-          <input type="text" placeholder="輸入消息..." />
+        <div class="chat-input" *ngIf="currentUserId !== 0">
+          <input
+            [(ngModel)]="message"
+            (keydown.enter)="sendMessage(message)"
+            type="text"
+            placeholder="輸入消息..."
+          />
           <button>發送</button>
         </div>
       </div>

@@ -8,7 +8,7 @@ export const forumGuard: CanActivateFn = (route, state) => {
   const type = route.paramMap.get('type');
   const requiresAuth = route.data['requiresAuth'];
   if (requiresAuth) {
-    const userId = forumService.getCurrentUserId();
+    const userId = forumService.getCurrentUser().id;
     if (userId === null) {
       router.navigate(['/login']);
       return false;

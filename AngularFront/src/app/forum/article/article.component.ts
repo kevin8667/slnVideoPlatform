@@ -58,7 +58,7 @@ export class ArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.forumService.loadQuill();
-    this.currentUserId = this.forumService.getCurrentUserId();
+    this.currentUserId = this.forumService.getCurrentUser().id;
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
     this.forumService
       .getUserReaction(this.currentUserId, this.articleId)
