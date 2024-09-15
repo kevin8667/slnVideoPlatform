@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MemberService } from './../member.service';
 import { Router } from '@angular/router';
-
-
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-info',
@@ -15,38 +14,48 @@ export class MmainComponent implements OnInit {
   memberId: number = 10;
   memberData: any = {};
   latestNews: any[] = [];
-  password='';
+  password = '';
   canSee: boolean = false; // 控制顯示輸入框或標籤
   canSeepwd: boolean = false; // 控制密碼的顯示/隱藏
 
   constructor(
     private memberService: MemberService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.readMemberData();
-    this.loadLatestNews();
+    this.authService.isLoggedIn.subscribe((isLoggedIn) => {
+      debugger;
+      if (isLoggedIn) {
+        this.readMemberData();
+        this.loadLatestNews();
+      } else {
+
+        this.router.navigateByUrl('login');
+      }
+    });
   }
 
-  seepwd(){
+  seepwd() {
     this.canSeepwd = true;
   }
 
-  cantseepwd(){
+  cantseepwd() {
     this.canSeepwd = false;
   }
 
   modifyClick() {
-    this.canSee = !this.canSee;// 切換 canSee
+    this.canSee = !this.canSee; // 切換 canSee
     this.cantSee = !this.cantSee;
     if (!this.canSee) {
       this.canSeepwd = false; // 如果隱藏輸入框，則隱藏密碼
-    }}
-  Return(){
+    }
+  }
+  Return() {
     this.canSee = !this.canSee;
     this.cantSee = !this.cantSee;
-    this.readMemberData()
+    this.readMemberData();
   }
 
   SaveData() {
@@ -194,17 +203,15 @@ export class MmainComponent implements OnInit {
     this.router.navigateByUrl('login/message');
   }
 
-
-  getMemberGenderDescription():string{
-switch(this.memberData.gender){
-  case 'M':
-    return '男性';
-  case 'F':
-    return '女性';
-    default:
+  getMemberGenderDescription(): string {
+    switch (this.memberData.gender) {
+      case 'M':
+        return '男性';
+      case 'F':
+        return '女性';
+      default:
         return '未知';
-}
-
+    }
   }
 
   getMemberGradeDescription(): string {
@@ -217,7 +224,4 @@ switch(this.memberData.gender){
         return '未知等級';
     }
   }
-
-
-
 }
