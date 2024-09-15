@@ -11,6 +11,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { JwtInterceptor } from './jwt.interceptor';
+import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
+
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     FooterComponent,
     ErrorPageComponent,
     ShoppingCartComponent,
+    AuthCallbackComponent,
   ],
   imports: [
     BrowserModule,

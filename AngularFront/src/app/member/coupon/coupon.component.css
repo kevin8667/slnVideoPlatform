@@ -70,3 +70,19 @@ a {
 .custom-img {
   object-fit: cover;
 }
+
+.carddiv img {
+    padding-top: 10px;
+}
+
+.container{
+  justify-content: space-between;
+}
+
+:host ::ng-deep .p-card-body{
+  height: 279px !important;
+}
+
+:host ::ng-deep .p-card{
+  align-items:center; justify-content:center; text-align:center; margin-top: 10px;
+}

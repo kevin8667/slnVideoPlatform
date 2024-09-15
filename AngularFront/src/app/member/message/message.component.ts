@@ -10,12 +10,21 @@ import { Router } from '@angular/router';
   providers: [MemberService],
 })
 export class MessageComponent implements OnInit {
-  messages: any[] = []; // 初始化为数组
+  messages: any[] = [];
+  items: any[] = [];
+  home: any;
+
 
   constructor(private memberService: MemberService, private router: Router) {}
 
   ngOnInit() {
     this.readmessages();
+    this.items = [
+      { label: '會員首頁', url: 'login/mmain' },
+      { label: '我的通知', url: 'login/friends' },
+    ];
+
+    this.home = { icon: 'pi pi-home', url: 'login' };
   }
   filteredMessages = [...this.messages]; // 初始化為所有訊息
   readmessages() {

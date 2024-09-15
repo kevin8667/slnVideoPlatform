@@ -40,5 +40,7 @@ namespace VdbAPI.Member.ViewModel
       
         public string? Pic { get; set; }
 
+        public int? ExpireTime { get; set; }
+
     }
 }
