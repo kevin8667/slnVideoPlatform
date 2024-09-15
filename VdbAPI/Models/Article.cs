@@ -27,13 +27,13 @@ public partial class Article
 
     public string ArticleImage { get; set; }
 
-    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
-
-    public virtual MemberInfo Author { get; set; }
-
     public int? LikeCount { get; set; }
 
     public int? DislikeCount { get; set; }
+
+    public virtual MemberInfo Author { get; set; }
+
+    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual Theme Theme { get; set; }
 

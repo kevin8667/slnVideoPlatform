@@ -138,7 +138,5 @@ public partial class MemberInfo
 
     public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
 
-    public virtual ICollection<UserReaction> UserReactions { get; set; } = new List<UserReaction>();
-
     public virtual ICollection<ValidCode> ValidCodes { get; set; } = new List<ValidCode>();
 }

@@ -17,8 +17,6 @@ public partial class SessionSeat
 
     public int? ReservationId { get; set; }
 
-    public virtual ReservationDetail Reservation { get; set; }
-
     public virtual Seat Seat { get; set; }
 
     public virtual Showtime Showtime { get; set; }
