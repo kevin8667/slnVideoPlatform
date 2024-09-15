@@ -68,16 +68,6 @@ namespace VdbAPI.Controllers
         }
     }
 
-
-    }
-    public class TokenResponse
-    {
-        public string access_token { get; set; }
-        public string tokenType { get; set; }
-        public string scope { get; set; }
-        public string exxpiresIn { get; set; }
-        public string refreshToken { get; set; }
-    }
     public class AuthCallbackRequest
     {
         public string Code { get; set; }
