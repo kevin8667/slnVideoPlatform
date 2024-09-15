@@ -21,15 +21,14 @@ export class CouponComponent implements OnInit{
   ngOnInit() {
     this.GetMemberCoupon();
     this.items = [
-      { label: '會員首頁', url: 'login/mmain' },
-      { label: '我的優惠券', url: 'login/friends' },
+      { label: '會員首頁', url: 'http://localhost:4200/#/login/mmain' },
+      { label: '我的優惠券', url: 'http://localhost:4200/#/login/coupon' },
     ];
-
     this.home = { icon: 'pi pi-home', url: 'login' };
   }
 
   GetMemberCoupon() {
-    debugger;
+  
     this.memberService.GetMemberCoupon().subscribe({
       next: (response) => {
         if (response.hasAlertMsg) {
@@ -42,7 +41,8 @@ export class CouponComponent implements OnInit{
       },
       error: (error) => {
         console.error('GetMemberCoupon error:', error);
-        alert('GetMemberCoupon failed');
+        alert('取不到會員優惠券');
+        this.hasData = false; 
       },
     });
   }
@@ -69,7 +69,7 @@ export class CouponComponent implements OnInit{
       },
       error: (error) => {
         console.error('GetMemberCoupon error:', error);
-        alert('GetMemberCoupon failed');
+        alert('會員優惠券有誤');
       },
     });
   }
