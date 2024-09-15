@@ -29,6 +29,7 @@ import { RatingModule } from 'primeng/rating';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { ToastModule } from 'primeng/toast';
+import { NewVideoComponent } from './new-video/new-video.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ToastModule } from 'primeng/toast';
     SeasonListComponent,
     EpisodeListComponent,
     PersonDetailComponent,
+    NewVideoComponent,
   ],
   imports: [
     CommonModule,
