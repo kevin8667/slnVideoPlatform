@@ -25,51 +25,60 @@ namespace VdbAPI.Controllers {
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
-            // 驗證 reactionType 參數
-            if(likeDTO.reactionType != -1 && likeDTO.reactionType != 0 && likeDTO.reactionType != 1) {
-                return BadRequest("無效的反應類型。必須是 -1, 0 或 1。");
-            }
-
-            // 驗證文章是否存在
-            var article = await _context.Posts.FindAsync(likeDTO.ContentId);
-            if(article == null)
+            var post = await _context.Posts.FindAsync(likeDTO.ContentId);
+            if(post == null)
                 return NotFound("回文不存在");
 
             using var connection = new SqlConnection(_connection);
 
             try {
                 // SQL 處理 UserReactions
-                var sqlUserReaction = @"
-                IF EXISTS (SELECT 1 FROM PostUserReactions WHERE MemberId = @MemberId AND PostId = @PostId)
-                BEGIN
-                    UPDATE PostUserReactions SET ReactionType = @ReactionType 
-                    WHERE MemberId = @MemberId AND PostId = @PostId;
-                END
-                ELSE
-                BEGIN
-                    INSERT INTO PostUserReactions (MemberId, ArticleId, ReactionType)
-                    VALUES (@MemberId, @ArticleId, @ReactionType);
-                END";
-
-                await connection.ExecuteAsync(sqlUserReaction,new UserReaction {
-                    MemberId = likeDTO.MemberId,
-                    ArticleId = likeDTO.ContentId,
-                    ReactionType = (short?)likeDTO.reactionType
+                var postUserReaction = await _context.PostUserReactions
+                            .FirstOrDefaultAsync(ur => ur.PostId == likeDTO.ContentId);
+                string sql = @"select articleId from post where PostId = @PostId";
+                int? articleId = await connection.QueryFirstOrDefaultAsync<int?>(sql,new {
+                    PostId = likeDTO.ContentId
                 });
 
+                if(!articleId.HasValue)
+                    return NotFound("回文不存在");
+
+                if(likeDTO.ReactionType.HasValue) {
+                    if(postUserReaction == null) {
+                        postUserReaction = new PostUserReaction {
+                            MemberId = likeDTO.MemberId,
+                            ArticleId = articleId.Value,
+                            ReactionType = likeDTO.ReactionType.Value,
+                            PostId = likeDTO.ContentId,
+                        };
+                        // 沒有紀錄就加一筆
+                        _context.PostUserReactions.Add(postUserReaction);
+                    }
+                    else {
+                        postUserReaction.ReactionType = likeDTO.ReactionType.Value; //有紀錄就改值
+                    }
+                }
+                else {
+                    if(postUserReaction != null) {
+                        _context.PostUserReactions.Remove(postUserReaction); //被取消就刪掉舊紀錄
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
                 var sqlGetCounts = @"
-            SELECT 
-                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
-                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = -1) AS DislikeCount";
+                SELECT 
+                (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 1) AS LikeCount,
+                (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 0) AS DislikeCount";
 
                 var counts = await connection.QueryFirstAsync(sqlGetCounts,new {
-                    ArticleId = likeDTO
+                    PostId = likeDTO
                 .ContentId
                 });
 
                 // 更新文章的計數
-                article.LikeCount = counts.LikeCount;
-                article.DislikeCount = counts.DislikeCount;
+                post.LikeCount = counts.LikeCount;
+                post.DislikeCount = counts.DislikeCount;
                 await _context.SaveChangesAsync();
 
                 return Ok(counts);

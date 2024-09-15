@@ -1,14 +1,11 @@
 import { LikeDTO } from './../../interfaces/forumInterface/LikeDTO';
-import {
-  Component,
-  HostListener,
-  OnInit
-} from '@angular/core'; // 引入 ViewEncapsulation
+import { Component, HostListener, OnInit } from '@angular/core'; // 引入 ViewEncapsulation
 import { ActivatedRoute, Router } from '@angular/router'; // Angular
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 第三方庫
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
 import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
 import ForumService from 'src/app/services/forumService/forum.service'; // 自定義模組
+import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
@@ -21,7 +18,7 @@ export class ArticleComponent implements OnInit {
   menuItems: MenuItem[] = [];
   debounceTimer!: number;
   currentUserId!: number;
-
+  pendingReaction: any = null;
   constructor(
     private router: Router,
     private forumService: ForumService,
@@ -30,20 +27,72 @@ export class ArticleComponent implements OnInit {
     private actRoute: ActivatedRoute
   ) {}
   @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any): void {
+  unloadNotification(event: any): void {
+    // 清除計時器
     if (this.debounceTimer !== 0) {
       clearTimeout(this.debounceTimer);
-      this.sendLikeStatus(); // 提交當前點讚狀態
+    }
+
+    // 如果有未提交的評價數據，則進行提交
+    if (this.pendingReaction) {
+      const contentId = this.pendingReaction.contentId;
+      if (contentId === this.articleId) {
+        this.forumService.ArticleCount(this.pendingReaction).subscribe({
+          next: (data) => {
+            console.log('離開前成功提交文章反應:', data);
+            this.pendingReaction = null; // 提交成功後清空 pendingReaction
+          },
+          error: (err: any) => this.handleError('離開前更新文章反應失敗', err),
+        });
+      } else {
+        this.forumService.PostCount(this.pendingReaction).subscribe({
+          next: (data) => {
+            console.log('離開前成功提交回覆反應:', data);
+            this.pendingReaction = null; // 提交成功後清空 pendingReaction
+          },
+          error: (err: any) => this.handleError('離開前更新回覆反應失敗', err),
+        });
+      }
     }
   }
+
   ngOnInit(): void {
     this.forumService.loadQuill();
     this.currentUserId = this.forumService.getCurrentUserId();
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
-    if (isNaN(this.articleId)) {
-      this.router.navigateByUrl('forum');
-      return;
-    }
+    this.forumService
+      .getUserReaction(this.currentUserId, this.articleId)
+      .subscribe({
+        next: (reactions) => {
+          const articleReactionType = reactions.articleReaction?.reactionType;
+          const postReactions = reactions.postReactions;
+
+          // 根據文章 reactionType 初始化文章的反應
+          if (articleReactionType === true) {
+            this.reactionMap[0] = 'like';
+          } else if (articleReactionType === false) {
+            this.reactionMap[0] = 'dislike';
+          } else {
+            this.reactionMap[0] = null;
+          }
+
+          // 迴圈檢查每篇文章的回文反應
+          postReactions.forEach((postReaction) => {
+            const postReactionType = postReaction.reactionType;
+            const postId = postReaction.contentId;
+
+            if (postReactionType === true) {
+              this.reactionMap[postId] = 'like';
+            } else if (postReactionType === false) {
+              this.reactionMap[postId] = 'dislike';
+            } else {
+              this.reactionMap[postId] = null;
+            }
+          });
+        },
+        error: (error) =>
+          console.error('Error fetching user reactions:', error),
+      });
 
     this.forumService.getArticle(this.articleId).subscribe((data) => {
       if (!data.lock) {
@@ -130,60 +179,161 @@ export class ArticleComponent implements OnInit {
   navToReply(articleId: number) {
     this.router.navigate(['/forum', 'new', 'post', articleId]);
   }
-  ArticleLike = false;
-  ArticleDislike = false;
+  // 使用 Map 來追踪每個內容的反應狀態
+  reactionMap: { [contentId: number]: 'like' | 'dislike' | null } = {}; // 記錄用戶對每篇文章的反應
 
-  toggleLike() {
-    this.ArticleLike = !this.ArticleLike;
-    if (this.ArticleLike) {
-      this.ArticleDislike = false; // 取消踩
-    }
+  getReaction(contentId: number) {
+    return this.reactionMap[contentId] || null; // 返回當前用戶對該文章的反應
   }
 
-  toggleDislike() {
-    this.ArticleDislike = !this.ArticleDislike;
-    if (this.ArticleDislike) {
-      this.ArticleLike = false; // 取消讚
+  toggleReaction(reaction: 'like' | 'dislike' | null, contentId: number) {
+    const currentReaction = this.getReaction(contentId);
+
+    // 決定新的反應狀態
+    let newReaction: 'like' | 'dislike' | null;
+    if (currentReaction === reaction) {
+      newReaction = null; // 取消反應
+    } else {
+      newReaction = reaction; // 更新反應
     }
-  }
-  dislike(type: string) {
-    if (type !== 'article') return;
     if (this.debounceTimer !== 0) {
       clearTimeout(this.debounceTimer);
     }
-    this.toggleDislike();
-    this.showMessage('warn', '注意', '已點踩!');
-    this.debounceTimer = window.setTimeout(() => {
-      this.sendLikeStatus();
-    }, 5000);
-  }
-  like(type: string) {
-    if (type !== 'article') return;
-    if (this.debounceTimer !== 0) {
-      clearTimeout(this.debounceTimer);
-    }
-    this.toggleLike();
 
-    this.showMessage('success', '成功', '按讚囉!');
-    this.debounceTimer = window.setTimeout(() => {
-      this.sendLikeStatus();
-    }, 5000);
+    // 更新本地反應狀態
+    this.reactionMap[contentId] = newReaction;
+    // 準備發送到後端的數據
+    this.pendingReaction = this.createReactionDTO(contentId, newReaction);
+    this.sendReaction(contentId, newReaction, currentReaction);
   }
-  private sendLikeStatus() {
-    let reaction = 0;
-    if (this.ArticleLike) reaction = 1;
-    else if (this.ArticleDislike) reaction = -1;
-    else reaction = 0;
-    const likeDTO: LikeDTO = {
+  private createReactionDTO(
+    contentId: number,
+    newReaction: 'like' | 'dislike' | null
+  ) {
+    return {
       memberId: this.currentUserId,
-      contentId: this.articleId,
-      reactionType: reaction,
+      contentId: contentId === 0 ? this.articleId : contentId,
+      reactionType:
+        newReaction === 'like'
+          ? true
+          : newReaction === 'dislike'
+          ? false
+          : null,
     };
-    this.forumService.ArticleCount(likeDTO).subscribe({
-      next: (data) => console.log(data),
-      error: (err) => this.handleError('錯誤原因:', err),
-    });
   }
+  private sendReaction(
+    contentId: number,
+    newReaction: 'like' | 'dislike' | null,
+    currentReaction: 'like' | 'dislike' | null
+  ): void {
+    // 如果新的反應和舊的反應相同，則直接 return，不做任何處理
+    if (newReaction === currentReaction) {
+      console.log('反應未改變，無需更新');
+      return;
+    }
+
+    const likeDTO = {
+      memberId: this.currentUserId,
+      contentId: contentId === 0 ? this.articleId : contentId,
+      reactionType:
+        newReaction === 'like'
+          ? true
+          : newReaction === 'dislike'
+          ? false
+          : null,
+    };
+
+    this.pendingReaction = likeDTO;
+
+    if (contentId === 0) {
+      this.updateArticleReaction(newReaction, currentReaction);
+      this.debounceTimer = window.setTimeout(() => {
+        this.forumService.ArticleCount(likeDTO).subscribe({
+          next: (data) => {
+            console.log('文章反應已提交:', data);
+            this.pendingReaction = null; // 提交成功後清空 pendingReaction
+          },
+          error: (err: any) => this.handleError('更新文章反應失敗', err),
+        });
+      }, 1000);
+    } else {
+      this.updatePostReaction(contentId, newReaction, currentReaction);
+      this.debounceTimer = window.setTimeout(() => {
+        this.forumService.PostCount(likeDTO).subscribe({
+          next: (data) => {
+            console.log('回覆反應已提交:', data);
+            this.pendingReaction = null; // 提交成功後清空 pendingReaction
+          },
+          error: (err: any) => this.handleError('更新回覆反應失敗', err),
+        });
+      }, 1000);
+    }
+  }
+
+  private updateArticleReaction(
+    newReaction: 'like' | 'dislike' | null,
+    currentReaction: 'like' | 'dislike' | null
+  ) {
+    if (newReaction === 'like') {
+      this.article.likeCount++;
+      this.showMessage('success', '成功', '已按讚');
+
+      if (currentReaction === 'dislike') {
+        this.article.dislikeCount--;
+      }
+    } else if (newReaction === 'dislike') {
+      this.article.dislikeCount++;
+      this.showMessage('error', '注意', '已點踩!!');
+
+      if (currentReaction === 'like') {
+        this.article.likeCount--;
+      }
+    } else {
+      // 取消反應
+      if (currentReaction === 'like') {
+        this.article.likeCount--;
+        this.showMessage('warn', '成功', '讚已復原');
+      } else if (currentReaction === 'dislike') {
+        this.article.dislikeCount--;
+        this.showMessage('info', '成功', '踩已復原');
+      }
+    }
+  }
+
+  private updatePostReaction(
+    postId: number,
+    newReaction: 'like' | 'dislike' | null,
+    currentReaction: 'like' | 'dislike' | null
+  ) {
+    const postIndex = this.posts.findIndex((p) => p.postId === postId);
+    if (postIndex === -1) return;
+
+    if (newReaction === 'like') {
+      this.posts[postIndex].likeCount++;
+      this.showMessage('success', '成功', '已按讚');
+
+      if (currentReaction === 'dislike') {
+        this.posts[postIndex].dislikeCount--;
+      }
+    } else if (newReaction === 'dislike') {
+      this.posts[postIndex].dislikeCount++;
+      this.showMessage('error', '注意', '已點踩!!');
+
+      if (currentReaction === 'like') {
+        this.posts[postIndex].likeCount--;
+      }
+    } else {
+      // 取消反應
+      if (currentReaction === 'like') {
+        this.posts[postIndex].likeCount--;
+        this.showMessage('warn', '成功', '讚已復原');
+      } else if (currentReaction === 'dislike') {
+        this.posts[postIndex].dislikeCount--;
+        this.showMessage('info', '成功', '踩已復原');
+      }
+    }
+  }
+
   private showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity, summary, detail });
   }

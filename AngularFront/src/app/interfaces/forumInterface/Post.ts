@@ -7,6 +7,6 @@ export interface Post {
   lock: boolean;
   postImage: '';
   nickName: string;
-  likeCount: 0;
-  dislikeCount: 0;
+  likeCount: number;
+  dislikeCount: number;
 }
