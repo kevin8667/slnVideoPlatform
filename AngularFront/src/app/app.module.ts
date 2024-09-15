@@ -5,6 +5,7 @@ import { TestComponent } from './test/test.component';
 import { AppRoutingModule } from './app-routing.module';
 import { Router } from '@angular/router';
 import { RouterModule, Routes } from '@angular/router';
+import { TicketReservationComponent } from './Ticket/ticket-reservation/ticket-reservation.component';
 
 
 
@@ -12,6 +13,7 @@ import { RouterModule, Routes } from '@angular/router';
   declarations: [
     AppComponent,
     TestComponent,
+    TicketReservationComponent,
   ],
   imports: [
     BrowserModule,
