@@ -19,12 +19,6 @@ import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
   declarations: [
     AppComponent,
     TestComponent,
-    NavBarComponent,
-    FooterComponent,
-    ErrorPageComponent,
-    ShoppingCartComponent,
-    AuthCallbackComponent,
-  
   ],
   imports: [
     BrowserModule,
