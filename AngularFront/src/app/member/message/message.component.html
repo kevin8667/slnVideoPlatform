@@ -1,11 +1,14 @@
-<div class="container">
+<div class="main flex justify-content-center flex-wrap">
+  <div class="cornercontainer col-1"></div>
+<div class="maincontainer col-10">
   <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
   <div class="p-float-label">
     <input pInputText id="searchbar" (change)="searchMessages($event)" />
     <label htmlFor="searchbar">搜尋訊息</label>
   </div>
-  <table class="table table-striped">
-    <thead class="table-group-divider">
+<div class="container w-full">
+  <table class="table w-full ">
+    <thead class="thead w-full">
       <tr>
         <th scope="col"></th>
         <th scope="col">信息標題</th>
@@ -14,9 +17,9 @@
         <th scope="col">建立時間</th>
       </tr>
     </thead>
-    <tbody class="table-group-divider">
+    <tbody class="tbody w-full">
       <tr *ngFor="let message of filteredMessages; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
+        <td scope="row">{{ i + 1 }}</td>
         <td>{{ message.title }}</td>
         <td>{{ message.noticeContent }}</td>
         <td>{{ message.status }}</td>
@@ -24,4 +27,8 @@
       </tr>
     </tbody>
   </table>
+  </div>
+  </div>
+  <div class="cornercontainer col-1">
+</div>
 </div>

@@ -221,7 +221,7 @@ namespace VdbAPI.Member.Dao
                 string sqlQuery = @"
             INSERT INTO FriendList ( MemberID, FriendID, CreationDate, FriendStatus, InvitedMessage)
 values
-            (@MemberID,@FriendID,getdate(),@status,@InvitedMessage)";
+            (@MemberID,@FriendID,CONVERT(DATE, GETDATE()),@status,@InvitedMessage)";
 
                 List<SqlParameter> pars = new List<SqlParameter>
         {
@@ -280,7 +280,7 @@ values
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string sqlQuery = @"SELECT F.FriendID, F.CreationDate, F.FriendStatus, F.InvitedMessage, 
+                string sqlQuery = @"SELECT F.FriendID, CONVERT(DATE, F.CreationDate) AS CreationDate, F.FriendStatus, F.InvitedMessage, 
                                     M.NickName, M.MemberName, M.PhotoPath, M.MemberID 
                                     FROM FriendList F 
                                     JOIN MemberInfo M ON F.FriendID = M.MemberID
