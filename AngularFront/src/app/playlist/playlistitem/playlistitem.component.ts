@@ -1,10 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PlaylistitemDTO } from 'src/app/interfaces/PlaylistitemDTO';
+import videojs from 'video.js';
+import 'videojs-youtube';
 
 @Component({
   selector: 'app-playlistitem',
   templateUrl: './playlistitem.component.html',
-  styleUrls: ['./playlistitem.component.css']
+  styleUrls: ['./playlistitem.component.css'],
 })
 export class PlaylistitemComponent {
   @Input()
@@ -13,18 +15,48 @@ export class PlaylistitemComponent {
   @Output()
   remove: EventEmitter<void> = new EventEmitter<void>();
 
-  getThumbnailUrl(thumbnailPath: string | null): string {
-    return thumbnailPath ?? '/assets/img/movie.png';
-  }
+  player: any;
+  displayOverlay: boolean = false;
 
-  removeItem(): void {
-    const element = document.querySelector(`[data-id="${this.item.videoId}"]`);
-    if (element) {
-      element.classList.add('removing');
-    }
+  playItem() {
+    this.displayOverlay = true;
 
     setTimeout(() => {
-      this.remove.emit();
-    }, 700);
+      this.initializePlayer();
+    }, 100);
+  }
+
+  initializePlayer() {
+    if (this.player) {
+      this.player.dispose();
+    }
+    this.player = videojs('youtube-player', {
+      controls: true,
+      autoplay: true,
+      techOrder: ['youtube'],
+      sources: [
+        {
+          type: 'video/youtube',
+          src: 'https://www.youtube.com/watch?v=FnCSee1k-ek',
+        },
+      ],
+    });
+  }
+
+  closeOverlay() {
+    this.displayOverlay = false;
+    if (this.player) {
+      this.player.dispose();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.player) {
+      this.player.dispose();
+    }
+  }
+
+  getThumbnailUrl(thumbnailPath: string | null): string {
+    return thumbnailPath ?? '/assets/img/movie.png';
   }
 }

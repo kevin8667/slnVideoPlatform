@@ -95,23 +95,23 @@ button {
 }
 
 .remove-button,
-.move-button {
+.drag-handle {
   background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 18px;
   color: #17A2B8;
-}
-
-.move-button {
-  margin-left: 10px;
+  margin: 0 5px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .drag-handle {
-  margin-left: 10px;
   cursor: grab;
-  color: #666;
-  font-size: 18px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
 }
 
 .collaborator-item {
