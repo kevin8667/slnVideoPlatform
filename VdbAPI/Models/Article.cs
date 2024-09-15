@@ -29,5 +29,13 @@ public partial class Article
 
     public int LikeCount { get; set; }
 
-    public int DislikeCount { get; set; }
+    public virtual MemberInfo Author { get; set; }
+
+    public int? LikeCount { get; set; }
+
+    public int? DislikeCount { get; set; }
+
+    public virtual Theme Theme { get; set; }
+
+    public virtual ICollection<UserReaction> UserReactions { get; set; } = new List<UserReaction>();
 }
