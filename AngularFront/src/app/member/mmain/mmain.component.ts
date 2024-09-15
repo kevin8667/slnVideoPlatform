@@ -224,4 +224,9 @@ export class MmainComponent implements OnInit {
         return '未知等級';
     }
   }
+
+  BindingLine():void{
+      this.authService.loginWithLine(true);
+    
+  }
 }

@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
+using Jose;
+using VdbAPI.Member.ViewModel;
 
 namespace VdbAPI.Member.Service
 {
@@ -183,7 +185,21 @@ namespace VdbAPI.Member.Service
             return Regex.IsMatch(phone, phonePattern);
         }
 
+        public static string CreateJwtToken(mMemberInfo mInfo)
+        {
+            string secretKey = "JarryYa";
+            byte[] secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
 
-     
+            // 使用 HMAC SHA-256 加密方式生成 JWT
+            JwtAuthObject jwtObj = new JwtAuthObject();
+            jwtObj.Email = mInfo.Email;
+            jwtObj.MemberId = (int)mInfo.MemberID;
+            jwtObj.ExpiredTime = DateTime.Now.AddMinutes(10).ToFileTime();
+
+            string token = JWT.Encode(jwtObj, secretKeyBytes, JwsAlgorithm.HS256);
+
+            return token;
+        }
+
     }
 }

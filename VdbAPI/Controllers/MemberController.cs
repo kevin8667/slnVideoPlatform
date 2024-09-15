@@ -126,6 +126,18 @@ namespace VdbAPI.Controllers
             }
         }
 
+        [Route("api/[controller]/[action]")]
+        [HttpDelete]
+        public ReturnResult<string> DeleteNoticeMessage(int memberNoticeID)
+        {
+            ReturnResult<string> rtn = new ReturnResult<string>();
+            MemberHelper mHelper = new MemberHelper(ConnString);
+            mHelper.DeleteNoticeMessage(memberNoticeID);
+            rtn.IsSuccess = true;
+            rtn.AlertMsg = "已刪除訊息";
+            return rtn;
+        }
+
 
         [Route("api/[controller]/[action]")]
         [HttpGet]

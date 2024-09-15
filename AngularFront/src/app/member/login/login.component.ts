@@ -34,7 +34,7 @@ export class LoginComponent implements AfterViewInit {
     /* this.oauthService.initLoginFlow();*/
   }
   LineLogin() {
-    this.authService.loginWithLine();
+    this.authService.loginWithLine(false);
   }
   ngAfterViewInit() {
     if (typeof grecaptcha === 'undefined') {
@@ -110,4 +110,6 @@ export class LoginComponent implements AfterViewInit {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
+
+  
 }
