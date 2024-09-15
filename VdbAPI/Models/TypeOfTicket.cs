@@ -10,4 +10,6 @@ public partial class TypeOfTicket
     public int TypeOfTicket1 { get; set; }
 
     public string TypeOfTicketName { get; set; }
+
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

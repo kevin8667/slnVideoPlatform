@@ -939,6 +939,19 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.ShowtimeId).HasColumnName("ShowtimeID");
+
+            entity.HasOne(d => d.Seat).WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.SeatId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_Ticket_Seat1");
+
+            entity.HasOne(d => d.Showtime).WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.ShowtimeId)
+                .HasConstraintName("FK_Ticket_Showtime");
+
+            entity.HasOne(d => d.TypeOfTicketNavigation).WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.TypeOfTicket)
+                .HasConstraintName("FK_Ticket_TypeOfTicket");
         });
 
         modelBuilder.Entity<TypeList>(entity =>
@@ -968,6 +981,16 @@ public partial class VideoDBContext : DbContext
             entity.HasKey(e => e.CountId).HasName("PK__UserReac");
 
             entity.HasIndex(e => new { e.MemberId, e.ArticleId }, "UQ_UserReactions_MemberArticle").IsUnique();
+
+            entity.HasOne(d => d.Member).WithMany(p => p.UserReactions)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserReactions_MemberInfo");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.UserReactions)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserReactions_MemberInfo");
         });
 
         modelBuilder.Entity<ValidCode>(entity =>
