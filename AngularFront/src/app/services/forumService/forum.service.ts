@@ -1,12 +1,7 @@
 // forum.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  firstValueFrom,
-  Observable,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Theme } from '../../interfaces/forumInterface/Theme';
 import { ForumPagingDTO } from '../../interfaces/forumInterface/ForumPagingDTO';
@@ -14,6 +9,7 @@ import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
 import { Post } from '../../interfaces/forumInterface/Post';
 import { LikeDTO } from '../../interfaces/forumInterface/LikeDTO';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +22,7 @@ export default class ForumService {
   }
 
   getCurrentUserId(): number {
-    return 1
+    return 1;
   }
   loadThemeTags(): void {
     const api = 'https://localhost:7193/api/Articles/Theme';
@@ -114,8 +110,17 @@ export default class ForumService {
     link.href = '../../../assets/css/quill.snow.css';
     document.head.appendChild(link);
   }
-  ArticleCount(data:LikeDTO){
-    const api = 'https://localhost:7193/api/Articles/React'
-    return this.client.post(api,data)
+  ArticleCount(data: LikeDTO) {
+    const api = 'https://localhost:7193/api/Articles/React';
+    return this.client.post(api, data);
+  }
+  PostCount(data: LikeDTO) {
+    const api = 'https://localhost:7193/api/Posts/React';
+    return this.client.post(api, data);
+  }
+  getUserReaction(memberId: number, articleId: number) {
+    const api = 'https://localhost:7193/api/Articles/UserReactions';
+    const ArticleReactionDTO = { memberId: memberId, articleId: articleId };
+    return this.client.post<AllReactionsDTO>(api, ArticleReactionDTO);
   }
 }

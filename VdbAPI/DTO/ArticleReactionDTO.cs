@@ -1,12 +1,9 @@
 ﻿namespace VdbAPI.DTO {
-    public class LikeDTO {
+    public class ArticleReactionDTO {
         public int MemberId {
             get; set;
         }
-        public int ContentId {
-            get; set;
-        }
-        public bool? ReactionType {
+        public int ArticleId {
             get; set;
         }
     }

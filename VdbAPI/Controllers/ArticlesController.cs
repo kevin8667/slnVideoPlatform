@@ -22,58 +22,82 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        [HttpPost("UserReactions")]
+        public async Task<ActionResult<AllReactionsDTO>> GetUserReactions(ArticleReactionDTO dTO)
+        {
+            using var connection = new SqlConnection(_connection);
+            var sql = @"
+                        SELECT MemberId, ArticleId AS ContentId, ReactionType
+            FROM UserReactions
+            WHERE MemberId = @MemberId and ArticleId = @ArticleId;
+
+            SELECT MemberId, PostId AS ContentId, ReactionType
+            FROM PostUserReactions
+            WHERE ArticleId = @ArticleId and MemberId = @MemberId";
+
+            using var multi = await connection.QueryMultipleAsync(sql,new {
+                ArticleId = dTO.ArticleId,
+                MemberId = dTO.MemberId
+            });
+            var articleReaction = await multi.ReadFirstOrDefaultAsync<LikeDTO>();
+            var postReactions = await multi.ReadAsync<LikeDTO>();
+
+            var result = new AllReactionsDTO {
+                ArticleReaction = articleReaction,
+                PostReactions = postReactions.ToList()
+            };
+
+            return Ok(result);
+        }
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
-            // 驗證 reactionType 參數
-            if(likeDTO.reactionType != -1 && likeDTO.reactionType != 0 && likeDTO.reactionType != 1) {
-                return BadRequest("無效的反應類型。必須是 -1, 0 或 1。");
-            }
-
-            // 驗證文章是否存在
-            var article = await _context.Articles.FindAsync(likeDTO.ContentId);
-            if(article == null)
-                return NotFound("文章不存在");
-
-            using var connection = new SqlConnection(_connection);
-
+            var userReaction = await _context.UserReactions
+            .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId);
             try {
-                // SQL 處理 UserReactions
-                var sqlUserReaction = @"
-                IF EXISTS (SELECT 1 FROM UserReactions WHERE MemberId = @MemberId AND ArticleId = @ArticleId)
-                BEGIN
-                    UPDATE UserReactions SET ReactionType = @ReactionType 
-                    WHERE MemberId = @MemberId AND ArticleId = @ArticleId;
-                END
-                ELSE
-                BEGIN
-                    INSERT INTO UserReactions (MemberId, ArticleId, ReactionType)
-                    VALUES (@MemberId, @ArticleId, @ReactionType);
-                END";
+                if(likeDTO.ReactionType.HasValue) {
+                    if(userReaction == null) {
+                        userReaction = new UserReaction {
+                            MemberId = likeDTO.MemberId,
+                            ArticleId = likeDTO.ContentId,
+                            ReactionType = likeDTO.ReactionType.Value
+                        };
+                        _context.UserReactions.Add(userReaction);
+                    }
+                    else {
+                        userReaction.ReactionType = likeDTO.ReactionType.Value;
+                    }
+                }
+                else {
+                    if(userReaction != null) {
+                        _context.UserReactions.Remove(userReaction);
+                    }
+                }
 
-                await connection.ExecuteAsync(sqlUserReaction,new UserReaction {
-                    MemberId = likeDTO.MemberId,
-                    ArticleId = likeDTO.ContentId,
-                    ReactionType = (short?)likeDTO.reactionType
-                });
+                await _context.SaveChangesAsync();
 
+                // 使用 Dapper 進行高效計數查詢
+                using var connection = new SqlConnection(_connection);
                 var sqlGetCounts = @"
             SELECT 
-                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
-                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = -1) AS DislikeCount";
+                        (SELECT COUNT(1) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
+        (SELECT COUNT(1) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 0) AS DislikeCount";
 
                 var counts = await connection.QueryFirstAsync(sqlGetCounts,new {
-                    ArticleId = likeDTO
-                .ContentId
+                    ArticleId = likeDTO.ContentId
                 });
 
                 // 更新文章的計數
-                article.LikeCount = counts.LikeCount;
-                article.DislikeCount = counts.DislikeCount;
-                await _context.SaveChangesAsync();
+                var article = await _context.Articles.FindAsync(likeDTO.ContentId);
+                if(article != null) {
+                    article.LikeCount = counts.LikeCount;
+                    article.DislikeCount = counts.DislikeCount;
+                    await _context.SaveChangesAsync();
+                }
 
                 return Ok(counts);
             }
+
             catch(Exception ex) {
                 return StatusCode(500,"錯誤原因: " + ex.Message);
             }
@@ -212,15 +236,15 @@ namespace VdbAPI.Controllers {
                 return NotFound();
             }
             try {
-                await trans.CommitAsync();
                 _context.Articles.Remove(article);
                 await _context.SaveChangesAsync();
+                await trans.CommitAsync();
 
                 return NoContent();
             }
             catch(Exception ex) {
                 await trans.RollbackAsync();
-                return StatusCode(500,"錯誤原因: " + ex.Message);
+                return StatusCode(500,$"錯誤原因: {ex.Message} - 內部錯誤: {ex.InnerException?.Message}");
             }
         }
         // 文章列表
