@@ -359,6 +359,7 @@ export class ArticleComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
   private showMessage(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity, summary, detail });
   }
