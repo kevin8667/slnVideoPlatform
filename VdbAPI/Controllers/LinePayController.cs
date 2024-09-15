@@ -123,7 +123,7 @@ namespace VdbAPI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 /*Console.WriteLine($"Response: {responseData}");*/  // 檢查 LINE Pay 回應內容
-                return Redirect("http://localhost:4200/#/shoppingCart/order");
+                return Redirect("http://localhost:4200/shoppingCart/order");
             }
             else
             {
