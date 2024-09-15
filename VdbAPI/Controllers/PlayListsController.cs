@@ -514,5 +514,41 @@ namespace VdbAPI.Controllers
                 return Ok(allCollaborators);
             }
         }
+
+        [HttpPost("add-to-favorites")]
+        public async Task<IActionResult> AddToFavorites(int playListId)
+        {
+            int memberId = 5;
+            
+            var existingFavorite = await _context.MemberPlayLists
+                .Where(mpl => mpl.PlayListId == playListId && mpl.MemberId == memberId)
+                .FirstOrDefaultAsync();
+
+            if (existingFavorite != null)
+            {
+                return BadRequest(new { message = "該播放清單已經被添加到收藏中。" });
+            }
+            
+            var createdByMember = await _context.MemberCreatedPlayLists
+                .Where(mcpl => mcpl.PlayListId == playListId && mcpl.MemberId == memberId)
+                .FirstOrDefaultAsync();
+
+            if (createdByMember != null)
+            {
+                return BadRequest(new { message = "無法添加您自己創建的播放清單。" });
+            }
+            
+            var newFavorite = new MemberPlayList
+            {
+                MemberId = memberId,
+                PlayListId = playListId,
+                AddedOtherMemberPlayListAt = DateTime.Now
+            };
+
+            _context.MemberPlayLists.Add(newFavorite);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "成功將播放清單添加到收藏！" });
+        }
     }
 }

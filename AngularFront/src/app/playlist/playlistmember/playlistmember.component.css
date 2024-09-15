@@ -58,8 +58,9 @@
 
 ::ng-deep .playlist-cards {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 20px;
+  justify-content: flex-start;
 }
 
 ::ng-deep .playlist-cards div {
@@ -67,7 +68,8 @@
 }
 
 ::ng-deep .custom-card {
-  width: 100%;
+  flex: 1 1 300px;
+  max-width: 300px;
   box-sizing: border-box;
   font-size: 14px;
   padding: 20px;
@@ -123,27 +125,29 @@
   box-shadow: none;
 }
 
-::ng-deep .playlist-section h2 {
+::ng-deep .playlist-section {
   color: #333;
   font-size: 16px;
   margin-bottom: 20px;
 }
 
+::ng-deep h2 {
+  flex-basis: 100%;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
 @media (max-width: 1024px) {
-  ::ng-deep .playlist-container {
-    flex-direction: column;
+  ::ng-deep .custom-card {
+    flex: 1 1 calc(50% - 20px);
   }
+}
 
-  ::ng-deep .playlist-section {
-    margin-bottom: 20px;
-  }
-
-  ::ng-deep .topbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  ::ng-deep .topbar .add-icon {
-    margin-bottom: 10px;
+@media (max-width: 768px) {
+  ::ng-deep .custom-card {
+    flex: 1 1 100%;
   }
 }

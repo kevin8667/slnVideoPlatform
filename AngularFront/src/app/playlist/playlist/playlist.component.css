@@ -1,7 +1,7 @@
 .grid-view {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px 10px;
+  gap: 15px 10px;
 }
 
 .playlist-card {
@@ -144,6 +144,12 @@
 
 .topbar-search p-autocomplete , .topbar-search button {
   margin-left: 20px;
+}
+
+@media screen and (min-width: 1800px) {
+  .grid-view {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 @media screen and (max-width: 1400px) {
