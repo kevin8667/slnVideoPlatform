@@ -24,61 +24,94 @@ namespace VdbAPI.Controllers {
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
-            var post = await _context.Posts.FindAsync(likeDTO.ContentId);
-            if(post == null)
-                return NotFound("回文不存在");
-
             using var connection = new SqlConnection(_connection);
 
             try {
-                // SQL 處理 UserReactions
-                var postUserReaction = await _context.PostUserReactions
-                            .FirstOrDefaultAsync(ur => ur.PostId == likeDTO.ContentId);
-                string sql = @"select articleId from post where PostId = @PostId";
-                int? articleId = await connection.QueryFirstOrDefaultAsync<int?>(sql,new {
+                // 查詢是否有對應的回文
+                string postSql = @"SELECT PostId FROM Post WHERE PostId = @PostId";
+                var post = await connection.QueryFirstOrDefaultAsync<int?>(postSql,new {
                     PostId = likeDTO.ContentId
                 });
 
-                if(!articleId.HasValue)
+                if(post < 1)
                     return NotFound("回文不存在");
+
+                // 查詢對應的會員反應
+                string userReactionSql = @"
+            SELECT * FROM PostUserReactions 
+            WHERE PostId = @PostId AND MemberId = @MemberId";
+                var postUserReaction = await connection.QueryFirstOrDefaultAsync<PostUserReaction>(userReactionSql,new {
+                    PostId = likeDTO.ContentId,
+                    MemberId = likeDTO.MemberId
+                });
+
+                string articleIdSql = @"SELECT ArticleId FROM Post WHERE PostId = @PostId";
+                var articleId = await connection.QueryFirstOrDefaultAsync<int?>(articleIdSql,new {
+                    PostId = likeDTO.ContentId
+                });
+
+                if(!articleId.HasValue) {
+                    return NotFound("找不到對應的文章");
+                }
 
                 if(likeDTO.ReactionType.HasValue) {
                     if(postUserReaction == null) {
-                        postUserReaction = new PostUserReaction {
-                            MemberId = likeDTO.MemberId,
-                            ArticleId = articleId.Value,
-                            ReactionType = likeDTO.ReactionType.Value,
+                        // 沒有紀錄就新增
+                        string insertReactionSql = @"
+                    INSERT INTO PostUserReactions (PostId, MemberId, ReactionType, ArticleId)
+                    VALUES (@PostId, @MemberId, @ReactionType, @ArticleId)";
+                        await connection.ExecuteAsync(insertReactionSql,new {
                             PostId = likeDTO.ContentId,
-                        };
-                        // 沒有紀錄就加一筆
-                        _context.PostUserReactions.Add(postUserReaction);
+                            MemberId = likeDTO.MemberId,
+                            ReactionType = likeDTO.ReactionType.Value,
+                            ArticleId = articleId.Value
+                        });
                     }
                     else {
-                        postUserReaction.ReactionType = likeDTO.ReactionType.Value; //有紀錄就改值
+                        // 有紀錄就更新
+                        string updateReactionSql = @"
+                    UPDATE PostUserReactions 
+                    SET ReactionType = @ReactionType 
+                    WHERE PostId = @PostId AND MemberId = @MemberId";
+                        await connection.ExecuteAsync(updateReactionSql,new {
+                            PostId = likeDTO.ContentId,
+                            MemberId = likeDTO.MemberId,
+                            ReactionType = likeDTO.ReactionType.Value
+                        });
                     }
                 }
                 else {
                     if(postUserReaction != null) {
-                        _context.PostUserReactions.Remove(postUserReaction); //被取消就刪掉舊紀錄
+                        // 被取消就刪除紀錄
+                        string deleteReactionSql = @"
+                    DELETE FROM PostUserReactions 
+                    WHERE PostId = @PostId AND MemberId = @MemberId";
+                        await connection.ExecuteAsync(deleteReactionSql,new {
+                            PostId = likeDTO.ContentId,
+                            MemberId = likeDTO.MemberId
+                        });
                     }
                 }
 
-                await _context.SaveChangesAsync();
-
-                var sqlGetCounts = @"
-                SELECT 
+                // 查詢最新的喜歡和不喜歡數量
+                string sqlGetCounts = @"
+            SELECT 
                 (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 1) AS LikeCount,
                 (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 0) AS DislikeCount";
-
                 var counts = await connection.QueryFirstAsync(sqlGetCounts,new {
-                    PostId = likeDTO
-                .ContentId
+                    PostId = likeDTO.ContentId
                 });
 
-                // 更新文章的計數
-                post.LikeCount = counts.LikeCount;
-                post.DislikeCount = counts.DislikeCount;
-                await _context.SaveChangesAsync();
+                // 更新文章的喜歡與不喜歡數
+                string updatePostSql = @"
+            UPDATE Post
+            SET LikeCount = @LikeCount, DislikeCount = @DislikeCount 
+            WHERE PostId = @PostId";
+                await connection.ExecuteAsync(updatePostSql,new {
+                    LikeCount = counts.LikeCount,
+                    DislikeCount = counts.DislikeCount,
+                    PostId = likeDTO.ContentId
+                });
 
                 return Ok(counts);
             }
@@ -86,6 +119,7 @@ namespace VdbAPI.Controllers {
                 return StatusCode(500,"錯誤原因: " + ex.Message);
             }
         }
+
 
         // GET: api/Posts
         [HttpGet("{id}")]

@@ -23,21 +23,36 @@
     <div class="article-actions">
       <div>
         <p-button
-        [icon]="getReaction(0) === 'like' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"
-        [label]="'讚(' + article.likeCount + ')'"
-        [styleClass]="getReaction(0) === 'like' ? 'p-button-success mr-2 mb-2' : 'p-button-outlined p-button-success mr-2 mb-2'"
-        (click)="toggleReaction('like', 0)"
-      >
-      </p-button>
+          [icon]="
+            getReaction(0) === 'like'
+              ? 'pi pi-thumbs-up-fill'
+              : 'pi pi-thumbs-up'
+          "
+          [label]="'讚(' + article.likeCount + ')'"
+          [styleClass]="
+            getReaction(0) === 'like'
+              ? 'p-button-success mr-2 mb-2'
+              : 'p-button-outlined p-button-success mr-2 mb-2'
+          "
+          (click)="toggleReaction('like', 0)"
+        >
+        </p-button>
 
-      <p-button
-        [icon]="getReaction(0) === 'dislike' ? 'pi pi-thumbs-down-fill' : 'pi pi-thumbs-down'"
-        [label]="'踩(' + article.dislikeCount + ')'"
-        [styleClass]="getReaction(0) === 'dislike' ? 'p-button-danger mr-2 mb-2' : 'p-button-outlined p-button-danger mr-2 mb-2'"
-        (click)="toggleReaction('dislike', 0)"
-      >
-      </p-button>
-
+        <p-button
+          [icon]="
+            getReaction(0) === 'dislike'
+              ? 'pi pi-thumbs-down-fill'
+              : 'pi pi-thumbs-down'
+          "
+          [label]="'踩(' + article.dislikeCount + ')'"
+          [styleClass]="
+            getReaction(0) === 'dislike'
+              ? 'p-button-danger mr-2 mb-2'
+              : 'p-button-outlined p-button-danger mr-2 mb-2'
+          "
+          (click)="toggleReaction('dislike', 0)"
+        >
+        </p-button>
       </div>
       <div *ngIf="currentUserId === article.authorId || currentUserId === 1">
         <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
@@ -72,23 +87,49 @@
         ></div>
       </div>
       <div class="reply-actions">
-        <div >
+        <div>
           <p-button
-          [icon]="getReaction(post.postId) === 'like' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"
-          [label]="'讚(' + post.likeCount + ')'"
-          [styleClass]="getReaction(post.postId) === 'like' ? 'p-button-success mr-2 mb-2' : 'p-button-outlined p-button-success mr-2 mb-2'"
-          (onClick)="toggleReaction('like', post.postId)"
+            [icon]="
+              getReaction(post.postId) === 'like'
+                ? 'pi pi-thumbs-up-fill'
+                : 'pi pi-thumbs-up'
+            "
+            [label]="'讚(' + post.likeCount + ')'"
+            [styleClass]="
+              getReaction(post.postId) === 'like'
+                ? 'p-button-success mr-2 mb-2'
+                : 'p-button-outlined p-button-success mr-2 mb-2'
+            "
+            (onClick)="toggleReaction('like', post.postId)"
           >
           </p-button>
 
           <!-- 貼文的踩按鈕 -->
           <p-button
-          [icon]="getReaction(post.postId) === 'dislike' ? 'pi pi-thumbs-down-fill' : 'pi pi-thumbs-down'"
-          [label]="'踩(' + post.dislikeCount + ')'"
-          [styleClass]="getReaction(post.postId) === 'dislike' ? 'p-button-danger mr-2 mb-2' : 'p-button-outlined p-button-danger mr-2 mb-2'"
-          (onClick)="toggleReaction('dislike', post.postId)"
+            [icon]="
+              getReaction(post.postId) === 'dislike'
+                ? 'pi pi-thumbs-down-fill'
+                : 'pi pi-thumbs-down'
+            "
+            [label]="'踩(' + post.dislikeCount + ')'"
+            [styleClass]="
+              getReaction(post.postId) === 'dislike'
+                ? 'p-button-danger mr-2 mb-2'
+                : 'p-button-outlined p-button-danger mr-2 mb-2'
+            "
+            (onClick)="toggleReaction('dislike', post.postId)"
           >
           </p-button>
+        </div>
+        <div *ngIf="currentUserId === post.posterId || currentUserId === 1">
+          <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-ellipsis-v"
+            (click)="menu.toggle($event)"
+            class="p-button-text custom-menu-button"
+          ></button>
         </div>
       </div>
     </div>
