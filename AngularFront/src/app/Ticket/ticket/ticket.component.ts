@@ -14,8 +14,8 @@ export class TicketComponent implements OnInit {
   selectedCinema: any = null; // 選中的影院
   cinemas: any[] = []; // 影院清單
   showTime: any;
-  showtime: any;
-
+  // showtime: any;
+  
   constructor(private router: Router, private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -61,15 +61,6 @@ export class TicketComponent implements OnInit {
           acc.push(hall);
         }
 
-        // 24 小時制時間並放入 Showtimes 陣列
-        // hall.Showtimes.push(
-        //   new Date(showtime.showTimeDatetime).toLocaleTimeString([], {
-        //     hour: '2-digit',
-        //     minute: '2-digit',
-        //     hour12: false,
-        //   })
-        // );
-        // 24 小時制時間，日期與星期加入 Showtimes 陣列
         const showTimeDate = new Date(showtime.showTimeDatetime);
         const time = showTimeDate.toLocaleTimeString([], {
           hour: '2-digit',
@@ -85,13 +76,6 @@ export class TicketComponent implements OnInit {
         hall.Showtimes.push({ time, date, day });
         return acc;
       }, []);
-
-      // 對每個影廳的 Showtimes 進行排序
-      // halls.forEach((hall: { Showtimes: string[] }) => {
-      //   hall.Showtimes.sort((a: string, b: string) => {
-      //     return a.localeCompare(b); // 按時間排序
-      //   });
-      // });
 
       // 對每個影廳的 Showtimes 進行排序
       halls.forEach((hall: { Showtimes: any[] }) => {
@@ -134,48 +118,4 @@ export class TicketComponent implements OnInit {
   goToSelection() {
     window.location.href = '../../../ticketselection'; // 進入選擇票券頁面
   }
-
-  // 最基本
-  //constructor(private router: Router) {}
-  // ngOnInit(): void {
-  //   throw new Error('Method not implemented.');
-  // }
-  // selectedCinema: any = null;
-  // cinemas: any[] = [
-  //   {
-  //     CinemaName: '秀泰新北板橋',
-  //     Halls: [
-  //       {
-  //         HallName: '影廳 1',
-  //         Showtimes: ['14:35', '19:05'],
-  //       },
-  //       {
-  //         HallName: '影廳 2',
-  //         Showtimes: ['19:00', '21:08'],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     CinemaName: '新光影城台中大遠百',
-  //     Halls: [
-  //       {
-  //         HallName: '影廳 1',
-  //         Showtimes: ['15:00', '20:00'],
-  //       },
-  //       {
-  //         HallName: '影廳 2',
-  //         Showtimes: ['16:00', '22:00'],
-  //       },
-  //     ],
-  //   },
-  // ];
-
-  // onCinemaChange(event: any) {
-  //   const selectedCinemaName = event.target.value;
-  //   this.selectedCinema = this.cinemas.find(cinema => cinema.CinemaName === selectedCinemaName);
-  // }
-
-  // goToSelection() {
-  //   window.location.href = '../../../ticket-selection';
-  // }
 }
