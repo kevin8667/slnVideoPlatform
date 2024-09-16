@@ -111,6 +111,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[MemberRating]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[NowShowingTheater]",
          "ObjectType": 0
       },
@@ -212,10 +216,6 @@
       },
       {
          "Name": "[dbo].[VideoStreamingLinkList]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ViedoPlanList]",
          "ObjectType": 0
       },
       {

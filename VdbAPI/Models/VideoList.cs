@@ -57,6 +57,8 @@ public partial class VideoList
 
     public virtual GenreList MainGenre { get; set; }
 
+    public virtual ICollection<MemberRating> MemberRatings { get; set; } = new List<MemberRating>();
+
     public virtual ICollection<NowShowingTheater> NowShowingTheaters { get; set; } = new List<NowShowingTheater>();
 
     public virtual ICollection<PlayListItem> PlayListItems { get; set; } = new List<PlayListItem>();
@@ -65,11 +67,11 @@ public partial class VideoList
 
     public virtual SeriesList Series { get; set; }
 
+    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
+
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
 
     public virtual TypeList Type { get; set; }
 
     public virtual ICollection<VideoStreamingLinkList> VideoStreamingLinkLists { get; set; } = new List<VideoStreamingLinkList>();
-
-    public virtual ICollection<ViedoPlanList> ViedoPlanLists { get; set; } = new List<ViedoPlanList>();
 }

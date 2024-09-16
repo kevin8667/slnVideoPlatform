@@ -2,20 +2,22 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
-public partial class MemberPlayList
+public partial class MemberRating
 {
-    public int MemberPlayListId { get; set; }
+    public int RatingId { get; set; }
 
     public int MemberId { get; set; }
 
-    public int PlayListId { get; set; }
+    public int VideoId { get; set; }
 
-    public DateTime? AddedOtherMemberPlayListAt { get; set; }
+    public decimal Rating { get; set; }
 
+    [JsonIgnore]
     public virtual MemberInfo Member { get; set; }
-
-    public virtual PlayList PlayList { get; set; }
+    [JsonIgnore]
+    public virtual VideoList Video { get; set; }
 }

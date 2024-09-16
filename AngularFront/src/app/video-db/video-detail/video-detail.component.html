@@ -57,20 +57,19 @@
         style="text-decoration-line: none;"
         pButton
         pRipple
-        [href]="video.trailerUrl"
-        target="_blank"
         icon="pi pi-play"
-        >觀看預告片</a>
+        (click)="overLayToggle()">觀看預告片</a>
       </div>
       <div>
         <p *ngIf="season?.seasonName"><strong>季:</strong> {{ season?.seasonName }}</p>
         <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
         <p><strong>片長:</strong> {{ video.runningTime }}</p>
         <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
-        <p><strong>評分:</strong> 4.7 / 5<a (click)="op.toggle($event)" class="rating-link">
+        <p><strong>評分:</strong> 8.5 / 10<a (click)="op.toggle($event)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分
         </a></p>
         <p-toast position="center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
+
           <ng-template let-message pTemplate="message">
               <div class="flex flex-column" style="flex: 1">
                   <div class="text-center">
@@ -89,6 +88,7 @@
               </div>
           </ng-template>
       </p-toast>
+      <p-toast position="top-center" key="global"></p-toast>
         <p-overlayPanel #op>
           <ng-template pTemplate="content">
               <h4>Custom Content</h4>
@@ -168,7 +168,7 @@
         class="video-carousel-item border-1 surface-border border-round m-2 text-center py-5 px-3"
       >
         <div class="mb-3">
-          <a [routerLink]="['/details', video.videoId]"
+          <a [routerLink]="['/video-db/details', video.videoId]"
             ><img
               [src]="video.thumbnailPath"
               [alt]="video.name"
@@ -182,4 +182,11 @@
       </div>
     </ng-template>
   </p-carousel>
+</div>
+<div *ngIf="trailerVisibility" class="trailerOverlay" >
+  <a (click)="overLayToggle()"style="text-decoration: none;">
+    <i class="pi pi-times closeButton"></i>
+  </a>
+  <iframe [src]="videoUrl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" style="position: absolute;" allowfullscreen></iframe>
+
 </div>

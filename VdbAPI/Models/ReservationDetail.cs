@@ -9,17 +9,25 @@ public partial class ReservationDetail
 {
     public int ReservationId { get; set; }
 
-    public int MemberId { get; set; }
+    public int? MemberId { get; set; }
+
+    public int? ShowtimeId { get; set; }
 
     public DateTime? PurchaseDate { get; set; }
 
-    public decimal? Total { get; set; }
+    public string TypeOfTicket { get; set; }
+
+    public decimal? Price { get; set; }
 
     public string Status { get; set; }
 
-    public int? PaymentMethod { get; set; }
+    public string PaymentMethod { get; set; }
 
     public int? CouponId { get; set; }
 
+    public int? TicketCount { get; set; }
+
     public virtual MemberInfo Member { get; set; }
+
+    public virtual Showtime Showtime { get; set; }
 }

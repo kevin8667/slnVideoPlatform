@@ -24,9 +24,30 @@ namespace VdbAPI.Controllers
 
         // GET: api/VideoList
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VideoList>>> GetVideoLists()
+        public async Task<ActionResult<IEnumerable<VideoListDTO>>> GetVideoLists()
         {
-            return await _context.VideoLists.ToListAsync();
+            var query = _context.VideoLists.AsQueryable();
+
+            var videoListDTOs = await query
+               .Select(v => new VideoListDTO
+               {
+                   VideoId = v.VideoId,
+                   VideoName = v.VideoName,
+                   TypeId = v.TypeId,
+                   TypeName = v.Type.TypeName,
+                   Summary = v.Summary,
+                   SeriesId = v.SeriesId,
+                   SeriesName = v.Series.SeriesName,
+                   SeasonId = v.SeasonId,
+                   SeasonName = v.Season.SeasonName,
+                   MainGenreId = v.MainGenreId,
+                   MainGenreName = v.MainGenre.GenreName,
+                   ThumbnailPath = v.ThumbnailPath,
+                   Bgpath = v.Bgpath
+
+               }).ToListAsync();
+
+            return Ok(videoListDTOs);
         }
 
         // GET: api/VideoList/5
@@ -42,6 +63,7 @@ namespace VdbAPI.Controllers
 
             return videoList;
         }
+
         [HttpGet("type={typeID}")]
         public async Task<ActionResult<VideoList>> GetVideoListByType(int typeID)
         {

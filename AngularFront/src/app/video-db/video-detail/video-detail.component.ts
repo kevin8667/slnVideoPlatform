@@ -3,10 +3,10 @@ import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
-import { data } from 'jquery';
 import { ConfirmationService, MessageService  } from 'primeng/api';
 import { RatingRateEvent } from 'primeng/rating';
 import { OverlayPanel } from 'primeng/overlaypanel';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-video-detail',
@@ -32,6 +32,10 @@ export class VideoDetailComponent implements OnInit{
   userRating!:number;
 
   visible: boolean = false;
+
+  trailerVisibility:boolean=false;
+
+  videoUrl: SafeResourceUrl ="";
 
 
   selectedIndex = 0; // 初始為第一張圖片
@@ -64,7 +68,7 @@ export class VideoDetailComponent implements OnInit{
     }
   ]
 
-  constructor(private route: ActivatedRoute, private videoService: VideoDBService, private confirmationService: ConfirmationService, private messageService: MessageService) {
+  constructor(private route: ActivatedRoute, private videoService: VideoDBService, private confirmationService: ConfirmationService, private messageService: MessageService, private sanitizer: DomSanitizer) {
     this.video = {
       videoId: 1,
       videoName: 'Sample Video',
@@ -115,18 +119,31 @@ export class VideoDetailComponent implements OnInit{
     event.originalEvent.stopPropagation();
 
     if (!this.visible) {
-      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: 'Are you sure?', detail: 'Confirm to proceed' });
+      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: '確定要留下評分?', detail: '確認評分' });
       this.visible = true;
     }
   }
   onConfirm() {
     this.messageService.clear('confirm');
+
     this.visible = false;
+
+    this.messageService.add({
+      key: 'global',
+      severity: 'success',
+      summary: '已成功留下評分!',
+      detail: `您留下的評分為：${this.userRating}`
+    });
   }
 
 onReject() {
     this.messageService.clear('confirm');
     this.visible = false;
+  }
+
+  overLayToggle(){
+    this.trailerVisibility = !this.trailerVisibility;
+    console.log(this.trailerVisibility)
   }
 
   ngOnInit() {
@@ -141,6 +158,7 @@ onReject() {
           if(this.video.seasonId){
             this.videoService.getSeasonWithID(data.seasonId.toString()).subscribe((data)=>{this.season = data})
           }
+          this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.video.trailerUrl);
         });
 
         this.videoService.getImagesByVideoID(videoID).subscribe(images=>{

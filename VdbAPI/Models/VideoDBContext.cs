@@ -63,6 +63,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<MemberPlayList> MemberPlayLists { get; set; }
 
+    public virtual DbSet<MemberRating> MemberRatings { get; set; }
+
     public virtual DbSet<NowShowingTheater> NowShowingTheaters { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
@@ -115,8 +117,6 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<VideoStreamingLinkList> VideoStreamingLinkLists { get; set; }
 
-    public virtual DbSet<ViedoPlanList> ViedoPlanLists { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActorList>(entity =>
@@ -135,11 +135,9 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<Article>(entity =>
         {
-            entity.HasKey(e => e.ArticleId).HasName("PK__Article__9C6270C8A7594F7D");
+            entity.HasKey(e => e.ArticleId).IsClustered(false);
 
             entity.ToTable("Article");
-
-            entity.HasIndex(e => new { e.ArticleId, e.ThemeId, e.AuthorId, e.Title, e.PostDate, e.Lock }, "NonClusteredIndex-20240815-155924");
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
@@ -147,9 +145,10 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.PostDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.ReplyCount).HasDefaultValue(0);
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
-            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(50);
             entity.Property(e => e.UpdateDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -173,15 +172,17 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
-            entity.Property(e => e.MemberName)
+            entity.Property(e => e.NickName)
                 .IsRequired()
-                .HasMaxLength(30);
+                .HasMaxLength(10);
             entity.Property(e => e.PostDate).HasColumnType("datetime");
             entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
             entity.Property(e => e.ThemeName)
                 .IsRequired()
                 .HasMaxLength(50);
-            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(50);
             entity.Property(e => e.UpdateDate).HasColumnType("datetime");
         });
 
@@ -353,6 +354,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.FriendStatus)
                 .IsRequired()
                 .HasMaxLength(50);
+            entity.Property(e => e.InvitedMessage).HasMaxLength(50);
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
             entity.HasOne(d => d.Friend).WithMany(p => p.FriendListFriends)
@@ -631,6 +633,8 @@ public partial class VideoDBContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasComment("信箱");
+            entity.Property(e => e.FidocredentialId).HasColumnName("FIDOCredentialID");
+            entity.Property(e => e.Fidoenabled).HasColumnName("FIDOEnabled");
             entity.Property(e => e.Gender)
                 .IsRequired()
                 .HasMaxLength(5)
@@ -730,6 +734,26 @@ public partial class VideoDBContext : DbContext
                 .HasConstraintName("FK_MemberPlayList_PlayList");
         });
 
+        modelBuilder.Entity<MemberRating>(entity =>
+        {
+            entity.HasKey(e => e.RatingId);
+
+            entity.ToTable("MemberRating");
+
+            entity.Property(e => e.RatingId).HasColumnName("RatingID");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.Rating).HasColumnType("decimal(2, 1)");
+            entity.Property(e => e.VideoId).HasColumnName("VideoID");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.MemberRatings)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("FK_MemberRating_MemberInfo");
+
+            entity.HasOne(d => d.Video).WithMany(p => p.MemberRatings)
+                .HasForeignKey(d => d.VideoId)
+                .HasConstraintName("FK_MemberRating_VideoList");
+        });
+
         modelBuilder.Entity<NowShowingTheater>(entity =>
         {
             entity.HasKey(e => e.CombinationId);
@@ -761,12 +785,9 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.DeliveryName).HasMaxLength(50);
             entity.Property(e => e.DriverId).HasColumnName("DriverID");
             entity.Property(e => e.LastEditTime).HasColumnType("datetime");
+            entity.Property(e => e.OrderDate).HasColumnType("datetime");
             entity.Property(e => e.OrderTotalPrice).HasColumnType("money");
             entity.Property(e => e.ShoppingCartId).HasColumnName("ShoppingCartID");
-
-            entity.HasOne(d => d.Coupon).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.CouponId)
-                .HasConstraintName("FK_Order_CouponInfo");
 
             entity.HasOne(d => d.Driver).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.DriverId)
@@ -787,7 +808,6 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_OrderDetail_Order");
 
             entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
@@ -817,9 +837,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.AnalysisTimestamp).HasColumnType("datetime");
             entity.Property(e => e.PlayListCreatedAt).HasColumnType("datetime");
             entity.Property(e => e.PlayListDescription).HasMaxLength(50);
-            entity.Property(e => e.PlayListName)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.PlayListName).HasMaxLength(50);
             entity.Property(e => e.PlayListUpdatedAt).HasColumnType("datetime");
         });
 
@@ -831,9 +849,7 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.CollaboratorId).HasColumnName("CollaboratorID");
             entity.Property(e => e.ActionTimestamp).HasColumnType("datetime");
-            entity.Property(e => e.CollaboratorActionType)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.CollaboratorActionType).HasMaxLength(50);
             entity.Property(e => e.CollaboratorJoinedAt).HasColumnType("datetime");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.PlayListId).HasColumnName("PlayListID");
@@ -899,13 +915,11 @@ public partial class VideoDBContext : DbContext
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Post__AA126038B6A21AA1");
+            entity.HasKey(e => e.PostId).IsClustered(false);
 
             entity.ToTable("Post");
 
-            entity.Property(e => e.PostId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("PostID");
+            entity.Property(e => e.PostId).HasColumnName("PostID");
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.Lock).HasDefaultValue(true);
             entity.Property(e => e.PostContent).IsRequired();
@@ -914,9 +928,8 @@ public partial class VideoDBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.PosterId).HasColumnName("PosterID");
 
-            entity.HasOne(d => d.PostNavigation).WithOne(p => p.Post)
-                .HasForeignKey<Post>(d => d.PostId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.Article).WithMany(p => p.Posts)
+                .HasForeignKey(d => d.ArticleId)
                 .HasConstraintName("FK_Post_Article");
 
             entity.HasOne(d => d.Poster).WithMany(p => p.Posts)
@@ -946,14 +959,22 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
             entity.Property(e => e.CouponId).HasColumnName("CouponID");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.PaymentMethod).HasMaxLength(50);
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.PurchaseDate).HasColumnType("datetime");
+            entity.Property(e => e.ShowtimeId).HasColumnName("ShowtimeID");
             entity.Property(e => e.Status).HasMaxLength(50);
-            entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TypeOfTicket)
+                .HasMaxLength(10)
+                .IsFixedLength();
 
             entity.HasOne(d => d.Member).WithMany(p => p.ReservationDetails)
                 .HasForeignKey(d => d.MemberId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ReservationDetail_MemberInfo");
+
+            entity.HasOne(d => d.Showtime).WithMany(p => p.ReservationDetails)
+                .HasForeignKey(d => d.ShowtimeId)
+                .HasConstraintName("FK_ReservationDetail_Showtime");
         });
 
         modelBuilder.Entity<SeasonList>(entity =>
@@ -1004,16 +1025,20 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.ShoppingCartId).HasColumnName("ShoppingCartID");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
-            entity.Property(e => e.ViedoPlanId).HasColumnName("ViedoPlanID");
+            entity.Property(e => e.PlanId).HasColumnName("PlanID");
+            entity.Property(e => e.VideoId).HasColumnName("VideoID");
 
             entity.HasOne(d => d.Member).WithMany(p => p.ShoppingCarts)
                 .HasForeignKey(d => d.MemberId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ShoppingCart_MemberInfo");
 
-            entity.HasOne(d => d.ViedoPlan).WithMany(p => p.ShoppingCarts)
-                .HasForeignKey(d => d.ViedoPlanId)
-                .HasConstraintName("FK_ShoppingCart_ViedoPlanList");
+            entity.HasOne(d => d.Plan).WithMany(p => p.ShoppingCarts)
+                .HasForeignKey(d => d.PlanId)
+                .HasConstraintName("FK_ShoppingCart_PlanList");
+
+            entity.HasOne(d => d.Video).WithMany(p => p.ShoppingCarts)
+                .HasForeignKey(d => d.VideoId)
+                .HasConstraintName("FK_ShoppingCart_VideoList");
         });
 
         modelBuilder.Entity<ShowingHall>(entity =>
@@ -1243,26 +1268,6 @@ public partial class VideoDBContext : DbContext
                 .HasForeignKey(d => d.VideoId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_VideoStreamingLinkList_VideoList");
-        });
-
-        modelBuilder.Entity<ViedoPlanList>(entity =>
-        {
-            entity.HasKey(e => e.ViedoPlanId);
-
-            entity.ToTable("ViedoPlanList");
-
-            entity.Property(e => e.ViedoPlanId).HasColumnName("ViedoPlanID");
-            entity.Property(e => e.PlanId).HasColumnName("PlanID");
-            entity.Property(e => e.ViedoId).HasColumnName("ViedoID");
-
-            entity.HasOne(d => d.Plan).WithMany(p => p.ViedoPlanLists)
-                .HasForeignKey(d => d.PlanId)
-                .HasConstraintName("FK_ViedoPlanList_PlanList");
-
-            entity.HasOne(d => d.Viedo).WithMany(p => p.ViedoPlanLists)
-                .HasForeignKey(d => d.ViedoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ViedoPlanList_VideoList");
         });
 
         OnModelCreatingPartial(modelBuilder);

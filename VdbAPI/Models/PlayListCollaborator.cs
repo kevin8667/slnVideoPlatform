@@ -13,11 +13,11 @@ public partial class PlayListCollaborator
 
     public int MemberId { get; set; }
 
-    public DateTime CollaboratorJoinedAt { get; set; }
+    public DateTime? CollaboratorJoinedAt { get; set; }
 
     public string CollaboratorActionType { get; set; }
 
-    public DateTime ActionTimestamp { get; set; }
+    public DateTime? ActionTimestamp { get; set; }
 
     public virtual MemberInfo Member { get; set; }
 

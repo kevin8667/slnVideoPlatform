@@ -90,6 +90,10 @@ public partial class MemberInfo
 
     public string MemberIdentity { get; set; }
 
+    public bool Fidoenabled { get; set; }
+
+    public int? FidocredentialId { get; set; }
+
     public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 
     public virtual ICollection<BlackList> BlackListBlockedMembers { get; set; } = new List<BlackList>();
@@ -113,6 +117,8 @@ public partial class MemberInfo
     public virtual ICollection<MemberNotice> MemberNotices { get; set; } = new List<MemberNotice>();
 
     public virtual ICollection<MemberPlayList> MemberPlayLists { get; set; } = new List<MemberPlayList>();
+
+    public virtual ICollection<MemberRating> MemberRatings { get; set; } = new List<MemberRating>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
