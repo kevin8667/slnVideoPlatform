@@ -5,7 +5,7 @@ import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
 import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
 import ForumService from 'src/app/services/forumService/forum.service'; // 自定義模組
-import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
@@ -18,9 +18,9 @@ export class ArticleComponent implements OnInit {
   posts: Post[] = [];
   menuItems: MenuItem[] = [];
   debounceTimer!: number;
-  currentUserId!: number;
   pendingReaction: any = null;
   show = false;
+  user!: memberName;
   constructor(
     private router: Router,
     private forumService: ForumService,
@@ -59,42 +59,45 @@ export class ArticleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.forumService.loadQuill();
-    this.currentUserId = this.forumService.getCurrentUser().id;
+    this.forumService.user$.subscribe((data) => (this.user = data));
+    this.forumService.loadCss('../../../assets/css/quill.snow.css');
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
-    this.forumService
-      .getUserReaction(this.currentUserId, this.articleId)
-      .subscribe({
-        next: (reactions) => {
-          const articleReactionType = reactions.articleReaction?.reactionType;
-          const postReactions = reactions.postReactions;
 
-          // 根據文章 reactionType 初始化文章的反應
-          if (articleReactionType === true) {
-            this.reactionMap[0] = 'like';
-          } else if (articleReactionType === false) {
-            this.reactionMap[0] = 'dislike';
-          } else {
-            this.reactionMap[0] = null;
-          }
+    if (this.user.memberId > 0) {
+      this.forumService
+        .getUserReaction(this.user.memberId, this.articleId)
+        .subscribe({
+          next: (reactions) => {
+            const articleReactionType = reactions.articleReaction?.reactionType;
+            const postReactions = reactions.postReactions;
 
-          // 迴圈檢查每篇文章的回文反應
-          postReactions.forEach((postReaction) => {
-            const postReactionType = postReaction.reactionType;
-            const postId = postReaction.contentId;
-
-            if (postReactionType === true) {
-              this.reactionMap[postId] = 'like';
-            } else if (postReactionType === false) {
-              this.reactionMap[postId] = 'dislike';
+            // 根據文章 reactionType 初始化文章的反應
+            if (articleReactionType === true) {
+              this.reactionMap[0] = 'like';
+            } else if (articleReactionType === false) {
+              this.reactionMap[0] = 'dislike';
             } else {
-              this.reactionMap[postId] = null;
+              this.reactionMap[0] = null;
             }
-          });
-        },
-        error: (error) =>
-          console.error('Error fetching user reactions:', error),
-      });
+
+            // 迴圈檢查每篇文章的回文反應
+            postReactions.forEach((postReaction) => {
+              const postReactionType = postReaction.reactionType;
+              const postId = postReaction.contentId;
+
+              if (postReactionType === true) {
+                this.reactionMap[postId] = 'like';
+              } else if (postReactionType === false) {
+                this.reactionMap[postId] = 'dislike';
+              } else {
+                this.reactionMap[postId] = null;
+              }
+            });
+          },
+          error: (error) =>
+            console.error('Error fetching user reactions:', error),
+        });
+    }
 
     this.forumService.getArticle(this.articleId).subscribe((data) => {
       if (!data.lock) {
@@ -213,7 +216,7 @@ export class ArticleComponent implements OnInit {
     newReaction: 'like' | 'dislike' | null
   ) {
     return {
-      memberId: this.currentUserId,
+      memberId: this.user.memberId,
       contentId: contentId === 0 ? this.articleId : contentId,
       reactionType:
         newReaction === 'like'
@@ -235,7 +238,7 @@ export class ArticleComponent implements OnInit {
     }
 
     const likeDTO = {
-      memberId: this.currentUserId,
+      memberId: this.user.memberId,
       contentId: contentId === 0 ? this.articleId : contentId,
       reactionType:
         newReaction === 'like'

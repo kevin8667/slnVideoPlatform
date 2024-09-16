@@ -1,3 +1,4 @@
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import ForumService from 'src/app/services/forumService/forum.service';
@@ -8,8 +9,9 @@ export const forumGuard: CanActivateFn = (route, state) => {
   const type = route.paramMap.get('type');
   const requiresAuth = route.data['requiresAuth'];
   if (requiresAuth) {
-    const userId = forumService.getCurrentUser().id;
-    if (userId === null) {
+    let userId = 0;
+    forumService.user$.subscribe((data) => (userId = data.memberId));
+    if (userId < 0) {
       router.navigate(['/login']);
       return false;
     }
@@ -32,7 +34,6 @@ export const forumGuard: CanActivateFn = (route, state) => {
       return false;
     }
   }
-
 
   return true;
 };

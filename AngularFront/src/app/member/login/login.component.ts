@@ -15,8 +15,8 @@ declare var grecaptcha: any;
   providers: [MemberService],
 })
 export class LoginComponent implements AfterViewInit {
-  email: string = 'jarry6304@hotmail.com';
-  pwd: string = 'password1';
+  email: string = 'example6@example.com';
+  pwd: string = 'password6';
   siteKey: string = '6Lf8GToqAAAAAMLRKwyKmVEiMtYeMDqK61sPxWPS';
   googleClientId = environment.googleClientId;
 
@@ -29,7 +29,6 @@ export class LoginComponent implements AfterViewInit {
   }
 
   login() {
-    debugger;
     console.log('Login()');
     /* this.oauthService.initLoginFlow();*/
   }
@@ -54,7 +53,6 @@ export class LoginComponent implements AfterViewInit {
     }
   }
   onLogin() {
-    debugger;
     const recaptchaResponse = grecaptcha.getResponse();
     if (!recaptchaResponse) {
       alert('請進行圖形認證');

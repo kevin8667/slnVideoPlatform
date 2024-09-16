@@ -10,9 +10,11 @@ import { Router } from '@angular/router';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { Chatroom } from 'src/app/interfaces/forumInterface/Chatroom';
 import { ForumPagingDTO } from 'src/app/interfaces/forumInterface/ForumPagingDTO';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
 import ForumService from 'src/app/services/forumService/forum.service';
 import { SignalRService } from 'src/app/services/forumService/signal-r.service';
+import { use } from 'video.js/dist/types/tech/middleware';
 
 @Component({
   selector: 'app-article-list',
@@ -24,7 +26,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   themeTag: Theme[] = [];
   debounceTimer!: number;
   forumPagingDTO: ForumPagingDTO | undefined;
-
+  user!: memberName;
   message = '';
   messages: Chatroom[] = [];
   private messageSubscription?: Subscription;
@@ -78,15 +80,14 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     private route: Router,
     private forumService: ForumService,
     private signalRService: SignalRService
-  ) {}
+  ) {
+    this.forumService.user$.subscribe((data) => (this.user = data));
+  }
   ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
   loading = false;
   ngOnInit(): void {
-    this.currentUserId = this.forumService.getCurrentUser().id
-      ? this.forumService.getCurrentUser().id
-      : 0;
     this.load();
     this.messageSubscription = this.signalRService.messages$.subscribe({
       next: (data: Chatroom[]) => {
@@ -98,6 +99,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
       this.themeTag = data;
     });
   }
+
   private scrollToBottom(): void {
     try {
       this.chatContainer.nativeElement.scrollTop =
@@ -107,9 +109,10 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   sendMessage(message: string) {
     if (!message.trim()) return;
     const chatroom: Chatroom = {
-      senderId: this.forumService.getCurrentUser().id,
+      senderId: this.user.memberId,
       chatMessage: message,
-      nickname: this.forumService.getCurrentUser().name,
+      nickname: this.user.nickName,
+      sendtime: new Date().toISOString(),
     };
     this.signalRService.sendMessage(chatroom);
     this.scrollToBottom();
@@ -194,7 +197,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     const imgSrc = htmlContent.substring(srcStart + 5, srcEnd);
     return imgSrc;
   }
-  navToArticle(id:any){
-    this.route.navigate(['forum',id])
+  navToArticle(id: any) {
+    this.route.navigate(['forum', id]);
   }
 }

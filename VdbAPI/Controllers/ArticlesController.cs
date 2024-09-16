@@ -2,18 +2,18 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 using System.Text;
 
 using VdbAPI.DTO;
+using VdbAPI.Filters;
 using VdbAPI.Models;
 
 namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArticlesController : ControllerBase {
+    public class ArticlesController : BaseController {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
 
@@ -64,6 +64,7 @@ namespace VdbAPI.Controllers {
 
             return Ok(result);
         }
+        [JwtActionFilter]
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
@@ -150,6 +151,7 @@ namespace VdbAPI.Controllers {
             return Ok(articleView);
         }
         //新增
+        [JwtActionFilter]
         [HttpPost]
         public async Task<IActionResult> CreateArticle(ArticleView articleView)
         {
@@ -196,6 +198,7 @@ namespace VdbAPI.Controllers {
 
         }
         //編輯
+        [JwtActionFilter]
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchArticle(int id,ArticleUpdate articleUpdate)
         {
@@ -242,6 +245,7 @@ namespace VdbAPI.Controllers {
         }
 
         // DELETE: api/Articles/5 刪除
+        [JwtActionFilter]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {

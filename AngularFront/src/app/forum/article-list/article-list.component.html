@@ -103,7 +103,10 @@
                   <img
                     (click)="navToArticle(article.articleId)"
                     class="article-cover"
-                    [src]="getFirstImageSrc(article.articleContent)||'/assets/images/defaultImg.png'"
+                    [src]="
+                      getFirstImageSrc(article.articleContent) ||
+                      '/assets/images/defaultImg.png'
+                    "
                     [alt]="article.title"
                   />
                 </div>
@@ -151,13 +154,22 @@
         <div class="chat-header">
           <h1>聊天室</h1>
         </div>
-        <div class="chat-messages" #chatContainer>
-          <div class="" *ngFor="let msg of messages.reverse()">
-            <span class="sender">{{ msg.nickname }}：</span>
-            <span class="message">{{ msg.chatMessage }}</span>
+        <div class="chat-messages-container" #chatContainer>
+          <div *ngFor="let msg of messages.reverse()">
+            <div class="chat-messages">
+              <!-- 使用者名稱和時間保持在訊息框外 -->
+              <div class="message-info">
+                <span class="message-user">{{ msg.nickname }}</span>
+                <span class="snedTime">{{ msg.sendtime | forumDate : 1 }}</span>
+              </div>
+              <!-- 只有訊息本身在框內 -->
+              <p [ngClass]="{ 'my-message-text': msg.isMined, 'message-text': !msg.isMined }">
+                {{ msg.chatMessage }}
+              </p>
+            </div>
           </div>
         </div>
-        <div class="chat-input" *ngIf="currentUserId !== 0">
+        <div class="chat-input" >
           <input
             [(ngModel)]="message"
             (keydown.enter)="sendMessage(message)"
