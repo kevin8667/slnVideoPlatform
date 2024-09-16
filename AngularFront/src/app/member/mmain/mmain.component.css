@@ -146,20 +146,48 @@ button:hover , :focus {
   padding-top: 1rem;
 
 }
-/* 最新消息區域的樣式 */
+
 .news-section {
   margin-top: 20px;
   padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 0px;
   background-color: #f9f9f9;
   max-height: 300px;
+  overflow-y: auto; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.news-list {
+  padding-right: 10px; 
 }
 
 .news-section h3 {
   margin-bottom: 10px;
   font-size: 1.5em;
   color: #333;
+}
+
+.news-section::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.news-section::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px; 
+}
+
+.news-section::-webkit-scrollbar-thumb {
+  background: #17a2b8; 
+  border-radius: 10px; 
+}
+
+.news-section::-webkit-scrollbar-thumb:hover {
+  background: #00c8d6; 
+}
+
+.news-section::-webkit-scrollbar-thumb:active {
+  background: #007bff; 
 }
 
 .news-header:hover, :focus{
@@ -228,15 +256,15 @@ button:hover , :focus {
 }
 
 .news-date {
-  font-size: 0.9em; /* 日期字體大小 */
-  color: #6c757d; /* 日期顏色 */
+  font-size: 0.9em; 
+  color: #6c757d;
 }
 
 .news-title {
   margin-left: 30px;
   font-size: 1.1em;
   font-weight: bold;
-  color: #007bff; /* 標題顏色 */
+  color: #17a2b8; 
 }
 
 .news-summary {
@@ -247,56 +275,56 @@ button:hover , :focus {
 
 .modify-area {
   background: #f9f9f9;
-  border-radius: 8px;
+  border-radius: 0px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 
 .profile-header {
   display: flex;
-  align-items: flex-end; /* 垂直對齊底部 */
-  gap: 10px; /* 圖片和文字之間的間距 */
+  align-items: flex-end; 
+  gap: 10px; 
 }
 
 .rounded-circle {
-  width: 100px; /* 或者你需要的其他尺寸 */
-  height: 100px; /* 或者你需要的其他尺寸 */
+  width: 100px; 
+  height: 100px; 
 }
 
 .profile-info {
   display: flex;
-  align-items: flex-end; /* 垂直對齊底部 */
+  align-items: flex-end;
 }
 
 .picdiv{
 text-align:left;
-
+flex-direction: row
 }
 
 .crown {
   width: 25px;
-  margin-right: 5px; /* 圖標和文字之間的間距 */
+  margin-right: 5px; 
   margin-bottom: 10px;
 }
 
 .profile-info label {
-  font-size: 1rem; /* 調整文字大小 */
+  font-size: 1rem; 
 }
 
 
 .profile-image-container {
-  position: relative; /* 設置相對定位 */
-  display: inline-block; /* 使容器自適應內容 */
+  position: relative; 
+  display: inline-block; 
 
 }
 
 .mpic {
-  width: 150px; /* 設定寬度 */
-  height: 150px; /* 設定高度 */
-  border-radius: 50%; /* 設定圓角為 50% 以形成圓形 */
-  object-fit: cover; /* 確保圖片填滿圓形 */
-  background-color: transparent; /* 設定背景透明 */
+  width: 150px; 
+  height: 150px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  background-color: transparent; 
 }
 
 .mpicdiv {
@@ -318,13 +346,13 @@ text-align:left;
 }
 
 .edit-button {
-  width: 150px; /* 設定寬度為 150px */
-  background-color: transparent; /* 設置背景為透明 */
-  border: none; /* 移除邊框 */
-  cursor: pointer; /* 鼠標懸停時顯示手型 */
-  display: flex; /* 使用 flexbox 來對齊內容 */
-  align-items: center; /* 垂直置中 */
-  justify-content: center; /* 水平置中 */
+  width: 150px; 
+  background-color: transparent; 
+  border: none; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
   font-weight:900
 }
 
