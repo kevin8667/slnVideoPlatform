@@ -56,4 +56,10 @@ public partial class MemberCoupon
     /// 兌換的贈品編號
     /// </summary>
     public int? GiftId { get; set; }
+
+    public virtual CouponInfo Coupon { get; set; }
+
+    public virtual GiftInfo Gift { get; set; }
+
+    public virtual MemberInfo Member { get; set; }
 }

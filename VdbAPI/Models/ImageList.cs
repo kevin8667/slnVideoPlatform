@@ -10,4 +10,6 @@ public partial class ImageList
     public int ImageId { get; set; }
 
     public string ImagePath { get; set; }
+
+    public virtual ICollection<ImageForVideoList> ImageForVideoLists { get; set; } = new List<ImageForVideoList>();
 }

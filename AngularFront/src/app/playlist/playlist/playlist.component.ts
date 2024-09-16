@@ -11,6 +11,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   templateUrl: './playlist.component.html',
   styleUrls: ['./playlist.component.css'],
   providers: [ConfirmationService, MessageService],
+  encapsulation:ViewEncapsulation.Emulated
 })
 export class PlaylistComponent implements OnInit {
   playlists: PlaylistDTO[] = [];

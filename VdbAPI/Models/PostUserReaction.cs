@@ -16,4 +16,10 @@ public partial class PostUserReaction
     public int MemberId { get; set; }
 
     public bool ReactionType { get; set; }
+
+    public virtual Article Article { get; set; }
+
+    public virtual MemberInfo Member { get; set; }
+
+    public virtual Post Post { get; set; }
 }
