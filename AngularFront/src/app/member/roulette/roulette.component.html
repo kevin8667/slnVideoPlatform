@@ -1,3 +1,4 @@
+<div class="roulette-container">
     <div class="wheel" [@spin]="spinState" (click)="spinWheel()">
       <div *ngFor="let segment of segments" class="segment" [ngStyle]="{'transform': 'rotate(' + (360 / segments.length) * segments.indexOf(segment) + 'deg)'}">
         {{ segment.label }}
