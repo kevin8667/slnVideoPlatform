@@ -337,5 +337,19 @@ text-align:left;
   padding:10px;
 }
 
+.playlist-icon {
+  color: #17a2b8; /* 設置圖示顏色 */
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.playlist-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
 
 

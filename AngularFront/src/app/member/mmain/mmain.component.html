@@ -28,6 +28,7 @@
               </button>
             </div>
           </div>
+
           <div class="gradediv">
             <img
               class="gradepic"
@@ -38,6 +39,11 @@
               >會員等級: {{ getMemberGradeDescription() }}</label
             >
             <img src="./../../../assets/img/Member/line-logo.jpg" style="height: 30px; margin-left: 10px;"><button  (click)="BindingLine()" *ngIf="memberData?.BindingLine != 'Y'" style="margin-left: 10px;" >綁定</button>
+            <div class="playlist-button-container">
+              <button (click)="goToPlaylist()" class="playlist-button" title="播放清單">
+                <i class="pi pi-list playlist-icon"></i> <!-- 使用 PrimeNG 的圖示 -->
+              </button>
+            </div>
           </div>
         </div>
         <table>
