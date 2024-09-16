@@ -190,6 +190,7 @@
   background-color: transparent;
 }
 
+
 .article-cover {
   display: block; /* 防止圖片周圍出現空白 */
   width: 100%; /* 確保圖片寬度100% */
@@ -200,6 +201,7 @@
   background-color: transparent;
   cursor: pointer;
 }
+
 
 .card-body {
   width: 70%;
