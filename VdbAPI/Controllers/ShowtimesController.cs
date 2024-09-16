@@ -19,18 +19,18 @@ namespace VdbAPI.Controllers
         {
             // 使用 LINQ 查詢，從 NowShowingTheaters 表中找到符合指定 videoId 的所有影院。
             var cinemas = (from nst in _context.NowShowingTheaters
-                           join cinema in _context.Cinemas on nst.CinemaId equals cinema.CinemaId 
+                           join cinema in _context.Cinemas on nst.CinemaId equals cinema.CinemaId
                            where nst.VideoId == videoId // 過濾條件，查找符合指定 VideoID 的紀錄。
-                           select new 
+                           select new
                            {
-                               cinema.CinemaId, 
-                               cinema.CinemaName, 
-                               cinema.CinemaAddress  
+                               cinema.CinemaId,
+                               cinema.CinemaName,
+                               cinema.CinemaAddress
                            }).ToList(); // 執行查詢並轉換成列表。
 
-            
+
             if (!cinemas.Any()) // 如果查詢結果為空
-                return NotFound("沒有找到相關的上映影院"); 
+                return NotFound("沒有找到相關的上映影院");
 
             // 如果有查詢結果，返回 200 狀態碼以及查詢結果的列表。
             return Ok(cinemas); // 返回 200 OK，並將查詢結果 cinemas 以 JSON 格式返回給用戶端。
@@ -62,30 +62,38 @@ namespace VdbAPI.Controllers
         [HttpPost]
         public IActionResult CreateReservation([FromBody] ReservationRequest request)
         {
-            // 驗證輸入
-            if (request == null || request.TicketCount <= 0)
+            try
             {
-                return BadRequest("無效的請求");
+                // 驗證輸入
+                if (request == null || request.TicketCount <= 0)
+                {
+                    return BadRequest("無效的請求");
+                }
+
+                // 創建新的 ReservationDetail 資料，並保存 TicketCount
+                var reservation = new ReservationDetail
+                {
+                    MemberId = request.MemberID,
+                    ShowtimeId = request.ShowtimeID,
+                    PurchaseDate = DateTime.Now,
+                    Price = request.TotalPrice,
+                    Status = "未付款", // 根據您的邏輯設置狀態
+                    PaymentMethod = request.PaymentMethod,
+                    CouponId = request.CouponID,
+                    TicketCount = request.TicketCount  // 保存傳入的票數
+                };
+
+                // 將 ReservationDetail 寫入資料庫
+                _context.ReservationDetails.Add(reservation);
+                _context.SaveChanges();
+
+                return Ok(new { ReservationID = reservation.ReservationId });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message + ex.InnerException);
             }
 
-            // 創建新的 ReservationDetail 資料，並保存 TicketCount
-            var reservation = new ReservationDetail
-            {
-                MemberId = request.MemberID,
-                ShowtimeId = request.ShowtimeID,
-                PurchaseDate = DateTime.Now,
-                Price = request.TotalPrice,
-                Status = "未付款", // 根據您的邏輯設置狀態
-                PaymentMethod = request.PaymentMethod,
-                CouponId = request.CouponID,
-                TicketCount = request.TicketCount  // 保存傳入的票數
-            };
-
-            // 將 ReservationDetail 寫入資料庫
-            _context.ReservationDetails.Add(reservation);
-            _context.SaveChanges();
-
-            return Ok(new { ReservationID = reservation.ReservationId });
         }
 
 
@@ -95,6 +103,9 @@ namespace VdbAPI.Controllers
         [HttpPost("reservation/seats")]
         public IActionResult AssignSeats([FromBody] SeatAssignmentRequest request)
         {
+
+
+
             // 1. 驗證輸入
             if (request == null || request.TicketCount <= 0 || request.ReservationId <= 0)
             {
@@ -155,5 +166,6 @@ namespace VdbAPI.Controllers
                 AssignedSeats = assignedSeats
             });
         }
+
     }
 }

@@ -39,7 +39,7 @@
         <li *ngFor="let showtime of hall.Showtimes" class="showtime">
           <div class="showtime-details">
             <strong>{{ showtime.date }} {{ showtime.day }}</strong> <!-- 顯示日期與星期 -->
-            <button (click)="onTimeSelect(hall.HallName, showtime.time)">
+            <button (click)="onTimeSelect(hall.HallName, showtime.time, showtime.showTimeID)">
               {{ showtime.time }}
             </button>
           </div>
