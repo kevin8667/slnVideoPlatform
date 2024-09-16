@@ -73,10 +73,10 @@ namespace VdbAPI.Controllers
     public class TokenResponse
     {
         public string access_token { get; set; }
-        public string TokenType { get; set; }
-        public string Scope { get; set; }
-        public string ExpiresIn { get; set; }
-        public string RefreshToken { get; set; }
+        public string tokenType { get; set; }
+        public string scope { get; set; }
+        public string exxpiresIn { get; set; }
+        public string refreshToken { get; set; }
     }
     public class AuthCallbackRequest
     {
