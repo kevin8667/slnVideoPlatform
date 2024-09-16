@@ -92,19 +92,20 @@
           placeholder="選擇影片"
           [showClear]="true"
         >
-          <ng-template let-video pTemplate="item">
-            <div class="video-item">
-              <img
-                [src]="video.thumbnailPath || '/assets/img/movie.png'"
-                alt="Video Thumbnail"
-                class="thumbnail"
-              />
-              <span>{{ video.videoName }}</span>
-              <span *ngIf="video.episode !== null && video.episode > 0">
-                - 第 {{ video.episode }} 集
-              </span>
-            </div>
-          </ng-template>
+
+        <ng-template let-video pTemplate="item">
+          <div class="video-item">
+            <img
+              [src]="video.thumbnailPath || '/assets/img/movie.png'"
+              alt="Video Thumbnail"
+              class="thumbnail"
+            />
+            <span>{{ video.videoName }}</span>
+            <span *ngIf="video.episode !== null && video.episode > 0">
+              - 第 {{ video.episode }} 集
+            </span>
+          </div>
+        </ng-template>
 
           <ng-template let-video pTemplate="selectedItem">
             <div class="video-item">

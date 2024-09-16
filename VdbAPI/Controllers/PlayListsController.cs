@@ -276,10 +276,10 @@ namespace VdbAPI.Controllers
 
         // GET: api/PlayList/videos
         [HttpGet("videos")]
-        public async Task<ActionResult<IEnumerable<VideoListDTO>>> GetAllVideos()
+        public async Task<ActionResult<IEnumerable<VideoForPlaylistDTO>>> GetAllVideos()
         {
             var videos = await _context.VideoLists
-                .Select(v => new VideoListDTO
+                .Select(v => new VideoForPlaylistDTO
                 {
                     VideoId = v.VideoId,
                     VideoName = v.VideoName,

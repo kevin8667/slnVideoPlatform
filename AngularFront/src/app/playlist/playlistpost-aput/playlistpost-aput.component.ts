@@ -93,16 +93,12 @@ export class PlaylistpostAputComponent implements OnInit {
             episode: item.episode,
             thumbnailPath: item.thumbnailPath ?? '',
           }));
-
-          this.selectedVideos.forEach((video) => {
-            console.log('Video Name:', video.videoName, 'Episode:', video.episode);
-          });
         },
         (error) => {
           console.error('Error loading playlist items', error);
         }
       );
-  }
+    }
 
   loadCollaborators(): void {
     this.playlistService.getCollaborators().subscribe(
