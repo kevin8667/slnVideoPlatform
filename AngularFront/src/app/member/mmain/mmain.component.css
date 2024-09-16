@@ -316,8 +316,8 @@ button:hover , :focus {
 }
 
 .picdiv{
-text-align:center;
-flex-direction: row
+text-align:left;
+
 }
 
 .crown {
