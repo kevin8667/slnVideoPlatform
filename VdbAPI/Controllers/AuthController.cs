@@ -100,8 +100,8 @@ namespace VdbAPI.Controllers
         private async Task<string> ExchangeCodeForTokenAsync(string code)
         {
             var tokenUrl = "https://api.line.me/oauth2/v2.1/token";
-            var clientId = "2006327640"; // 從 LINE 開發者控制台取得
-            var clientSecret = "a39601453cb987584dd65eb779405f67"; // 從 LINE 開發者控制台取得
+            var clientId = "2006329488"; // 從 LINE 開發者控制台取得
+            var clientSecret = "9d8c1d8fb3d8387734d75a2263ae03a6"; // 從 LINE 開發者控制台取得
             var redirectUri = "http://localhost:4200/#/auth/callback"; // 必須與 LINE 開發者控制台設定一致
 
             var parameters = new Dictionary<string, string>
@@ -151,10 +151,10 @@ namespace VdbAPI.Controllers
     public class TokenResponse
     {
         public string access_token { get; set; }
-        public string TokenType { get; set; }
-        public string Scope { get; set; }
-        public string ExpiresIn { get; set; }
-        public string RefreshToken { get; set; }
+        public string tokenType { get; set; }
+        public string scope { get; set; }
+        public string exxpiresIn { get; set; }
+        public string refreshToken { get; set; }
     }
     public class AuthCallbackRequest
     {
