@@ -17,7 +17,7 @@ import { SignalRService } from 'src/app/services/forumService/signal-r.service';
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
-  styleUrls: ['./article-list.component.css']
+  styleUrls: ['./article-list.component.css'],
 })
 export class ArticleListComponent implements OnInit, AfterViewChecked {
   articles: ArticleView[] = [];
@@ -90,7 +90,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     this.load();
     this.messageSubscription = this.signalRService.messages$.subscribe({
       next: (data: Chatroom[]) => {
-        this.messages = data
+        this.messages = data;
       },
       error: (err) => console.error('接收訊息發生例外:', err),
     });
@@ -178,5 +178,23 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     const truncatedText =
       text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
     return truncatedText;
+  }
+  getFirstImageSrc(htmlContent: string): string | null {
+    const imgTagStart = htmlContent.indexOf('<img');
+    if (imgTagStart === -1) {
+      return null; // 沒有找到 img 元素
+    }
+
+    const srcStart = htmlContent.indexOf('src="', imgTagStart);
+    if (srcStart === -1) {
+      return null; // 沒有找到 src 屬性
+    }
+
+    const srcEnd = htmlContent.indexOf('"', srcStart + 5); // 5 是 `src="` 的長度
+    const imgSrc = htmlContent.substring(srcStart + 5, srcEnd);
+    return imgSrc;
+  }
+  navToArticle(id:any){
+    this.route.navigate(['forum',id])
   }
 }

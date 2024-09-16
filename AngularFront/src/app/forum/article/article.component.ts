@@ -10,6 +10,7 @@ import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsD
   selector: 'app-article',
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.css'],
+  providers: [MessageService, ConfirmationService],
 })
 export class ArticleComponent implements OnInit {
   article: ArticleView = {} as ArticleView;
@@ -19,6 +20,7 @@ export class ArticleComponent implements OnInit {
   debounceTimer!: number;
   currentUserId!: number;
   pendingReaction: any = null;
+  show = false;
   constructor(
     private router: Router,
     private forumService: ForumService,
