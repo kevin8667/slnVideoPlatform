@@ -100,15 +100,12 @@
               <div class="card-content">
                 <!-- 圖片 -->
                 <div class="card-image">
-                  <a routerLink="{{ article.articleId }}"
-                    ><img
-                      class="article-cover"
-                      [src]="
-                        article.coverImageUrl || 'assets/images/avantar.jpg'
-                      "
-                      [alt]="article.title"
-                    />
-                  </a>
+                  <img
+                    (click)="navToArticle(article.articleId)"
+                    class="article-cover"
+                    [src]="getFirstImageSrc(article.articleContent)||'/assets/images/defaultImg.png'"
+                    [alt]="article.title"
+                  />
                 </div>
                 <!-- 文章 -->
                 <div class="card-body">

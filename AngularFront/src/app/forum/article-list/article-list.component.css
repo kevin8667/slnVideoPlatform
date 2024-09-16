@@ -1,5 +1,6 @@
 .myContainer {
-  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 .card1 {
   background: #ffffff31; /* 背景顏色 */
@@ -110,12 +111,7 @@
   margin-right: 0.5rem;
 }
 
-.card img {
-  width: 100%; /* 圖片寬度 */
-  height: auto; /* 圖片高度自動調整 */
-  border-bottom: 1px solid #131111; /* 圖片下方邊框 */
-  margin-bottom: 1rem; /* 圖片下方外邊距 */
-}
+
 
 .grid-item {
   flex: 1 1 calc(33.333% - 1rem); /* 三列佈局，減去間距 */
@@ -133,15 +129,6 @@
   margin: 0 auto; /* 使卡片水平居中 */
 }
 
-.p-card:hover {
-  transform: translateY(-5px); /* 鼠標懸停時的位移效果 */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 鼠標懸停時的陰影效果 */
-}
-
-.p-card-body {
-  padding: 1.5rem; /* 內邊距 */
-  color: #333; /* 文字顏色 */
-}
 
 .p-card-title {
   font-weight: bold;
@@ -171,9 +158,7 @@
   border: 1px solid #dee2e6; /* 淺灰色邊框 */
 }
 
-.p-card-body {
-  background-color: #f8f9fa2a; /* 淺灰背景色 */
-}
+
 
 .p-card-title {
   color: #007bff; /* 藍色標題 */
@@ -194,15 +179,26 @@
 
 .card-image {
   flex: 1;
+  position: relative;
+  margin: 10px; /* 調整外框間距 */
+  padding: 0; /* 確保沒有額外的填充 */
+  border-radius: 12px;
+
+  background-color:transparent
 }
 
+
 .article-cover {
-  width: 100%; /* 使圖片適應容器寬度 */
-  height: auto; /* 保持圖片高度自適應 */
-  object-fit: cover; /* 確保圖片不變形地填滿容器 */
-  border-radius: 8px; /* 添加圓角 */
-  min-width: 214px;
+  display: block; /* 防止圖片周圍出現空白 */
+  width: 100%; /* 確保圖片寬度100% */
+  height: auto; /* 根據圖片本身比例自動調整高度 */
+  max-height: 200px; /* 限制最大高度，避免圖片過高 */
+  object-fit: cover; /* 保持圖片比例，避免變形 */
+  border-radius: 12px; /* 圓角效果 */
+  background-color: transparent;
+  cursor: pointer;
 }
+
 
 .card-body {
   width: 70%;
