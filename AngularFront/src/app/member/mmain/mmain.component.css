@@ -315,7 +315,7 @@ p-table th {
 
 .picdiv{
 text-align:left;
-
+flex-direction: row
 }
 
 .crown {

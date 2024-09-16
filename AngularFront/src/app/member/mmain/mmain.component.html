@@ -20,6 +20,7 @@
               </button>
             </div>
           </div>
+            </div>
           <div class="gradediv">
             <img class="gradepic" src="./../../../assets/img/Member/crown.png" alt="crown" />
             <label class="gradetxt" style="margin-left: 10px;">會員等級: {{ getMemberGradeDescription() }}</label>
@@ -180,14 +181,14 @@
     </div>
     <div class="rightcontainer col-7">
       <div class="tree">
-        <div class="brick col-6">
+        <div class="brick col-4">
           <a class="link" (click)="onmessage()">
             <div class="txtbtn">
               <h2>我的通知</h2>
             </div>
           </a>
         </div>
-        <div class="brick col-6">
+        <div class="brick col-4">
           <a class="link" (click)="oncoupon()">
             <div class="txtbtn">
               <h2>我的優惠券</h2>
@@ -197,14 +198,21 @@
 
       </div>
       <div class="tree">
-        <div class="brick col-6">
+        <div class="brick col-4">
           <a class="link" (click)="onhistory()">
             <div class="txtbtn">
               <h2>購物紀錄</h2>
             </div>
           </a>
         </div>
-        <div class="brick col-6">
+        <div class="brick col-4">
+          <a class="link" (click)="onhistory()">
+            <div class="txtbtn">
+              <h2>購物紀錄</h2>
+            </div>
+          </a>
+        </div>
+        <div class="brick col-4">
           <a class="link" (click)="onfriends()">
             <div class="txtbtn">
               <h2>瘋狂大轉盤</h2>
