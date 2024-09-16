@@ -27,10 +27,11 @@ namespace VdbAPI.hubs {
             using var con = new SqlConnection(_connection);
 
             await con.ExecuteAsync(sql,new {
-                SendTime = DateTime.UtcNow,
+                SendTime = chatDTO.Sendtime,
                 SenderId = chatDTO.SenderId,
                 ChatMessage = chatDTO.ChatMessage
             });
+            chatDTO.IsMined = true;
             await Clients.All.SendAsync("ReceiveMessage",chatDTO);
         }
 

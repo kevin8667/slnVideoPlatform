@@ -1,7 +1,13 @@
 // forum.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, Observable, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  firstValueFrom,
+  Observable,
+  ReplaySubject,
+  throwError,
+} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Theme } from '../../interfaces/forumInterface/Theme';
 import { ForumPagingDTO } from '../../interfaces/forumInterface/ForumPagingDTO';
@@ -10,25 +16,44 @@ import { Post } from '../../interfaces/forumInterface/Post';
 import { LikeDTO } from '../../interfaces/forumInterface/LikeDTO';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
+import { AuthService } from 'src/app/auth.service';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 @Injectable({
   providedIn: 'root',
 })
 export default class ForumService {
+  private renderer: Renderer2;
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
-  private userSubject: BehaviorSubject<{ id: number; name: string }>;
-  public user$: Observable<{ id: number; name: string }>;
-  constructor(private client: HttpClient, private sanitizer: DomSanitizer) {
+  private userSubject = new ReplaySubject<memberName>(1); // 初始化
+  public user$ = this.userSubject.asObservable()
+  constructor(
+    private client: HttpClient,
+    private sanitizer: DomSanitizer,
+    private rendererFactory: RendererFactory2,
+    private auth: AuthService
+  ) {
+    this.renderer = this.rendererFactory.createRenderer(null, null);
     this.loadThemeTags();
-    this.userSubject = new BehaviorSubject<{ id: number; name: string }>({
-      id: 1,
-      name: '管理員',
-    });
-    this.user$ = this.userSubject.asObservable();
+    this.loadAllCss();
+    this.loadMember();
   }
 
-  getCurrentUser() {
-    return this.userSubject.value;
+
+  loadMember() {
+    this.auth.getMemberId().subscribe({
+      next: (data) => {
+        if (data && data.memberId) {
+          this.userSubject.next({
+            memberId: data.memberId,
+            nickName: '豬頭',
+          });
+        }
+      },
+      error(err) {
+        console.error('獲取會員失敗', err);
+      },
+    });
   }
   loadThemeTags(): void {
     const api = 'https://localhost:7193/api/Articles/Theme';
@@ -110,11 +135,11 @@ export default class ForumService {
     const api = 'https://localhost:7193/api/Posts';
     return this.client.post(api, data);
   }
-  loadQuill() {
+  loadCss(fontUrl: string) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '../../../assets/css/quill.snow.css';
-    document.head.appendChild(link);
+    link.href = fontUrl;
+    this.renderer.appendChild(document.head, link);
   }
   ArticleCount(data: LikeDTO) {
     const api = 'https://localhost:7193/api/Articles/React';
@@ -128,5 +153,13 @@ export default class ForumService {
     const api = 'https://localhost:7193/api/Articles/UserReactions';
     const ArticleReactionDTO = { memberId: memberId, articleId: articleId };
     return this.client.post<AllReactionsDTO>(api, ArticleReactionDTO);
+  }
+  private loadAllCss() {
+    this.loadCss(
+      'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap'
+    );
+    this.loadCss(
+      'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700&display=swap'
+    );
   }
 }

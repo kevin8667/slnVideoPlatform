@@ -27,7 +27,12 @@ export class LoginComponent implements AfterViewInit {
   ) {
     console.log('Google Client ID:', this.googleClientId);
   }
-  
+
+  login() {
+    debugger;
+    console.log('Login()');
+    /* this.oauthService.initLoginFlow();*/
+  }
   LineLogin() {
     this.authService.loginWithLine(false);
   }
@@ -49,7 +54,6 @@ export class LoginComponent implements AfterViewInit {
     }
   }
   onLogin() {
-    debugger;
     const recaptchaResponse = grecaptcha.getResponse();
     if (!recaptchaResponse) {
       alert('請進行圖形認證');
