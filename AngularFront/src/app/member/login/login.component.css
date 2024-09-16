@@ -45,6 +45,10 @@ button {
   animation: shine 3s infinite linear;
 }
 
+button:hover, button:focus{
+  background-color:  #00c8d6
+} 
+
 @keyframes shine {
   0% {
       left: -100px;
@@ -59,13 +63,19 @@ button {
       left: 100%;
   }
   100% {
-       left:-100%;
+      left: -100%;
   }
 }
 
-button:hover, button:focus{
-  background-color:  #00c8d6
-} 
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
 
 @keyframes shine {
   0% {
