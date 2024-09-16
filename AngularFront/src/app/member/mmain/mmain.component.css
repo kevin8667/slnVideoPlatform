@@ -338,7 +338,7 @@ text-align:left;
 }
 
 .playlist-icon {
-  color: #17a2b8; /* 設置圖示顏色 */
+  color: #333; /* 設置圖示顏色 */
   font-size: 24px;
   margin-right: 5px;
 }
@@ -349,7 +349,7 @@ text-align:left;
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 

@@ -24,6 +24,12 @@ export class PlaylistMemberComponent implements OnInit {
     this.loadCollaboratorPlaylists();
   }
 
+  onPlaylistAdded(): void {
+    this.loadCreatedPlaylists();
+    this.loadAddedPlaylists();
+    this.loadCollaboratorPlaylists();
+  }
+
   loadCreatedPlaylists(): void {
     this.playlistService.getMemberCreatedPlaylists(this.memberId).subscribe(
       (data: PlaylistDTO[]) => {
