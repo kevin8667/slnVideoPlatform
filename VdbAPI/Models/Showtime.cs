@@ -23,7 +23,5 @@ public partial class Showtime
 
     public virtual ICollection<SessionSeat> SessionSeats { get; set; } = new List<SessionSeat>();
 
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
-
     public virtual VideoList Viedo { get; set; }
 }

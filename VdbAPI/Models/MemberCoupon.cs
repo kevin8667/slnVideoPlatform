@@ -30,7 +30,7 @@ public partial class MemberCoupon
     /// <summary>
     /// 失效時間
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public int? ExpireTime { get; set; }
 
     /// <summary>
     /// 使用時間
