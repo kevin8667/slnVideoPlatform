@@ -134,17 +134,20 @@ export class PlaylistService {
       `${this.apiUrl}/${playlistId}/collaborators/${memberId}`
     );
   }
+
   loadVideoCss(){
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = '../../../assets/css/video-js.min.css';
     document.head.appendChild(link);
+    this.loadVideoJs();
   }
+
   loadVideoJs(){
     const script = document.createElement('script');
-    script.src = '../../../assets/css/video.min.js';  // 設定腳本的路徑
+    script.src = '../../../assets/css/video.min.js';
     script.type = 'text/javascript';
-    script.defer = true;  // 確保腳本在 DOM 加載後才執行
-    document.body.appendChild(script);  // 將腳本動態添加到 body
+    script.defer = true;
+    document.body.appendChild(script);
   }
 }
