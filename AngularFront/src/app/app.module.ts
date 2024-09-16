@@ -15,6 +15,7 @@ import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { TicketReservationComponent } from './Ticket/ticket-reservation/ticket-reservation.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,

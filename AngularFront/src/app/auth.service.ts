@@ -109,7 +109,7 @@ export class AuthService {
 
 
 
-  loginWithLine(binding:boolean) {
+  loginWithLine(binding: boolean) {
     debugger;
     const lineLoginUrl = 'https://access.line.me/oauth2/v2.1/authorize';
     const clientId = '2006329488';
@@ -132,8 +132,5 @@ export class AuthService {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
-  
-  }
-
   
 }

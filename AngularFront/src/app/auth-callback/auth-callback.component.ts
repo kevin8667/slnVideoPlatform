@@ -63,8 +63,11 @@ if(this.authService.getCookie("Binding")=="Y")
         }
         if (response.isSuccess) {
           if(response.data!="Binding"){
-          this.setCookie('JwtToken', response.data, 1);
+          this.setCookie('JwtToken', response.data.jwtToken, 1);
+
           this.authService.SetLoginValue();
+          this.authService.SetMemberData(response.data);
+
           }
           this.router.navigateByUrl('login/mmain');
         }else{

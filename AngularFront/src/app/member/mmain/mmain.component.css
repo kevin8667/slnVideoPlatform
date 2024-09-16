@@ -24,18 +24,22 @@
 
 }
 
+.lightcontroller{
+  position: relative;
+    height: 26px; /* 设置容器高度 */
+}
+
+.lightcontroller img{
+  position: absolute;
+  top: 50%;
+  left: 95%;
+  transform: translate(-50%, -50%); /* 使图片中心对齐 */
+}
+
 .light{
-  transform: scale(0.7);
+  height: 26px;
 }
 
-.light:hover, :focus{
-  cursor: pointer ;
-  transform: scale(1);
-}
-
-.light:active{
-  transform: scale(0.5);
-}
 
 .brick{
   padding: 20PX;
@@ -46,10 +50,11 @@ background-color: #ffffff;
 }
 
 .btncorner{
-padding:5px;
+padding:1px;
 display: flex;
 flex-direction: row;
-text-align: left;
+text-align: right;
+justify-content: flex-end; 
 }
 
 .btnedit{
@@ -280,6 +285,9 @@ button:hover , :focus {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+.mtb td{
+  width: 40%;
+}
 
 .profile-header {
   display: flex;
