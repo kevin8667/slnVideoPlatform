@@ -86,6 +86,8 @@ export class TicketSelectionComponent implements OnInit {
       couponID: null, // 如果有折扣券可以填入
     };
 
+    console.log("傳入參數："+reservationData);
+
     // 調用 API 生成訂單
     this.dataService.createReservation(reservationData).subscribe(
       (reservationResponse) => {
@@ -97,7 +99,7 @@ export class TicketSelectionComponent implements OnInit {
           ShowtimeId: this.showtimeId,
           TicketCount: this.TicketCount,
         };
-        console.log(seatAssignmentRequest.ReservationId);
+
 
         // 調用生成座位的 API
         this.assignSeats(seatAssignmentRequest); // 呼叫 assignSeats() 函數
@@ -115,7 +117,6 @@ export class TicketSelectionComponent implements OnInit {
     TicketCount: number;
   }) {
     console.log('生成座位請求數據:', seatAssignmentRequest); // 這裡檢查要傳給 API 的請求數據
-
     this.dataService.assignSeats(seatAssignmentRequest).subscribe(
       (seatResponse) => {
         console.log('座位成功生成:', seatResponse);
