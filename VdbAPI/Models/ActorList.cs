@@ -14,4 +14,6 @@ public partial class ActorList
     public string ActorImgPath { get; set; }
 
     public string ActorDescription { get; set; }
+
+    public virtual ICollection<CastList> CastLists { get; set; } = new List<CastList>();
 }

@@ -12,4 +12,8 @@ public partial class CastList
     public int? VideoId { get; set; }
 
     public int? ActorId { get; set; }
+
+    public virtual ActorList Actor { get; set; }
+
+    public virtual VideoList Video { get; set; }
 }

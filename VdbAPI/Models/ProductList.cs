@@ -16,4 +16,6 @@ public partial class ProductList
     public string ProductDescription { get; set; }
 
     public string ProductImg { get; set; }
+
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

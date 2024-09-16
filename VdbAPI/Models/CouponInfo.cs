@@ -51,4 +51,6 @@ public partial class CouponInfo
     /// 建立時間
     /// </summary>
     public DateTime CreTime { get; set; }
+
+    public virtual ICollection<MemberCoupon> MemberCoupons { get; set; } = new List<MemberCoupon>();
 }

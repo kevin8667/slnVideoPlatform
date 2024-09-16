@@ -14,4 +14,8 @@ public partial class VideoStreamingLinkList
     public string StreamLink { get; set; }
 
     public int? VideoId { get; set; }
+
+    public virtual StreamingPlatformList Platform { get; set; }
+
+    public virtual VideoList Video { get; set; }
 }

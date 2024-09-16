@@ -31,4 +31,8 @@ public partial class GiftInfo
     /// 贈品圖片
     /// </summary>
     public string Pic { get; set; }
+
+    public virtual ICollection<GiftList> GiftLists { get; set; } = new List<GiftList>();
+
+    public virtual ICollection<MemberCoupon> MemberCoupons { get; set; } = new List<MemberCoupon>();
 }

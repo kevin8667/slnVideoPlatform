@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { PlaylistService } from '../../services/playlist.service';
 import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
@@ -11,6 +11,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   templateUrl: './playlist.component.html',
   styleUrls: ['./playlist.component.css'],
   providers: [ConfirmationService, MessageService],
+  encapsulation:ViewEncapsulation.Emulated
 })
 export class PlaylistComponent implements OnInit {
   playlists: PlaylistDTO[] = [];

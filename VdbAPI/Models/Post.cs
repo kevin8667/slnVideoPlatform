@@ -24,4 +24,10 @@ public partial class Post
     public int LikeCount { get; set; }
 
     public int DislikeCount { get; set; }
+
+    public virtual Article Article { get; set; }
+
+    public virtual ICollection<PostUserReaction> PostUserReactions { get; set; } = new List<PostUserReaction>();
+
+    public virtual MemberInfo Poster { get; set; }
 }

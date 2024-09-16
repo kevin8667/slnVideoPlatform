@@ -14,4 +14,8 @@ public partial class MemberRating
     public int VideoId { get; set; }
 
     public decimal Rating { get; set; }
+
+    public virtual MemberInfo Member { get; set; }
+
+    public virtual VideoList Video { get; set; }
 }

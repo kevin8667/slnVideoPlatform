@@ -10,4 +10,8 @@ public partial class SeriesList
     public int SeriesId { get; set; }
 
     public string SeriesName { get; set; }
+
+    public virtual ICollection<SeasonList> SeasonLists { get; set; } = new List<SeasonList>();
+
+    public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }

@@ -14,4 +14,12 @@ public partial class Hall
     public string HallsName { get; set; }
 
     public int? SeatCapacity { get; set; }
+
+    public virtual Cinema Cinema { get; set; }
+
+    public virtual ICollection<Seat> Seats { get; set; } = new List<Seat>();
+
+    public virtual ICollection<ShowingHall> ShowingHalls { get; set; } = new List<ShowingHall>();
+
+    public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
 }

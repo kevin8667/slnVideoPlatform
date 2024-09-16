@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
@@ -21,6 +20,6 @@ public partial class PlayListCollaborator
     public DateTime? ActionTimestamp { get; set; }
 
     public virtual MemberInfo Member { get; set; }
-    [JsonIgnore]
+
     public virtual PlayList PlayList { get; set; }
 }

@@ -10,4 +10,6 @@ public partial class StreamingPlatformList
     public int PlatformId { get; set; }
 
     public string PlatformName { get; set; }
+
+    public virtual ICollection<VideoStreamingLinkList> VideoStreamingLinkLists { get; set; } = new List<VideoStreamingLinkList>();
 }

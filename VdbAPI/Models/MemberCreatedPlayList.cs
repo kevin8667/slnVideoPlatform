@@ -16,4 +16,8 @@ public partial class MemberCreatedPlayList
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public virtual MemberInfo Member { get; set; }
+
+    public virtual PlayList PlayList { get; set; }
 }

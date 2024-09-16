@@ -41,4 +41,6 @@ public partial class ValidCode
     /// 建立時間
     /// </summary>
     public DateTime CreTime { get; set; }
+
+    public virtual MemberInfo Member { get; set; }
 }
