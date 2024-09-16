@@ -2,9 +2,9 @@
   <div class="secend p-grid p-nogutter" *ngIf="memberData">
     <div class="cornercontainer col-1"></div>
 
-    <div class="leftcontainer col-4">
+    <div class="leftcontainer col-3">
       <div id="MemberModifyArea" class="modify-area">
-        <div class="picdiv p-grid">
+        <div class="picdiv p-grid"><div class="left">
           <div class="profile-image-container">
             <img
               *ngIf="!memberData.photoPath"
@@ -28,6 +28,7 @@
               </button>
             </div>
           </div>
+            </div>
           <div class="gradediv">
             <img
               class="gradepic"
@@ -85,7 +86,13 @@
                 />
               </ng-container>
               <ng-container *ngIf="!canSee">
-                <label>{{ memberData.password }}</label>
+                <label>{{ canSeepwd ? memberData.password : '******' }}</label>
+                <img
+                  class="light"
+                  [src]="canSeepwd ? './../../../assets/img/Member/light-off.png' : './../../../assets/img/Member/light-on.png'"
+                  (click)="canSeepwd ? cantseepwd() : seepwd()"
+                  alt="Toggle password visibility"
+                />
               </ng-container>
             </td>
           </tr>
@@ -210,32 +217,46 @@
         </div>
       </div>
     </div>
-    <div class="rightcontainer col-6 row-12">
+    <div class="rightcontainer col-7">
       <div class="tree">
-        <div class="brick col-6">
+        <div class="brick col-4">
           <a class="link" (click)="onmessage()">
             <div class="txtbtn">
               <h2>我的通知</h2>
             </div>
           </a>
         </div>
-        <div class="brick col-6">
+        <div class="brick col-4">
           <a class="link" (click)="oncoupon()">
             <div class="txtbtn">
               <h2>我的優惠券</h2>
             </div>
           </a>
         </div>
+        <div class="brick col-4">
+          <a class="link" (click)="oncoupon()">
+            <div class="txtbtn">
+              <h2>我的片單</h2>
+            </div>
+          </a>
+        </div>
       </div>
       <div class="tree">
-        <div class="brick col-6">
+        <div class="brick col-4">
           <a class="link" (click)="onhistory()">
             <div class="txtbtn">
               <h2>購物紀錄</h2>
             </div>
           </a>
         </div>
-        <div class="brick col-6">
+        <div class="brick col-4">
+          <a class="link" (click)="onhistory()">
+            <div class="txtbtn">
+              <h2>購物紀錄</h2>
+            </div>
+          </a>
+        </div>
+        <div class="brick col-4">
           <a class="link" (click)="onfriends()">
             <div class="txtbtn">
               <h2>我的好友</h2>
