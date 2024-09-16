@@ -11,16 +11,14 @@
                 src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp" />
               <img *ngIf="memberData.photoPath" class="mpic" alt="avatar2" [src]="memberData.photoPath" />
 
-            <div class="mpicdiv"  (click)="onEditClick()">
-              <button class="edit-button">
-                <img
-                  src="./../../../assets/img/Member/edit.png"
-                  alt="Edit" />
-                <span>上傳圖片</span>
-              </button>
+              <div class="mpicdiv" (click)="onEditClick()">
+                <button class="edit-button">
+                  <img src="./../../../assets/img/Member/edit.png" alt="Edit" />
+                  <span>上傳圖片</span>
+                </button>
+              </div>
             </div>
           </div>
-            </div>
           <div class="gradediv">
             <img class="gradepic" src="./../../../assets/img/Member/crown.png" alt="crown" />
             <label class="gradetxt" style="margin-left: 10px;">會員等級: {{ getMemberGradeDescription() }}</label>
@@ -29,7 +27,7 @@
               class="link" (click)="onplaylist()">我的片單</a>
           </div>
         </div>
-        <table>
+        <table class="mtb">
           <tr>
             <td class="label"><label>電子信箱:</label></td>
             <td>
@@ -49,34 +47,26 @@
             </td>
           </tr>
           <tr>
-            <td><label>密碼:</label></td>
+            <td>
+              <div class="lightcontroller"><label>密碼:</label><ng-container *ngIf="canSee"><img class="light" [src]="
+              canSeepwd
+                ? './../../../assets/img/Member/light-off.png'
+                : './../../../assets/img/Member/light-on.png'
+            " (click)="canSeepwd ? cantseepwd() : seepwd()" /></ng-container><ng-container *ngIf="!canSee"><img
+                    class="light"
+                    [src]="canSeepwd ? './../../../assets/img/Member/light-off.png' : './../../../assets/img/Member/light-on.png'"
+                    (click)="canSeepwd ? cantseepwd() : seepwd()" alt="Toggle password visibility" /></ng-container>
+              </div>
+            </td>
             <td>
               <ng-container *ngIf="canSee">
-                <input
-                  pInputText
-                  id="inputpwd"
-                  class="p-inputtext-sm"
-                  [(ngModel)]="memberData.password"
-                  [attr.type]="canSeepwd ? 'text' : 'password'"
-                />
-                <img
-                class="light"
-                  [src]="
-                    canSeepwd
-                      ? './../../../assets/img/Member/light-off.png'
-                      : './../../../assets/img/Member/light-on.png'
-                  "
-                  (click)="canSeepwd ? cantseepwd() : seepwd()"
-                />
+                <input pInputText id="inputpwd" class="p-inputtext-sm" [(ngModel)]="memberData.password"
+                  [attr.type]="canSeepwd ? 'text' : 'password'" />
+
               </ng-container>
               <ng-container *ngIf="!canSee">
                 <label>{{ canSeepwd ? memberData.password : '******' }}</label>
-                <img
-                  class="light"
-                  [src]="canSeepwd ? './../../../assets/img/Member/light-off.png' : './../../../assets/img/Member/light-on.png'"
-                  (click)="canSeepwd ? cantseepwd() : seepwd()"
-                  alt="Toggle password visibility"
-                />
+
               </ng-container>
               <ng-container *ngIf="!canSee">
                 <label>{{ memberData.password }}</label>
@@ -198,6 +188,14 @@
 
       </div>
       <div class="tree">
+      <div class="brick col-4">
+        <a class="link" (click)="onfriends()">
+          <div class="txtbtn">
+            <h2>我的好友</h2>
+          </div>
+        </a>
+      </div>
+   
         <div class="brick col-4">
           <a class="link" (click)="onhistory()">
             <div class="txtbtn">
@@ -206,14 +204,7 @@
           </a>
         </div>
         <div class="brick col-4">
-          <a class="link" (click)="onhistory()">
-            <div class="txtbtn">
-              <h2>購物紀錄</h2>
-            </div>
-          </a>
-        </div>
-        <div class="brick col-4">
-          <a class="link" (click)="onfriends()">
+          <a class="link" (click)="onroulette()">
             <div class="txtbtn">
               <h2>瘋狂大轉盤</h2>
             </div>
