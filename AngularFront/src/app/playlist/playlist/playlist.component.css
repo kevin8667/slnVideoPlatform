@@ -17,7 +17,7 @@
   padding: 0;
 }
 
-.custom-card {
+.playlist-card .custom-card {
   width: 100%;
   height: auto;
   display: flex;

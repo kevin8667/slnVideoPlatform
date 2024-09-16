@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 using VdbAPI.Models;
 
 namespace VdbAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] 
     [ApiController]
     public class PlayListController : ControllerBase
     {
         private readonly VideoDBContext _context;
+        private readonly string? _connection;
 
-        public PlayListController(VideoDBContext context)
+        public PlayListController(VideoDBContext context,IConfiguration configuration)
         {
             _context = context;
+            _connection = configuration.GetConnectionString("VideoDB");
         }
 
         [HttpGet]

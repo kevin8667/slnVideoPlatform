@@ -41,7 +41,7 @@ namespace VdbAPI.Controllers {
             });
             var articleReaction = await multi.ReadFirstOrDefaultAsync<LikeDTO>();
             var postReactions = await multi.ReadAsync<LikeDTO>();
-
+            
             var result = new AllReactionsDTO {
                 ArticleReaction = articleReaction,
                 PostReactions = postReactions.ToList()
@@ -200,7 +200,7 @@ namespace VdbAPI.Controllers {
             try {
 
                 var rowsAffected = await con.ExecuteAsync(sql,new {
-                    articleUpdate.ArticleContent,
+                    ArticleContent = articleUpdate.ArticleContent,
                     articleUpdate.Title,
                     articleUpdate.ThemeId,
                     id,

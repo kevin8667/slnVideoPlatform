@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PlaylistitemDTO } from 'src/app/interfaces/PlaylistitemDTO';
+import { PlaylistService } from 'src/app/services/playlist.service';
 import videojs from 'video.js';
 import 'videojs-youtube';
-
 @Component({
   selector: 'app-playlistitem',
   templateUrl: './playlistitem.component.html',
@@ -25,7 +25,9 @@ export class PlaylistitemComponent {
       this.initializePlayer();
     }, 100);
   }
-
+  constructor(private service: PlaylistService) {
+    service.loadVideoCss();
+  }
   initializePlayer() {
     if (this.player) {
       this.player.dispose();
