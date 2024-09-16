@@ -28,6 +28,7 @@ import { JwtInterceptor } from './jwt.interceptor';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +38,7 @@ import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
     ErrorPageComponent,
     ShoppingCartComponent,
     AuthCallbackComponent,
+  
   ],
   imports: [
     BrowserModule,

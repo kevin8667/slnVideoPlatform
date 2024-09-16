@@ -25,6 +25,13 @@ export class MmainComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    
+    this.authService.MemberBehaviorData.subscribe((memberData) => {
+      console.log("MemberBehabiorData >>")
+      console.log(memberData);
+    });
+
+
     this.authService.isLoggedIn.subscribe((isLoggedIn) => {
       debugger;
       if (isLoggedIn) {
@@ -201,6 +208,14 @@ export class MmainComponent implements OnInit {
 
   onmessage() {
     this.router.navigateByUrl('login/message');
+  }
+
+  onroulette(){
+    this.router.navigateByUrl('login/roulette');
+  }
+
+  onplaylist(){
+    this.router.navigateByUrl('playlist/member');
   }
 
   getMemberGenderDescription(): string {

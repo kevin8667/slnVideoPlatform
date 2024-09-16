@@ -70,8 +70,11 @@ export class LoginComponent implements AfterViewInit {
             alert(response.alertMsg);
           }
           if (response.isSuccess) {
-            this.setCookie('JwtToken', response.data, 1);
+            this.setCookie('JwtToken', response.data.jwtToken, 1);
+
             this.authService.SetLoginValue();
+            this.authService.SetMemberData(response.data);
+
             this.router.navigateByUrl('login/mmain');
           }
         },

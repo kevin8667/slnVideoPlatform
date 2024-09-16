@@ -25,6 +25,7 @@ import { CouponComponent } from './coupon/coupon.component';
 import { MessageComponent } from './message/message.component';
 import { FriendsComponent } from './friends/friends.component';
 import { HistoryComponent } from './history/history.component';
+import { RouletteComponent } from './roulette/roulette.component';
 // import { LoginCallbackComponent } from './login-callback/login-callback.component';
 
 
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'mmain', component: MmainComponent },
   { path: 'message', component: MessageComponent },
   { path: 'history', component: HistoryComponent },
+  { path: 'Roulette', component: RouletteComponent },
   { path: '**', component: MmainComponent },
 ];
 
@@ -48,6 +50,7 @@ const routes: Routes = [
     MessageComponent,
     FriendsComponent,
     HistoryComponent,
+    RouletteComponent
     // LoginCallbackComponent
   ],
   imports: [
