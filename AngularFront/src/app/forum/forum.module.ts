@@ -24,8 +24,6 @@ import { GalleriaModule } from 'primeng/galleria';
 import { EditorComponent } from './share/editor/editor.component';
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { MessageService } from 'primeng/api';
-import { ConfirmationService } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { SidebarModule } from 'primeng/sidebar';

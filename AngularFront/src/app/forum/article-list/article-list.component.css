@@ -1,6 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap");
+
 .myContainer {
   margin: 0;
   padding: 0;
+
+}
+.myContainer div{
+  font-family: 'Noto Sans TC', sans-serif;
 }
 .card1 {
   background: #ffffff31; /* 背景顏色 */
@@ -29,6 +35,7 @@
 }
 
 .d2 {
+  flex:65%;
   flex-grow: 1;
 }
 .d1 {
@@ -41,7 +48,7 @@
 
 .d3 {
   margin: 0 20px;
-  flex-grow: 1;
+
 }
 .article {
   margin-top: 2%;
@@ -58,7 +65,7 @@
 }
 ::ng-deep .themeBtn {
   font-size: 13px;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-family: 'Noto Sans TC', sans-serif;
   background-color: #56ccf2;
   color: #e8ecee;
   border: none;
@@ -111,8 +118,6 @@
   margin-right: 0.5rem;
 }
 
-
-
 .grid-item {
   flex: 1 1 calc(33.333% - 1rem); /* 三列佈局，減去間距 */
   box-sizing: border-box;
@@ -128,7 +133,6 @@
   width: 100%;
   margin: 0 auto; /* 使卡片水平居中 */
 }
-
 
 .p-card-title {
   font-weight: bold;
@@ -158,8 +162,6 @@
   border: 1px solid #dee2e6; /* 淺灰色邊框 */
 }
 
-
-
 .p-card-title {
   color: #007bff; /* 藍色標題 */
   overflow: hidden; /* 避免標題超出卡片範圍 */
@@ -175,6 +177,7 @@
   align-items: center;
   gap: 2rem; /* 調整圖片和內容之間的間距 */
   padding: 10px;
+  height: 253px;
 }
 
 .card-image {
@@ -184,9 +187,8 @@
   padding: 0; /* 確保沒有額外的填充 */
   border-radius: 12px;
 
-  background-color:transparent
+  background-color: transparent;
 }
-
 
 .article-cover {
   display: block; /* 防止圖片周圍出現空白 */
@@ -198,7 +200,6 @@
   background-color: transparent;
   cursor: pointer;
 }
-
 
 .card-body {
   width: 70%;
@@ -234,26 +235,59 @@
   border-radius: 8px 8px 0 0;
 }
 
-.chat-messages {
-  flex: 1;
+.chat-messages-container {
   padding: 1rem;
   overflow-y: auto;
-  border-bottom: 1px solid #ddd;
-  margin: 0;
-  font-family: "Arial", sans-serif;
+  max-height: 500px;
   background-color: #d5e3e9;
 }
 
-.message {
+.chat-messages {
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  word-wrap: break-word;
+}
+
+.message-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .message-user {
-  font-weight: bold;
+  margin-right: 10px;
+  font-family: "Montserrat", "Noto Sans TC", sans-serif;
+  font-weight: 700;
+}
+
+.snedTime {
+  font-size: 0.75rem;
+  color: #b3b3b3;
 }
 
 .message-text {
-  margin-top: 0.5rem;
+  font-size: 15px;
+  background-color: #ffffff;
+  color: #333;
+  border-radius: 4px;
+  padding: 6px 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+/* 自己的訊息靠右顯示，並且只有訊息有框 */
+.my-message-text {
+  border-radius: 4px;
+  padding: 6px 10px;
+  background-color: #117e96;
+  color: #f3f0f0;
+  border-radius: 4px;
+  max-width: 80%;
+  word-wrap: break-word;
+  margin: 0;
 }
 
 .chat-input {

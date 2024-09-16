@@ -27,7 +27,7 @@ namespace VdbAPI.Controllers {
         {
             var sql = @"  SELECT TOP 50
                     c.SenderId,
-                    c.ChatMessage,
+                    c.ChatMessage,c.SendTime,
                     m.Nickname 
                 FROM ChatRoom c
                 LEFT JOIN MemberInfo m ON c.SenderId = m.MemberId
