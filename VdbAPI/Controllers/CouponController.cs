@@ -11,7 +11,7 @@ namespace VdbAPI.Controllers
     [JwtActionFilter]
     public class CouponController : BaseController
     {
-       
+        
         [Route("api/[controller]/[action]")]
         [HttpGet]
         public ReturnResult<mCoupondata> GetCouponData()
