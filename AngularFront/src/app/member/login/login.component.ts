@@ -29,7 +29,6 @@ export class LoginComponent implements AfterViewInit {
   }
 
   login() {
-    debugger;
     console.log('Login()');
     /* this.oauthService.initLoginFlow();*/
   }

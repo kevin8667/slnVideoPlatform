@@ -42,6 +42,8 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  }
+
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
 
   private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(
@@ -93,7 +95,9 @@ export class AuthService {
   SetLoginValue(): void {
     this.isLogin.next(true);
   }
-
+  nvaToLogion() {
+    this.router.navigate(['/login']);
+  }
   getCookie(name: string): string | null {
     const nameEQ = name + '=';
     const cookiesArray = document.cookie.split(';');
@@ -108,6 +112,8 @@ export class AuthService {
 
     return null; // 返回 null 如果没有找到该 cookie
   }
+
+
   getMemberId(): Observable<MemberIdResponse> {
     // 如果已經緩存了會員 ID，直接返回緩存的值
     if (this.cachedMemberId !== null) {
@@ -116,9 +122,9 @@ export class AuthService {
 
     // 發送請求獲取會員 ID
     return this.http.get<MemberIdResponse>(this.apiUrl).pipe(
-      tap(data => this.cachedMemberId = data.MemberId), // 緩存數據
+      tap((data) => (this.cachedMemberId = data.MemberId)), // 緩存數據
       shareReplay(1), // 緩存最後一次的結果，避免重複 HTTP 請求
-      catchError(err => {
+      catchError((err) => {
         console.error('獲取會員 ID 失敗', err);
         return of({ MemberId: -1, error: true }); // 返回錯誤標記
       })
@@ -126,27 +132,31 @@ export class AuthService {
   }
 
 
-
+  private redirectUri = 'http://localhost:4200/auth/callback';
 
   loginWithLine() {
-    const lineLoginUrl = 'https://access.line.me/oauth2/v2.1/authorize';
     const clientId = '2006329488';
     const redirectUri = encodeURIComponent(
       'http://localhost:4200/#/auth/callback'
     );
+    const redirectUri = encodeURIComponent('http://localhost:4200/#/auth/callback');
     const state = '3'; // 生成一個隨機的 state 參數
     const scope = 'openid profile';
-
     const authUrl = `${lineLoginUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
     this.setCookie('Binding', binding ? 'Y' : 'N', 1);
+
+
+
+
     window.location.href = authUrl;
   }
 
   handleCallback() {
   setCookie(name: string, value: string, days: number) {
     const expires = new Date();
-    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-    const expiresString = 'expires=' + expires.toUTCString();
+}    const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
+
+  
 }

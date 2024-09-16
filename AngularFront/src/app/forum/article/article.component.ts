@@ -63,8 +63,8 @@ export class ArticleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.forumService.loadQuill();
-    this.currentUserId = this.forumService.getCurrentUser().id;
+    this.forumService.user$.subscribe((data) => (this.user = data));
+    this.forumService.loadCss('../../../assets/css/quill.snow.css');
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
 
     this.forumService.user$.subscribe((data) => {
@@ -98,19 +98,19 @@ export class ArticleComponent implements OnInit, AfterViewInit {
           const articleReactionType = reactions.articleReaction?.reactionType;
           const postReactions = reactions.postReactions;
 
-          // 根據文章 reactionType 初始化文章的反應
-          if (articleReactionType === true) {
-            this.reactionMap[0] = 'like';
-          } else if (articleReactionType === false) {
-            this.reactionMap[0] = 'dislike';
-          } else {
-            this.reactionMap[0] = null;
-          }
+            // 根據文章 reactionType 初始化文章的反應
+            if (articleReactionType === true) {
+              this.reactionMap[0] = 'like';
+            } else if (articleReactionType === false) {
+              this.reactionMap[0] = 'dislike';
+            } else {
+              this.reactionMap[0] = null;
+            }
 
-          // 迴圈檢查每篇文章的回文反應
-          postReactions.forEach((postReaction) => {
-            const postReactionType = postReaction.reactionType;
-            const postId = postReaction.contentId;
+            // 迴圈檢查每篇文章的回文反應
+            postReactions.forEach((postReaction) => {
+              const postReactionType = postReaction.reactionType;
+              const postId = postReaction.contentId;
 
             if (postReactionType === true) {
               this.reactionMap[postId] = 'like';

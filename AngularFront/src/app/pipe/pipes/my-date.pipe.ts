@@ -35,5 +35,4 @@ export class forumDatePipe implements PipeTransform {
 
     }
   }
-
 }

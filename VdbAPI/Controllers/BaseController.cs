@@ -20,5 +20,6 @@ namespace VdbAPI.Controllers {
                 return -1;  // 如果 MemberId 不存在，則返回 0 或其他合適的值
             }
         }
+
     }
 }

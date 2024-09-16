@@ -1,7 +1,13 @@
 // forum.service.ts
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, Observable, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  firstValueFrom,
+  Observable,
+  ReplaySubject,
+  throwError,
+} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Theme } from '../../interfaces/forumInterface/Theme';
 import { ForumPagingDTO } from '../../interfaces/forumInterface/ForumPagingDTO';
