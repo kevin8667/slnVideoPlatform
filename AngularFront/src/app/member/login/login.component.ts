@@ -15,8 +15,8 @@ declare var grecaptcha: any;
   providers: [MemberService],
 })
 export class LoginComponent implements AfterViewInit {
-  email: string = 'jarry6304@hotmail.com';
-  pwd: string = 'password1';
+  email: string = 'example3@example.com';
+  pwd: string = 'password3';
   siteKey: string = '6Lf8GToqAAAAAMLRKwyKmVEiMtYeMDqK61sPxWPS';
   googleClientId = environment.googleClientId;
 
@@ -34,7 +34,7 @@ export class LoginComponent implements AfterViewInit {
     /* this.oauthService.initLoginFlow();*/
   }
   LineLogin() {
-    this.authService.loginWithLine();
+    this.authService.loginWithLine(false);
   }
   ngAfterViewInit() {
     if (typeof grecaptcha === 'undefined') {
@@ -110,4 +110,6 @@ export class LoginComponent implements AfterViewInit {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
+
+  
 }

@@ -106,6 +106,12 @@ export class MemberService {
     );
   }
 
+  DeleteMemberNotice(memberNoticeID:number): Observable<any>{
+    return this.http.delete(
+      this.apiUrl + 'Member/DeleteNoticeMessage?memberNoticeID=' + memberNoticeID
+    );
+  }
+
   addFriend(friendId: string): Observable<any> {
     return this.http.post(
       this.apiUrl + 'Member/AddFriend?friendId=' + friendId,

@@ -67,6 +67,8 @@ namespace VdbAPI.Member.Model
         public string? FIDOEnabled { get; set; }
 
         public int? FIDOCredentialID { get; set; }
+        public string BindingLine { get; set; }
+        public string LineUserId { get; set; }
 
 
         public MemberInfoProcess Process { get; set; }
@@ -79,7 +81,8 @@ namespace VdbAPI.Member.Model
             Normal,
             UpdateInfo,
             UpdatePwd,
-            UpdateStatus
+            UpdateStatus,
+            UpdateLineUser
 
         }
     }

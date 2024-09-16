@@ -71,7 +71,7 @@ export class MmainComponent implements OnInit {
       },
       error: (error) => {
         console.error('SaveData error:', error);
-        alert('SaveData 失敗');
+        alert('儲存資料失敗');
       },
     });
   }
@@ -173,7 +173,7 @@ export class MmainComponent implements OnInit {
             },
             error: (error) => {
               console.error('SaveData error:', error);
-              alert('保存資料失敗');
+              alert('儲存資料失敗');
             },
           });
         } else {
@@ -223,5 +223,10 @@ export class MmainComponent implements OnInit {
       default:
         return '未知等級';
     }
+  }
+
+  BindingLine():void{
+      this.authService.loginWithLine(true);
+    
   }
 }

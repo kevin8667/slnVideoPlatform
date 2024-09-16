@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Jose;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text;
 using VdbAPI.Member.Helper;
+using VdbAPI.Member.Model;
 using VdbAPI.Member.ViewModel;
 
 namespace VdbAPI.Controllers
@@ -23,10 +26,9 @@ namespace VdbAPI.Controllers
             }
         }
 
-        public void SetNoticeMessage(string memberid, string title, string content, string action) 
-        {
-            MemberHelper mHelper = new MemberHelper(memberid);
-            mHelper.SetNoticeMessage(memberid, title, content, action);
-        }
+    
+        //create jwt token 
+      
+
     }
 }
