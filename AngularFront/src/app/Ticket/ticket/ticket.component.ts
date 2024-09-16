@@ -13,9 +13,10 @@ export class TicketComponent implements OnInit {
 
   selectedCinema: any = null; // 選中的影院
   cinemas: any[] = []; // 影院清單
-  showTime: any;
   // showtime: any;
-  
+
+  showTimeID : number=0;
+
   constructor(private router: Router, private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -73,7 +74,14 @@ export class TicketComponent implements OnInit {
         });
         const day = showTimeDate.toLocaleDateString([], { weekday: 'long' });
 
-        hall.Showtimes.push({ time, date, day });
+        hall.Showtimes.push({
+          time,
+          date,
+          day,
+          showTimeID: showtime.showtimeId
+        });
+
+        console.log('獲取的 showtime',hall.Showtimes);
         return acc;
       }, []);
 
@@ -100,13 +108,28 @@ export class TicketComponent implements OnInit {
     });
   }
 
-  onTimeSelect(hallName: string, showtime: string) {
+  onTimeSelect(
+    hallName: string,
+    showtime: {
+      // showtimeId: number;
+      showtime: string;
+      date: string;
+      day: string;
+    },
+    showTimeID:number
+  ) {
+    // 檢查 showtime 物件的內容
+    console.log('傳遞的 showtime:', showtime);
+
+    // 檢查是否取得了 showtimeId
+    console.log('選中的 showtimeId:', showTimeID);
     // 跳轉到購票頁面，並傳遞相關資訊
     this.router.navigate(['ticket/ticketselection'], {
       queryParams: {
         cinemaName: this.selectedCinema.CinemaName,
         hallName: hallName,
         showtime: showtime,
+        selectedShowtimeId: showTimeID,
         movieId: this.movieId,
         movieName: 'Deadpool & Wolverine',
         posterUrl: '../../../../assets/image/Deadpool_Wolverine.png',

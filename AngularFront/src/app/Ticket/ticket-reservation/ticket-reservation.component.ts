@@ -42,7 +42,7 @@ export class TicketReservationComponent implements OnInit {
         this.showtime = '2024/08/06 11:30'; // 假設放映時間
         this.seats = response.SelectedSeats; // 儲存分配的座位
         this.ticketDetails = response; // 假設完整訂單資訊在這裡
-        
+
       },
       (error) => {
         console.error('生成座位失敗:', error);
