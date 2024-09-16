@@ -11,12 +11,13 @@
                 src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp" />
               <img *ngIf="memberData.photoPath" class="mpic" alt="avatar2" [src]="memberData.photoPath" />
 
-              <div class="mpicdiv" (click)="onEditClick()">
-                <button class="edit-button">
-                  <img src="./../../../assets/img/Member/edit.png" alt="Edit" />
-                  <span>上傳圖片</span>
-                </button>
-              </div>
+            <div class="mpicdiv"  (click)="onEditClick()">
+              <button class="edit-button">
+                <img
+                  src="./../../../assets/img/Member/edit.png"
+                  alt="Edit" />
+                <span>上傳圖片</span>
+              </button>
             </div>
           </div>
           <div class="gradediv">
@@ -66,8 +67,7 @@
 
               </ng-container>
               <ng-container *ngIf="!canSee">
-                <label>{{ canSeepwd ? memberData.password : '▆▆▆▆▆▆▆' }}</label>
-
+                <label>{{ memberData.password }}</label>
               </ng-container>
             </td>
           </tr>
@@ -186,63 +186,47 @@
 
       </div>
       <div class="tree">
-        <div class="brick col-6">
-          <a class="link" (click)="onfriends()">
-            <div class="txtbtn">
-              <h2>我的好友</h2>
-            </div>
-          </a>
-        </div>
-
-        <div class="brick col-6">
+      <div class="brick col-4">
+        <a class="link" (click)="onfriends()">
+          <div class="txtbtn">
+            <h2>我的好友</h2>
+          </div>
+        </a>
+      </div>
+   
+        <div class="brick col-4">
           <a class="link" (click)="onhistory()">
             <div class="txtbtn">
               <h2>購物紀錄</h2>
             </div>
           </a>
         </div>
-
-      </div>
-      <!-- 新增的最新消息區域 -->
-      <!-- <div class="news-section col-12" *ngIf="latestNews.length">
-        <h3>最新消息</h3>
-        <ul class="news-list">
-          <li *ngFor="let news of latestNews" class="news-item">
-            <div class="news-header" (click)="toggleSummary(news.id)">
-              <span class="news-date">{{
-                news.date | date : "yyyy-MM-dd"
-                }}</span>
-              <span class="news-title">{{ news.title }}</span>
+        <div class="brick col-4">
+          <a class="link" (click)="onroulette()">
+            <div class="txtbtn">
+              <h2>瘋狂大轉盤</h2>
             </div>
-            <p *ngIf="news.showSummary" class="news-summary">
-              {{ news.summary }}...
-            </p>
-          </li>
-        </ul>
-      </div> -->
-      <div class="news-section">
-        <h3>最新消息</h3>
-        <p-table [value]="latestNews" [paginator]="true" [rows]="6" [rowHover]="true">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>日期</th>
-              <th>標題</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-news let-expanded="expanded">
-            <tr (click)="news.showSummary = !news.showSummary" [ngClass]="{'news-header': true, 'expanded': expanded}">
-              <td class="news-date">{{ news.date | date: 'yyyy-MM-dd' }}</td>
-              <td class="news-title">{{ news.title }}</td>
-            </tr>
-            <tr *ngIf="news.showSummary">
-              <td colspan="2">
-                <p class="news-summary">{{ news.summary }}...</p>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+          </a>
+        </div>
+        </div>
+          <!-- 新增的最新消息區域 -->
+          <div class="news-section col-12" *ngIf="latestNews.length">
+            <h3>最新消息</h3>
+            <ul class="news-list">
+              <li *ngFor="let news of latestNews" class="news-item">
+                <div class="news-header" (click)="toggleSummary(news.id)">
+                  <span class="news-date">{{
+                    news.date | date : "yyyy-MM-dd"
+                    }}</span>
+                  <span class="news-title">{{ news.title }}</span>
+                </div>
+                <p *ngIf="news.showSummary" class="news-summary">
+                  {{ news.summary }}...
+                </p>
+              </li>
+            </ul>
+          </div>
       </div>
-    </div>
 
     <div class="end col-1">
       <div></div>
