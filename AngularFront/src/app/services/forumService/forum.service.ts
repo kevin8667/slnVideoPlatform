@@ -67,9 +67,6 @@ export default class ForumService {
       error(err) {
         console.error('獲取會員失敗', err);
       },
-      complete: () => {
-        console.log('會員資料加載完成');
-      },
     });
   }
   loadThemeTags(): void {
