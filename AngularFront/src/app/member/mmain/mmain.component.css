@@ -47,6 +47,9 @@
   height: 26px;
 }
 
+.light:hover, :focus{
+  cursor: pointer;
+}
 
 .brick{
   padding: 20PX;
@@ -297,9 +300,9 @@ p-table th {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.mtb td{
+/* .mtb td{
   width: 40%;
-}
+} */
 
 .profile-header {
   display: flex;
