@@ -62,7 +62,6 @@ export class MemberService {
   }
 
   updatememberdata(memberData: any): Observable<any> {
-    debugger;
     return this.http.put(this.apiUrl + 'Member/PutMemberData', memberData);
   }
 
@@ -78,7 +77,7 @@ export class MemberService {
   }
 
   GetGiftList(giftListId: number): Observable<any> {
-    debugger;
+
     return this.http.get(this.apiUrl + 'Coupon/GetGiftList/' + giftListId);
   }
 

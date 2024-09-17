@@ -2,10 +2,9 @@ import { AuthService } from '../../auth.service';
 import { Component, AfterViewInit } from '@angular/core';
 import { MemberService } from './../member.service';
 
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 // import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from './../../../environments/environment';
-import { take } from 'rxjs';
 
 declare var grecaptcha: any;
 
@@ -16,37 +15,23 @@ declare var grecaptcha: any;
   providers: [MemberService],
 })
 export class LoginComponent implements AfterViewInit {
-  email: string = 'example6@example.com';
-  pwd: string = 'password6';
+  email: string = 'example3@example.com';
+  pwd: string = 'password3';
   siteKey: string = '6Lf8GToqAAAAAMLRKwyKmVEiMtYeMDqK61sPxWPS';
   googleClientId = environment.googleClientId;
 
   constructor(
     private memberService: MemberService,
-    private authService: AuthService,
-    private router: Router /*private oauthService: OAuthService*/,
-    private route: ActivatedRoute  ) {
+    private authService:AuthService,
+    private router: Router /*private oauthService: OAuthService*/
+  ) {
     console.log('Google Client ID:', this.googleClientId);
   }
 
-  login() {
-    console.log('Login()');
-    /* this.oauthService.initLoginFlow();*/
-  }
   LineLogin() {
-    this.authService.loginWithLine();
+    this.authService.loginWithLine(false);
   }
   ngAfterViewInit() {
-    this.authService.isLoggedIn.pipe(take(1)).subscribe((isLoggedIn) => {
-      console.log(isLoggedIn);
-      if (isLoggedIn) {
-        const returnUrl =
-          this.route.snapshot.queryParamMap.get('returnUrl') || '/';
-        this.router.navigateByUrl(returnUrl);
-        return
-      }
-    });
-
     if (typeof grecaptcha === 'undefined') {
       // 動態加載 reCAPTCHA 腳本
       const script = document.createElement('script');
@@ -79,18 +64,12 @@ export class LoginComponent implements AfterViewInit {
             alert(response.alertMsg);
           }
           if (response.isSuccess) {
-            this.setCookie('JwtToken', response.data, 1);
-            this.authService.SetLoginValue();
-            const returnUrl =
-              this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+            this.setCookie('JwtToken', response.data.jwtToken, 1);
 
-            // 訂閱登入狀態
-            this.authService.isLoggedIn.subscribe((isLoggedIn) => {
-              if (isLoggedIn) {
-                // 當登入成功後，重定向回之前嘗試訪問的頁面
-                this.router.navigateByUrl(returnUrl);
-              }
-            });
+            this.authService.SetLoginValue();
+            this.authService.SetMemberData(response.data);
+
+            this.router.navigateByUrl('login/mmain');
           }
         },
         error: (error) => {
@@ -128,4 +107,6 @@ export class LoginComponent implements AfterViewInit {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
+
+
 }

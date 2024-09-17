@@ -9,16 +9,18 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import{AuthService} from './auth.service';
 // import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private router: Router,/* private oauthService: OAuthService*/) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+
     //const token = this.oauthService.getAccessToken(); // Use OAuthService to get token
     const token = this.getCookie('JwtToken');
     if (token) {
@@ -31,18 +33,16 @@ export class JwtInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.handleUnauthorized();
+
+        if (error.status === 666) {
+          this.authService.Logout();
         }
         return throwError(error);
       })
     );
   }
 
-  private handleUnauthorized() {
-   /* this.oauthService.logOut(); // Log out using OAuthService  */
-    this.router.navigate(['/login']);
-  }
+
 
   getCookie(name: string): string | null {
     const nameEQ = name + '=';

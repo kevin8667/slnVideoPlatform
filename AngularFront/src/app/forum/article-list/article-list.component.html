@@ -78,13 +78,6 @@
           label="全部主題"
           class="ui-button"
         ></p-button>
-
-        <p-button
-          styleClass="myArticleBtn"
-          (onClick)="loadTheme(0)"
-          label="我的發文"
-        ></p-button>
-
         <p-button
           styleClass="themeBtn"
           *ngFor="let item of themeTag"
@@ -174,7 +167,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="user.memberId > 1" class="chat-input">
+        <div *ngIf="user.memberId > 0" class="chat-input">
           <input
             [(ngModel)]="message"
             (keydown.enter)="sendMessage(message)"

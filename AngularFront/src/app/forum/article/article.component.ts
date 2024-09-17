@@ -1,18 +1,16 @@
-import { LikeDTO } from './../../interfaces/forumInterface/LikeDTO';
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core'; // 引入 ViewEncapsulation
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'; // Angular
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 第三方庫
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
 import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
 import ForumService from 'src/app/services/forumService/forum.service'; // 自定義模組
 import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
-import { AuthService } from 'src/app/auth.service';
-import { state } from '@angular/animations';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.css'],
   providers: [MessageService, ConfirmationService],
+
 })
 export class ArticleComponent implements OnInit, AfterViewInit {
   article: ArticleView = {} as ArticleView;
@@ -32,7 +30,6 @@ export class ArticleComponent implements OnInit, AfterViewInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private actRoute: ActivatedRoute,
-    private auth: AuthService
   ) {}
 
   @HostListener('window:beforeunload', ['$event'])
@@ -66,13 +63,14 @@ export class ArticleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.auth.getMemberId().subscribe((data) => {
+    this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
+
+    this.forumService.user$.subscribe((data) => {
       this.user.memberId = data.memberId;
-      this.user.nickName = '54';
+      this.user.nickName = data.nickName;
       if (data.memberId > 0) this.getReactions();
     });
     this.forumService.loadCss('../../../assets/css/quill.snow.css');
-    this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
 
     this.forumService.getArticle(this.articleId).subscribe((data) => {
       if (!data.lock) {

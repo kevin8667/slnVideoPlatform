@@ -45,18 +45,15 @@ export default class ForumService {
   }
 
   loadMember() {
-    this.auth.getMemberId().subscribe({
+    this.auth.MemberBehaviorData.subscribe({
       next: (data) => {
         this.userSubject.next({
-          memberId: data.memberId,
-          nickName: '豬頭',
+          memberId: data?.MemberID || 0,
+          nickName: data?.NickName || '',
         });
       },
       error(err) {
         console.error('獲取會員失敗', err);
-      },
-      complete: () => {
-        console.log('會員資料加載完成');
       },
     });
   }
