@@ -209,7 +209,6 @@ export class VideoDetailComponent implements OnInit {
     this.ref.onClose.subscribe((selectedPlaylist) => {
       if (selectedPlaylist) {
         console.log('已選擇播放清單，將影片加入:', selectedPlaylist);
-        // 在這裡處理影片加入到所選播放清單的邏輯
       }
     });
   }
