@@ -69,7 +69,8 @@ namespace VdbAPI.Controllers {
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
             var userReaction = await _context.UserReactions
-            .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId);
+    .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId && ur.MemberId == likeDTO.MemberId);
+
             try {
                 if(likeDTO.ReactionType.HasValue) {
                     if(userReaction == null) {

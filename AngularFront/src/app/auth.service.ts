@@ -8,16 +8,14 @@ import { catchError, tap, shareReplay } from 'rxjs/operators';
 
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'https://localhost:7193/api/Member/GetMemberId'; // 替換為您的實際 API URL
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {}
 
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
-
-  private memberBehaviorSubject = new BehaviorSubject<any | null>(this.getMemberData());
 
   removeCookie(name: string): void {
     // 设置一个过期时间为过去的时间
@@ -26,34 +24,8 @@ export class AuthService {
   get isLoggedIn() {
     return this.isLogin.asObservable();
   }
-  get MemberBehaviorData() {
-    return this.memberBehaviorSubject.asObservable();
-  }
-
-  getMemberData(): any | null {
-    console.log("getMemberData by cookie");
-    const cookieValue = this.getCookie('MemberData');
-    if (cookieValue) {
-      try {
-        return JSON.parse(cookieValue);
-      } catch (error) {
-        console.error('解析 MemberData Cookie 失敗:', error);
-        return null;
-      }
-    }
-    return null;
-  }
-
-  
-  SetMemberData(data:any): void {
-    this.memberBehaviorSubject.next(data);
-    this.setCookie('MemberData', JSON.stringify(data), 1);
-
-  }
-
   hasToken(): boolean {
-    const token = this.getCookie('JwtToken');
-    return token != null;
+    return this.getCookie('JwtToken') != null;
   }
 
   Logout(): void {
@@ -63,6 +35,7 @@ export class AuthService {
     this.memberBehaviorSubject.next(null);
 
     this.router.navigateByUrl('login');
+
   }
   SetLoginValue(): void {
     this.isLogin.next(true);
@@ -83,7 +56,6 @@ export class AuthService {
     return null; // 返回 null 如果没有找到该 cookie
   }
 
-
   getMemberId(): Observable<MemberIdResponse> {
     // 如果沒有緩存的會員 ID，且沒有 token，則返回未登入狀態
     if (!this.hasToken()) {
@@ -96,32 +68,29 @@ export class AuthService {
 
     // 發送請求獲取會員 ID
     return this.http.get<MemberIdResponse>(this.apiUrl).pipe(
-      tap((data) => (this.cachedMemberId = data.MemberId)), // 緩存數據
+      tap((data) => (this.cachedMemberId = data.memberId)), // 緩存數據
       shareReplay(1), // 緩存最後一次的結果，避免重複 HTTP 請求
-      catchError(err => {
+      catchError((err) => {
         console.error('獲取會員 ID 失敗', err);
         return of({ memberId: -1, error: true }); // 返回錯誤標記
       })
     );
   }
 
-
   private lineAuthUrl = 'https://access.line.me/oauth2/v2.1/authorize';
   private clientId = '2006327640';
   private redirectUri = 'http://localhost:4200/auth/callback';
 
-
   loginWithLine() {
     const lineLoginUrl = 'https://access.line.me/oauth2/v2.1/authorize';
     const clientId = '2006327640';
-    const redirectUri = encodeURIComponent('http://localhost:4200/#/auth/callback');
+    const redirectUri = encodeURIComponent(
+      'http://localhost:4200/#/auth/callback'
+    );
     const state = '3'; // 生成一個隨機的 state 參數
     const scope = 'openid profile';
 
-const authUrl = `${lineLoginUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
-
-
-
+    const authUrl = `${lineLoginUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
 
     window.location.href = authUrl;
   }
@@ -129,6 +98,4 @@ const authUrl = `${lineLoginUrl}?response_type=code&client_id=${clientId}&redire
   handleCallback() {
     // Handle the callback, extract authorization code, and exchange it for a token.
   }
-
-  
 }
