@@ -163,21 +163,27 @@
                 <span class="snedTime">{{ msg.sendtime | forumDate : 1 }}</span>
               </div>
               <!-- 只有訊息本身在框內 -->
-              <p [ngClass]="{ 'my-message-text': msg.isMined, 'message-text': !msg.isMined }">
+              <p
+                [ngClass]="{
+                  'my-message-text': msg.isMined,
+                  'message-text': !msg.isMined
+                }"
+              >
                 {{ msg.chatMessage }}
               </p>
             </div>
           </div>
         </div>
-        <div class="chat-input" >
+        <div *ngIf="user.memberId > 1" class="chat-input">
           <input
             [(ngModel)]="message"
             (keydown.enter)="sendMessage(message)"
             type="text"
             placeholder="輸入消息..."
           />
-          <button>發送</button>
+          <button (click)="sendMessage(message)">發送</button>
         </div>
+        <div *ngIf="user.memberId < 1">點擊右上角登入方可參與聊天</div>
       </div>
     </div>
   </main>

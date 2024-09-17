@@ -42,8 +42,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  }
-
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
 
   private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(
@@ -82,7 +80,8 @@ export class AuthService {
   }
 
   hasToken(): boolean {
-    return this.getCookie('JwtToken') != null;
+    const token = this.getCookie('JwtToken');
+    return token != null;
   }
 
   Logout(): void {
@@ -95,9 +94,7 @@ export class AuthService {
   SetLoginValue(): void {
     this.isLogin.next(true);
   }
-  nvaToLogion() {
-    this.router.navigate(['/login']);
-  }
+
   getCookie(name: string): string | null {
     const nameEQ = name + '=';
     const cookiesArray = document.cookie.split(';');
@@ -112,26 +109,31 @@ export class AuthService {
 
     return null; // 返回 null 如果没有找到该 cookie
   }
+
+
   getMemberId(): Observable<MemberIdResponse> {
+    // 如果沒有緩存的會員 ID，且沒有 token，則返回未登入狀態
+    if (!this.hasToken()) {
+      return of({ memberId: -1 }); // -1 表示訪客狀態
+    }
     // 如果已經緩存了會員 ID，直接返回緩存的值
     if (this.cachedMemberId !== null) {
-      return of({ MemberId: this.cachedMemberId });
+      return of({ memberId: this.cachedMemberId });
     }
 
     // 發送請求獲取會員 ID
     return this.http.get<MemberIdResponse>(this.apiUrl).pipe(
-      tap(data => this.cachedMemberId = data.MemberId), // 緩存數據
+      tap((data) => (this.cachedMemberId = data.MemberId)), // 緩存數據
       shareReplay(1), // 緩存最後一次的結果，避免重複 HTTP 請求
       catchError(err => {
         console.error('獲取會員 ID 失敗', err);
-        return of({ MemberId: -1, error: true }); // 返回錯誤標記
+        return of({ memberId: -1, error: true }); // 返回錯誤標記
       })
     );
   }
 
 
   loginWithLine() {
-    debugger;
     const lineLoginUrl = 'https://access.line.me/oauth2/v2.1/authorize';
     const clientId = '2006329488';
     const redirectUri = encodeURIComponent(
