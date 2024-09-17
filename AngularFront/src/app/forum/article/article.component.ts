@@ -5,6 +5,8 @@ import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 
 import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
 import ForumService from 'src/app/services/forumService/forum.service'; // 自定義模組
 import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
+import { AuthService } from 'src/app/auth.service';
+import { state } from '@angular/animations';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
@@ -63,7 +65,11 @@ export class ArticleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.forumService.user$.subscribe((data) => (this.user = data));
+    this.auth.getMemberId().subscribe((data) => {
+      this.user.memberId = data.memberId;
+      this.user.nickName = '54';
+      if (data.memberId > 0) this.getReactions();
+    });
     this.forumService.loadCss('../../../assets/css/quill.snow.css');
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
 
@@ -98,19 +104,19 @@ export class ArticleComponent implements OnInit, AfterViewInit {
           const articleReactionType = reactions.articleReaction?.reactionType;
           const postReactions = reactions.postReactions;
 
-            // 根據文章 reactionType 初始化文章的反應
-            if (articleReactionType === true) {
-              this.reactionMap[0] = 'like';
-            } else if (articleReactionType === false) {
-              this.reactionMap[0] = 'dislike';
-            } else {
-              this.reactionMap[0] = null;
-            }
+          // 根據文章 reactionType 初始化文章的反應
+          if (articleReactionType === true) {
+            this.reactionMap[0] = 'like';
+          } else if (articleReactionType === false) {
+            this.reactionMap[0] = 'dislike';
+          } else {
+            this.reactionMap[0] = null;
+          }
 
-            // 迴圈檢查每篇文章的回文反應
-            postReactions.forEach((postReaction) => {
-              const postReactionType = postReaction.reactionType;
-              const postId = postReaction.contentId;
+          // 迴圈檢查每篇文章的回文反應
+          postReactions.forEach((postReaction) => {
+            const postReactionType = postReaction.reactionType;
+            const postId = postReaction.contentId;
 
             if (postReactionType === true) {
               this.reactionMap[postId] = 'like';

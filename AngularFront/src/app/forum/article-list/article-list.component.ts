@@ -15,7 +15,6 @@ import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
 import ForumService from 'src/app/services/forumService/forum.service';
 import { SignalRService } from 'src/app/services/forumService/signal-r.service';
-import { use } from 'video.js/dist/types/tech/middleware';
 
 @Component({
   selector: 'app-article-list',
@@ -36,7 +35,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   message = '';
   messages: Chatroom[] = [];
   private messageSubscription?: Subscription;
-  currentUserId = 0;
+
   forumDto = {
     categoryId: 0,
     keyword: '',
@@ -86,9 +85,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     private route: Router,
     private forumService: ForumService,
     private signalRService: SignalRService
-  ) {
-    this.forumService.user$.subscribe((data) => (this.user = data));
-  }
+  ) {}
   ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
