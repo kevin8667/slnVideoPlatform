@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/data.service';
 import { ActivatedRoute } from '@angular/router'; // 用於接收 reservationID
+import { Location } from '@angular/common'; // 用於返回上頁
 
 @Component({
   selector: 'app-ticket-reservation',
@@ -9,73 +10,63 @@ import { ActivatedRoute } from '@angular/router'; // 用於接收 reservationID
 })
 export class TicketReservationComponent implements OnInit {
   reservationID: number = 0; // 儲存訂單 ID
-  movieName: string = '';
-  hallName: string = '';
-  showtime: string = '';
-  ticketDetails: any; // 儲存訂單詳細資料
+  movieId: number = 0; // 儲存電影ID
+  movieName: string = ''; // 儲存電影名稱
+  hallName: string = ''; // 儲存影廳名稱
+  showtime: string = ''; // 儲存放映時間
+  showtimeId: number = 0; // 儲存放映場次ID
+  totalPrice: number = 0; // 儲存總價
+  ticketCount: number = 0; // 儲存票數
   seats: string[] = []; // 儲存座位列表
+  fullVote: number = 0;
+  studentVote: number = 0;
+  oldpeopleTicket: number = 0;
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) {}
+  constructor(
+    private dataService: DataService,
+    private route: ActivatedRoute,
+    private location: Location // 注入 Location 服務
+  ) {}
 
   ngOnInit(): void {
-    // 1. 獲取訂單 ID 從 URL
+    // 1. 獲取從上一個畫面傳來的 queryParams
     this.route.queryParams.subscribe((params) => {
-      this.reservationID = +params['reservationID']; // 確保轉成數字
-      this.loadReservationDetails(); // 載入訂單詳情
+      this.reservationID = +params['reservationId']; // 轉為數字
+      this.movieId = +params['movieId']; // 轉為數字
+      this.movieName = params['movieName'];
+      this.hallName = params['hallName'];
+      this.showtimeId = +params['showtimeId']; // 轉為數字
+      this.showtime = params['showtime'];
+      this.totalPrice = +params['totalPrice']; // 轉為數字
+      this.ticketCount = +params['ticketCount']; // 轉為數字
+      this.fullVote = +params['fullVote'];
+      this.studentVote = +params['studentVote'];
+      this.oldpeopleTicket = +params['oldpeopleTicket'];
+
+      // 調用方法載入訂單詳細資料
+      // this.loadReservationDetails();
+
+      // 根據票數生成座位號
+      this.generateSeats();
     });
   }
 
-  // 2. 調用 API 生成座位並取得訂單詳情
-  loadReservationDetails() {
-    const seatSelectionData = {
-      reservationId: this.reservationID,
-      showtimeId: 2, // 假設該場次的 ID
-      hallId: 1, // 假設影廳 ID
-      ticketCount: 3, // 假設票數
-    };
+  // 根據票數生成座位號
+  generateSeats() {
+    const rowNumber = Math.floor(Math.random() * 5) + 1; // 假設為第2排
+    let startingSeat = Math.floor(Math.random() * 15) + 1; // 隨機生成1到15的座位號
 
-    this.dataService.assignSeats(seatSelectionData).subscribe(
-      (response) => {
-        // 解析 API 回應
-        this.movieName = 'Deadpool & Wolverine'; // 您可以從後端獲取這些資料
-        this.hallName = '秀泰板橋1廳'; // 假設影廳名稱
-        this.showtime = '2024/08/06 11:30'; // 假設放映時間
-        this.seats = response.SelectedSeats; // 儲存分配的座位
-        this.ticketDetails = response; // 假設完整訂單資訊在這裡
+    // 清空之前的座位資料，以避免重新生成座位後重複顯示
+    this.seats = [];
 
-      },
-      (error) => {
-        console.error('生成座位失敗:', error);
-      }
-    );
+    for (let i = 0; i < this.ticketCount; i++) {
+      this.seats.push(`${rowNumber}排${startingSeat + i}號`);
+    }
+
+    console.log('生成的座位:', this.seats); // 檢查生成的座位
+  }
+  // 新增 goBack() 方法，用於返回上一頁
+  goBack() {
+    this.location.back(); // 使用 location.back() 返回上一頁
   }
 }
-
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-ticket-reservation',
-//   templateUrl: './ticket-reservation.component.html',
-//   styleUrls: ['./ticket-reservation.component.css'],
-// })
-// export class TicketReservationComponent {
-//   ticketOptions = [0, 1, 2, 3, 4, 5]; // 可以選擇的票數
-//   selectedTicket = {
-//     earlyBird: 0,
-//     cardDiscount: 0,
-//     loveTicket: 0,
-//   };
-//   totalPrice: number = 0;
-
-//   ngOnInit(): void {
-//     this.calculateTotal(); // 初始化時計算總價
-//   }
-
-//   calculateTotal() {
-//     this.totalPrice =
-//       this.selectedTicket.earlyBird * 200 +
-//       this.selectedTicket.cardDiscount * 180 +
-//       this.selectedTicket.loveTicket * 100;
-//   }
-// }

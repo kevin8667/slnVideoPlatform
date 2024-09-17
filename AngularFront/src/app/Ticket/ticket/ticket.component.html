@@ -1,10 +1,7 @@
 <div class="ticket-container">
   <div class="movie-container">
     <div class="movie-poster">
-      <img
-        src="../../../../assets/image/Deadpool_Wolverine.png"
-        alt="Deadpool & Wolverine"
-      />
+      <img src="../../../../assets/image/Deadpool_Wolverine.png" alt="Deadpool & Wolverine" />
     </div>
     <div class="movie-info">
       <h2>死侍與金鋼狼</h2>
@@ -18,9 +15,10 @@
 
   <div class="cinema-selection">
     <label for="cinema"><strong>選擇影院：</strong></label>
+    <!-- 確保 ngModel 只綁定 CinemaId -->
     <select
       id="cinema"
-      [(ngModel)]="selectedCinema"
+      [(ngModel)]="selectedCinemaId"
       (change)="onCinemaChange($event)"
       class="form-control"
     >
@@ -30,15 +28,16 @@
     </select>
   </div>
 
+  <!-- 根據選擇的影院顯示對應的放映時間 -->
   <div *ngIf="selectedCinema" class="showtimes">
     <h3>{{ selectedCinema.CinemaName }}的上映時間</h3>
     <div *ngFor="let hall of selectedCinema.Halls" class="hall-container">
       <h4>{{ hall.HallName }}</h4>
       <ul>
-        <!-- 修改這部分，加入日期與星期的顯示 -->
         <li *ngFor="let showtime of hall.Showtimes" class="showtime">
           <div class="showtime-details">
-            <strong>{{ showtime.date }} {{ showtime.day }}</strong> <!-- 顯示日期與星期 -->
+            <strong>{{ showtime.date }} {{ showtime.day }}</strong>
+            <!-- 傳遞選中的時間按鈕 -->
             <button (click)="onTimeSelect(hall.HallName, showtime.time, showtime.showTimeID)">
               {{ showtime.time }}
             </button>
@@ -46,7 +45,7 @@
         </li>
       </ul>
     </div>
-
-    <button routerLink="ticketreservation" class="btn">選擇票券</button>
   </div>
+
+  <!-- <button routerLink="ticketreservation" class="btn">選擇票券</button> -->
 </div>

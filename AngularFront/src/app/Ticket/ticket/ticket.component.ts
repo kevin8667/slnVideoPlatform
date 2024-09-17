@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
-// import { TicketSelectionComponent } from '../ticket-selection/ticket-selection.component';
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
@@ -9,51 +10,66 @@ import { DataService } from 'src/app/data.service';
   providers: [DataService],
 })
 export class TicketComponent implements OnInit {
-  movieId: number = 4; // 測試用電影ID，您可以更換此ID為實際接收到的ID
-
+  movieId: number = 4; // 測試用電影ID
+  selectedCinemaId: number | null = null; // 選中的影院ID
   selectedCinema: any = null; // 選中的影院
   cinemas: any[] = []; // 影院清單
-  // showtime: any;
+  showTimeID: number = 0;
 
-  showTimeID : number=0;
-
-  constructor(private router: Router, private dataService: DataService) {}
+  constructor(
+    private router: Router,
+    private dataService: DataService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    // 2. 在 ngOnInit 中使用 movieId 呼叫 API
     if (this.movieId) {
-      // 3. 調用 DataService 的 getCinemasByMovie 方法，傳入 movieId
       this.dataService.getCinemas(this.movieId).subscribe((data: any) => {
         this.cinemas = data.map((cinema: any) => ({
-          CinemaId: cinema.cinemaId, // 確保保存 cinemaId
+          CinemaId: cinema.cinemaId,
           CinemaName: cinema.cinemaName,
-          Halls: [], // 暫時將 Halls 設置為空陣列，稍後填充
+          Halls: [],
         }));
 
-        // 預設選中第一個影院並加載放映時間
-        if (this.cinemas.length > 0) {
-          this.selectedCinema = this.cinemas[0];
-          this.loadShowtimes(this.selectedCinema.CinemaId); // 請求時傳 cinemaId
+        const savedCinemaId = localStorage.getItem('selectedCinemaId');
+
+        if (savedCinemaId) {
+          this.selectedCinemaId = parseInt(savedCinemaId, 10);
+          this.selectedCinema = this.cinemas.find(
+            (cinema) => cinema.CinemaId === this.selectedCinemaId
+          );
         }
+
+        // 如果有預設選中的影院，則載入該影院的放映時間
+        if (this.selectedCinema) {
+          this.loadShowtimes(this.selectedCinema.CinemaId);
+        }
+
+        // 手動觸發變更檢測
+        this.cdr.detectChanges();
       });
     } else {
-      // 如果沒有電影ID，您可以處理錯誤或提示用戶
       console.error('沒有電影ID');
     }
   }
 
-  // 當選擇影院時觸發此方法
   onCinemaChange(event: any) {
-    const selectedCinemaId = event.target.value; // 這裡需要 cinemaId 而非 cinemaName
+    this.selectedCinemaId = parseInt(event.target.value, 10);
     this.selectedCinema = this.cinemas.find(
-      (cinema) => cinema.CinemaId === parseInt(selectedCinemaId, 10) // 找到選中的影院
+      (cinema) => cinema.CinemaId === this.selectedCinemaId
     );
-    this.loadShowtimes(this.selectedCinema.CinemaId); // 傳送 cinemaId 給 API
+
+    // 將選中的影院ID儲存到 localStorage
+    localStorage.setItem('selectedCinemaId', this.selectedCinemaId.toString());
+
+    // 載入放映時間
+    this.loadShowtimes(this.selectedCinema.CinemaId);
+
+    // 手動觸發變更檢測
+    this.cdr.detectChanges();
   }
 
-  // 根據選中的影院載入影廳與放映時間
   loadShowtimes(cinemaId: number) {
-    // 根據 API 獲取影院的放映時間
     this.dataService.getShowtimesByCinema(cinemaId).subscribe((data: any) => {
       const halls = data.reduce((acc: any[], showtime: any) => {
         let hall = acc.find((h) => h.HallName === showtime.hallsName);
@@ -78,57 +94,44 @@ export class TicketComponent implements OnInit {
           time,
           date,
           day,
-          showTimeID: showtime.showtimeId
+          showTimeID: showtime.showtimeId,
+          showTimeDate // 我們要保存原始日期進行排序
         });
 
-        console.log('獲取的 showtime',hall.Showtimes);
         return acc;
       }, []);
 
-      // 對每個影廳的 Showtimes 進行排序
+      // 對每個影廳的 Showtimes 進行日期和時間排序
       halls.forEach((hall: { Showtimes: any[] }) => {
         hall.Showtimes.sort((a: any, b: any) => {
-          return a.time.localeCompare(b.time); // 按時間排序
+          // 首先比較日期，然後比較時間
+          const dateComparison = new Date(a.showTimeDate).getTime() - new Date(b.showTimeDate).getTime();
+          if (dateComparison !== 0) {
+            return dateComparison; // 如果日期不同，按照日期排序
+          }
+          // 如果日期相同，則按照時間排序
+          return a.time.localeCompare(b.time);
         });
       });
 
-      // 對 halls 進行排序，按照廳的名稱中的數字排序
-      halls.sort(
-        (
-          a: { HallName: { match: (arg0: RegExp) => string[] } },
-          b: { HallName: { match: (arg0: RegExp) => string[] } }
-        ) => {
-          const hallNumberA = parseInt(a.HallName.match(/\d+/)[0], 10);
-          const hallNumberB = parseInt(b.HallName.match(/\d+/)[0], 10);
-          return hallNumberA - hallNumberB;
-        }
-      );
-      // 將取得的影廳和放映時間放入 selectedCinema 的 Halls 中
+      // 更新選中的影院的 Halls
       this.selectedCinema.Halls = halls;
+
+      // 手動觸發變更檢測
+      this.cdr.detectChanges();
     });
   }
 
-  onTimeSelect(
-    hallName: string,
-    showtime: {
-      // showtimeId: number;
-      showtime: string;
-      date: string;
-      day: string;
-    },
-    showTimeID:number
-  ) {
-    // 檢查 showtime 物件的內容
-    console.log('傳遞的 showtime:', showtime);
-
-    // 檢查是否取得了 showtimeId
+  // 當點擊選擇時間按鈕時，傳遞選中的上映時間至下一頁面
+  onTimeSelect(hallName: string, time: string, showTimeID: number) {
     console.log('選中的 showtimeId:', showTimeID);
-    // 跳轉到購票頁面，並傳遞相關資訊
+
+    // 傳遞選中的上映時間至第二個畫面
     this.router.navigate(['ticket/ticketselection'], {
       queryParams: {
         cinemaName: this.selectedCinema.CinemaName,
         hallName: hallName,
-        showtime: showtime,
+        showtime: time, // 傳遞選中的上映時間
         selectedShowtimeId: showTimeID,
         movieId: this.movieId,
         movieName: 'Deadpool & Wolverine',
