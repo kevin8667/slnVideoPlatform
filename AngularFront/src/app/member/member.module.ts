@@ -37,7 +37,7 @@ const routes: Routes = [
   { path: 'mmain', component: MmainComponent },
   { path: 'message', component: MessageComponent },
   { path: 'history', component: HistoryComponent },
-  { path: 'Roulette', component: RouletteComponent },
+  { path: 'roulette', component: RouletteComponent },
   { path: '**', component: MmainComponent },
 ];
 

@@ -316,7 +316,7 @@ button:hover , :focus {
 }
 
 .picdiv{
-text-align:left;
+text-align:center;
 flex-direction: row
 }
 
