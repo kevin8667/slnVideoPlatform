@@ -27,7 +27,8 @@
               class="link" (click)="onplaylist()">我的片單</a>
           </div>
         </div>
-        <table class="mtb">
+
+        <table class="mtb form-table">
           <tr>
             <td class="label"><label>電子信箱:</label></td>
             <td>
@@ -47,7 +48,7 @@
             </td>
           </tr>
           <tr>
-            <td>
+            <td class="label">
               <div class="lightcontroller"><label>密碼:</label><ng-container *ngIf="canSee"><img class="light" [src]="
               canSeepwd
                 ? './../../../assets/img/Member/light-off.png'
@@ -65,7 +66,7 @@
 
               </ng-container>
               <ng-container *ngIf="!canSee">
-                <label>{{ canSeepwd ? memberData.password : '******' }}</label>
+                <label>{{ canSeepwd ? memberData.password : '▆▆▆▆▆▆▆' }}</label>
 
               </ng-container>
               <ng-container *ngIf="!canSee">
