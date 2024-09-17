@@ -30,9 +30,10 @@ namespace VdbAPI.Controllers {
 
             try {
                 // 查詢是否有對應的回文
-                string postSql = @"SELECT PostId FROM Post WHERE PostId = @PostId";
+                string postSql = @"SELECT PostId FROM Post WHERE PostId = @PostId ";
                 var post = await connection.QueryFirstOrDefaultAsync<int?>(postSql,new {
-                    PostId = likeDTO.ContentId
+                    PostId = likeDTO.ContentId,
+                    MemberId = likeDTO.MemberId,
                 });
 
                 if(post < 1)

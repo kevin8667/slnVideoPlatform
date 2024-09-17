@@ -33,17 +33,18 @@ export class JwtInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        debugger;
-
-        if (error.status === 666) {
-          this.authService.Logout();
+        if (error.status === 401) {
+          this.handleUnauthorized();
         }
         return throwError(error);
       })
     );
   }
 
- 
+  private handleUnauthorized() {
+   /* this.oauthService.logOut(); // Log out using OAuthService  */
+    this.router.navigate(['/login']);
+  }
 
   getCookie(name: string): string | null {
     const nameEQ = name + '=';
