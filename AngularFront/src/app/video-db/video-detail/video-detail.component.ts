@@ -34,6 +34,7 @@ export class VideoDetailComponent implements OnInit {
   visible: boolean = false;
 
   ref: DynamicDialogRef | undefined;
+  displayOverlay: boolean = false;
 
   selectedIndex = 0; // 初始為第一張圖片
   selectedImage: string = this.images[this.selectedIndex]; // 預設選中第一個
@@ -190,6 +191,31 @@ export class VideoDetailComponent implements OnInit {
         numScroll: 1,
       },
     ];
+
+    this.route.queryParams.subscribe(params => {
+      if (params['showOverlay'] === 'true') {
+        this.displayOverlay = true;
+
+        setTimeout(() => {
+          const button = document.querySelector('.add-to-playlist-button') as HTMLElement;
+          const arrowContainer = document.querySelector('.arrow-container') as HTMLElement;
+
+          if (button && arrowContainer) {
+            const buttonRect = button.getBoundingClientRect();
+
+            // 動態設置箭頭位置，使其對準按鈕
+            arrowContainer.style.position = 'absolute'; // 確保是絕對定位
+            arrowContainer.style.top = (buttonRect.top - 80) + 'px'; // 讓箭頭位於按鈕上方
+            arrowContainer.style.left = (buttonRect.left + (buttonRect.width / 2) - (arrowContainer.offsetWidth / 2) + 140) + 'px'; // 將箭頭水平居中對齊按鈕
+          }
+        }, 0); // 延遲執行，確保 DOM 完全加載
+      }
+    });
+  }
+
+  // 隱藏 overlay 的方法
+  hideOverlay() {
+    this.displayOverlay = false;
   }
 
   showAddToPlaylist() {

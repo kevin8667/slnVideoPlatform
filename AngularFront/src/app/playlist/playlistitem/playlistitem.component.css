@@ -139,3 +139,44 @@ button.p-button-danger i {
   width: 640px;
   height: 360px;
 }
+
+.floating-button {
+  position: absolute;
+  bottom: 40px;
+  right: 30px;
+  width: 90px; /* 按鈕寬度應根據圖片大小調整 */
+  height: 120px; /* 按鈕高度應根據圖片大小調整 */
+  cursor: pointer;
+  z-index: 1001; /* 保持在 overlay 上 */
+  background-color: transparent; /* 移除背景色，讓它變透明 */
+  box-shadow: none; /* 去掉陰影 */
+  border-radius: 0; /* 移除邊框圓角，保證只有圖片 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: pulse 1.5s infinite; /* 保留閃動效果 */
+  padding: 0; /* 移除內間距 */
+}
+
+.floating-button img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px; /* 保持圖片圓角，根據需求可移除 */
+}
+
+.floating-button img:hover {
+  transform: scale(1.05); /* 鼠標懸停時輕微放大效果 */
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 211, 51, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 211, 51, 1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 211, 51, 0.7);
+  }
+}
