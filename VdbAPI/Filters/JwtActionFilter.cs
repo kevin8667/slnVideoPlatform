@@ -16,7 +16,7 @@ namespace VdbAPI.Filters
 
             if (string.IsNullOrEmpty(token))
             {
-                context.Result = new JsonResult(new { message = "Token is missing" }) { StatusCode = 401 };
+                context.Result = new JsonResult(new { message = "Token is missing" }) { StatusCode = 666 };
                 return;
             }
 
@@ -28,7 +28,7 @@ namespace VdbAPI.Filters
                 long currentFileTime = DateTime.Now.ToFileTime();
                 if (jwtObj.ExpiredTime < currentFileTime)
                 {
-                    context.Result = new JsonResult(new { message = "Token has expired" }) { StatusCode = 401 };
+                    context.Result = new JsonResult(new { message = "Token has expired" }) { StatusCode = 666 };
                     return;
                 }
 
@@ -36,7 +36,7 @@ namespace VdbAPI.Filters
             }
             catch (Exception ex)
             {
-                context.Result = new JsonResult(new { message = "Invalid token", error = ex.Message }) { StatusCode = 401 };
+                context.Result = new JsonResult(new { message = "Invalid token", error = ex.Message }) { StatusCode = 666 };
             }
 
             base.OnActionExecuting(context);

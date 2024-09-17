@@ -64,9 +64,11 @@ export class AuthService {
   }
 
   Logout(): void {
-    debugger;
     this.isLogin.next(false);
     this.removeCookie('JwtToken');
+    this.removeCookie('MemberData');
+    this.memberBehaviorSubject.next(null);
+
     this.router.navigateByUrl('login');
 
   }

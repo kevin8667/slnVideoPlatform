@@ -22,7 +22,7 @@ namespace VdbAPI.Controllers
                 {
                     return (int)HttpContext.Items["MemberId"];
                 }
-                return 0;  // 如果 MemberId 不存在，則返回 0 或其他合適的值
+                return -1;  // 如果 MemberId 不存在，則返回 0 或其他合適的值
             }
         }
 
