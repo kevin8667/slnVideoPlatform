@@ -1,0 +1,46 @@
+.playlist-image-container {
+  position: relative;
+}
+
+.playlist-image-wrapper {
+  position: relative;
+}
+
+.playlist-image {
+  width: 120px; /* 根據需要調整圖片大小 */
+  height: 90px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.playlist-type-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* 黑色半透明背景 */
+  color: white;
+  padding: 2px 5px;
+  font-size: 0.65em; /* 調整字體大小為更小 */
+  font-weight: normal; /* 設置字體為常規，不加粗 */
+  border-radius: 0 0 3px 0; /* 只對右下角設置圓角 */
+  z-index: 10;
+}
+
+/* 字體等比例變大 */
+td {
+  font-size: 1.3em; /* 調整字體大小 */
+  padding: 10px; /* 增加單元格內部的空白 */
+}
+
+th {
+  font-size: 1.3em;
+}
+
+::ng-deep .p-dialog {
+  width: 50% !important; /* 強制將寬度設定為 50% */
+  max-width: none !important; /* 確保不受 max-width 的限制 */
+}
+
+::ng-deep .p-dialog-content {
+  overflow: auto !important; /* 確保內容自動滾動 */
+}

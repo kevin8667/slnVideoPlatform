@@ -48,8 +48,7 @@
         style="text-decoration-line: none;"
         pButton
         pRipple
-        [href]="video.trailerUrl"
-        target="_blank"
+        (click)="showAddToPlaylist()"
         icon="pi pi-plus-circle"
         >加入片單</a>
         <a

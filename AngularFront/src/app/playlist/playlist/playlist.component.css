@@ -17,7 +17,7 @@
   padding: 0;
 }
 
-.playlist-card .custom-card {
+.playlist-card .custom-card-two {
   width: 100%;
   height: auto;
   display: flex;
@@ -34,7 +34,7 @@
   border: 2px solid #17A2B8;
 }
 
-.custom-card:hover {
+.custom-card-two:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }

@@ -90,7 +90,7 @@
   z-index: 10000 !important;
 }
 
-.cdk-overlay-container, .ui-dialog {
+.cdk-overlay-container {
   z-index: 1050 !important;
 }
 

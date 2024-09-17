@@ -28,7 +28,7 @@
     <p-card
       [header]="playlist.playListName"
       [subheader]="playlist.playListDescription"
-      class="custom-card">
+      class="custom-card-two">
 
       <ng-template pTemplate="content">
         <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
