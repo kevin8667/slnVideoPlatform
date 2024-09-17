@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { RecaptchaModule } from 'ng-recaptcha';
+// import { LuckyWheel, LuckyGrid } from 'lucky-canvas'
 
 import { InputTextModule } from 'primeng/inputtext';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -25,7 +26,8 @@ import { CouponComponent } from './coupon/coupon.component';
 import { MessageComponent } from './message/message.component';
 import { FriendsComponent } from './friends/friends.component';
 import { HistoryComponent } from './history/history.component';
-import { RouletteComponent } from './roulette/roulette.component';
+// import { CrazygridComponent } from './crazygrid/crazygrid.component';
+
 // import { LoginCallbackComponent } from './login-callback/login-callback.component';
 
 
@@ -37,7 +39,7 @@ const routes: Routes = [
   { path: 'mmain', component: MmainComponent },
   { path: 'message', component: MessageComponent },
   { path: 'history', component: HistoryComponent },
-  { path: 'roulette', component: RouletteComponent },
+  // { path: 'crazygrid', component: CrazygridComponent },
   { path: '**', component: MmainComponent },
 ];
 
@@ -50,7 +52,8 @@ const routes: Routes = [
     MessageComponent,
     FriendsComponent,
     HistoryComponent,
-    RouletteComponent
+    // CrazygridComponent,
+  
     // LoginCallbackComponent
   ],
   imports: [
@@ -69,7 +72,9 @@ const routes: Routes = [
     InputTextareaModule,
     BreadcrumbModule,
     CheckboxModule,
-    MessagesModule
+    MessagesModule,
+    // LuckyGrid,
+    // LuckyWheel
   ],
   exports: [RouterModule],
 

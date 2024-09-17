@@ -27,6 +27,7 @@
     "bootstrap": "^5.3.3",
     "jest-editor-support": "*",
     "jquery": "^3.7.1",
+    "lucky-canvas": "^1.7.27",
     "ng-recaptcha": "^12.0.0",
     "ngx-quill": "^23.0.3",
     "owl.carousel": "^2.3.4",

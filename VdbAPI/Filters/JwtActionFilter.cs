@@ -36,7 +36,7 @@ namespace VdbAPI.Filters
             }
             catch (Exception ex)
             {
-                context.Result = new JsonResult(new { message = "Invalid token", error = ex.Message }) { StatusCode = 666 };
+                context.Result = new JsonResult(new { message = ex.Message, error = ex.Message }) { StatusCode = 666 };
             }
 
             base.OnActionExecuting(context);

@@ -5,15 +5,7 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, tap, shareReplay } from 'rxjs/operators';
 
 // 定義接口來處理返回的結果和錯誤狀態
-interface MemberIdResponse {
-  MemberID: number;
-  Email: string;
-  NickName: string;
-  MemberName: string;
-  Gender: string;
-  error?: boolean;
-  PhotoPath: string;
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +17,7 @@ export class AuthService {
 
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
 
-  private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(this.getMemberData());
+  private memberBehaviorSubject = new BehaviorSubject<any | null>(this.getMemberData());
 
   removeCookie(name: string): void {
     // 设置一个过期时间为过去的时间
@@ -38,7 +30,7 @@ export class AuthService {
     return this.memberBehaviorSubject.asObservable();
   }
 
-  getMemberData(): MemberIdResponse | null {
+  getMemberData(): any | null {
     console.log("getMemberData by cookie");
     const cookieValue = this.getCookie('MemberData');
     if (cookieValue) {
@@ -53,7 +45,7 @@ export class AuthService {
   }
 
   
-  SetMemberData(data:MemberIdResponse): void {
+  SetMemberData(data:any): void {
     this.memberBehaviorSubject.next(data);
     this.setCookie('MemberData', JSON.stringify(data), 1);
 
