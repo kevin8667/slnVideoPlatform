@@ -8,11 +8,12 @@ using System.Text;
 
 using VdbAPI.DTO;
 using VdbAPI.Models;
+using VdbAPI.Filters;
 
 namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostsController : ControllerBase {
+    public class PostsController : BaseController {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
 
@@ -21,6 +22,7 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        //[JwtActionFilter]
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
@@ -155,7 +157,7 @@ namespace VdbAPI.Controllers {
 
             return Ok(post.ToList());
         }
-
+        //[JwtActionFilter]
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdatePost(int id,PostUpdate postUpdate)
         {
@@ -195,6 +197,7 @@ namespace VdbAPI.Controllers {
         }
 
         // POST: api/Posts
+        //[JwtActionFilter]
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(PostDTO postDTO)
         {
@@ -243,6 +246,7 @@ namespace VdbAPI.Controllers {
         }
 
         // DELETE: api/Posts/5
+        //[JwtActionFilter]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {

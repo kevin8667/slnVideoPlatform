@@ -18,6 +18,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
 import { AuthService } from 'src/app/auth.service';
 import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,13 +26,17 @@ export default class ForumService {
   private renderer: Renderer2;
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
-  private userSubject = new ReplaySubject<memberName>(1); // 初始化
-  public user$ = this.userSubject.asObservable()
+  private userSubject = new BehaviorSubject<memberName>({
+    memberId: 0,
+    nickName: '',
+  }); // 初始化
+  public user$ = this.userSubject.asObservable();
   constructor(
     private client: HttpClient,
     private sanitizer: DomSanitizer,
     private rendererFactory: RendererFactory2,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
     this.loadThemeTags();
@@ -39,19 +44,19 @@ export default class ForumService {
     this.loadMember();
   }
 
-
   loadMember() {
     this.auth.getMemberId().subscribe({
       next: (data) => {
-        if (data && data.memberId) {
-          this.userSubject.next({
-            memberId: data.memberId,
-            nickName: '豬頭',
-          });
-        }
+        this.userSubject.next({
+          memberId: data.memberId,
+          nickName: '豬頭',
+        });
       },
       error(err) {
         console.error('獲取會員失敗', err);
+      },
+      complete: () => {
+        console.log('會員資料加載完成');
       },
     });
   }
@@ -161,5 +166,8 @@ export default class ForumService {
     this.loadCss(
       'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700&display=swap'
     );
+  }
+  nvaToLogion() {
+    this.router.navigate(['/login']);
   }
 }

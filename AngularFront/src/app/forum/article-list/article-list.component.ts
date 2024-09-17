@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/auth.service';
 import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
 import {
   AfterViewChecked,
@@ -14,7 +15,6 @@ import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
 import ForumService from 'src/app/services/forumService/forum.service';
 import { SignalRService } from 'src/app/services/forumService/signal-r.service';
-import { use } from 'video.js/dist/types/tech/middleware';
 
 @Component({
   selector: 'app-article-list',
@@ -27,10 +27,11 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   debounceTimer!: number;
   forumPagingDTO: ForumPagingDTO | undefined;
   user!: memberName;
+  loading = false;
   message = '';
   messages: Chatroom[] = [];
   private messageSubscription?: Subscription;
-  currentUserId = 0;
+
   forumDto = {
     categoryId: 0,
     keyword: '',
@@ -80,15 +81,13 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     private route: Router,
     private forumService: ForumService,
     private signalRService: SignalRService
-  ) {
-    this.forumService.user$.subscribe((data) => (this.user = data));
-  }
+  ) {}
   ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
-  loading = false;
   ngOnInit(): void {
     this.load();
+    this.forumService.user$.subscribe((data) => (this.user = data));
     this.messageSubscription = this.signalRService.messages$.subscribe({
       next: (data: Chatroom[]) => {
         this.messages = data;

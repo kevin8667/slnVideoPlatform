@@ -26,7 +26,6 @@ export class MmainComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe((isLoggedIn) => {
-      debugger;
       if (isLoggedIn) {
         this.readMemberData();
         this.loadLatestNews();

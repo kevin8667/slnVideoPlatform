@@ -92,7 +92,7 @@
           <div>
             <p-button
               [icon]="
-                getReaction(post.postId) === 'like'
+                getReaction(post.postId||0) === 'like'
                   ? 'pi pi-thumbs-up-fill'
                   : 'pi pi-thumbs-up'
               "

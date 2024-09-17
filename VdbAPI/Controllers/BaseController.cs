@@ -22,12 +22,5 @@ namespace VdbAPI.Controllers
                 return 0;  // 如果 MemberId 不存在，則返回 0 或其他合適的值
             }
         }
-
-        protected void SetNoticeMessage(string memberid,string title,string content,string action)
-        {
-            MemberHelper mHelper = new MemberHelper(memberid);
-            mHelper.SetNoticeMessage(memberid,title,content,action);
-        }
-
     }
 }

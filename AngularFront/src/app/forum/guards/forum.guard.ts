@@ -2,17 +2,20 @@ import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import ForumService from 'src/app/services/forumService/forum.service';
+import { AuthService } from 'src/app/auth.service';
 
 export const forumGuard: CanActivateFn = (route, state) => {
   const router = inject(Router); // 使用 inject() 來獲取服務
-  const forumService = inject(ForumService);
   const type = route.paramMap.get('type');
   const requiresAuth = route.data['requiresAuth'];
+  const auth = inject(AuthService);
+  const forumService = inject(ForumService);
   if (requiresAuth) {
     let userId = 0;
     forumService.user$.subscribe((data) => (userId = data.memberId));
-    if (userId < 0) {
-      router.navigate(['/login']);
+    if (userId < 1) {
+      router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+
       return false;
     }
   }
