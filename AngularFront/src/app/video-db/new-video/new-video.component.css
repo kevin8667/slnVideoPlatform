@@ -1,0 +1,36 @@
+/* .custom-card {
+    max-width: 1200px;
+    margin: 0 auto;
+  } */
+  
+  .thumbnail-preview,
+  .image-preview {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+  }
+  
+  /* .p-panel {
+    background-color: #f4f4f9;
+  } */
+  
+  .p-field {
+    margin-bottom: 20px;
+  }
+
+  .image-container {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .thumbnail-preview {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+  }
+  
+  .preview-carousel {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+  }

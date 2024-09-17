@@ -6,6 +6,7 @@ import { VideoDbSearchComponent } from './video-db-search/video-db-search.compon
 import { SeasonListComponent } from './season-list/season-list.component';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
+import { NewVideoComponent } from './new-video/new-video.component';
 
 const routes: Routes = [
   { path: '', component: VideoDBFrontPageComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'search', component: VideoDbSearchComponent },
   { path: 'seasons', component: SeasonListComponent },
   { path: 'episodes', component: EpisodeListComponent },
-  { path: 'person/:id', component: PersonDetailComponent }
+  { path: 'person/:id', component: PersonDetailComponent },
+  { path: 'newvideo', component: NewVideoComponent },
 ];
 
 @NgModule({

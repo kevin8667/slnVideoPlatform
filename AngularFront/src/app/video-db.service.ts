@@ -6,6 +6,8 @@ import { HttpParams } from '@angular/common/http';
 import { PagedResult } from './video-db/interfaces/PagedResult';
 import {Genre} from './video-db/interfaces/genre';
 import { Actor } from './video-db/interfaces/actor';
+import { CreateVideoDTO } from './video-db/interfaces/CreateVideoDTO';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -174,5 +176,12 @@ export class VideoDBService {
     });
 
     return this.httpClient.get<Video[]>(url)
+  }
+
+  createVideo(video:CreateVideoDTO): Observable<Video> {
+    
+    const apiUrl = 'https://your-api-url/api/videos';
+
+    return this.httpClient.post<Video>(apiUrl, video);
   }
 }

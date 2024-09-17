@@ -1,1 +1,239 @@
-<p>new-video works!</p>
+<div class="custom-card p-fluid">
+    <p-panel header="新增影片" styleClass="mb-3">
+      <form [formGroup]="videoForm" (ngSubmit)="onSubmit()">
+        <div class="p-grid p-formgrid">
+          <!-- 左邊欄位 (影片詳細資料) -->
+          <div class="p-col-12 p-md-6">
+            <p-fieldset legend="影片資料">
+              <!-- 影片名稱 -->
+              <div class="p-field">
+                <label for="videoName">影片名稱</label>
+                <input
+                  id="videoName"
+                  type="text"
+                  pInputText
+                  formControlName="videoName"
+                />
+              </div>
+  
+              <!-- 類型 ID -->
+              <div class="p-field">
+                <label for="typeId">類型 ID</label>
+                <input
+                  id="typeId"
+                  type="number"
+                  pInputText
+                  formControlName="typeId"
+                />
+              </div>
+  
+              <!-- 系列 ID -->
+              <div class="p-field">
+                <label for="seriesId">系列 ID</label>
+                <input
+                  id="seriesId"
+                  type="number"
+                  pInputText
+                  formControlName="seriesId"
+                />
+              </div>
+  
+              <!-- 主要類型 ID -->
+              <div class="p-field">
+                <label for="mainGenreId">主要類型 ID</label>
+                <input
+                  id="mainGenreId"
+                  type="number"
+                  pInputText
+                  formControlName="mainGenreId"
+                />
+              </div>
+  
+              <!-- 季數 ID -->
+              <div class="p-field">
+                <label for="seasonId">季數 ID</label>
+                <input
+                  id="seasonId"
+                  type="number"
+                  pInputText
+                  formControlName="seasonId"
+                />
+              </div>
+  
+              <!-- 集數 -->
+              <div class="p-field">
+                <label for="episode">集數</label>
+                <input
+                  id="episode"
+                  type="number"
+                  pInputText
+                  formControlName="episode"
+                />
+              </div>
+  
+              <!-- 影片時長 -->
+              <div class="p-field">
+                <label for="runningTime">時長</label>
+                <input
+                  id="runningTime"
+                  type="text"
+                  pInputText
+                  placeholder="格式: hh:mm:ss"
+                  formControlName="runningTime"
+                />
+              </div>
+  
+              <!-- 是否上映 -->
+              <div class="p-field-checkbox">
+                <p-checkbox
+                  formControlName="isShowing"
+                  [binary]="true"
+                  label="正在上映"
+                ></p-checkbox>
+              </div>
+  
+              <!-- 上映日期 -->
+              <div class="p-field">
+                <label for="releaseDate">上映日期</label>
+                <p-calendar
+                  formControlName="releaseDate"
+                  id="releaseDate"
+                  [showIcon]="true"
+                ></p-calendar>
+              </div>
+  
+              <!-- 評分 -->
+              <div class="p-field">
+                <label for="rating">評分</label>
+                <p-inputNumber
+                  formControlName="rating"
+                  [min]="0"
+                  [max]="5"
+                  [step]="0.1"
+                ></p-inputNumber>
+              </div>
+  
+              <!-- 語言 -->
+              <div class="p-field">
+                <label for="lang">語言</label>
+                <input
+                  id="lang"
+                  type="text"
+                  pInputText
+                  formControlName="lang"
+                />
+              </div>
+  
+              <!-- 簡介 -->
+              <div class="p-field">
+                <label for="summary">簡介</label>
+                <textarea
+                  id="summary"
+                  pInputTextarea
+                  formControlName="summary"
+                ></textarea>
+              </div>
+  
+              <!-- 年齡分級 -->
+              <div class="p-field">
+                <label for="ageRating">年齡分級</label>
+                <input
+                  id="ageRating"
+                  type="text"
+                  pInputText
+                  formControlName="ageRating"
+                />
+              </div>
+  
+              <!-- 預告片 URL -->
+              <div class="p-field">
+                <label for="trailerUrl">預告片 URL</label>
+                <input
+                  id="trailerUrl"
+                  type="text"
+                  pInputText
+                  formControlName="trailerUrl"
+                />
+              </div>
+            </p-fieldset>
+          </div>
+  
+          <!-- 右邊欄位 (圖片) -->
+          <div class="p-col-12 p-md-6">
+            <p-fieldset legend="縮圖與圖片">
+              <!-- 縮圖上傳 -->
+              <div class="p-field">
+                <label for="thumbnailPath">上傳縮圖</label>
+                <p-fileUpload
+                  name="thumbnail"
+                  accept="image/*"
+                  (onSelect)="onThumbnailSelect($event)"
+                  mode="basic"
+                  [auto]="false"
+                ></p-fileUpload>
+                <div *ngIf="thumbnailPreview" class="image-container">
+                  <img
+                    [src]="thumbnailPreview"
+                    alt="縮圖預覽"
+                    class="thumbnail-preview"
+                  />
+                </div>
+              </div>
+  
+              <!-- 圖片上傳 -->
+              <!-- <div class="p-field">
+                <label for="images">上傳圖片</label>
+                <p-fileUpload
+                  name="image"
+                  accept="image/*"
+                  (onSelect)="onImageSelect($event)"
+                  mode="basic"
+                  [auto]="false"
+                ></p-fileUpload>
+              </div> -->
+  
+              <!-- 圖片預覽列表 -->
+              <div *ngIf="imagePreview.length > 0" class="p-field">
+                <p-carousel
+                  [value]="imagePreview"
+                  [numVisible]="3"
+                  [circular]="true"
+                  [autoplayInterval]="3000"
+                >
+                  <ng-template pTemplate="item" let-preview>
+                    <img
+                      [src]="preview"
+                      alt="圖片預覽"
+                      class="preview-carousel"
+                    />
+                  </ng-template>
+                </p-carousel>
+              </div>
+  
+              <!-- 新增圖片按鈕 -->
+              <button
+                type="button"
+                pButton
+                label="新增圖片"
+                icon="pi pi-plus"
+                (click)="addImage()"
+              ></button>
+            </p-fieldset>
+          </div>
+        </div>
+  
+        <!-- 提交按鈕 -->
+        <div class="p-grid">
+          <div class="p-col-12">
+            <button
+              type="submit"
+              pButton
+              label="提交"
+              [disabled]="videoForm.invalid"
+              class="p-button-success"
+            ></button>
+          </div>
+        </div>
+      </form>
+    </p-panel>
+  </div>

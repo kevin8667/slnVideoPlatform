@@ -27,9 +27,16 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { RatingModule } from 'primeng/rating';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
 import { ToastModule } from 'primeng/toast';
 import { NewVideoComponent } from './new-video/new-video.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PanelModule } from 'primeng/panel';
+import { FieldsetModule } from 'primeng/fieldset';
+
+
 
 @NgModule({
   declarations: [
@@ -64,7 +71,13 @@ import { NewVideoComponent } from './new-video/new-video.component';
     OverlayPanelModule,
     RatingModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ReactiveFormsModule,
+    CalendarModule,
+    FileUploadModule,
+    CheckboxModule,
+    PanelModule,
+    FieldsetModule
   ]
 })
 export class VideoDbModule { }

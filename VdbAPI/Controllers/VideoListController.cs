@@ -180,13 +180,87 @@ namespace VdbAPI.Controllers
 
         // POST: api/VideoList
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<VideoList>> PostVideoList(VideoList videoList)
+        //[HttpPost]
+        //public async Task<ActionResult<VideoList>> PostVideoList(VideoList videoList)
+        //{
+        //    _context.VideoLists.Add(videoList);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetVideoList", new { id = videoList.VideoId }, videoList);
+        //}
+
+        [HttpPost("newVideo={videoName}")]
+        public async Task<IActionResult> PostVideoList([FromBody] VideoCreateDTO videoDTO)
         {
-            _context.VideoLists.Add(videoList);
+            var video = new VideoList
+            {
+                VideoName = videoDTO.VideoName,
+                TypeId = videoDTO.TypeId,
+                SeriesId = videoDTO.SeriesId,
+                MainGenreId = videoDTO.MainGenreId,
+                RunningTime = TimeSpan.Parse(videoDTO.RunningTime),
+                IsShowing = videoDTO.IsShowing,
+                ReleaseDate = videoDTO.ReleaseDate,
+                Lang = videoDTO.Lang,
+                Summary = videoDTO.Summary,
+                AgeRating = videoDTO.AgeRating,
+                TrailerUrl = videoDTO.TrailerUrl,
+                ThumbnailPath = videoDTO.ThumbnailPath,
+                Bgpath = videoDTO.Bgpath    
+
+                // Set other properties...
+            };
+            _context.VideoLists.Add(video);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetVideoList", new { id = videoList.VideoId }, videoList);
+            // Now handle images
+            foreach (var imageDTO in videoDTO.Images)
+            {
+                var image = new ImageList { ImagePath = imageDTO.ImagePath };
+                _context.ImageLists.Add(image);
+                await _context.SaveChangesAsync();
+
+                var imageForVideo = new ImageForVideoList
+                {
+                    VideoId = video.VideoId,
+                    ImageId = image.ImageId
+                };
+                _context.ImageForVideoLists.Add(imageForVideo);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetVideoList", new { id = video.VideoId }, video);
+        }
+
+        [HttpPost("uploadImages")]
+        public async Task<IActionResult> UploadImages([FromForm] IFormFile thumbnail, [FromForm] List<IFormFile> images)
+        {
+            // 處理縮圖圖片
+            string thumbnailPath = string.Empty;
+            if (thumbnail != null)
+            {
+                var filePath = Path.Combine("wwwroot/assets/img", thumbnail.FileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await thumbnail.CopyToAsync(stream);
+                }
+                thumbnailPath = "/assets/img/" + thumbnail.FileName;
+            }
+
+            // 處理其他圖片
+            List<string> imagePaths = new List<string>();
+            foreach (var image in images)
+            {
+                var filePath = Path.Combine("wwwroot/assets/img", image.FileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await image.CopyToAsync(stream);
+                }
+                imagePaths.Add("/assets/img/" + image.FileName);
+            }
+
+            return Ok(new { thumbnailPath, imagePaths });
         }
 
         // DELETE: api/VideoList/5

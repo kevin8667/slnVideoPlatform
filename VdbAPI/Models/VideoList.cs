@@ -21,11 +21,11 @@ public partial class VideoList
 
     public int? Episode { get; set; }
 
-    public TimeOnly? RunningTime { get; set; }
+    public TimeSpan? RunningTime { get; set; }
 
     public bool IsShowing { get; set; }
 
-    public DateOnly? ReleaseDate { get; set; }
+    public DateTime? ReleaseDate { get; set; }
 
     public decimal? Rating { get; set; }
 
