@@ -64,7 +64,7 @@ namespace VdbAPI.Controllers {
 
             return Ok(result);
         }
-        [JwtActionFilter]
+        //[JwtActionFilter]
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
@@ -151,7 +151,7 @@ namespace VdbAPI.Controllers {
             return Ok(articleView);
         }
         //新增
-        [JwtActionFilter]
+        //[JwtActionFilter]
         [HttpPost]
         public async Task<IActionResult> CreateArticle(ArticleView articleView)
         {
@@ -192,13 +192,13 @@ namespace VdbAPI.Controllers {
             }
             catch(Exception ex) {
                 await transaction.RollbackAsync();
-                return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
+                return StatusCode(500,"錯誤原因:" + ex.Message + ex.InnerException);
 
             }
 
         }
         //編輯
-        [JwtActionFilter]
+        //[JwtActionFilter]
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchArticle(int id,ArticleUpdate articleUpdate)
         {
@@ -245,7 +245,7 @@ namespace VdbAPI.Controllers {
         }
 
         // DELETE: api/Articles/5 刪除
-        [JwtActionFilter]
+        //[JwtActionFilter]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {

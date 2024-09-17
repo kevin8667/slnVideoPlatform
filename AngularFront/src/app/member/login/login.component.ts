@@ -2,9 +2,10 @@ import { AuthService } from '../../auth.service';
 import { Component, AfterViewInit } from '@angular/core';
 import { MemberService } from './../member.service';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from './../../../environments/environment';
+import { take } from 'rxjs';
 
 declare var grecaptcha: any;
 
@@ -22,9 +23,9 @@ export class LoginComponent implements AfterViewInit {
 
   constructor(
     private memberService: MemberService,
-    private authService:AuthService,
-    private router: Router /*private oauthService: OAuthService*/
-  ) {
+    private authService: AuthService,
+    private router: Router /*private oauthService: OAuthService*/,
+    private route: ActivatedRoute  ) {
     console.log('Google Client ID:', this.googleClientId);
   }
 
@@ -37,6 +38,16 @@ export class LoginComponent implements AfterViewInit {
     this.authService.loginWithLine(false);
   }
   ngAfterViewInit() {
+    this.authService.isLoggedIn.pipe(take(1)).subscribe((isLoggedIn) => {
+      console.log(isLoggedIn);
+      if (isLoggedIn) {
+        const returnUrl =
+          this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+        this.router.navigateByUrl(returnUrl);
+        return
+      }
+    });
+
     if (typeof grecaptcha === 'undefined') {
       // 動態加載 reCAPTCHA 腳本
       const script = document.createElement('script');

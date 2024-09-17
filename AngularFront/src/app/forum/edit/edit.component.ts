@@ -245,9 +245,9 @@ export class EditComponent implements OnInit {
   private navigateBack(): void {
     setTimeout(() => {
       if (this.type === 'post' && this.articleId) {
-        this.router.navigate(['/forum', this.articleId]);
+        this.router.navigate(['forum', this.articleId]);
       } else {
-        this.router.navigate(['/forum']);
+        this.router.navigate(['forum']);
       }
     }, 0);
   }
