@@ -18,7 +18,6 @@ export class AuthService {
 
   private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(this.getMemberData());
 
-  private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(this.getMemberData());
 
   removeCookie(name: string): void {
     // 设置一个过期时间为过去的时间
