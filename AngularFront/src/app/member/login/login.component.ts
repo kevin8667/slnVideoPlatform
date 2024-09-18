@@ -2,7 +2,7 @@ import { AuthService } from '../../auth.service';
 import { Component, AfterViewInit } from '@angular/core';
 import { MemberService } from './../member.service';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from './../../../environments/environment';
 
@@ -23,11 +23,12 @@ export class LoginComponent implements AfterViewInit {
   constructor(
     private memberService: MemberService,
     private authService:AuthService,
-    private router: Router /*private oauthService: OAuthService*/
+    private router: Router, /*private oauthService: OAuthService*/
+    private route:ActivatedRoute
   ) {
     console.log('Google Client ID:', this.googleClientId);
   }
-  
+
   LineLogin() {
     this.authService.loginWithLine(false);
   }
@@ -68,8 +69,8 @@ export class LoginComponent implements AfterViewInit {
 
             this.authService.SetLoginValue();
             this.authService.SetMemberData(response.data);
-
-            this.router.navigateByUrl('login/mmain');
+            const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+            this.router.navigateByUrl(returnUrl);
           }
         },
         error: (error) => {

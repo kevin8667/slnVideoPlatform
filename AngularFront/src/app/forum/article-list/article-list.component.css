@@ -3,10 +3,9 @@
 .myContainer {
   margin: 0;
   padding: 0;
-
 }
-.myContainer div{
-  font-family: 'Noto Sans TC', sans-serif;
+.myContainer div {
+  font-family: "Noto Sans TC", sans-serif;
 }
 .card1 {
   background: #ffffff31; /* 背景顏色 */
@@ -35,7 +34,7 @@
 }
 
 .d2 {
-  flex:65%;
+  flex: 65%;
 }
 .d1 {
   margin: 0 20px;
@@ -48,7 +47,7 @@
 
 .d3 {
   margin: 0 20px;
-  flex:20%
+  flex: 20%;
 }
 .article {
   margin-top: 2%;
@@ -65,7 +64,7 @@
 }
 ::ng-deep .themeBtn {
   font-size: 13px;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans TC", sans-serif;
   background-color: #56ccf2;
   color: #e8ecee;
   border: none;
@@ -238,7 +237,7 @@
 .chat-messages-container {
   padding: 1rem;
   overflow-y: auto;
-  min-height: 79%;
+  min-height: 70%;
   background-color: #d5e3e9;
 }
 
@@ -247,6 +246,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: end;
   word-wrap: break-word;
 }
 

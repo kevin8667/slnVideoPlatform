@@ -157,10 +157,8 @@
               </div>
               <!-- 只有訊息本身在框內 -->
               <p
-                [ngClass]="{
-                  'my-message-text': msg.isMined,
-                  'message-text': !msg.isMined
-                }"
+                class="message-text"
+                [ngClass]="{'my-message-text': msg.senderId === user.memberId}"
               >
                 {{ msg.chatMessage }}
               </p>
@@ -176,7 +174,9 @@
           />
           <button (click)="sendMessage(message)">發送</button>
         </div>
-        <div *ngIf="user.memberId < 1">點擊右上角登入方可參與聊天</div>
+        <div style="text-align: center" *ngIf="user.memberId < 1">
+          點擊右上角登入方可參與聊天
+        </div>
       </div>
     </div>
   </main>

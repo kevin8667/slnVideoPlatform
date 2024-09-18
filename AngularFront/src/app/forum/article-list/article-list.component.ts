@@ -1,7 +1,9 @@
 import { AuthService } from 'src/app/auth.service';
 import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
 import {
+  AfterContentInit,
   AfterViewChecked,
+  AfterViewInit,
   Component,
   ElementRef,
   OnInit,
@@ -31,7 +33,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   message = '';
   messages: Chatroom[] = [];
   private messageSubscription?: Subscription;
-
+  private previousMessageCount = 0;
   forumDto = {
     categoryId: 0,
     keyword: '',
@@ -78,14 +80,14 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   ];
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
   constructor(
-    private route: Router,
+    private router: Router,
     private forumService: ForumService,
     private signalRService: SignalRService
   ) {}
-  ngAfterViewChecked(): void {
-    this.scrollToBottom();
-  }
+
   ngOnInit(): void {
+    console.log('ngOnInit');
+
     this.load();
     this.forumService.user$.subscribe((data) => {
       if (data) this.user = data;
@@ -102,12 +104,24 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  ngAfterViewChecked() {
+    if (this.messages.length !== this.previousMessageCount) {
+      this.scrollToBottom();
+      this.previousMessageCount = this.messages.length; // 更新訊息數量
+    }
+  }
+
   private scrollToBottom(): void {
     try {
-      this.chatContainer.nativeElement.scrollTop =
-        this.chatContainer.nativeElement.scrollHeight;
-    } catch (err) {}
+      this.chatContainer.nativeElement.scroll({
+        top: this.chatContainer.nativeElement.scrollHeight,
+        behavior: 'smooth', // 平滑滾動
+      });
+    } catch (err) {
+      console.error('滾動到底部失敗', err);
+    }
   }
+
   sendMessage(message: string) {
     if (!message.trim()) return;
     const chatroom: Chatroom = {
@@ -117,7 +131,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
       sendtime: new Date().toISOString(),
     };
     this.signalRService.sendMessage(chatroom);
-    this.scrollToBottom();
+    setTimeout(() => this.scrollToBottom(), 0);
     this.message = '';
   }
   private async load() {
@@ -169,7 +183,21 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     this.load();
   }
   openCreateArticleDialog() {
-    this.route.navigateByUrl('forum/new/article');
+    if (this.user.memberId < 1) {
+      // 捕获当前的URL（用户想要访问的页面）
+      this.redirect();
+    } else {
+      // 用户已登录，导航到创建文章页面
+      this.router.navigateByUrl('forum/new/article');
+    }
+  }
+
+
+  private redirect() {
+    const currentUrl = this.router.url;
+
+    // 导航到登录页面，并传递 returnUrl 查询参数
+    this.router.navigate(['login'], { queryParams: { returnUrl: currentUrl } });
   }
 
   truncateText(articleContent: string, maxLength: number) {
@@ -200,6 +228,6 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     return imgSrc;
   }
   navToArticle(id: any) {
-    this.route.navigate(['forum', id]);
+    this.router.navigate(['forum', id]);
   }
 }

@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', component: ArticleListComponent },
   { path: ':id', component: ArticleComponent, canActivate: [forumGuard] },
   {
-    path: 'new/:type',
+    path: 'new/a',
     component: EditComponent,
     canActivate: [forumGuard],
     canDeactivate: [unsavedChangesGuard],

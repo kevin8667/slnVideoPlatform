@@ -8,7 +8,6 @@ export const forumGuard: CanActivateFn = (route, state) => {
   const router = inject(Router); // 使用 inject() 來獲取服務
   const type = route.paramMap.get('type');
   const requiresAuth = route.data['requiresAuth'];
-  const auth = inject(AuthService);
   const forumService = inject(ForumService);
   if (requiresAuth) {
     let userId = 0;
@@ -16,8 +15,7 @@ export const forumGuard: CanActivateFn = (route, state) => {
       if (data) userId = data.memberId;
     });
     if (userId < 1) {
-      router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-
+      router.navigate(['login'], { queryParams: { returnUrl: state.url } });
       return false;
     }
   }

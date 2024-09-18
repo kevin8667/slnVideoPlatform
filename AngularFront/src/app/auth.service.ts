@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
+import { state } from '@angular/animations';
 
 // 定義接口來處理返回的結果和錯誤狀態
 export interface MemberIdResponse {
@@ -88,8 +89,7 @@ export class AuthService {
     this.removeCookie('JwtToken');
     this.removeCookie('MemberData');
     this.memberBehaviorSubject.next(null);
-
-    this.router.navigateByUrl('login');
+    location.reload();
   }
   SetLoginValue(): void {
     this.isLogin.next(true);
