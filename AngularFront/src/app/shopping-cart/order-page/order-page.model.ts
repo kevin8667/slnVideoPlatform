@@ -14,4 +14,6 @@ export interface OrderPage {
   deliveryAddress: string;
   paymentStatus: number;
   deliveryStatus: number;
+  payments?: string;
+  deliverys?: string;
 }

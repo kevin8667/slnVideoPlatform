@@ -27,4 +27,16 @@ export class CartPageService {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete(url);
   }
+
+  //更新購物車
+  updateShoppingCart(cartId: number, updatedData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${cartId}`, updatedData);
+  }
+
+  private PlanapiUrl = 'https://localhost:7193/api/PlanLists'; // 根據你的 API URL 進行調整
+
+   //取得方案資料
+  GetPlans(): Observable<any[]> {
+    return this.http.get<any[]>(this.PlanapiUrl);  // 假設你的API路徑是 /api/plans
+  }
 }

@@ -16,12 +16,18 @@
                   <div class="pic" style="position:relative;"><a><img src={{item.imagePath}}/></a></div>
               </td>
               <!-- 商品名稱 -->
-              <td width="37%" class="text_left">
+              <td width="37%" class="text_center">
                   <div class="blue">{{ item.videoName }}</div>
               </td>
 
               <!-- 預期是要放select -->
-              <td class="text_center">{{ item.planName }}</td>
+              <!-- <td class="text_center">{{ item.planName }}</td> -->
+              <td class="text_center">
+                <select [(ngModel)]="item.planId" (change)="updatePlan(item)" style="border-radius: 2px;">
+                  <option *ngFor="let plan of plans" [value]="plan.planId">{{ plan.planName }}</option>
+                </select>
+              </td>
+
 
               <!-- 數量 -->
               <td class="text_center">
@@ -35,9 +41,9 @@
               </td>
 
               <!-- 管理 -->
-              <td class="text_left">
+              <td class="text_center">
                   <div class="info">
-                      <a >修改</a>
+                      <!-- <a >修改</a> -->
                       <a (click)="deleteShoppingCart(item.shoppingCartId)">刪除</a>
                   </div>
               </td>

@@ -38,7 +38,29 @@ export class PreOrderComponent {
     //顯示左下方的商品列表
     this.PreOrderService.getProduct().subscribe(
       data => {
-        this.products = data;
+        this.products = data
+        .map(item=>{
+          switch(item.productId){
+            case 1:
+              item.productImg = 'assets/img/nutBoostBar.png';
+              break;
+            case 2:
+              item.productImg = 'assets/img/fruitBox.png';
+              break;
+            case 3:
+              item.productImg = 'assets/img/cookieBox.png';
+              break;
+            case 4:
+              item.productImg = 'assets/img/fruitySplash.png';
+              break;
+            case 5:
+              item.productImg = 'assets/img/crunchyGrains.png';
+              break;
+            default:
+              item.productImg = 'assets/img/NoImage.png';
+          }
+          return item;
+        });
         // 為每個商品添加 isAdded 屬性，初始值設為 false
         this.products.forEach(product => {
           product.isAdded = false;

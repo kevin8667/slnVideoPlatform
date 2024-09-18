@@ -20,7 +20,34 @@ export class OrderPageComponent {
   loadOrders(): void {
     this.OrderPageService.getOrders().subscribe(
       data => {
-        this.orders = data.filter(item => item.memberId === this.filterMemberId);
+        this.orders = data
+        .filter(item => item.memberId === this.filterMemberId)
+        .map(item => {
+          // 根據 planId 設定價格
+          switch(item.paymentStatus) {
+            case 0:
+              item.payments = "未付款";
+              break;
+            case 1:
+                item.payments = "已付款";
+                break;
+            default:
+              item.payments = "";
+          }
+
+          switch(item.deliveryStatus) {
+            case 0:
+              item.deliverys = "送貨中";
+              break;
+            case 1:
+                item.deliverys = "已送達";
+                break;
+            default:
+              item.deliverys = "";
+          }
+
+          return item;
+        });
         console.log('OrderPage:', this.orders);
       },
       error => {
@@ -28,4 +55,6 @@ export class OrderPageComponent {
       }
     );
   }
+
+  sidebarVisible: boolean = false;
 }

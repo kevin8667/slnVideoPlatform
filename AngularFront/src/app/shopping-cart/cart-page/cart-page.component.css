@@ -46,6 +46,7 @@ a:hover { text-decoration: underline; color: #818181; }
 .mem_page_border .mem_page_content .info a { display: block; margin: 8px 0 6px 0; color: #446faf; }
 
 
+
 .table-container { width:100%; overflow:hidden; }
 .table-container th i.down , .table-container td i.down { display: inline-block; width: 10px; height: 10px; margin-left: 3px; background-size: 100%; }
 .table-container th i.up , .table-container td i.up { display: inline-block; width: 10px; height: 10px; margin-left: 3px;  background-size: 100%; }

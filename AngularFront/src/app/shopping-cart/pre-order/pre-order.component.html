@@ -19,7 +19,7 @@
       <!-- Left Panel -->
       <div class="left-panel">
           <div class="side-card mainOne" *ngFor="let product of displayedProducts">
-              <img src="assets/img/NoImage.jpg" alt="{{product.productName}}" class="product-image">
+              <img src={{product.productImg}} alt="{{product.productName}}" class="product-image">
               <div class="product-info2">
                 <h3>{{product.productName}}</h3>
                 <p>{{product.productDescription}}</p>

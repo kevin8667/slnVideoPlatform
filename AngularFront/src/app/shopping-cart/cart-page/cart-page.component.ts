@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class CartPageComponent {
   sc: cartPage[] = []; //用model定義介面數據
+  plans: any[] = [];
   filterMemberId: number = 2;
 
 
@@ -22,6 +23,7 @@ export class CartPageComponent {
 
   ngOnInit(): void {
     this.loadshoppingCart();
+    this.loadPlans();
   }
 
   loadshoppingCart(){
@@ -139,12 +141,6 @@ export class CartPageComponent {
   //刪除購物車
   deleteShoppingCart(id: number): void {
 
-    // this.CartPageService.deleteShoppingCart(id).subscribe(() => {
-    //   console.log(`購物車 ${id} 已刪除`);
-    //   this.loadshoppingCart();// 刪除後重新載入資料
-    // }, error => {
-    //   console.error('刪除失敗:', error);
-    // });
 
     // 顯示確認訊息
     const confirmed = window.confirm('確定要刪除嗎？');
@@ -157,5 +153,26 @@ export class CartPageComponent {
         console.error('刪除失敗:', error);
       });
     }
+  }
+
+  // 加載方案資料
+  loadPlans() {
+    this.CartPageService.GetPlans().subscribe(data => {
+      this.plans = data;  // 從API獲取的方案賦值給 plans
+      console.log(data)
+    });
+  }
+
+  //更新購物車
+  updatePlan(item: any) {
+
+    console.log('已更新項目的 planId:', item);
+    this.CartPageService.updateShoppingCart(Number(item.shoppingCartId), { planId: Number(item.planId), videoId: Number(item.videoId), memberId: this.filterMemberId})
+      .subscribe(response => {
+        console.log('購物車已更新:', response);
+        this.loadshoppingCart();
+      }, error => {
+        console.error('更新購物車時發生錯誤:', error);
+      });
   }
 }
