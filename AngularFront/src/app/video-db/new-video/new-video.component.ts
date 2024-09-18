@@ -82,11 +82,11 @@ export class NewVideoComponent {
 
           // 成功上傳後，將檔案路徑更新到表單資料
           video.thumbnailPath = response.thumbnailPath;  // 更新縮圖路徑
-          video.images = response.imagePaths.$values.map((paths: any) => ({ imagePath: paths }));  // 將圖片路徑轉換為 ImageCreateDTO 格式
+          video.images = response.imagePaths.map((paths: any) => ({ imagePath: paths }));  // 將圖片路徑轉換為 ImageCreateDTO 格式
 
           const imageControls = this.imagesArray.controls;
 
-          response.imagePaths.$values.forEach((path: string, index: number) => {
+          response.imagePaths.forEach((path: string, index: number) => {
             if (imageControls[index]) {
               imageControls[index].get('imageUrl')?.setValue(path);  // 更新圖片路徑
             }
