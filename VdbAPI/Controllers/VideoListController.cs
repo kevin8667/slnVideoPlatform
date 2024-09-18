@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VdbAPI.Models;
+using static System.Net.WebRequestMethods;
 
 namespace VdbAPI.Controllers
 {
@@ -208,7 +209,6 @@ namespace VdbAPI.Controllers
                 ThumbnailPath = videoDTO.ThumbnailPath,
                 Bgpath = videoDTO.Bgpath    
 
-                // Set other properties...
             };
             _context.VideoLists.Add(video);
             await _context.SaveChangesAsync();
@@ -245,6 +245,11 @@ namespace VdbAPI.Controllers
                 {
                     await thumbnail.CopyToAsync(stream);
                 }
+
+                // 複製到 Angular 專案的 assets 目錄
+                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", thumbnail.FileName);
+                System.IO.File.Copy(filePath, angularAssetsPath, overwrite: true);
+
                 thumbnailPath = "/assets/img/" + thumbnail.FileName;
             }
 
@@ -257,6 +262,11 @@ namespace VdbAPI.Controllers
                 {
                     await image.CopyToAsync(stream);
                 }
+
+                // 複製到 Angular 專案的 assets 目錄
+                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", image.FileName);
+                System.IO.File.Copy(filePath, angularAssetsPath, overwrite: true);
+
                 imagePaths.Add("/assets/img/" + image.FileName);
             }
 

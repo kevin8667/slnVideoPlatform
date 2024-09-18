@@ -44,10 +44,10 @@ export class NewVideoComponent {
   onSubmit() {
     if (this.videoForm.valid) {
       const video: CreateVideoDTO = this.videoForm.value;
-  
+
       // 先上傳所有圖片，然後更新表單的圖片路徑
       const formData = new FormData();
-  
+
       // 上傳縮圖
       if (this.uploadedThumbnail) {
         formData.append('thumbnail', this.uploadedThumbnail, this.uploadedThumbnail.name);
@@ -55,21 +55,21 @@ export class NewVideoComponent {
         console.error('No thumbnail selected');  // 確認是否有選擇縮圖
         return;  // 如果沒有選擇縮圖，則返回並不繼續
       }
-  
+
       // 上傳其他圖片
       this.uploadedImages.forEach((file, index) => {
         if (file) {
           formData.append(`images[${index}]`, file, file.name);
         }
       });
-  
+
       // 上傳圖片並取得檔案路徑
       this.http.post<any>('https://localhost:7193/api/VideoList/uploadImages', formData).subscribe(
         (response) => {
           // 成功上傳後，將檔案路徑更新到表單資料
           video.thumbnailPath = response.thumbnailPath;  // 更新縮圖路徑
           video.images = response.imagePaths;  // 更新其他圖片路徑
-  
+
           // 提交表單資料到後端
           this.http.post<any>(`https://localhost:7193/api/VideoList/newVideo=${video.videoName}`, video).subscribe(
             (res) => {
@@ -93,17 +93,17 @@ export class NewVideoComponent {
     this.imagePreview.push(null); // 為新的預覽預留位置
   }
 
-  onImageSelect(event: any, index: number) {
+  onImageSelect(event: any) {
     const file = event.files[0]; // 獲取選中的檔案
-  
-    // 將檔案暫存
-    this.uploadedImages[index] = file;
-  
+
+    // 將檔案新增到上傳列表
+    this.uploadedImages.push(file);
+
     const reader = new FileReader();
     reader.onload = () => {
-      this.imagePreview[index] = reader.result;
+      this.imagePreview.push(reader.result); // 新增預覽圖片
     };
-    reader.readAsDataURL(file); // 預覽圖片
+    reader.readAsDataURL(file);
   }
 
 

@@ -35,6 +35,8 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PanelModule } from 'primeng/panel';
 import { FieldsetModule } from 'primeng/fieldset';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+
 
 
 
@@ -77,7 +79,8 @@ import { FieldsetModule } from 'primeng/fieldset';
     FileUploadModule,
     CheckboxModule,
     PanelModule,
-    FieldsetModule
+    FieldsetModule,
+    InputTextareaModule
   ]
 })
 export class VideoDbModule { }
