@@ -269,6 +269,7 @@ namespace VdbAPI.Controllers
 
                 imagePaths.Add("/assets/img/" + image.FileName);
             }
+            
 
             return Ok(new { thumbnailPath, imagePaths });
         }

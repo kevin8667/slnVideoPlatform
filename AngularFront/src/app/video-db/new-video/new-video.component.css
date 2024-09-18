@@ -27,7 +27,7 @@
     margin-top: 10px;
   }
 
-  .thumbnail-preview {
+  ::ng-deep .p-image .thumbnail-preview {
     max-width: 100%;
     max-height: 200px;
     object-fit: cover;

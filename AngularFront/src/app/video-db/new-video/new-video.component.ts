@@ -1,16 +1,19 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CreateVideoDTO } from '../interfaces/CreateVideoDTO';
 import { ImageDTO } from '../interfaces/CreateVideoDTO';
 import { HttpClient } from '@angular/common/http';
+import { FileUpload } from 'primeng/fileupload';
 @Component({
   selector: 'app-new-video',
   templateUrl: './new-video.component.html',
   styleUrls: ['./new-video.component.css']
 })
 export class NewVideoComponent {
+  @ViewChild('thumbnailUpload') thumbnailUpload: FileUpload | undefined;
 
   videoForm: FormGroup;
+
   thumbnailPreview: string | ArrayBuffer | null = null;
   imagePreview: (string | ArrayBuffer | null)[] = [];
 
@@ -41,6 +44,11 @@ export class NewVideoComponent {
     });
   }
 
+
+  get imagesArray(): FormArray {
+    return this.videoForm.get('images') as FormArray;
+  }
+
   onSubmit() {
     if (this.videoForm.valid) {
       const video: CreateVideoDTO = this.videoForm.value;
@@ -57,18 +65,34 @@ export class NewVideoComponent {
       }
 
       // 上傳其他圖片
-      this.uploadedImages.forEach((file, index) => {
+      this.uploadedImages.forEach((file) => {
         if (file) {
-          formData.append(`images[${index}]`, file, file.name);
+          formData.append('images', file, file.name);  // 將 key 統一為 'images'
         }
+      });
+
+      formData.forEach((value, key) => {
+        console.log(key, value);
       });
 
       // 上傳圖片並取得檔案路徑
       this.http.post<any>('https://localhost:7193/api/VideoList/uploadImages', formData).subscribe(
         (response) => {
+          console.log(response);
+
           // 成功上傳後，將檔案路徑更新到表單資料
           video.thumbnailPath = response.thumbnailPath;  // 更新縮圖路徑
-          video.images = response.imagePaths;  // 更新其他圖片路徑
+          video.images = response.imagePaths.$values.map((paths: any) => ({ imagePath: paths }));  // 將圖片路徑轉換為 ImageCreateDTO 格式
+
+          const imageControls = this.imagesArray.controls;
+
+          response.imagePaths.$values.forEach((path: string, index: number) => {
+            if (imageControls[index]) {
+              imageControls[index].get('imageUrl')?.setValue(path);  // 更新圖片路徑
+            }
+          });
+
+          console.log(this.imagesArray);
 
           console.log(video);
           // 提交表單資料到後端
@@ -89,25 +113,24 @@ export class NewVideoComponent {
     }
   }
 
-  // 動態新增圖片 (images)
-  addImage() {
-    this.uploadedImages.push(undefined); // 為新的圖片預留位置
-    this.imagePreview.push(null); // 為新的預覽預留位置
+  onImageSelect(event: any) {
+    const files = event.files as File[]; // 獲取選中的檔案
+
+  // 確保 files 存在
+  if (files && files.length > 0) {
+
+    Array.from(files).forEach((file: File) => {
+      this.uploadedImages.push(file);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview.push(reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
-  onImageSelect(event: any) {
-    const file = event.files; // 獲取選中的檔案
-
-    // 將檔案新增到上傳列表
-    this.uploadedImages.push(file);
-
-    console.log(this.uploadedImages);
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview.push(reader.result); // 新增預覽圖片
-    };
-    reader.readAsDataURL(file);
+  console.log(this.uploadedImages);
   }
 
 
@@ -123,6 +146,8 @@ onThumbnailSelect(event: any) {
     this.thumbnailPreview = reader.result;
   };
   reader.readAsDataURL(file); // 預覽圖片
+
+
 }
 
   // 將 Base64 資料轉換為 Blob

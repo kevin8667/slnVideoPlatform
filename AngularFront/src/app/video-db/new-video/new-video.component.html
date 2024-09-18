@@ -172,13 +172,19 @@
                   mode="basic"
                   [auto]="false"
                   uploadStyleClass = "upload-btn"
+                  #thumbnailUpload
+                  [customUpload]="true"
                 ></p-fileUpload>
                 <div *ngIf="thumbnailPreview" class="image-container">
-                  <img
+                  <p-image
                     [src]="thumbnailPreview"
                     alt="縮圖預覽"
                     class="thumbnail-preview"
-                  />
+                    [preview]="true"
+                    width=" 100%"
+                    height="200px"
+                    object-fit="cover"
+                  ></p-image>
                 </div>
               </div>
 
@@ -198,7 +204,6 @@
                 >
                 <ng-template pTemplate="content">
                   <ul *ngIf="uploadedImages.length">
-
                   </ul>
                 </ng-template>
               </p-fileUpload>
