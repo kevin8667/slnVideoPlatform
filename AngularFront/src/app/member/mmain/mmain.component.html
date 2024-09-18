@@ -23,7 +23,8 @@
             <img class="gradepic" src="./../../../assets/img/Member/crown.png" alt="crown" />
             <label class="gradetxt" style="margin-left: 10px;">會員等級: {{ getMemberGradeDescription() }}</label>
             <img src="./../../../assets/img/Member/line-logo.jpg" style="height: 30px; margin-left: 10px;"><button
-              (click)="BindingLine()" *ngIf="memberData?.BindingLine != 'Y'" style="margin-left: 10px;">綁定</button>
+              (click)="BindingLine()" *ngIf="memberData?.BindingLine != 'Y'" style="margin-left: 10px;">綁定</button><a
+              class="link" (click)="onplaylist()">我的片單</a>
           </div>
         </div>
 
@@ -151,7 +152,7 @@
         </table>
 
 
-     
+
         <div class="btncorner">
           <div class="btncancel" *ngIf="cantSee" (click)="modifyClick()">
             <h4>修改會員資料</h4>
@@ -168,73 +169,61 @@
     </div>
     <div class="rightcontainer col-7">
       <div class="tree">
-        <div class="brick col-4">
+        <div class="brick col-6">
           <a class="link" (click)="onmessage()">
             <div class="txtbtn">
               <h2>我的通知</h2>
             </div>
           </a>
         </div>
-        <div class="brick col-4">
+        <div class="brick col-6">
           <a class="link" (click)="oncoupon()">
             <div class="txtbtn">
               <h2>我的優惠券</h2>
             </div>
           </a>
         </div>
-        <div class="brick col-4">
-          <a class="link" (click)="onplaylist()">
+
+      </div>
+      <div class="tree">
+        <div class="brick col-6">
+          <a class="link" (click)="onfriends()">
             <div class="txtbtn">
-              <h2>我的片單</h2>
+              <h2>我的好友</h2>
             </div>
           </a>
         </div>
-      </div>
-      <div class="tree">
-      <div class="brick col-4">
-        <a class="link" (click)="onfriends()">
-          <div class="txtbtn">
-            <h2>我的好友</h2>
-          </div>
-        </a>
-      </div>
-   
-        <div class="brick col-4">
+
+        <div class="brick col-6">
           <a class="link" (click)="onhistory()">
             <div class="txtbtn">
               <h2>購物紀錄</h2>
             </div>
           </a>
         </div>
-        <div class="brick col-4">
-          <a class="link" (click)="onroulette()">
-            <div class="txtbtn">
-              <h2>瘋狂大轉盤</h2>
-            </div>
-          </a>
-        </div>
-        </div>
-          <!-- 新增的最新消息區域 -->
-          <div class="news-section col-12" *ngIf="latestNews.length">
-            <h3>最新消息</h3>
-            <ul class="news-list">
-              <li *ngFor="let news of latestNews" class="news-item">
-                <div class="news-header" (click)="toggleSummary(news.id)">
-                  <span class="news-date">{{
-                    news.date | date : "yyyy-MM-dd"
-                    }}</span>
-                  <span class="news-title">{{ news.title }}</span>
-                </div>
-                <p *ngIf="news.showSummary" class="news-summary">
-                  {{ news.summary }}...
-                </p>
-              </li>
-            </ul>
-          </div>
-      </div>
 
-      <div class="end col-1">
-        <div></div>
+      </div>
+      <!-- 新增的最新消息區域 -->
+      <div class="news-section col-12" *ngIf="latestNews.length">
+        <h3>最新消息</h3>
+        <ul class="news-list">
+          <li *ngFor="let news of latestNews" class="news-item">
+            <div class="news-header" (click)="toggleSummary(news.id)">
+              <span class="news-date">{{
+                news.date | date : "yyyy-MM-dd"
+                }}</span>
+              <span class="news-title">{{ news.title }}</span>
+            </div>
+            <p *ngIf="news.showSummary" class="news-summary">
+              {{ news.summary }}...
+            </p>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <div class="end col-1">
+      <div></div>
+    </div>
   </div>
+</div>
