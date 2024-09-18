@@ -25,7 +25,15 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: inline-block;
+  margin-right: 60px; /* 添加右側間距 */
 }
+
+
+/* 當按鈕為最後一個子元素時，移除 margin-right，避免過多間距 */
+.btn-container .btn:last-child {
+  margin-right: 0;
+}
+
 
 /* 票選擇容器樣式 */
 .ticket-selection-container {

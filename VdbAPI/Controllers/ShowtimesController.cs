@@ -97,15 +97,10 @@ namespace VdbAPI.Controllers
         }
 
 
-
-
         //座位生成，並確保沒有重複
         [HttpPost("reservation/seats")]
         public IActionResult AssignSeats([FromBody] SeatAssignmentRequest request)
         {
-
-
-
             // 1. 驗證輸入
             if (request == null || request.TicketCount <= 0 || request.ReservationId <= 0)
             {
@@ -119,23 +114,32 @@ namespace VdbAPI.Controllers
                 return NotFound("未找到該訂單");
             }
 
-            // 3. 查詢該場次中可用的座位
+            // 3. 查詢該場次中已經被選取的座位
             var reservedSeats = _context.SessionSeats
-                .Where(ss => ss.ShowtimeId == request.ShowtimeId && ss.SeatStatus == 2)
+                .Where(ss => ss.ShowtimeId == request.ShowtimeId && ss.SeatStatus == 2) // 確認該場次下已經被選取的座位
                 .Select(ss => ss.SeatId)
                 .ToList();
 
+            // 4. 查詢尚未被選擇的座位（修改邏輯） 
             var availableSeats = _context.Seats
-                .Where(s => !reservedSeats.Contains(s.SeatId) && s.HallsId == reservation.ShowtimeId)
-                .OrderBy(s => s.SeatNumber)
+                .Where(s => !reservedSeats.Contains(s.SeatId) && s.HallsId == reservation.ShowtimeId) // 修改這裡，篩選出剩餘可用座位
+                .OrderBy(s => s.SeatNumber) // 座位依照 SeatNumber 排序，確保連號分配
                 .ToList();
 
+            // 調試：輸出可用座位的數量和每個座位的 ID
+            Console.WriteLine("Available Seats: " + availableSeats.Count);
+            foreach (var seat in availableSeats)
+            {
+                Console.WriteLine("Seat ID: " + seat.SeatId);
+            }
+
+            // 5. 確認是否有足夠座位
             if (availableSeats.Count < request.TicketCount)
             {
                 return BadRequest("無法找到足夠的座位");
             }
 
-            // 4. 分配連號座位
+            // 6. 分配座位
             var assignedSeats = new List<int>();
             for (int i = 0; i < availableSeats.Count; i++)
             {
@@ -146,7 +150,7 @@ namespace VdbAPI.Controllers
 
                 assignedSeats.Add(availableSeats[i].SeatId);
 
-                // 5. 將座位記錄到 SessionSeats
+                // 7. 將座位記錄到 SessionSeats
                 _context.SessionSeats.Add(new SessionSeat
                 {
                     SeatId = availableSeats[i].SeatId,
@@ -156,16 +160,94 @@ namespace VdbAPI.Controllers
                 });
             }
 
-            // 6. 更新資料庫
+            // 8. 更新資料庫
             _context.SaveChanges();
 
-            // 7. 返回分配的座位
+            // 9. 返回分配的座位
             return Ok(new
             {
                 ReservationID = request.ReservationId,
                 AssignedSeats = assignedSeats
             });
         }
+
+
+        ////座位生成，並確保沒有重複
+        //[HttpPost("reservation/seats")]
+        //public IActionResult AssignSeats([FromBody] SeatAssignmentRequest request)
+        //{
+
+
+
+        //    // 1. 驗證輸入
+        //    if (request == null || request.TicketCount <= 0 || request.ReservationId <= 0)
+        //    {
+        //        return BadRequest("無效的請求");
+        //    }
+
+        //    // 2. 查詢該訂單詳細資料
+        //    var reservation = _context.ReservationDetails.FirstOrDefault(r => r.ReservationId == request.ReservationId);
+        //    if (reservation == null)
+        //    {
+        //        return NotFound("未找到該訂單");
+        //    }
+
+        //    // 3. 查詢該場次中可用的座位
+        //    var reservedSeats = _context.SessionSeats
+        //        .Where(ss => ss.ShowtimeId == request.ShowtimeId && ss.SeatStatus == 2)
+        //        .Select(ss => ss.SeatId)
+        //        .ToList();
+
+        //    var availableSeats = _context.Seats
+        //        .Where(s => !reservedSeats.Contains(s.SeatId) && s.SeatId == reservation.ShowtimeId)
+        //        .OrderBy(s => s.SeatNumber)
+        //        .ToList();
+
+        //    // 調試：輸出可用座位的數量和每個座位的 ID
+        //    Console.WriteLine("Available Seats: " + availableSeats.Count);
+        //    foreach (var seat in availableSeats)
+        //    {
+        //        Console.WriteLine("Seat ID: " + seat.SeatId);
+        //    }
+
+
+
+        //    if (availableSeats.Count < request.TicketCount)
+        //    {
+        //        return BadRequest("無法找到足夠的座位");
+        //    }
+
+        //    // 4. 分配連號座位
+        //    var assignedSeats = new List<int>();
+        //    for (int i = 0; i < availableSeats.Count; i++)
+        //    {
+        //        if (assignedSeats.Count == request.TicketCount)
+        //        {
+        //            break;
+        //        }
+
+        //        assignedSeats.Add(availableSeats[i].SeatId);
+
+        //        // 5. 將座位記錄到 SessionSeats
+        //        _context.SessionSeats.Add(new SessionSeat
+        //        {
+        //            SeatId = availableSeats[i].SeatId,
+        //            ShowtimeId = request.ShowtimeId,
+        //            SeatStatus = 2,  // 標記座位為已選
+        //            ReservationId = request.ReservationId
+        //        });
+        //    }
+
+        //    // 6. 更新資料庫
+        //    _context.SaveChanges();
+
+        //    // 7. 返回分配的座位
+        //    return Ok(new
+        //    {
+        //        ReservationID = request.ReservationId,
+        //        AssignedSeats = assignedSeats
+        //    });
+        //}
 
     }
 }

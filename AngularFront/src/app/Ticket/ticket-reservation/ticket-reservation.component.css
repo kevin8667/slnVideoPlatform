@@ -1,5 +1,4 @@
-/* 訂單明細css */
-
+/* 訂單明細容器樣式 */
 .reservation-summary-container {
   max-width: 800px;
   margin: 20px auto;
@@ -55,20 +54,33 @@
   font-size: 1.2em;
 }
 
+/* 按鈕容器樣式 */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 60px; /* 控制按鈕之間的間距 */
+  margin-top: 20px;
+}
+
+/* 按鈕樣式 */
 .btn {
-  display: block;
-  margin: 20px auto;
   padding: 10px 20px;
   font-size: 16px;
   background-color: #17A2B8;
-  color: white;
+  color: #ffffff !important; /* 確保按鈕文字為白色 */
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  text-align: center;
   transition: background-color 0.3s ease;
 }
 
 .btn:hover {
   background-color: #138496;
+}
+
+h2 {
+  color: #131414;
+}
+h3 {
+  color: #131414;
 }
