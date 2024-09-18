@@ -70,10 +70,12 @@ export class NewVideoComponent {
           video.thumbnailPath = response.thumbnailPath;  // 更新縮圖路徑
           video.images = response.imagePaths;  // 更新其他圖片路徑
 
+          console.log(video);
           // 提交表單資料到後端
           this.http.post<any>(`https://localhost:7193/api/VideoList/newVideo=${video.videoName}`, video).subscribe(
             (res) => {
               console.log('表單提交成功', res);
+
             },
             (error) => {
               console.error('表單提交失敗', error);
@@ -94,10 +96,12 @@ export class NewVideoComponent {
   }
 
   onImageSelect(event: any) {
-    const file = event.files[0]; // 獲取選中的檔案
+    const file = event.files; // 獲取選中的檔案
 
     // 將檔案新增到上傳列表
     this.uploadedImages.push(file);
+
+    console.log(this.uploadedImages);
 
     const reader = new FileReader();
     reader.onload = () => {
