@@ -21,6 +21,10 @@ a {
   display: none; /* Hide footer if not needed */
 }
 
+.main{
+  margin-top: 30px;
+}
+
 .dialog-content {
   padding: 16px;
 }
@@ -75,8 +79,15 @@ a {
     padding-top: 10px;
 }
 
-.container{
-  justify-content: space-between;
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+  gap: 16px; 
+}
+
+.maincontainer{
+  margin-top: 30px;
 }
 
 :host ::ng-deep .p-card-body{

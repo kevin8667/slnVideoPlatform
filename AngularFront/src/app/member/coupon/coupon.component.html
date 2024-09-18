@@ -15,7 +15,7 @@
               src="./../../../assets/img/Member/gift-card.png" alt="c" style="width: 130px" />
           </ng-template>
           <p>
-            使用期限: {{ coupon.expireTime }},
+            使用期限: {{ coupon.expireTime }}
           </p>
           <ng-template pTemplate="footer">
             <p-button *ngIf="coupon.type !== 'A'" (onClick)="ShowGiftList(coupon.giftListID)" label="贈品清單">
