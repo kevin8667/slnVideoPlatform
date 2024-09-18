@@ -36,10 +36,10 @@
 
 .d2 {
   flex:65%;
-  flex-grow: 1;
 }
 .d1 {
   margin: 0 20px;
+  flex: 15%;
 }
 .ad-container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
@@ -48,7 +48,7 @@
 
 .d3 {
   margin: 0 20px;
-
+  flex:20%
 }
 .article {
   margin-top: 2%;
@@ -58,7 +58,7 @@
   display: flex;
   flex-wrap: wrap-reverse;
   background-color: #f8f9fa; /* 背景色 */
-  gap: 3px; /* 按鈕之間的間距 */
+  gap: 7px; /* 按鈕之間的間距 */
 }
 .article a:hover {
   text-decoration: none;
@@ -238,7 +238,7 @@
 .chat-messages-container {
   padding: 1rem;
   overflow-y: auto;
-  max-height: 500px;
+  min-height: 79%;
   background-color: #d5e3e9;
 }
 
