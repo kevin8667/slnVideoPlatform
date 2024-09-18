@@ -1,31 +1,62 @@
 // forum.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   BehaviorSubject,
   firstValueFrom,
-  lastValueFrom,
   Observable,
+  ReplaySubject,
   throwError,
 } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Theme } from '../interfaces/forumInterface/Theme';
-import { ForumPagingDTO } from '../interfaces/forumInterface/ForumPagingDTO';
-import { ArticleView } from '../interfaces/forumInterface/ArticleView';
-import { Post } from '../interfaces/forumInterface/Post';
+import { Theme } from '../../interfaces/forumInterface/Theme';
+import { ForumPagingDTO } from '../../interfaces/forumInterface/ForumPagingDTO';
+import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
+import { Post } from '../../interfaces/forumInterface/Post';
+import { LikeDTO } from '../../interfaces/forumInterface/LikeDTO';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
+import { AuthService } from 'src/app/auth.service';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 export default class ForumService {
+  private renderer: Renderer2;
   private themeTagSubject = new BehaviorSubject<Theme[]>([]);
   themeTag$ = this.themeTagSubject.asObservable();
-
-  constructor(private client: HttpClient, private sanitizer: DomSanitizer) {
+  private userSubject = new BehaviorSubject<memberName>({
+    memberId: 0,
+    nickName: '',
+  }); // 初始化
+  public user$ = this.userSubject.asObservable();
+  constructor(
+    private client: HttpClient,
+    private sanitizer: DomSanitizer,
+    private rendererFactory: RendererFactory2,
+    private auth: AuthService,
+    private router: Router
+  ) {
+    this.renderer = this.rendererFactory.createRenderer(null, null);
     this.loadThemeTags();
+    this.loadAllCss();
+    this.loadMember();
   }
 
+  loadMember() {
+    this.auth.MemberBehaviorData.subscribe({
+      next: (data) => {
+        this.userSubject.next({
+          memberId: data?.MemberID || 0,
+          nickName: data?.NickName || '',
+        });
+      },
+      error(err) {
+        console.error('獲取會員失敗', err);
+      },
+    });
+  }
   loadThemeTags(): void {
     const api = 'https://localhost:7193/api/Articles/Theme';
     this.client.get<Theme[]>(api).subscribe({
@@ -105,5 +136,35 @@ export default class ForumService {
   createPost(data: Post) {
     const api = 'https://localhost:7193/api/Posts';
     return this.client.post(api, data);
+  }
+  loadCss(fontUrl: string) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = fontUrl;
+    this.renderer.appendChild(document.head, link);
+  }
+  ArticleCount(data: LikeDTO) {
+    const api = 'https://localhost:7193/api/Articles/React';
+    return this.client.post(api, data);
+  }
+  PostCount(data: LikeDTO) {
+    const api = 'https://localhost:7193/api/Posts/React';
+    return this.client.post(api, data);
+  }
+  getUserReaction(memberId: number, articleId: number) {
+    const api = 'https://localhost:7193/api/Articles/UserReactions';
+    const ArticleReactionDTO = { memberId: memberId, articleId: articleId };
+    return this.client.post<AllReactionsDTO>(api, ArticleReactionDTO);
+  }
+  private loadAllCss() {
+    this.loadCss(
+      'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap'
+    );
+    this.loadCss(
+      'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700&display=swap'
+    );
+  }
+  nvaToLogion() {
+    this.router.navigate(['/login']);
   }
 }

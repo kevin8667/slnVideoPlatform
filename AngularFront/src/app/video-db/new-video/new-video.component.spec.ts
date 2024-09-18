@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewPostComponent } from './new-post.component';
+import { NewVideoComponent } from './new-video.component';
 
-describe('NewPostComponent', () => {
-  let component: NewPostComponent;
-  let fixture: ComponentFixture<NewPostComponent>;
+describe('NewVideoComponent', () => {
+  let component: NewVideoComponent;
+  let fixture: ComponentFixture<NewVideoComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewPostComponent]
+      declarations: [NewVideoComponent]
     });
-    fixture = TestBed.createComponent(NewPostComponent);
+    fixture = TestBed.createComponent(NewVideoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

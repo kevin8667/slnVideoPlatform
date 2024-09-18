@@ -12,8 +12,4 @@ public partial class DirectorForVideoList
     public int DirectorId { get; set; }
 
     public int VideoId { get; set; }
-
-    public virtual DirectorList Director { get; set; }
-
-    public virtual VideoList Video { get; set; }
 }

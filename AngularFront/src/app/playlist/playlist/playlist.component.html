@@ -21,8 +21,7 @@
   </div>
 </div>
 
-<a routerLink="member">會員頁面</a>&nbsp;<a routerLink="item">清單內容</a>
-&nbsp;<a routerLink="add">新增頁面</a>
+<a routerLink="member">會員頁面</a>
 
 <div class="grid-view">
   <div *ngFor="let playlist of paginatedPlaylists" class="playlist-card" [attr.data-id]="playlist.playListId" (click)="onCardClick(playlist.playListId??0)">
@@ -40,7 +39,7 @@
           <span class="info-item">
             <i class="pi pi-eye"></i> {{ playlist.viewCount }}
           </span>
-          <span class="info-item">
+          <span class="info-item" (click)="checkAndConfirmAddToFavorites($event, playlist)">
             <i class="pi pi-plus-circle"></i> {{ playlist.addedCount }}
           </span>
           <span class="info-item">
@@ -55,6 +54,9 @@
     </p-card>
   </div>
 </div>
+
+<p-confirmPopup></p-confirmPopup>
+<p-toast></p-toast>
 
 <p-dialog [(visible)]="displayModal" [modal]="true" header="播放清單內容" (onHide)="closeModal()">
   <div cdkDropList (cdkDropListDropped)="drop($event)">

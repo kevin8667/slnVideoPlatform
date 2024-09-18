@@ -33,7 +33,6 @@ export class MmainComponent implements OnInit {
 
 
     this.authService.isLoggedIn.subscribe((isLoggedIn) => {
-      debugger;
       if (isLoggedIn) {
         this.readMemberData();
         this.loadLatestNews();

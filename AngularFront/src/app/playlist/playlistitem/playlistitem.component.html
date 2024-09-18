@@ -7,8 +7,16 @@
   </div>
 
   <div class="playlist-item-actions">
-    <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="removeItem()"></button>
+    <button pButton type="button" icon="pi pi-play" class="p-button-success" (click)="playItem()"></button>
     <i class="pi pi-arrows-alt draggable-handle" cdkDragHandle></i>
   </div>
 </div>
 
+<div *ngIf="displayOverlay" class="video-overlay">
+  <div class="overlay-content">
+    <button pButton type="button" icon="pi pi-times" class="p-button-danger" (click)="closeOverlay()"></button>
+    <video id="youtube-player" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
+      <source type="video/youtube">
+    </video>
+  </div>
+</div>

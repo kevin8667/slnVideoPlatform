@@ -3,6 +3,10 @@
   justify-content: center; /* 使整個內容區域在頁面中置中 */
   align-items: flex-start; /* 使側邊欄和內容區域的頂部對齊 */
   padding: 1rem;
+  font-family: "Noto Sans TC", sans-serif;
+}
+.newContainer div .contentSection {
+  font-family: "Noto Sans TC", sans-serif;
 }
 .mainSection {
   max-width: 800px; /* 設定最大寬度以保證內容區域不會太寬 */
@@ -93,7 +97,6 @@ h2 {
 
 .titleInput {
   margin: 1rem 0;
-
 }
 input[pInputText] {
   padding: 10px;
@@ -101,9 +104,9 @@ input[pInputText] {
   border: 1px solid #ced4da;
   width: 100%;
 }
-.contentSection{
+.contentSection {
   margin-bottom: 1rem;
 }
-.contentSection img{
+.contentSection img {
   max-width: 100%;
 }

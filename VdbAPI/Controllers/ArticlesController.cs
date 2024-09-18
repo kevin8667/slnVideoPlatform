@@ -2,18 +2,18 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 using System.Text;
 
 using VdbAPI.DTO;
+using VdbAPI.Filters;
 using VdbAPI.Models;
 
 namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArticlesController : ControllerBase {
+    public class ArticlesController : BaseController {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
 
@@ -22,55 +22,99 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
-        [HttpGet("React")]
-        public async Task<IActionResult> React(int memberId,int articleId,int reactionType)
+        [HttpPost("UserReactions")]
+        public async Task<ActionResult<AllReactionsDTO>> GetUserReactions(ArticleReactionDTO dTO)
         {
-            // 驗證 reactionType 參數
-            if(reactionType != -1 && reactionType != 0 && reactionType != 1) {
-                return BadRequest("無效的反應類型。必須是 -1, 0 或 1。");
-            }
-
-            // 驗證文章是否存在
-            var article = await _context.Articles.FindAsync(articleId);
-            if(article == null)
-                return NotFound("文章不存在");
-
             using var connection = new SqlConnection(_connection);
+            // 第一次查詢 - 查詢文章反應
+            var articleReactionSql = @"
+        SELECT * 
+        FROM UserReactions
+        WHERE MemberId = @MemberId AND ArticleId = @ArticleId";
+
+            var articleReaction = await connection.QueryFirstOrDefaultAsync<UserReaction>(articleReactionSql,new {
+                ArticleId = dTO.ArticleId,
+                MemberId = dTO.MemberId
+            });
+            var postReactionsSql = @"
+                SELECT * 
+                FROM PostUserReactions
+                WHERE ArticleId = @ArticleId AND MemberId = @MemberId";
+
+            var postReactions = await connection.QueryAsync<PostUserReaction>(postReactionsSql,new {
+                ArticleId = dTO.ArticleId,
+                MemberId = dTO.MemberId
+            });
+            // 檢查 articleReaction 是否為 null，確保有反應結果
+            var article = articleReaction != null ? new LikeDTO {
+                ContentId = articleReaction.ArticleId,  // 確認使用正確的屬性名稱
+                MemberId = articleReaction.MemberId,
+                ReactionType = articleReaction.ReactionType,
+            } : null;
+            // 將 postReactions 中的每個 PostUserReaction 轉換為 PostDTO
+            var posts = postReactions.Select(pr => new LikeDTO {
+                ContentId = pr.PostId,
+                MemberId = pr.MemberId,
+                ReactionType = pr.ReactionType
+            });
+            var result = new AllReactionsDTO {
+                ArticleReaction = article,
+                PostReactions = posts.ToList()
+            };
+
+            return Ok(result);
+        }
+        //[JwtActionFilter]
+        [HttpPost("React")]
+        public async Task<IActionResult> React(LikeDTO likeDTO)
+        {
+            var userReaction = await _context.UserReactions
+    .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId && ur.MemberId == likeDTO.MemberId);
 
             try {
-                // SQL 處理 UserReactions
-            var sqlUserReaction = @"
-                IF EXISTS (SELECT 1 FROM UserReactions WHERE MemberId = @MemberId AND ArticleId = @ArticleId)
-                BEGIN
-                    UPDATE UserReactions SET ReactionType = @ReactionType 
-                    WHERE MemberId = @MemberId AND ArticleId = @ArticleId;
-                END
-                ELSE
-                BEGIN
-                    INSERT INTO UserReactions (MemberId, ArticleId, ReactionType)
-                    VALUES (@MemberId, @ArticleId, @ReactionType);
-                END";
+                if(likeDTO.ReactionType.HasValue) {
+                    if(userReaction == null) {
+                        userReaction = new UserReaction {
+                            MemberId = likeDTO.MemberId,
+                            ArticleId = likeDTO.ContentId,
+                            ReactionType = likeDTO.ReactionType.Value
+                        };
+                        _context.UserReactions.Add(userReaction);
+                    }
+                    else {
+                        userReaction.ReactionType = likeDTO.ReactionType.Value;
+                    }
+                }
+                else {
+                    if(userReaction != null) {
+                        _context.UserReactions.Remove(userReaction);
+                    }
+                }
 
-                await connection.ExecuteAsync(sqlUserReaction,new UserReaction{
-                    MemberId = memberId,
-                    ArticleId = articleId,
-                    ReactionType = (short?)reactionType
-                });
+                await _context.SaveChangesAsync();
 
+                // 使用 Dapper 進行高效計數查詢
+                using var connection = new SqlConnection(_connection);
                 var sqlGetCounts = @"
             SELECT 
-                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
-                (SELECT COUNT(*) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = -1) AS DislikeCount";
+                        (SELECT COUNT(1) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 1) AS LikeCount,
+        (SELECT COUNT(1) FROM UserReactions WHERE ArticleId = @ArticleId AND ReactionType = 0) AS DislikeCount";
 
-        var counts = await connection.QueryFirstAsync(sqlGetCounts, new { ArticleId = articleId });
+                var counts = await connection.QueryFirstAsync(sqlGetCounts,new {
+                    ArticleId = likeDTO.ContentId
+                });
 
-        // 更新文章的計數
-        article.LikeCount = counts.LikeCount;
-        article.DislikeCount = counts.DislikeCount;
-        await _context.SaveChangesAsync();
+                // 更新文章的計數
+                var article = await _context.Articles.FindAsync(likeDTO.ContentId);
+                if(article != null) {
+                    article.LikeCount = counts.LikeCount;
+                    article.DislikeCount = counts.DislikeCount;
+                    await _context.SaveChangesAsync();
+                }
 
-        return Ok(counts);
+                return Ok(counts);
             }
+
             catch(Exception ex) {
                 return StatusCode(500,"錯誤原因: " + ex.Message);
             }
@@ -108,6 +152,7 @@ namespace VdbAPI.Controllers {
             return Ok(articleView);
         }
         //新增
+        //[JwtActionFilter]
         [HttpPost]
         public async Task<IActionResult> CreateArticle(ArticleView articleView)
         {
@@ -148,12 +193,13 @@ namespace VdbAPI.Controllers {
             }
             catch(Exception ex) {
                 await transaction.RollbackAsync();
-                return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
+                return StatusCode(500,"錯誤原因:" + ex.Message + ex.InnerException);
 
             }
 
         }
         //編輯
+        //[JwtActionFilter]
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchArticle(int id,ArticleUpdate articleUpdate)
         {
@@ -200,6 +246,7 @@ namespace VdbAPI.Controllers {
         }
 
         // DELETE: api/Articles/5 刪除
+        //[JwtActionFilter]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {
@@ -209,15 +256,15 @@ namespace VdbAPI.Controllers {
                 return NotFound();
             }
             try {
-                await trans.CommitAsync();
                 _context.Articles.Remove(article);
                 await _context.SaveChangesAsync();
+                await trans.CommitAsync();
 
                 return NoContent();
             }
             catch(Exception ex) {
                 await trans.RollbackAsync();
-                return StatusCode(500,"錯誤原因: " + ex.Message);
+                return StatusCode(500,$"錯誤原因: {ex.Message} - 內部錯誤: {ex.InnerException?.Message}");
             }
         }
         // 文章列表
@@ -229,24 +276,25 @@ namespace VdbAPI.Controllers {
                 var sql = new StringBuilder(@"select * from ArticleView WHERE 1=1 and [lock] = 1");
                 // 篩選條件
                 if(searchDTO.categoryId != 0) {
-                    sql.Append(" AND ThemeId = @CategoryId");
+                    sql.Append(" AND ThemeId = @ThemeId");
                 }
                 // 關鍵字篩選
                 // 定義變數
                 string likePattern = $"%{searchDTO.keyword}%";
                 // 根據條件添加搜尋詞
                 if(!string.IsNullOrEmpty(searchDTO.keyword)) {
-                    likePattern = $"%{searchDTO.keyword}%";
-                    sql.Append(" AND ArticleContent LIKE @LikePattern OR Title LIKE @LikePattern OR NickName LIKE @LikePattern");
+                    sql.Append(" AND (ArticleContent LIKE @LikePattern OR Title LIKE @LikePattern OR NickName LIKE @LikePattern)");
                 }
-               
+
                 // 排序
 
                 // 計算總筆數
                 var countSql = $"SELECT COUNT(1) FROM ({sql}) AS CountQuery";
+
+
                 var dataCount = await connection.ExecuteScalarAsync<int>(countSql,new {
-                    CategoryId = searchDTO.categoryId,
-                    LikePattern = likePattern
+                    ThemeId = searchDTO.categoryId,
+                    LikePattern = $"%{searchDTO.keyword}%"
                 });
 
                 // 排序條件
@@ -258,11 +306,13 @@ namespace VdbAPI.Controllers {
                 int totalPages = (int)Math.Ceiling((decimal)dataCount / pageSize);
 
                 sql.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");
-
+                Console.WriteLine($"Count SQL: {countSql}");
+                Console.WriteLine($"Parameters: ThemeId={searchDTO.categoryId}, LikePattern={likePattern}, " +
+                    $"Offset={(page - 1) * pageSize}, PageSize={pageSize}");
 
                 var articles = await connection.QueryAsync<ArticleView>(sql.ToString(),new {
-                    CategoryId = searchDTO.categoryId,
-                    LikePattern = likePattern,
+                    ThemeId = searchDTO.categoryId,
+                    LikePattern = $"%{searchDTO.keyword}%",
                     Offset = (page - 1) * pageSize,
                     PageSize = pageSize
                 });
@@ -273,7 +323,7 @@ namespace VdbAPI.Controllers {
                 var pagingDTO = new ForumPagingDTO {
                     TotalCount = dataCount,
                     TotalPages = totalPages,
-                    ForumResult = articles.Take(pageSize).ToList(),
+                    ForumResult = articles.Take(pageSize > dataCount ? dataCount : pageSize).ToList(),
                 };
 
                 return Ok(pagingDTO); // 返回 OK 和 DTO

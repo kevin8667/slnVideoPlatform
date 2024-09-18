@@ -12,10 +12,4 @@ public partial class ShowingHall
     public int CombinationId { get; set; }
 
     public int HallsId { get; set; }
-
-    public virtual NowShowingTheater Combination { get; set; }
-
-    public virtual Hall Halls { get; set; }
-
-    public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
 }

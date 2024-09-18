@@ -10,6 +10,4 @@ public partial class KeywordList
     public int KeywordId { get; set; }
 
     public string Keyword { get; set; }
-
-    public virtual ICollection<KeywordForVideoList> KeywordForVideoLists { get; set; } = new List<KeywordForVideoList>();
 }

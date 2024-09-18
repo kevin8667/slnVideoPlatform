@@ -22,8 +22,11 @@ export class AuthService {
   private apiUrl = 'https://localhost:7193/api/Member/GetMemberId'; // 替換為您的實際 API URL
 
   constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
+
+  private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(this.getMemberData());
 
   private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(this.getMemberData());
 
@@ -66,6 +69,9 @@ export class AuthService {
   Logout(): void {
     this.isLogin.next(false);
     this.removeCookie('JwtToken');
+    this.removeCookie('MemberData');
+    this.memberBehaviorSubject.next(null);
+
     this.removeCookie('MemberData');
     this.memberBehaviorSubject.next(null);
 

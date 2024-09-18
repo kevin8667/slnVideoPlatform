@@ -1,19 +1,19 @@
 ﻿using Dapper;
-
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 using System.Text;
 
 using VdbAPI.DTO;
 using VdbAPI.Models;
+using VdbAPI.Filters;
 
 namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostsController : ControllerBase {
+    public class PostsController : BaseController {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
 
@@ -22,6 +22,107 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+        //[JwtActionFilter]
+        [HttpPost("React")]
+        public async Task<IActionResult> React(LikeDTO likeDTO)
+        {
+            using var connection = new SqlConnection(_connection);
+
+            try {
+                // 查詢是否有對應的回文
+                string postSql = @"SELECT PostId FROM Post WHERE PostId = @PostId ";
+                var post = await connection.QueryFirstOrDefaultAsync<int?>(postSql,new {
+                    PostId = likeDTO.ContentId,
+                    MemberId = likeDTO.MemberId,
+                });
+
+                if(post < 1)
+                    return NotFound("回文不存在");
+
+                // 查詢對應的會員反應
+                string userReactionSql = @"
+            SELECT * FROM PostUserReactions 
+            WHERE PostId = @PostId AND MemberId = @MemberId";
+                var postUserReaction = await connection.QueryFirstOrDefaultAsync<PostUserReaction>(userReactionSql,new {
+                    PostId = likeDTO.ContentId,
+                    MemberId = likeDTO.MemberId
+                });
+
+                string articleIdSql = @"SELECT ArticleId FROM Post WHERE PostId = @PostId";
+                var articleId = await connection.QueryFirstOrDefaultAsync<int?>(articleIdSql,new {
+                    PostId = likeDTO.ContentId
+                });
+
+                if(!articleId.HasValue) {
+                    return NotFound("找不到對應的文章");
+                }
+
+                if(likeDTO.ReactionType.HasValue) {
+                    if(postUserReaction == null) {
+                        // 沒有紀錄就新增
+                        string insertReactionSql = @"
+                    INSERT INTO PostUserReactions (PostId, MemberId, ReactionType, ArticleId)
+                    VALUES (@PostId, @MemberId, @ReactionType, @ArticleId)";
+                        await connection.ExecuteAsync(insertReactionSql,new {
+                            PostId = likeDTO.ContentId,
+                            MemberId = likeDTO.MemberId,
+                            ReactionType = likeDTO.ReactionType.Value,
+                            ArticleId = articleId.Value
+                        });
+                    }
+                    else {
+                        // 有紀錄就更新
+                        string updateReactionSql = @"
+                    UPDATE PostUserReactions 
+                    SET ReactionType = @ReactionType 
+                    WHERE PostId = @PostId AND MemberId = @MemberId";
+                        await connection.ExecuteAsync(updateReactionSql,new {
+                            PostId = likeDTO.ContentId,
+                            MemberId = likeDTO.MemberId,
+                            ReactionType = likeDTO.ReactionType.Value
+                        });
+                    }
+                }
+                else {
+                    if(postUserReaction != null) {
+                        // 被取消就刪除紀錄
+                        string deleteReactionSql = @"
+                    DELETE FROM PostUserReactions 
+                    WHERE PostId = @PostId AND MemberId = @MemberId";
+                        await connection.ExecuteAsync(deleteReactionSql,new {
+                            PostId = likeDTO.ContentId,
+                            MemberId = likeDTO.MemberId
+                        });
+                    }
+                }
+
+                // 查詢最新的喜歡和不喜歡數量
+                string sqlGetCounts = @"
+            SELECT 
+                (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 1) AS LikeCount,
+                (SELECT COUNT(1) FROM PostUserReactions WHERE PostId = @PostId AND ReactionType = 0) AS DislikeCount";
+                var counts = await connection.QueryFirstAsync(sqlGetCounts,new {
+                    PostId = likeDTO.ContentId
+                });
+
+                // 更新文章的喜歡與不喜歡數
+                string updatePostSql = @"
+            UPDATE Post
+            SET LikeCount = @LikeCount, DislikeCount = @DislikeCount 
+            WHERE PostId = @PostId";
+                await connection.ExecuteAsync(updatePostSql,new {
+                    LikeCount = counts.LikeCount,
+                    DislikeCount = counts.DislikeCount,
+                    PostId = likeDTO.ContentId
+                });
+
+                return Ok(counts);
+            }
+            catch(Exception ex) {
+                return StatusCode(500,"錯誤原因: " + ex.Message);
+            }
+        }
+
 
         // GET: api/Posts
         [HttpGet("{id}")]
@@ -57,7 +158,7 @@ namespace VdbAPI.Controllers {
 
             return Ok(post.ToList());
         }
-
+        //[JwtActionFilter]
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdatePost(int id,PostUpdate postUpdate)
         {
@@ -97,6 +198,7 @@ namespace VdbAPI.Controllers {
         }
 
         // POST: api/Posts
+        //[JwtActionFilter]
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(PostDTO postDTO)
         {
@@ -117,9 +219,9 @@ namespace VdbAPI.Controllers {
                     PostDate = DateTime.UtcNow,
                     PosterId = postDTO.PosterId,
                     PostImage = "",
-                    //LikeCount = 0,
-                    //DislikeCount = 0,
-                    
+                    LikeCount = 0,
+                    DislikeCount = 0,
+
                 };
                 _context.Posts.Add(post);
 
@@ -127,6 +229,7 @@ namespace VdbAPI.Controllers {
                 if(article != null) {
 
                     article.ReplyCount++;                  // 回覆次數增加 1
+                    article.UpdateDate = DateTime.UtcNow;
                     _context.Articles.Update(article);
                 }
 
@@ -144,6 +247,7 @@ namespace VdbAPI.Controllers {
         }
 
         // DELETE: api/Posts/5
+        //[JwtActionFilter]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {

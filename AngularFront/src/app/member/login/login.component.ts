@@ -49,7 +49,6 @@ export class LoginComponent implements AfterViewInit {
     }
   }
   onLogin() {
-    debugger;
     const recaptchaResponse = grecaptcha.getResponse();
     if (!recaptchaResponse) {
       alert('請進行圖形認證');
@@ -108,6 +107,4 @@ export class LoginComponent implements AfterViewInit {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
-
-  
 }

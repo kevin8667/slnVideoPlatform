@@ -1,22 +1,36 @@
+import { AuthService } from 'src/app/auth.service';
 import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
+import { Chatroom } from 'src/app/interfaces/forumInterface/Chatroom';
 import { ForumPagingDTO } from 'src/app/interfaces/forumInterface/ForumPagingDTO';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
-import ForumService from 'src/app/service/forum.service';
+import ForumService from 'src/app/services/forumService/forum.service';
+import { SignalRService } from 'src/app/services/forumService/signal-r.service';
 
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.css'],
 })
-export class ArticleListComponent implements OnInit {
-  // getSafe = (data: string) => this.forumService.getSafe(data);
+export class ArticleListComponent implements OnInit, AfterViewChecked {
   articles: ArticleView[] = [];
   themeTag: Theme[] = [];
   debounceTimer!: number;
   forumPagingDTO: ForumPagingDTO | undefined;
+  user!: memberName;
+  loading = false;
+  message = '';
+  messages: Chatroom[] = [];
+  private messageSubscription?: Subscription;
 
   forumDto = {
     categoryId: 0,
@@ -62,16 +76,47 @@ export class ArticleListComponent implements OnInit {
       numVisible: 1,
     },
   ];
-  constructor(private route: Router, private forumService: ForumService) {}
-  loading = false;
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  constructor(
+    private route: Router,
+    private forumService: ForumService,
+    private signalRService: SignalRService
+  ) {}
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
   ngOnInit(): void {
     this.load();
-
+    this.forumService.user$.subscribe((data) => (this.user = data));
+    this.messageSubscription = this.signalRService.messages$.subscribe({
+      next: (data: Chatroom[]) => {
+        this.messages = data;
+      },
+      error: (err) => console.error('接收訊息發生例外:', err),
+    });
     this.forumService.themeTag$.subscribe((data) => {
       this.themeTag = data;
     });
   }
 
+  private scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop =
+        this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+  sendMessage(message: string) {
+    if (!message.trim()) return;
+    const chatroom: Chatroom = {
+      senderId: this.user.memberId,
+      chatMessage: message,
+      nickname: this.user.nickName,
+      sendtime: new Date().toISOString(),
+    };
+    this.signalRService.sendMessage(chatroom);
+    this.scrollToBottom();
+    this.message = '';
+  }
   private async load() {
     this.loading = true;
     try {
@@ -119,7 +164,6 @@ export class ArticleListComponent implements OnInit {
 
   search() {
     this.load();
-    this.forumDto.keyword = '';
   }
   openCreateArticleDialog() {
     this.route.navigateByUrl('forum/new/article');
@@ -136,5 +180,23 @@ export class ArticleListComponent implements OnInit {
     const truncatedText =
       text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
     return truncatedText;
+  }
+  getFirstImageSrc(htmlContent: string): string | null {
+    const imgTagStart = htmlContent.indexOf('<img');
+    if (imgTagStart === -1) {
+      return null; // 沒有找到 img 元素
+    }
+
+    const srcStart = htmlContent.indexOf('src="', imgTagStart);
+    if (srcStart === -1) {
+      return null; // 沒有找到 src 屬性
+    }
+
+    const srcEnd = htmlContent.indexOf('"', srcStart + 5); // 5 是 `src="` 的長度
+    const imgSrc = htmlContent.substring(srcStart + 5, srcEnd);
+    return imgSrc;
+  }
+  navToArticle(id: any) {
+    this.route.navigate(['forum', id]);
   }
 }

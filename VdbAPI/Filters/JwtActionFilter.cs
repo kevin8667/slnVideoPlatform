@@ -1,18 +1,19 @@
 ﻿using Jose;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+
 using System.Text;
+
 using VdbAPI.Member.ViewModel;
 
-namespace VdbAPI.Filters
-{
-    public class JwtActionFilter : ActionFilterAttribute
-    {
+namespace VdbAPI.Filters {
+    public class JwtActionFilter : ActionFilterAttribute {
         private readonly string _secretKey = "JarryYa"; // 秘鑰
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var token = context.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var token = context.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
 
             if (string.IsNullOrEmpty(token))
             {
@@ -20,10 +21,9 @@ namespace VdbAPI.Filters
                 return;
             }
 
-            try
-            {
+            try {
                 byte[] secretKeyBytes = Encoding.UTF8.GetBytes(_secretKey);
-                var jwtObj = JWT.Decode<JwtAuthObject>(token, secretKeyBytes);
+                var jwtObj = JWT.Decode<JwtAuthObject>(token,secretKeyBytes);
 
                 long currentFileTime = DateTime.Now.ToFileTime();
                 if (jwtObj.ExpiredTime < currentFileTime)

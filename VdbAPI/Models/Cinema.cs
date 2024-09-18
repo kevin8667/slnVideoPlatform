@@ -14,8 +14,4 @@ public partial class Cinema
     public string CinemaAddress { get; set; }
 
     public string CinemaPhone { get; set; }
-
-    public virtual ICollection<Hall> Halls { get; set; } = new List<Hall>();
-
-    public virtual ICollection<NowShowingTheater> NowShowingTheaters { get; set; } = new List<NowShowingTheater>();
 }

@@ -21,37 +21,37 @@ namespace VdbAPI.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
-        {
-            var playlists = await _context.PlayLists
-                .Include(pl => pl.PlayListItems)
-                    .ThenInclude(pli => pli.Video)
-                .Select(pl => new PlaylistDTO
-                {
-                    PlayListId = pl.PlayListId,
-                    PlayListName = pl.PlayListName,
-                    PlayListDescription = pl.PlayListDescription,
-                    ViewCount = pl.ViewCount,
-                    LikeCount = pl.LikeCount,
-                    AddedCount = pl.AddedCount,
-                    SharedCount = pl.SharedCount,
-                    ShowImage = pl.ShowImage,
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
+        //{
+        //    var playlists = await _context.PlayLists
+        //        .Include(pl => pl.PlayListItems)
+        //            .ThenInclude(pli => pli.Video)
+        //        .Select(pl => new PlaylistDTO
+        //        {
+        //            PlayListId = pl.PlayListId,
+        //            PlayListName = pl.PlayListName,
+        //            PlayListDescription = pl.PlayListDescription,
+        //            ViewCount = pl.ViewCount,
+        //            LikeCount = pl.LikeCount,
+        //            AddedCount = pl.AddedCount,
+        //            SharedCount = pl.SharedCount,
+        //            ShowImage = pl.ShowImage,
                     
-                    Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
-                    {
-                        PlayListId = pli.PlayListId,
-                        VideoId = pli.Video.VideoId,
-                        VideoPosition = pli.VideoPosition,
-                        VideoName = pli.Video.VideoName,
-                        ThumbnailPath = pli.Video.ThumbnailPath,
-                        Episode = pli.Video.Episode
-                    }).ToList()
-                })
-                .ToListAsync();
+        //            Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
+        //            {
+        //                PlayListId = pli.PlayListId,
+        //                VideoId = pli.Video.VideoId,
+        //                VideoPosition = pli.VideoPosition,
+        //                VideoName = pli.Video.VideoName,
+        //                ThumbnailPath = pli.Video.ThumbnailPath,
+        //                Episode = pli.Video.Episode
+        //            }).ToList()
+        //        })
+        //        .ToListAsync();
 
-            return Ok(playlists);
-        }
+        //    return Ok(playlists);
+        //}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PlaylistDTO>> GetPlayList(int id)
@@ -487,7 +487,7 @@ namespace VdbAPI.Controllers
         public async Task<ActionResult<IEnumerable<MemberInfoDTO>>> GetCollaborators(int? playlistId)
         {
             if (playlistId.HasValue)
-            {                
+            {
                 var collaborators = await _context.PlayListCollaborators
                     .Where(c => c.PlayListId == playlistId.Value)
                     .Select(c => new MemberInfoDTO
@@ -501,7 +501,7 @@ namespace VdbAPI.Controllers
                 return Ok(collaborators);
             }
             else
-            {                
+            {
                 var allCollaborators = await _context.MemberInfos
                     .Select(m => new MemberInfoDTO
                     {
@@ -513,6 +513,42 @@ namespace VdbAPI.Controllers
 
                 return Ok(allCollaborators);
             }
+        }
+
+        [HttpPost("add-to-favorites")]
+        public async Task<IActionResult> AddToFavorites(int playListId)
+        {
+            int memberId = 5;
+            
+            var existingFavorite = await _context.MemberPlayLists
+                .Where(mpl => mpl.PlayListId == playListId && mpl.MemberId == memberId)
+                .FirstOrDefaultAsync();
+
+            if (existingFavorite != null)
+            {
+                return BadRequest(new { message = "該播放清單已經被添加到收藏中。" });
+            }
+            
+            var createdByMember = await _context.MemberCreatedPlayLists
+                .Where(mcpl => mcpl.PlayListId == playListId && mcpl.MemberId == memberId)
+                .FirstOrDefaultAsync();
+
+            if (createdByMember != null)
+            {
+                return BadRequest(new { message = "無法添加您自己創建的播放清單。" });
+            }
+            
+            var newFavorite = new MemberPlayList
+            {
+                MemberId = memberId,
+                PlayListId = playListId,
+                AddedOtherMemberPlayListAt = DateTime.Now
+            };
+
+            _context.MemberPlayLists.Add(newFavorite);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "成功將播放清單添加到收藏！" });
         }
     }
 }
