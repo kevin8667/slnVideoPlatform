@@ -92,7 +92,7 @@
           <div>
             <p-button
               [icon]="
-                getReaction(post.postId||0) === 'like'
+                getReaction(post.postId || 0) === 'like'
                   ? 'pi pi-thumbs-up-fill'
                   : 'pi pi-thumbs-up'
               "
@@ -124,7 +124,11 @@
             </p-button>
           </div>
           <div *ngIf="user.memberId === post.posterId || user.memberId === 1">
-            <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+            <p-menu
+              #menu
+              [popup]="true"
+              [model]="getPostMenuItems(post.postId)"
+            ></p-menu>
             <button
               pButton
               type="button"

@@ -65,7 +65,6 @@ export class AuthService {
     if (cookieValue) {
       try {
         const memberValue = JSON.parse(cookieValue);
-        console.log(memberValue);
         return memberValue;
       } catch (error) {
         console.error('解析 MemberData Cookie 失敗:', error);

@@ -1,4 +1,9 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -40,6 +45,8 @@ export class EditComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private router: Router
   ) {}
+
+
 
   ngOnInit(): void {
     this.forumService.user$.subscribe((data) => (this.user = data));

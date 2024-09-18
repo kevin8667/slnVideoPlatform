@@ -1,12 +1,11 @@
-import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import ForumService from 'src/app/services/forumService/forum.service';
-import { AuthService } from 'src/app/auth.service';
 
 export const forumGuard: CanActivateFn = (route, state) => {
   const router = inject(Router); // 使用 inject() 來獲取服務
   const type = route.paramMap.get('type');
+  const articleId = route.paramMap.get('articleId');
   const requiresAuth = route.data['requiresAuth'];
   const forumService = inject(ForumService);
   if (requiresAuth) {
@@ -19,6 +18,7 @@ export const forumGuard: CanActivateFn = (route, state) => {
       return false;
     }
   }
+
   if (type) {
     // 檢查 type 是否為 'post' 或 'article'
     if (type !== 'post' && type !== 'article') {

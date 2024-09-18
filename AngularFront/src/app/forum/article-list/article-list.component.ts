@@ -1,9 +1,6 @@
-import { AuthService } from 'src/app/auth.service';
 import { ArticleView } from '../../interfaces/forumInterface/ArticleView';
 import {
-  AfterContentInit,
   AfterViewChecked,
-  AfterViewInit,
   Component,
   ElementRef,
   OnInit,
@@ -22,6 +19,7 @@ import { SignalRService } from 'src/app/services/forumService/signal-r.service';
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.css'],
+  providers: [SignalRService],
 })
 export class ArticleListComponent implements OnInit, AfterViewChecked {
   articles: ArticleView[] = [];
@@ -86,12 +84,9 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   ) {}
 
   ngOnInit(): void {
-    console.log('ngOnInit');
-
     this.load();
     this.forumService.user$.subscribe((data) => {
       if (data) this.user = data;
-      console.log(data);
     });
     this.messageSubscription = this.signalRService.messages$.subscribe({
       next: (data: Chatroom[]) => {
@@ -191,7 +186,6 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
       this.router.navigateByUrl('forum/new/article');
     }
   }
-
 
   private redirect() {
     const currentUrl = this.router.url;

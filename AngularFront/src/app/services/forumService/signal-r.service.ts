@@ -1,5 +1,5 @@
 import { Chatroom } from './../../interfaces/forumInterface/Chatroom';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -7,13 +7,16 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class SignalRService {
+export class SignalRService implements OnDestroy {
   private hubConnection!: signalR.HubConnection;
   private messagesSubject = new BehaviorSubject<Chatroom[]>([]);
   public messages$ = this.messagesSubject.asObservable();
 
   constructor(private client: HttpClient) {
     this.startConnection();
+  }
+  ngOnDestroy(): void {
+    console.log('SignalR connection stopped')
   }
 
   private startConnection() {

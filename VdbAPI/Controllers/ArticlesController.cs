@@ -156,14 +156,10 @@ namespace VdbAPI.Controllers {
         [HttpPost]
         public async Task<IActionResult> CreateArticle(ArticleView articleView)
         {
-
             if(articleView == null) {
                 return BadRequest(new {
-                    error = "沒收到封包"
+                    error = "封包無資料"
                 });
-            }
-            if(!ModelState.IsValid) {
-                return BadRequest("傳入值不符合規範" + ModelState);
             }
 
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -186,17 +182,12 @@ namespace VdbAPI.Controllers {
                 await _context.SaveChangesAsync();
 
                 await transaction.CommitAsync();
-
-                return Ok(new {
-                    OK = "新增文章成功"
-                });
+                return Ok("新增文章成功");
             }
             catch(Exception ex) {
                 await transaction.RollbackAsync();
                 return StatusCode(500,"錯誤原因:" + ex.Message + ex.InnerException);
-
             }
-
         }
         //編輯
         //[JwtActionFilter]
