@@ -128,11 +128,15 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
   overflow: hidden; /* 隱藏超出邊界的內容 */
   transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
-  flex-direction: row; /* 使圖片和內容水平排列 */
+
   width: 100%;
   margin: 0 auto; /* 使卡片水平居中 */
 }
-
+.realContent {
+  display: flex;
+  flex-direction: column; /* 使圖片和內容水平排列 */
+  gap: 1rem;
+}
 .p-card-title {
   font-weight: bold;
   font-size: 20px; /* 調大字體 */

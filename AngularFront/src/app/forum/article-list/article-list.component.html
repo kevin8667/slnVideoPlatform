@@ -39,6 +39,7 @@
       </span>
     </div>
     <!-- 發表文章按鈕 -->
+
     <div class="fixed-button">
       <p-button
         label="發表文章"
@@ -88,7 +89,7 @@
       <div class="article" *ngIf="!loading">
         <p-dataView [value]="articles" layout="list" [paginator]="false">
           <!-- Grid Item 模板 -->
-          <ng-template pTemplate="listItem" let-article>
+          <ng-template class="realContent" pTemplate="listItem" let-article>
             <div class="p-card1">
               <div class="card-content">
                 <!-- 圖片 -->
