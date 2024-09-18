@@ -12,7 +12,9 @@ export const forumGuard: CanActivateFn = (route, state) => {
   const forumService = inject(ForumService);
   if (requiresAuth) {
     let userId = 0;
-    forumService.user$.subscribe((data) => (userId = data.memberId));
+    forumService.user$.subscribe((data) => {
+      if (data) userId = data.memberId;
+    });
     if (userId < 1) {
       router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
 
