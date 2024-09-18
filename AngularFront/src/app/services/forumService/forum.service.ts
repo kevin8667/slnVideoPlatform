@@ -1,13 +1,7 @@
 // forum.service.ts
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  firstValueFrom,
-  Observable,
-  ReplaySubject,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Theme } from '../../interfaces/forumInterface/Theme';
 import { ForumPagingDTO } from '../../interfaces/forumInterface/ForumPagingDTO';
@@ -45,12 +39,24 @@ export default class ForumService {
   }
 
   loadMember() {
-    this.auth.MemberBehaviorData.subscribe({
+    this.auth.MemberBehaviorData?.subscribe({
       next: (data) => {
-        this.userSubject.next({
-          memberId: data?.MemberID || 0,
-          nickName: data?.NickName || '',
-        });
+        // console.log(data?.MemberId);
+        // 檢查 data 是否為 null 並做防範性處理
+        if (
+          data &&
+          typeof data.memberID === 'number' &&
+          typeof data.nickName === 'string'
+        ) {
+          // 更新 userSubject 的值
+          this.userSubject.next({
+            memberId: data.memberID,
+            nickName: data.nickName,
+          });
+        } else {
+          // 如果資料無效，更新為 null
+          this.userSubject.next({ memberId: 0, nickName: '' });
+        }
       },
       error(err) {
         console.error('獲取會員失敗', err);

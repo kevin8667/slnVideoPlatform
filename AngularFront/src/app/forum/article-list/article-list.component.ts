@@ -87,7 +87,10 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   }
   ngOnInit(): void {
     this.load();
-    this.forumService.user$.subscribe((data) => (this.user = data));
+    this.forumService.user$.subscribe((data) => {
+      if (data) this.user = data;
+      console.log(data);
+    });
     this.messageSubscription = this.signalRService.messages$.subscribe({
       next: (data: Chatroom[]) => {
         this.messages = data;
