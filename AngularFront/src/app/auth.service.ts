@@ -135,7 +135,10 @@ export class AuthService {
     const scope = 'openid profile';
 
     const authUrl = `${lineLoginUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
-    this.setCookie("Binding", binding ? "Y" : "N", 1);
+    this.setCookie("Binding",binding?"Y":"N",1);
+
+
+
     window.location.href = authUrl;
   }
 
@@ -146,5 +149,5 @@ export class AuthService {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
-
+  
 }
