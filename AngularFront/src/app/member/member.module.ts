@@ -15,6 +15,8 @@ import { CarouselModule } from 'primeng/carousel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { CheckboxModule } from 'primeng/checkbox';
+import { MessagesModule } from 'primeng/messages';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -23,6 +25,7 @@ import { CouponComponent } from './coupon/coupon.component';
 import { MessageComponent } from './message/message.component';
 import { FriendsComponent } from './friends/friends.component';
 import { HistoryComponent } from './history/history.component';
+import { RouletteComponent } from './roulette/roulette.component';
 // import { LoginCallbackComponent } from './login-callback/login-callback.component';
 
 
@@ -34,6 +37,7 @@ const routes: Routes = [
   { path: 'mmain', component: MmainComponent },
   { path: 'message', component: MessageComponent },
   { path: 'history', component: HistoryComponent },
+  { path: 'roulette', component: RouletteComponent },
   { path: '**', component: MmainComponent },
 ];
 
@@ -46,6 +50,7 @@ const routes: Routes = [
     MessageComponent,
     FriendsComponent,
     HistoryComponent,
+    RouletteComponent
     // LoginCallbackComponent
   ],
   imports: [
@@ -62,7 +67,9 @@ const routes: Routes = [
     CarouselModule,
     RadioButtonModule,
     InputTextareaModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    CheckboxModule,
+    MessagesModule
   ],
   exports: [RouterModule],
 

@@ -25,6 +25,13 @@ export class MmainComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    
+    this.authService.MemberBehaviorData.subscribe((memberData) => {
+      console.log("MemberBehabiorData >>")
+      console.log(memberData);
+    });
+
+
     this.authService.isLoggedIn.subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         this.readMemberData();
@@ -70,7 +77,7 @@ export class MmainComponent implements OnInit {
       },
       error: (error) => {
         console.error('SaveData error:', error);
-        alert('SaveData 失敗');
+        alert('儲存資料失敗');
       },
     });
   }
@@ -172,7 +179,7 @@ export class MmainComponent implements OnInit {
             },
             error: (error) => {
               console.error('SaveData error:', error);
-              alert('保存資料失敗');
+              alert('儲存資料失敗');
             },
           });
         } else {
@@ -202,6 +209,14 @@ export class MmainComponent implements OnInit {
     this.router.navigateByUrl('login/message');
   }
 
+  onroulette(){
+    this.router.navigateByUrl('login/roulette');
+  }
+
+  onplaylist(){
+    this.router.navigateByUrl('playlist/member');
+  }
+
   getMemberGenderDescription(): string {
     switch (this.memberData.gender) {
       case 'M':
@@ -222,5 +237,10 @@ export class MmainComponent implements OnInit {
       default:
         return '未知等級';
     }
+  }
+
+  BindingLine():void{
+      this.authService.loginWithLine(true);
+    
   }
 }

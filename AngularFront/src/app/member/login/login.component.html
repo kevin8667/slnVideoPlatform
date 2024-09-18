@@ -14,9 +14,10 @@
   <!-- 添加 reCAPTCHA v2 的元素 -->
   <div id="recaptcha-container" class="g-recaptcha" [attr.data-sitekey]="siteKey"></div>
   <!-- <button (click)="login()">Sign in with Google</button> -->
-  <button (click)="onLogin()">登入</button>
-  <button (click)="onForgetpwd()">忘記密碼</button>
-  <button (click)="onregister()">註冊</button>
-  <button (click)="LineLogin()">Line Login</button>
+  <img class="btnline" src="./../../../assets/img/Member/line-logo.jpg"  (click)="LineLogin()">
+  <button class="shine-button" (click)="onLogin()">登入</button>
+  <button class="shine-button" (click)="onForgetpwd()">忘記密碼</button>
+  <button class="shine-button" (click)="onregister()">註冊</button>
+  
 
 </div>

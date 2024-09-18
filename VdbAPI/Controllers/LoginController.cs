@@ -15,9 +15,9 @@ namespace VdbAPI.Controllers
     {
         [Route("api/[controller]/[action]")]
         [HttpPost]
-        public ReturnResult<string> AccountLogin([FromBody] LoginInput input)
+        public ReturnResult<mMemberInfo> AccountLogin([FromBody] LoginInput input)
         {
-            ReturnResult<string> rtn = new ReturnResult<string>();
+            ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
             MemberHelper mHelper = new MemberHelper(ConnString);
             AccountService aS = new AccountService();
             if (aS.LoginCheck(input.email, input.password, out string rtnMsg))
@@ -30,9 +30,10 @@ namespace VdbAPI.Controllers
                 }
                 else
                 {
-                    string jwtToken = CreateJwtToken(mInfo.FirstOrDefault());
+                    string jwtToken = AccountService.CreateJwtToken(mInfo.FirstOrDefault());
                     rtn.IsSuccess = true;
-                    rtn.Data = jwtToken;
+                    rtn.Data = mInfo.FirstOrDefault();
+                    rtn.Data.JwtToken = jwtToken;
                     return rtn;
                 }
             }
@@ -43,23 +44,7 @@ namespace VdbAPI.Controllers
                 return rtn;
             }
         }
-        //create jwt token 
-        private string CreateJwtToken(mMemberInfo mInfo)
-        {
-            string secretKey = "JarryYa";
-            byte[] secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-
-            // 使用 HMAC SHA-256 加密方式生成 JWT
-            JwtAuthObject jwtObj = new JwtAuthObject();
-            jwtObj.Email = mInfo.Email;
-            jwtObj.MemberId = (int)mInfo.MemberID;
-            jwtObj.ExpiredTime = DateTime.Now.AddMinutes(10).ToFileTime();
-
-            string token = JWT.Encode(jwtObj, secretKeyBytes, JwsAlgorithm.HS256);
-
-            return token;
-        }
-
+       
 
         [Route("api/[controller]/[action]")]
         [HttpPost]

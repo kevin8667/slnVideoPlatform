@@ -27,7 +27,7 @@ export class LoginComponent implements AfterViewInit {
   ) {
     console.log('Google Client ID:', this.googleClientId);
   }
-
+  
   LineLogin() {
     this.authService.loginWithLine(false);
   }
@@ -107,6 +107,4 @@ export class LoginComponent implements AfterViewInit {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
-
-
 }

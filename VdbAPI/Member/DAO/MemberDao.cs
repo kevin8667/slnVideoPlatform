@@ -45,8 +45,25 @@ namespace VdbAPI.Member.Dao
             }
         }
 
+        internal void DeleteNoticeMessage(int memberNoticeID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string deleteQuery = @"DELETE FROM MemberNotice WHERE MemberNoticeID = @MemberNoticeID";
 
+                using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection))
+                {
+                    deleteCommand.Parameters.AddWithValue("@MemberNoticeID", memberNoticeID);
+                    connection.Open();
+                    int rowsAffected = deleteCommand.ExecuteNonQuery(); // 执行删除
 
+                    if (rowsAffected == 0)
+                    {
+                        // 处理没有删除任何行的情况（可选）
+                    }
+                }
+            }
+        }
 
 
         internal List<mMemberNotice> GetMemberNotice(mMemberNotice data)
@@ -221,7 +238,7 @@ namespace VdbAPI.Member.Dao
                 string sqlQuery = @"
             INSERT INTO FriendList ( MemberID, FriendID, CreationDate, FriendStatus, InvitedMessage)
 values
-            (@MemberID,@FriendID,getdate(),@status,@InvitedMessage)";
+            (@MemberID,@FriendID,CONVERT(DATE, GETDATE()),@status,@InvitedMessage)";
 
                 List<SqlParameter> pars = new List<SqlParameter>
         {
@@ -280,7 +297,7 @@ values
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string sqlQuery = @"SELECT F.FriendID, F.CreationDate, F.FriendStatus, F.InvitedMessage, 
+                string sqlQuery = @"SELECT F.FriendID, CONVERT(DATE, F.CreationDate) AS CreationDate, F.FriendStatus, F.InvitedMessage, 
                                     M.NickName, M.MemberName, M.PhotoPath, M.MemberID 
                                     FROM FriendList F 
                                     JOIN MemberInfo M ON F.FriendID = M.MemberID
@@ -387,7 +404,8 @@ values
                 member.Point = Convert.ToInt32(row["Point"]);
                 member.Status = row["Status"].ToString();
                 member.PhotoPath = row["PhotoPath"].ToString();
-
+                member.LineUserId = row["LineUserId"].ToString();
+                member.BindingLine = row["BindingLine"].ToString();
                 members.Add(member);
             }
             return members;
@@ -448,6 +466,21 @@ values
                     sqlQuery += @" and Password = @Password ";
                     pars.Add(new SqlParameter("Password", data.Password));
                 }
+
+
+                if (!string.IsNullOrEmpty(data.LineUserId))
+                {
+                    sqlQuery += @" and LineUserId = @LineUserId ";
+                    pars.Add(new SqlParameter("LineUserId", data.LineUserId));
+                }
+
+                if (!string.IsNullOrEmpty(data.BindingLine))
+                {
+                    sqlQuery += @" and BindingLine = @BindingLine ";
+                    pars.Add(new SqlParameter("BindingLine", data.BindingLine));
+                }
+
+
                 if (data.MemberID != null)
                 {
                     sqlQuery += @" and MemberID = @MemberID ";
@@ -556,7 +589,13 @@ values
                     pars.Add(new SqlParameter("status", info.Status));
                     pars.Add(new SqlParameter("memberId", info.MemberID));
                 }
-
+                else if (info.Process == MemberInfoProcess.UpdateLineUser)
+                {
+                    sqlQuery += @" BindingLine=@BindingLine , LineUserId=@LineUserId where memberId=@memberId";
+                    pars.Add(new SqlParameter("BindingLine", info.BindingLine));
+                    pars.Add(new SqlParameter("LineUserId", info.LineUserId));
+                    pars.Add(new SqlParameter("memberId", info.MemberID));
+                }
 
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {

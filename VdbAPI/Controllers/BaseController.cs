@@ -1,10 +1,8 @@
 ﻿using Jose;
-
 using Microsoft.AspNetCore.Mvc;
 
 using System;
 using System.Text;
-
 using VdbAPI.Member.Helper;
 using VdbAPI.Member.Model;
 using VdbAPI.Member.ViewModel;
@@ -24,9 +22,9 @@ namespace VdbAPI.Controllers {
             }
         }
 
-
+    
         //create jwt token 
-
+      
 
     }
 }
