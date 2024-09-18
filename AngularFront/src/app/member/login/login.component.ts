@@ -27,7 +27,7 @@ export class LoginComponent implements AfterViewInit {
   ) {
     console.log('Google Client ID:', this.googleClientId);
   }
-
+  
   LineLogin() {
     this.authService.loginWithLine(false);
   }

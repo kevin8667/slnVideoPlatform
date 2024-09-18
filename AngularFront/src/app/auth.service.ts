@@ -22,10 +22,12 @@ export class AuthService {
   private apiUrl = 'https://localhost:7193/api/Member/GetMemberId'; // 替換為您的實際 API URL
 
   constructor(private http: HttpClient, private router: Router) { }
+ 
 
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
 
   private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(this.getMemberData());
+
 
   removeCookie(name: string): void {
     // 设置一个过期时间为过去的时间
@@ -52,7 +54,7 @@ export class AuthService {
     return null;
   }
 
-
+  
   SetMemberData(data:MemberIdResponse): void {
     this.memberBehaviorSubject.next(data);
     this.setCookie('MemberData', JSON.stringify(data), 1);
