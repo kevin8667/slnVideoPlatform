@@ -40,7 +40,7 @@ public partial class MemberCoupon
     /// <summary>
     /// 得到優惠券時間
     /// </summary>
-    public DateTime? GetTime { get; set; }
+    public DateTime GetTime { get; set; }
 
     /// <summary>
     /// 使用類型(線上電影票/線下電影票)
@@ -56,10 +56,4 @@ public partial class MemberCoupon
     /// 兌換的贈品編號
     /// </summary>
     public int? GiftId { get; set; }
-
-    public virtual CouponInfo Coupon { get; set; }
-
-    public virtual GiftInfo Gift { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
 }

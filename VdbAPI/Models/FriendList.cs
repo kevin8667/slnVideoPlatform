@@ -17,7 +17,5 @@ public partial class FriendList
 
     public string FriendStatus { get; set; }
 
-    public virtual MemberInfo Friend { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
+    public string InvitedMessage { get; set; }
 }

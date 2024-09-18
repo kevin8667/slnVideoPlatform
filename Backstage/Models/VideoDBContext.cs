@@ -119,6 +119,8 @@ public partial class VideoDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
+
         modelBuilder.Entity<ActorList>(entity =>
         {
             entity.HasKey(e => e.ActorId).HasName("PK_演員列表");
@@ -153,7 +155,7 @@ public partial class VideoDBContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Member).WithMany(p => p.Articles)
+            entity.HasOne(d => d.Author).WithMany(p => p.Articles)
                 .HasForeignKey(d => d.AuthorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Article_MemberInfo");
@@ -451,6 +453,7 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Cinema).WithMany(p => p.Halls)
                 .HasForeignKey(d => d.CinemaId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Hall_Cinema");
         });
 
@@ -466,6 +469,7 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Image).WithMany(p => p.ImageForVideoLists)
                 .HasForeignKey(d => d.ImageId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ImageForVideoList_ImageList");
 
             entity.HasOne(d => d.Video).WithMany(p => p.ImageForVideoLists)
@@ -738,6 +742,7 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Cinema).WithMany(p => p.NowShowingTheaters)
                 .HasForeignKey(d => d.CinemaId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_NowShowingTheater_Cinema");
 
             entity.HasOne(d => d.Video).WithMany(p => p.NowShowingTheaters)
@@ -782,6 +787,7 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_OrderDetail_Order");
 
             entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
@@ -897,7 +903,9 @@ public partial class VideoDBContext : DbContext
 
             entity.ToTable("Post");
 
-            entity.Property(e => e.PostId).HasColumnName("PostID");
+            entity.Property(e => e.PostId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("PostID");
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.Lock).HasDefaultValue(true);
             entity.Property(e => e.PostContent).IsRequired();
@@ -906,8 +914,8 @@ public partial class VideoDBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.PosterId).HasColumnName("PosterID");
 
-            entity.HasOne(d => d.Article).WithMany(p => p.Posts)
-                .HasForeignKey(d => d.ArticleId)
+            entity.HasOne(d => d.PostNavigation).WithOne(p => p.Post)
+                .HasForeignKey<Post>(d => d.PostId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Post_Article");
 
@@ -974,6 +982,7 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Halls).WithMany(p => p.Seats)
                 .HasForeignKey(d => d.HallsId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Seat_Hall");
         });
 
@@ -1004,7 +1013,6 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.ViedoPlan).WithMany(p => p.ShoppingCarts)
                 .HasForeignKey(d => d.ViedoPlanId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ShoppingCart_ViedoPlanList");
         });
 
@@ -1018,7 +1026,6 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Combination).WithMany(p => p.ShowingHalls)
                 .HasForeignKey(d => d.CombinationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ShowingHall_NowShowingTheater");
 
             entity.HasOne(d => d.Halls).WithMany(p => p.ShowingHalls)
@@ -1044,6 +1051,7 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.HallsNavigation).WithMany(p => p.Showtimes)
                 .HasForeignKey(d => d.HallsId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Showtime_ShowingHall");
 
             entity.HasOne(d => d.Viedo).WithMany(p => p.Showtimes)
@@ -1095,13 +1103,9 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.ShowtimeId).HasColumnName("ShowtimeID");
 
-            entity.HasOne(d => d.Reservation).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.ReservationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Ticket_ReservationDetail");
-
             entity.HasOne(d => d.Seat).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.SeatId)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK_Ticket_Seat1");
 
             entity.HasOne(d => d.Showtime).WithMany(p => p.Tickets)
@@ -1188,7 +1192,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.SeasonId).HasColumnName("SeasonID");
             entity.Property(e => e.SeriesId).HasColumnName("SeriesID");
             entity.Property(e => e.Summary).HasMaxLength(500);
-            entity.Property(e => e.ThumbnailId).HasColumnName("ThumbnailID");
+            entity.Property(e => e.ThumbnailPath).HasMaxLength(300);
             entity.Property(e => e.TrailerUrl).HasColumnName("TrailerURL");
             entity.Property(e => e.TypeId).HasColumnName("TypeID");
             entity.Property(e => e.VideoName)
@@ -1250,7 +1254,6 @@ public partial class VideoDBContext : DbContext
 
             entity.HasOne(d => d.Plan).WithMany(p => p.ViedoPlanLists)
                 .HasForeignKey(d => d.PlanId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ViedoPlanList_PlanList");
 
             entity.HasOne(d => d.Viedo).WithMany(p => p.ViedoPlanLists)

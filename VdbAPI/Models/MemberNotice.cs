@@ -46,6 +46,4 @@ public partial class MemberNotice
     /// 建立通知的事件
     /// </summary>
     public string Action { get; set; }
-
-    public virtual MemberInfo Member { get; set; }
 }

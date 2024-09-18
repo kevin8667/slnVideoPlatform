@@ -1,0 +1,49 @@
+<div class="topbar">
+  <i class="pi pi-plus-circle add-icon" (click)="addNewPlaylist()"></i>
+  <i class="pi pi-trash trash-icon" id="trashIcon"></i>
+</div>
+
+<div class="playlist-container">
+  <div class="playlist-cards">
+    <h2>創立的播放清單</h2>
+    <ng-container *ngFor="let playlist of createdPlaylists">
+      <p-panel [id]="'playlist-' + playlist.playListId" header="{{ playlist.playListName }}" styleClass="custom-card">
+        <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
+        <p>{{ playlist.playListDescription }}</p>
+        <p>瀏覽次數: {{ playlist.viewCount }}</p>
+        <div class="button-group">
+          <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" (click)="editPlaylist(playlist.playListId??0)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="icon-only-button" (click)="triggerDeleteAnimation(playlist.playListId??0)"></button>
+        </div>
+      </p-panel>
+    </ng-container>
+
+    <h2>添加的播放清單</h2>
+    <ng-container *ngFor="let playlist of addedPlaylists">
+      <p-panel header="{{ playlist.playListName }}" styleClass="custom-card">
+        <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
+        <p>{{ playlist.playListDescription }}</p>
+        <p>瀏覽次數: {{ playlist.viewCount }}</p>
+        <div class="button-group">
+          <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" disabled></button>
+          <button pButton type="button" icon="pi pi-trash" class="icon-only-button" disabled></button>
+        </div>
+      </p-panel>
+    </ng-container>
+
+    <h2>協作的播放清單</h2>
+    <ng-container *ngFor="let playlist of collaboratorPlaylists">
+      <p-panel header="{{ playlist.playListName }}" styleClass="custom-card">
+        <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="{{ playlist.playListName }}" class="playlist-image">
+        <p>{{ playlist.playListDescription }}</p>
+        <p>瀏覽次數: {{ playlist.viewCount }}</p>
+        <div class="button-group">
+          <button pButton type="button" icon="pi pi-pencil" class="icon-only-button" disabled></button>
+          <button pButton type="button" icon="pi pi-trash" class="icon-only-button" disabled></button>
+        </div>
+      </p-panel>
+    </ng-container>
+  </div>
+</div>
+
+<app-playlistpost-aput></app-playlistpost-aput>

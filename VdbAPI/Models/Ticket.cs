@@ -18,12 +18,4 @@ public partial class Ticket
     public int? SeatId { get; set; }
 
     public decimal? Price { get; set; }
-
-    public virtual ReservationDetail Reservation { get; set; }
-
-    public virtual Seat Seat { get; set; }
-
-    public virtual Showtime Showtime { get; set; }
-
-    public virtual TypeOfTicket TypeOfTicketNavigation { get; set; }
 }

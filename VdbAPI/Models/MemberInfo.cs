@@ -90,41 +90,7 @@ public partial class MemberInfo
 
     public string MemberIdentity { get; set; }
 
-    public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
+    public bool Fidoenabled { get; set; }
 
-    public virtual ICollection<BlackList> BlackListBlockedMembers { get; set; } = new List<BlackList>();
-
-    public virtual ICollection<BlackList> BlackListMembers { get; set; } = new List<BlackList>();
-
-    public virtual ICollection<FriendChat> FriendChatReceivers { get; set; } = new List<FriendChat>();
-
-    public virtual ICollection<FriendChat> FriendChatSenders { get; set; } = new List<FriendChat>();
-
-    public virtual ICollection<FriendList> FriendListFriends { get; set; } = new List<FriendList>();
-
-    public virtual ICollection<FriendList> FriendListMembers { get; set; } = new List<FriendList>();
-
-    public virtual ICollection<Invite> InviteInvitedMembers { get; set; } = new List<Invite>();
-
-    public virtual ICollection<Invite> InviteMembers { get; set; } = new List<Invite>();
-
-    public virtual ICollection<MemberCoupon> MemberCoupons { get; set; } = new List<MemberCoupon>();
-
-    public virtual ICollection<MemberNotice> MemberNotices { get; set; } = new List<MemberNotice>();
-
-    public virtual ICollection<MemberPlayList> MemberPlayLists { get; set; } = new List<MemberPlayList>();
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
-    public virtual ICollection<PlayListCollaborator> PlayListCollaborators { get; set; } = new List<PlayListCollaborator>();
-
-    public virtual ICollection<PointHistory> PointHistories { get; set; } = new List<PointHistory>();
-
-    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
-
-    public virtual ICollection<ReservationDetail> ReservationDetails { get; set; } = new List<ReservationDetail>();
-
-    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
-
-    public virtual ICollection<ValidCode> ValidCodes { get; set; } = new List<ValidCode>();
+    public int? FidocredentialId { get; set; }
 }

@@ -31,6 +31,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ChatRoom]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Cinema]",
          "ObjectType": 0
       },
@@ -47,7 +51,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[FriendChat]",
+         "Name": "[dbo].[FIDOCredential]",
          "ObjectType": 0
       },
       {
@@ -99,6 +103,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[MemberCreatedPlayList]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[MemberInfo]",
          "ObjectType": 0
       },
@@ -108,6 +116,10 @@
       },
       {
          "Name": "[dbo].[MemberPlayList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberRating]",
          "ObjectType": 0
       },
       {
@@ -147,6 +159,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[PostUserReactions]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ProductList]",
          "ObjectType": 0
       },
@@ -164,6 +180,10 @@
       },
       {
          "Name": "[dbo].[SeriesList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SessionSeats]",
          "ObjectType": 0
       },
       {
@@ -203,6 +223,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[UserReactions]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ValidCode]",
          "ObjectType": 0
       },
@@ -213,6 +237,10 @@
       {
          "Name": "[dbo].[VideoStreamingLinkList]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ArticleView]",
+         "ObjectType": 3
       }
    ],
    "UiHint": null,
@@ -230,7 +258,7 @@
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
    "UseNoDefaultConstructor": false,
-   "UseNoNavigations": false,
+   "UseNoNavigations": true,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,

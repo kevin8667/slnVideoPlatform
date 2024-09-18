@@ -16,8 +16,4 @@ public partial class Seat
     public int? SeatNumber { get; set; }
 
     public string SeatStatus { get; set; }
-
-    public virtual Hall Halls { get; set; }
-
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

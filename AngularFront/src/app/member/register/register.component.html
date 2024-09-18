@@ -1,0 +1,65 @@
+<div id="container">
+  <h1>會員註冊</h1>
+  <div>
+    <span class="p-float-label">
+      <input type="text" pInputText id="email" [(ngModel)]="email" />
+      <label for="email">電子信箱</label>
+    </span>
+    <br />
+    <span class="p-float-label">
+      <input type="password" pInputText id="pwd" [(ngModel)]="pwd" />
+      <label for="pwd">密碼</label>
+    </span>
+    <br />
+    <span class="p-float-label">
+      <input type="text" pInputText id="nickname" [(ngModel)]="nickname" [(ngModel)]="nickname" />
+      <label for="nickname">暱稱</label>
+    </span>
+    <br />
+    <span class="p-float-label">
+      <input type="text" pInputText id="membername" [(ngModel)]="membername" />
+      <label for="membername">會員姓名</label>
+    </span>
+    <br />
+    <span class="p-float-label">
+      <input type="text" pInputText id="phone" [(ngModel)]="phone" />
+      <label for="phone">手機</label>
+    </span>
+    <br />
+    <span class="p-float-label">
+      <input type="date" pInputText id="birth" [(ngModel)]="birth" />
+      <label for="birth">生日</label>
+    </span>
+    <br />
+    <span class="p-float-label">
+      <input type="text" pInputText id="address" [(ngModel)]="address" />
+      <label for="address">地址</label>
+    </span>
+    <br />
+    <legend class="form-label">性別</legend>
+    <input
+      type="radio"
+      id="female"
+      name="gender"
+      value="F"
+      [(ngModel)]="gender"
+      style="width:30px"
+    />
+    <label for="female" class="form-check-label">女性</label>
+    <br />
+    <input
+      type="radio"
+      id="male"
+      name="gender"
+      value="M"
+      [(ngModel)]="gender"
+      style="width:30px"
+
+    />
+    <label for="male" class="form-check-label">男性</label>
+    <br />
+
+    <button (click)="onsave()" style="width: 145px">確定</button>&nbsp;
+    <button (click)="back()" style="width: 145px">返回</button>
+  </div>
+</div>

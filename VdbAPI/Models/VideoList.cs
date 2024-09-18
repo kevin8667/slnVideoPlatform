@@ -27,11 +27,11 @@ public partial class VideoList
 
     public DateOnly? ReleaseDate { get; set; }
 
-    public decimal Rating { get; set; }
+    public decimal? Rating { get; set; }
 
-    public decimal Popularity { get; set; }
+    public decimal? Popularity { get; set; }
 
-    public int? ThumbnailId { get; set; }
+    public string ThumbnailPath { get; set; }
 
     public string Lang { get; set; }
 
@@ -43,31 +43,5 @@ public partial class VideoList
 
     public string TrailerUrl { get; set; }
 
-    public virtual ICollection<CastList> CastLists { get; set; } = new List<CastList>();
-
-    public virtual ICollection<DirectorForVideoList> DirectorForVideoLists { get; set; } = new List<DirectorForVideoList>();
-
-    public virtual ICollection<GenresForVideoList> GenresForVideoLists { get; set; } = new List<GenresForVideoList>();
-
-    public virtual ICollection<ImageForVideoList> ImageForVideoLists { get; set; } = new List<ImageForVideoList>();
-
-    public virtual ICollection<KeywordForVideoList> KeywordForVideoLists { get; set; } = new List<KeywordForVideoList>();
-
-    public virtual GenreList MainGenre { get; set; }
-
-    public virtual ICollection<NowShowingTheater> NowShowingTheaters { get; set; } = new List<NowShowingTheater>();
-
-    public virtual ICollection<PlayListItem> PlayListItems { get; set; } = new List<PlayListItem>();
-
-    public virtual SeasonList Season { get; set; }
-
-    public virtual SeriesList Series { get; set; }
-
-    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
-
-    public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
-
-    public virtual TypeList Type { get; set; }
-
-    public virtual ICollection<VideoStreamingLinkList> VideoStreamingLinkLists { get; set; } = new List<VideoStreamingLinkList>();
+    public string Bgpath { get; set; }
 }
