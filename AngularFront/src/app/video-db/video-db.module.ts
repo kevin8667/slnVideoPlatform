@@ -27,9 +27,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { RatingModule } from 'primeng/rating';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
 import { ToastModule } from 'primeng/toast';
 import { NewVideoComponent } from './new-video/new-video.component';
+import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { NewVideoComponent } from './new-video/new-video.component';
     EpisodeListComponent,
     PersonDetailComponent,
     NewVideoComponent,
+    AddtoplaylistComponent,
   ],
   imports: [
     CommonModule,
@@ -64,7 +67,9 @@ import { NewVideoComponent } from './new-video/new-video.component';
     OverlayPanelModule,
     RatingModule,
     ToastModule,
-    ConfirmDialogModule
-  ]
+    ConfirmDialogModule,
+    DynamicDialogModule,
+  ],
+  providers: [DialogService, MessageService],
 })
 export class VideoDbModule { }

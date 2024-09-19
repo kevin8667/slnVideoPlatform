@@ -1,0 +1,30 @@
+<div class="card">
+  <p-table [value]="playlists" responsiveLayout="scroll" [paginator]="true" [rows]="5">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>封面</th>
+        <th>名稱</th>
+        <th>描述</th>
+        <th style="width:4em"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-playlist>
+      <tr>
+        <td class="playlist-image-container">
+          <div class="playlist-image-wrapper">
+            <img *ngIf="playlist.showImage" [src]="'data:image/png;base64,' + playlist.showImage" alt="封面" class="playlist-image"/>
+            <span class="playlist-type-label" *ngIf="playlist.isCreatedByUser">自建</span>
+            <span class="playlist-type-label" *ngIf="!playlist.isCreatedByUser">協作</span>
+          </div>
+        </td>
+        <td>{{ playlist.playListName }}</td>
+        <td>{{ playlist.playListDescription }}</td>
+        <td>
+          <button type="button" pButton icon="pi pi-plus" (click)="selectPlaylist(playlist)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-toast></p-toast> <!-- 加入此行用於顯示 toast 提示 -->

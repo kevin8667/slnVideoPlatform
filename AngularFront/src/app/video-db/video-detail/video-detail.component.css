@@ -256,3 +256,54 @@ p-carousel {
   border-color: #6c757d;
   color: white;
 }
+
+/* 全屏黑色半透明 Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* 黑色半透明背景 */
+  z-index: 9999; /* 保證在最上層 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 箭頭容器，指向按鈕 */
+.arrow-container {
+  position: absolute;
+  top: 200px; /* 根據需要調整位置 */
+  left: 50%; /* 根據需要調整位置 */
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 10001; /* 確保箭頭顯示在按鈕上方 */
+}
+
+/* 向下箭頭樣式 */
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 40px solid white; /* 箭頭的顏色 */
+  margin: 0 auto; /* 居中對齊 */
+  animation: bounce 2s infinite; /* 添加彈跳動畫 */
+}
+
+/* 彈跳動畫 */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+

@@ -44,12 +44,11 @@
         icon="pi pi-heart"
         >加入最愛</a>
         <a
-        class="button"
+        class="button add-to-playlist-button"
         style="text-decoration-line: none;"
         pButton
         pRipple
-        [href]="video.trailerUrl"
-        target="_blank"
+        (click)="showAddToPlaylist()"
         icon="pi pi-plus-circle"
         >加入片單</a>
         <a
@@ -183,3 +182,13 @@
     </ng-template>
   </p-carousel>
 </div>
+
+<!-- 全屏黑色半透明 Overlay -->
+<div *ngIf="displayOverlay" class="overlay" (click)="hideOverlay()">
+  <!-- 指向「加入片單」按鈕的箭頭 -->
+  <div class="arrow-container">
+    <div class="arrow-down"></div>
+    <p>喜歡這部影片的話，點擊這裡加入片單！</p>
+  </div>
+</div>
+

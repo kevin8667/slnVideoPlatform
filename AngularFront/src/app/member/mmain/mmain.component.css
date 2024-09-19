@@ -64,7 +64,7 @@ padding:1px;
 display: flex;
 flex-direction: row;
 text-align: right;
-justify-content: flex-end; 
+justify-content: flex-end;
 }
 
 .btnedit{
@@ -168,13 +168,13 @@ button:hover , :focus {
   border: 1px solid #ddd;
   border-radius: 0px;
   background-color: #f9f9f9;
-  overflow-y: auto; 
+  overflow-y: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   flex-grow: 1; /* 使新闻区域填满剩余空间 */
 }
 
 .news-list {
-  padding-right: 10px; 
+  padding-right: 10px;
 }
 
 .news-section h3 {
@@ -184,25 +184,25 @@ button:hover , :focus {
 }
 
 .news-section::-webkit-scrollbar {
-  width: 12px; 
+  width: 12px;
 }
 
 .news-section::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-  border-radius: 10px; 
+  background: #f1f1f1;
+  border-radius: 10px;
 }
 
 .news-section::-webkit-scrollbar-thumb {
-  background: #17a2b8; 
-  border-radius: 10px; 
+  background: #17a2b8;
+  border-radius: 10px;
 }
 
 .news-section::-webkit-scrollbar-thumb:hover {
-  background: #00c8d6; 
+  background: #00c8d6;
 }
 
 .news-section::-webkit-scrollbar-thumb:active {
-  background: #007bff; 
+  background: #007bff;
 }
 
 .news-header:hover, :focus{
@@ -271,7 +271,7 @@ button:hover , :focus {
 }
 
 .news-date {
-  font-size: 0.9em; 
+  font-size: 0.9em;
   color: #6c757d;
 }
 
@@ -279,7 +279,7 @@ button:hover , :focus {
   margin-left: 30px;
   font-size: 1.1em;
   font-weight: bold;
-  color: #17a2b8; 
+  color: #17a2b8;
 }
 
 .news-summary {
@@ -301,13 +301,13 @@ button:hover , :focus {
 
 .profile-header {
   display: flex;
-  align-items: flex-end; 
-  gap: 10px; 
+  align-items: flex-end;
+  gap: 10px;
 }
 
 .rounded-circle {
-  width: 100px; 
-  height: 100px; 
+  width: 100px;
+  height: 100px;
 }
 
 .profile-info {
@@ -322,27 +322,27 @@ flex-direction: row
 
 .crown {
   width: 25px;
-  margin-right: 5px; 
+  margin-right: 5px;
   margin-bottom: 10px;
 }
 
 .profile-info label {
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 
 .profile-image-container {
-  position: relative; 
-  display: inline-block; 
+  position: relative;
+  display: inline-block;
 
 }
 
 .mpic {
-  width: 150px; 
-  height: 150px; 
-  border-radius: 50%; 
-  object-fit: cover; 
-  background-color: transparent; 
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: transparent;
 }
 
 .mpicdiv {
@@ -364,13 +364,13 @@ flex-direction: row
 }
 
 .edit-button {
-  width: 150px; 
-  background-color: transparent; 
-  border: none; 
-  cursor: pointer; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+  width: 150px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight:900
 }
 
@@ -381,6 +381,21 @@ flex-direction: row
 
 .modify-area{
   padding:10px;
+}
+
+.playlist-icon {
+  color: #333; /* 設置圖示顏色 */
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.playlist-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
 }
 
 .form-table {

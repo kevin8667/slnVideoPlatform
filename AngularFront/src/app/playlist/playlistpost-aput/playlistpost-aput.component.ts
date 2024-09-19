@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, EventEmitter, Output } from '@angular/core';
 import { PlaylistDTO } from '../../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../../interfaces/PlaylistitemDTO';
 import { MemberInfoDTO } from '../../interfaces/MemberInfoDTO';
@@ -6,6 +6,7 @@ import { PlaylistService } from '../../services/playlist.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { VideoListDTO } from 'src/app/interfaces/VideoListDTO';
 import { PlayListCreateDTO } from '../../interfaces/PlayListCreateDTO';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-playlistpost-aput',
@@ -13,6 +14,7 @@ import { PlayListCreateDTO } from '../../interfaces/PlayListCreateDTO';
   styleUrls: ['./playlistpost-aput.component.css'],
 })
 export class PlaylistpostAputComponent implements OnInit {
+  @Output() playlistAdded: EventEmitter<void> = new EventEmitter<void>();
   isEditing: boolean = false;
   displayDialog: boolean = false;
 
@@ -37,7 +39,8 @@ export class PlaylistpostAputComponent implements OnInit {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private playlistService: PlaylistService
+    private playlistService: PlaylistService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -93,16 +96,12 @@ export class PlaylistpostAputComponent implements OnInit {
             episode: item.episode,
             thumbnailPath: item.thumbnailPath ?? '',
           }));
-
-          this.selectedVideos.forEach((video) => {
-            console.log('Video Name:', video.videoName, 'Episode:', video.episode);
-          });
         },
         (error) => {
           console.error('Error loading playlist items', error);
         }
       );
-  }
+    }
 
   loadCollaborators(): void {
     this.playlistService.getCollaborators().subscribe(
@@ -181,6 +180,7 @@ export class PlaylistpostAputComponent implements OnInit {
         .subscribe(
           (response) => {
             console.log('播放清單已編輯')
+            this.playlistAdded.emit();
           },
           (error) => {
             console.error('編輯播放清單時發生錯誤', error);
@@ -189,7 +189,8 @@ export class PlaylistpostAputComponent implements OnInit {
     } else {
       this.playlistService.addNewPlaylist(playListCreateDTO).subscribe(
         (response) => {
-          console.log('播放清單已新增');
+            console.log('播放清單已新增');
+            this.playlistAdded.emit();
         },
         (error) => {
           console.error('新增播放清單時發生錯誤', error);

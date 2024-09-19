@@ -276,10 +276,10 @@ namespace VdbAPI.Controllers
 
         // GET: api/PlayList/videos
         [HttpGet("videos")]
-        public async Task<ActionResult<IEnumerable<VideoListDTO>>> GetAllVideos()
+        public async Task<ActionResult<IEnumerable<VideoForPlaylistDTO>>> GetAllVideos()
         {
             var videos = await _context.VideoLists
-                .Select(v => new VideoListDTO
+                .Select(v => new VideoForPlaylistDTO
                 {
                     VideoId = v.VideoId,
                     VideoName = v.VideoName,
@@ -547,6 +547,40 @@ namespace VdbAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "成功將播放清單添加到收藏！" });
+        }
+
+        [HttpPost("{playlistId}/items")]
+        public async Task<IActionResult> AddVideoToPlaylist(int playlistId, [FromBody] VideoAddToDTO dto)
+        {
+            var playlist = await _context.PlayLists
+                .Include(p => p.PlayListItems)
+                .FirstOrDefaultAsync(p => p.PlayListId == playlistId);
+
+            if (playlist == null)
+            {
+                return NotFound(new { message = "播放清單不存在" });
+            }
+
+            // 檢查影片是否已經存在於播放清單中
+            var existingItem = playlist.PlayListItems.FirstOrDefault(i => i.VideoId == dto.VideoId);
+            if (existingItem != null)
+            {
+                return BadRequest(new { message = "影片已經存在於播放清單中" });
+            }
+
+            // 新增影片到播放清單
+            var newItem = new PlayListItem
+            {
+                PlayListId = dto.PlayListId,
+                VideoId = dto.VideoId,
+                VideoPosition = playlist.PlayListItems.Count + 1, // 設置最新的位置
+                VideoAddedAt = DateTime.Now // 設置當前時間
+            };
+
+            _context.PlayListItems.Add(newItem);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "成功將影片添加到播放清單！" });
         }
     }
 }

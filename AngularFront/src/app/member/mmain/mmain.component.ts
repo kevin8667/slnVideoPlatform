@@ -241,6 +241,11 @@ export class MmainComponent implements OnInit {
 
   BindingLine():void{
       this.authService.loginWithLine(true);
-    
+
   }
+
+  goToPlaylist() {
+    this.router.navigate(['/playlist/member']); // 導航到會員播放清單頁面
+  }
+
 }
