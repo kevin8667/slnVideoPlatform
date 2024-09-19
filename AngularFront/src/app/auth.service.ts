@@ -16,7 +16,9 @@ export class AuthService {
 
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
 
-  private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(this.getMemberData());
+  private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(
+    this.getMemberData()
+  );
 
 
   removeCookie(name: string): void {
@@ -31,11 +33,13 @@ export class AuthService {
   }
 
   getMemberData(): MemberIdResponse | null {
-    console.log("getMemberData by cookie");
+    console.log('getMemberData by cookie');
     const cookieValue = this.getCookie('MemberData');
     if (cookieValue) {
       try {
-        return JSON.parse(cookieValue);
+        const memberValue = JSON.parse(cookieValue);
+        console.log(memberValue);
+        return memberValue;
       } catch (error) {
         console.error('解析 MemberData Cookie 失敗:', error);
         return null;
@@ -44,11 +48,9 @@ export class AuthService {
     return null;
   }
 
-  
-  SetMemberData(data:MemberIdResponse): void {
+  SetMemberData(data: MemberIdResponse): void {
     this.memberBehaviorSubject.next(data);
     this.setCookie('MemberData', JSON.stringify(data), 1);
-
   }
 
   hasToken(): boolean {
@@ -98,7 +100,16 @@ export class AuthService {
     );
   }
 
-
+    // 發送請求獲取會員 ID
+    return this.http.get<MemberIdResponse>(this.apiUrl).pipe(
+      tap(data => this.cachedMemberId = data.MemberId), // 緩存數據
+      shareReplay(1), // 緩存最後一次的結果，避免重複 HTTP 請求
+      catchError(err => {
+        console.error('獲取會員 ID 失敗', err);
+        return of({ MemberId: -1, error: true }); // 返回錯誤標記
+      })
+    );
+  }
 
   loginWithLine(binding: boolean) {
     debugger;

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using VdbAPI.hubs;
 using VdbAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
