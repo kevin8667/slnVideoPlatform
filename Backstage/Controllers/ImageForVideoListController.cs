@@ -196,105 +196,105 @@ namespace Backstage.Controllers
             return Json(new { success = true, imageUrl = fullImagePath });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EditThumbnail(int videoId)
-        {
-            Console.WriteLine($"VideoId received: {videoId}");
-            if (videoId == 0)
-            {
-                return BadRequest();
-            }
-            var imageForVideoList = await _context.ImageForVideoLists
-                .Include(iv => iv.Image)
-                .Include(iv => iv.Video)
-                .Where(iv => iv.VideoId == videoId)
-                .FirstOrDefaultAsync();
+        //[HttpGet]
+        //public async Task<IActionResult> EditThumbnail(int videoId)
+        //{
+        //    Console.WriteLine($"VideoId received: {videoId}");
+        //    if (videoId == 0)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    var imageForVideoList = await _context.ImageForVideoLists
+        //        .Include(iv => iv.Image)
+        //        .Include(iv => iv.Video)
+        //        .Where(iv => iv.VideoId == videoId)
+        //        .FirstOrDefaultAsync();
 
-            if (imageForVideoList == null)
-            {
-                return NotFound();
-            }
+        //    if (imageForVideoList == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            // Create a SelectList for ImageList
-            ViewBag.ImageList = new SelectList(
-                _context.ImageLists,
-                "ImageId",
-                "ImagePath", // or another property you want to display
-                imageForVideoList.ImageId
-            );
+        //    // Create a SelectList for ImageList
+        //    ViewBag.ImageList = new SelectList(
+        //        _context.ImageLists,
+        //        "ImageId",
+        //        "ImagePath", // or another property you want to display
+        //        imageForVideoList.ImageId
+        //    );
 
-            // Pass the VideoId to the view to use it in the form
-            ViewBag.VideoId = videoId;
+        //    // Pass the VideoId to the view to use it in the form
+        //    ViewBag.VideoId = videoId;
 
-            return View(imageForVideoList);
-        }
+        //    return View(imageForVideoList);
+        //}
 
         // POST: ImageForVideoList/EditThumbnail/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditThumbnail(int videoId, [Bind("ImageId, VideoId")] ImageForVideoList imageForVideoList)
-        {
-            if (videoId != imageForVideoList.VideoId)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditThumbnail(int videoId, [Bind("ImageId, VideoId")] ImageForVideoList imageForVideoList)
+        //{
+        //    if (videoId != imageForVideoList.VideoId)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var existingImageForVideoList = await _context.ImageForVideoLists
-                .FirstOrDefaultAsync(iv => iv.VideoId == videoId);
+        //    var existingImageForVideoList = await _context.ImageForVideoLists
+        //        .FirstOrDefaultAsync(iv => iv.VideoId == videoId);
 
-            if (existingImageForVideoList == null)
-            {
-                return NotFound();
-            }
+        //    if (existingImageForVideoList == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            // 更新 ImageForVideoList 中的 ImageId
-            existingImageForVideoList.ImageId = imageForVideoList.ImageId;
+        //    // 更新 ImageForVideoList 中的 ImageId
+        //    existingImageForVideoList.ImageId = imageForVideoList.ImageId;
 
-            // 獲取對應的 VideoList 並更新 ThumbnailId
-            var video = await _context.VideoLists.FirstOrDefaultAsync(v => v.VideoId == videoId);
-            if (video != null)
-            {
-                video.ThumbnailId = imageForVideoList.ImageId;
-            }
-            else
-            {
-                return NotFound();
-            }
+        //    // 獲取對應的 VideoList 並更新 ThumbnailId
+        //    var video = await _context.VideoLists.FirstOrDefaultAsync(v => v.VideoId == videoId);
+        //    if (video != null)
+        //    {
+        //        video.ThumbnailId = imageForVideoList.ImageId;
+        //    }
+        //    else
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // 保存更改
-                    _context.Update(existingImageForVideoList);
-                    _context.Update(video);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ImageForVideoListExists(existingImageForVideoList.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            // 保存更改
+        //            _context.Update(existingImageForVideoList);
+        //            _context.Update(video);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ImageForVideoListExists(existingImageForVideoList.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
 
-                return RedirectToAction("Index");
-            }
+        //        return RedirectToAction("Index");
+        //    }
 
-            ViewBag.ImageList = new SelectList(
-                _context.ImageLists,
-                "ImageId",
-                "ImagePath",
-                existingImageForVideoList.ImageId
-            );
+        //    ViewBag.ImageList = new SelectList(
+        //        _context.ImageLists,
+        //        "ImageId",
+        //        "ImagePath",
+        //        existingImageForVideoList.ImageId
+        //    );
 
-            ViewBag.VideoId = videoId;
-            return View(existingImageForVideoList);
-        }
+        //    ViewBag.VideoId = videoId;
+        //    return View(existingImageForVideoList);
+        //}
 
 
         private bool ImageForVideoListExists(int id)

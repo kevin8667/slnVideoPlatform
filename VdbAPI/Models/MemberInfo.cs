@@ -94,19 +94,21 @@ public partial class MemberInfo
 
     public int? FidocredentialId { get; set; }
 
+    public string BindingLine { get; set; }
+
+    public string LineUserId { get; set; }
+
     public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 
     public virtual ICollection<BlackList> BlackListBlockedMembers { get; set; } = new List<BlackList>();
 
     public virtual ICollection<BlackList> BlackListMembers { get; set; } = new List<BlackList>();
 
+    public virtual ICollection<ChatRoom> ChatRooms { get; set; } = new List<ChatRoom>();
+
     public virtual Fidocredential Fidocredential { get; set; }
 
     public virtual ICollection<Fidocredential> Fidocredentials { get; set; } = new List<Fidocredential>();
-
-    public virtual ICollection<FriendChat> FriendChatReceivers { get; set; } = new List<FriendChat>();
-
-    public virtual ICollection<FriendChat> FriendChatSenders { get; set; } = new List<FriendChat>();
 
     public virtual ICollection<FriendList> FriendListFriends { get; set; } = new List<FriendList>();
 
@@ -132,11 +134,15 @@ public partial class MemberInfo
 
     public virtual ICollection<PointHistory> PointHistories { get; set; } = new List<PointHistory>();
 
+    public virtual ICollection<PostUserReaction> PostUserReactions { get; set; } = new List<PostUserReaction>();
+
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual ICollection<ReservationDetail> ReservationDetails { get; set; } = new List<ReservationDetail>();
 
     public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
+
+    public virtual ICollection<UserReaction> UserReactions { get; set; } = new List<UserReaction>();
 
     public virtual ICollection<ValidCode> ValidCodes { get; set; } = new List<ValidCode>();
 }

@@ -1,0 +1,175 @@
+<div class="myContainer">
+  <nav class="card1">
+    <!-- 變更筆數 -->
+    <div class="slider gap-3">
+      <span class="text-label">筆數:{{ forumDto.pageSize }}</span>
+      <p-slider
+        [(ngModel)]="forumDto.pageSize"
+        (ngModelChange)="onSliderChange()"
+        [style]="{ width: '10rem' }"
+        [min]="10"
+        [max]="100"
+        [step]="10"
+      ></p-slider>
+    </div>
+    <!-- 換頁功能 -->
+    <div class="page">
+      <p-paginator
+        (onPageChange)="changePage($event)"
+        [first]="pages.first"
+        [rows]="forumDto.pageSize"
+        [totalRecords]="pages.totalRecords"
+        [showFirstLastIcon]="true"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} 共 {totalRecords}筆"
+      ></p-paginator>
+    </div>
+    <!-- 搜尋功能 -->
+    <div class="searchInput">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          pInputText
+          pTooltip="作者、標題、內容"
+          [(ngModel)]="forumDto.keyword"
+          (keydown.enter)="search()"
+          placeholder="搜尋此討論區"
+        />
+      </span>
+    </div>
+    <!-- 發表文章按鈕 -->
+    <div class="fixed-button">
+      <p-button
+        label="發表文章"
+        icon="fa fa-plus"
+        (onClick)="openCreateArticleDialog()"
+      ></p-button>
+    </div>
+  </nav>
+  <!-- 文章列表開始 -->
+  <main class="mainPart">
+    <!-- 左側廣告區-->
+    <div class="d1">
+      <div id="ad-container">
+        <!-- 廣告 -->
+        <a href="Https://www.google.com.tw">
+          <p-galleria
+            [value]="images"
+            [autoPlay]="true"
+            [circular]="true"
+            [showThumbnails]="false"
+            [transitionInterval]="10000"
+          >
+            >
+            <ng-template pTemplate="item" let-item>
+              <img [src]="item.pic" />
+            </ng-template>
+          </p-galleria>
+        </a>
+      </div>
+    </div>
+    <!-- 中間上方篩選主題 -->
+    <div class="d2">
+      <div class="button-container">
+        <p-button
+          styleClass="allBtn"
+          (onClick)="loadTheme(0)"
+          label="全部主題"
+          class="ui-button"
+        ></p-button>
+
+        <p-button
+          styleClass="myArticleBtn"
+          (onClick)="loadTheme(0)"
+          label="我的發文"
+        ></p-button>
+
+        <p-button
+          styleClass="themeBtn"
+          *ngFor="let item of themeTag"
+          (onClick)="loadTheme(item.themeId)"
+          label="{{ item.themeName }}"
+        ></p-button>
+      </div>
+      <div class="article" *ngIf="!loading">
+        <p-dataView [value]="articles" layout="list" [paginator]="false">
+          <!-- Grid Item 模板 -->
+          <ng-template pTemplate="listItem" let-article>
+            <div class="p-card1">
+              <div class="card-content">
+                <!-- 圖片 -->
+                <div class="card-image">
+                  <a routerLink="{{ article.articleId }}"
+                    ><img
+                      class="article-cover"
+                      [src]="
+                        article.coverImageUrl || 'assets/images/avantar.jpg'
+                      "
+                      [alt]="article.title"
+                    />
+                  </a>
+                </div>
+                <!-- 文章 -->
+                <div class="card-body">
+                  <!-- 標題 -->
+                  <a routerLink="{{ article.articleId }}">
+                    <div class="p-card-title">{{ article.title }}</div>
+                  </a>
+                  <!-- 作者 -->
+                  <div class="p-card-subtitle">
+                    <p-tag class="label-tag" value="{{ article.themeName }}" />
+                    {{ article.nickName }}
+                  </div>
+                  <!-- 內文 -->
+                  <div class="p-card-body-content">
+                    <a routerLink="{{ article.articleId }}">
+                      <p
+                        [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }"
+                      >
+                        {{ truncateText(article.articleContent, 60) }}
+                      </p>
+                    </a>
+                    <p>
+                      <i class="pi pi-calendar"></i> 更新時間:
+                      {{ article.updateDate | forumDate }}
+                    </p>
+                    <p>
+                      <i class="pi pi-comments"></i> 回覆數:
+                      {{ article.replyCount }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataView>
+      </div>
+      <div *ngIf="loading">資料載入中...</div>
+    </div>
+    <!-- 右側聊天室 -->
+    <div class="d3">
+      <!-- 聊天室區域 -->
+      <div class="chat-section">
+        <div class="chat-header">
+          <h1>聊天室</h1>
+        </div>
+        <div class="chat-messages" #chatContainer>
+          <div class="" *ngFor="let msg of messages.reverse()">
+            <span class="sender">{{ msg.nickname }}：</span>
+            <span class="message">{{ msg.chatMessage }}</span>
+          </div>
+        </div>
+        <div class="chat-input" *ngIf="currentUserId !== 0">
+          <input
+            [(ngModel)]="message"
+            (keydown.enter)="sendMessage(message)"
+            type="text"
+            placeholder="輸入消息..."
+          />
+          <button>發送</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

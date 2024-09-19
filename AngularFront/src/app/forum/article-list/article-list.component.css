@@ -1,0 +1,344 @@
+.myContainer {
+  width: 100%;
+}
+.card1 {
+  background: #ffffff31; /* 背景顏色 */
+  border-radius: 8px; /* 邊角圓角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+  padding: 1.5rem; /* 內邊距 */
+  margin: 20px; /* 外邊距 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+}
+
+.mainPart {
+  display: flex;
+  justify-content: space-between;
+}
+
+.slider {
+  /* 每頁大小 */
+}
+
+.page {
+  /* display: flex;
+  justify-content: center;  */
+}
+
+.d2 {
+  flex-grow: 1;
+}
+.d1 {
+  margin: 0 20px;
+}
+.ad-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
+  cursor: pointer;
+}
+
+.d3 {
+  margin: 0 20px;
+  flex-grow: 1;
+}
+.article {
+  margin-top: 2%;
+}
+/* 篩選按鈕 */
+.button-container {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  background-color: #f8f9fa; /* 背景色 */
+  gap: 3px; /* 按鈕之間的間距 */
+}
+.article a:hover {
+  text-decoration: none;
+}
+::ng-deep .themeBtn {
+  font-size: 13px;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background-color: #56ccf2;
+  color: #e8ecee;
+  border: none;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+}
+::ng-deep .allBtn {
+  font-size: 13px;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background-color: #2980b9;
+  color: white;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+  border: none;
+}
+::ng-deep .myArticleBtn {
+  font-size: 13px;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background-color: #2980b9;
+  color: #e8ecee;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+  border: none;
+}
+::ng-deep .button-container .p-button:hover {
+  background-color: #e66241; /* 當滑鼠懸停時的背景顏色 */
+
+  color: #e8ecee; /* 懸停時的文字顏色 */
+  border-color: #b9ad9a; /* 懸停時的邊框顏色 */
+}
+::ng-deep .button-container .p-button:active {
+  transform: translateY(-10px); /* 向上移動 5px */
+  transition: transform 0.4s ease; /* 加入平滑的動畫效果 */
+}
+
+.text-label {
+  font-size: 1.5rem; /* 调整字体大小 */
+  color: #333; /* 字体颜色 */
+  font-weight: bold; /* 加粗字体 */
+}
+
+.gap-3 {
+  gap: 25px; /* 調整為你需要的間距 */
+}
+
+.searchInput {
+  min-width: auto;
+}
+.text-label {
+  margin-right: 0.5rem;
+}
+
+.card img {
+  width: 100%; /* 圖片寬度 */
+  height: auto; /* 圖片高度自動調整 */
+  border-bottom: 1px solid #131111; /* 圖片下方邊框 */
+  margin-bottom: 1rem; /* 圖片下方外邊距 */
+}
+
+.grid-item {
+  flex: 1 1 calc(33.333% - 1rem); /* 三列佈局，減去間距 */
+  box-sizing: border-box;
+}
+
+.p-card1 {
+  background: #f9f9f956; /* 淺灰背景色 */
+  border-radius: 8px; /* 邊角圓角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+  overflow: hidden; /* 隱藏超出邊界的內容 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 過渡效果 */
+  flex-direction: row; /* 使圖片和內容水平排列 */
+  width: 100%;
+  margin: 0 auto; /* 使卡片水平居中 */
+}
+
+.p-card:hover {
+  transform: translateY(-5px); /* 鼠標懸停時的位移效果 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 鼠標懸停時的陰影效果 */
+}
+
+.p-card-body {
+  padding: 1.5rem; /* 內邊距 */
+  color: #333; /* 文字顏色 */
+}
+
+.p-card-title {
+  font-weight: bold;
+  font-size: 20px; /* 調大字體 */
+  color: #1a73e8; /* 使用較深的藍色 */
+  margin-bottom: 5px; /* 增加與其他元素的間距 */
+}
+
+.p-card-subtitle {
+  font-size: 1rem; /* 副標題字體大小 */
+  color: #6c757d; /* 淺灰色副標題 */
+  margin-bottom: 1rem; /* 副標題下方外邊距 */
+}
+
+.p-card-body-content {
+  line-height: 1.6; /* 增加行距 */
+  margin-bottom: 10px; /* 增加段落間距 */
+}
+
+.p-card-body-content i {
+  margin-right: 0.5rem; /* 圖標和文字間的間距 */
+  color: #28a745; /* 綠色圖標 */
+}
+
+.grid-item {
+  background-color: #ffffff3d; /* 白色背景 */
+  border: 1px solid #dee2e6; /* 淺灰色邊框 */
+}
+
+.p-card-body {
+  background-color: #f8f9fa2a; /* 淺灰背景色 */
+}
+
+.p-card-title {
+  color: #007bff; /* 藍色標題 */
+  overflow: hidden; /* 避免標題超出卡片範圍 */
+  text-overflow: ellipsis; /* 使用省略號表示超出內容 */
+  white-space: nowrap; /* 防止換行 */
+}
+
+.p-card-body-content p {
+  color: #6c757d; /* 淺灰色文字 */
+}
+.card-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* 調整圖片和內容之間的間距 */
+  padding: 10px;
+}
+
+.card-image {
+  flex: 1;
+}
+
+.article-cover {
+  width: 100%; /* 使圖片適應容器寬度 */
+  height: auto; /* 保持圖片高度自適應 */
+  object-fit: cover; /* 確保圖片不變形地填滿容器 */
+  border-radius: 8px; /* 添加圓角 */
+  min-width: 214px;
+}
+
+.card-body {
+  width: 70%;
+}
+
+/* 聊天室 */
+
+.discussion-section {
+  flex: 3; /* 討論區域佔據的比例 */
+  background-color: #6b2424;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-section {
+  flex: 1; /* 聊天區域佔據的比例 */
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 75vh; /* 設定固定高度，方便顯示 */
+  min-height: 600px;
+}
+
+.chat-header {
+  background-color: #56ccf2;
+  color: #fff;
+  /* padding: 1rem; */
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  border-bottom: 1px solid #ddd;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #d5e3e9;
+}
+
+.message {
+  margin-bottom: 1rem;
+}
+
+.message-user {
+  font-weight: bold;
+}
+
+.message-text {
+  margin-top: 0.5rem;
+}
+
+.chat-input {
+  display: flex;
+  padding: 1rem;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 8px 8px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.chat-input button {
+  padding: 10px 20px; /* 增加按鈕的內邊距 */
+  font-size: 16px; /* 增大字體 */
+  border-radius: 5px; /* 調整圓角讓按鈕更柔和 */
+  background-color: #2d9cdb; /* 明亮的藍色 */
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.chat-input button:hover {
+  background-color: #1b82b1;
+}
+
+::ng-deep .fixed-button .p-button {
+  background-color: #6198c8;
+  color: #ffffd4;
+}
+.fixed-button {
+  min-width: 128px;
+}
+
+::ng-deep .p-tag {
+  background-color: #56ccf2;
+  padding: 5px 10px;
+  font-size: 14px !important; /* 修改字體大小 */
+  min-width: 80px; /* 設定最小寬度，讓所有標籤保持一致 */
+  border-radius: 12px; /* 添加圓角，讓標籤更柔和 */
+  margin-right: 8px; /* 增加標籤之間的間距 */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+  transition: all 0.3s ease;
+}
+::ng-deep .p-tag:hover {
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* 懸停時陰影加深 */
+  background-color: #2d9cdb; /* 改變背景色來增強效果 */
+}
+/* 響應式 */
+
+@media (max-width: 1368px) {
+  .d1 {
+    display: none;
+  }
+  .slider {
+    display: none;
+  }
+  .card {
+    /* flex-direction: column-reverse; */
+    flex-wrap: wrap-reverse;
+  }
+}
+
+@media (max-width: 768px) {
+  .d3 {
+    display: none;
+  }
+  .card {
+    margin: 20px 0;
+  }
+}
+.page ::ng-deep .p-paginator {
+  background: transparent;
+}

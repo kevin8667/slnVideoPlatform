@@ -103,6 +103,8 @@ export class TicketSelectionComponent implements OnInit {
       couponID: null, // 如果有折扣券可以填入
     };
 
+    console.log("傳入參數："+reservationData);
+
     // 調用 API 生成訂單
     this.dataService.createReservation(reservationData).subscribe(
       (reservationResponse) => {

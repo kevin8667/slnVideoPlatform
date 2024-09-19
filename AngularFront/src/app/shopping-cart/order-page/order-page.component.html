@@ -1,0 +1,36 @@
+<table>
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Shopping Cart ID</th>
+      <th>Member ID</th>
+      <th>Plan Name</th>
+      <th>Video Name</th>
+      <th>Coupon Name</th>
+      <th>Order Date</th>
+      <th>Order Total Price</th>
+      <th>Delivery Name</th>
+      <th>Delivery Address</th>
+      <th>Payment Status</th>
+      <th>Delivery Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.orderId }}</td>
+      <td>{{ order.shoppingCartId }}</td>
+      <td>{{ order.memberId }}</td>
+      <td>{{ order.planName }}</td>
+      <td>{{ order.videoName }}</td>
+      <td>{{ order.couponName }}</td>
+      <td>{{ order.orderDate | date }}</td>
+      <td>{{ order.orderTotalPrice | currency }}</td>
+      <td>{{ order.deliveryName }}</td>
+      <td>{{ order.deliveryAddress }}</td>
+      <td>{{ order.paymentStatus }}</td>
+      <td>{{ order.deliveryStatus }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<br>

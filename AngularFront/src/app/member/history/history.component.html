@@ -1,0 +1,610 @@
+<div class="container">
+  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
+  <table
+    class="orderSearch"
+    cellspacing="0"
+    cellpadding="0"
+    border="1"
+    width="100%"
+  >
+    <tbody>
+      <tr>
+        <th>購買通路</th>
+        <td class="choseway">
+          <input type="checkbox" value="07" name="way" id="way1" /><label
+            for="way1"
+            >網路</label
+          ><input type="checkbox" value="01" name="way" id="way2" /><label
+            for="way2"
+            >實體</label
+          >
+        </td>
+      </tr>
+      <tr>
+        <th>訂單時間</th>
+        <td class="orderDate">
+          <input
+            type="text"
+            readonly=""
+            class="FaqSearch hasDatepicker"
+            value=""
+            size="15"
+            name="from_date"
+            id="from_date"
+          /><img
+            class="ui-datepicker-trigger"
+            src="//image.momoshop.com.tw/ecm/img/cmm/memb/daterangeimg.gif"
+            alt="..."
+            title="..."
+          /><input
+            type="text"
+            readonly=""
+            class="FaqSearch hasDatepicker"
+            value=""
+            size="15"
+            name="to_date"
+            id="to_date"
+          /><img
+            class="ui-datepicker-trigger"
+            src="//image.momoshop.com.tw/ecm/img/cmm/memb/daterangeimg.gif"
+            alt="..."
+            title="..."
+          /><span
+            >請輸入欲查詢的日期區間，最大區間以6個月為限，可查2年內的訂單。</span
+          >
+        </td>
+      </tr>
+      <tr id="orderSearchArea">
+        <th>購買商品</th>
+        <td>
+          <input
+            type="text"
+            placeholder="查詢訂單商品，請輸入商品名稱"
+            id="orderKeyword"
+            value=""
+          /><button id="rtnBtn">查詢</button>
+        </td>
+      </tr>
+      <tr id="onlySearchBtn" style="display: none">
+        <th></th>
+        <td><button id="rtnBtn">查詢</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="1">
+    <tbody>
+      <tr
+        class="orderDetailEach botLine noStore"
+        isorderneedconfirmmember="0"
+        isslipproc40="1"
+        isslipproc80="1"
+        returnchkmsg="over_checkDay"
+      >
+        <td
+          width="570px"
+          class="prdname"
+          orderg="001"
+          orderd="001"
+          orderw="001"
+          ismall="undefined"
+        >
+          <input type="hidden" value="undefined" name="insuranceKind" /><a
+            href="/goods/GoodsDetail.jsp?i_code=10987293"
+            target="_blank"
+            name="001"
+            class="goodsName"
+            >【Philips 飛利浦】充電智能三段式除毛球機 GCA2200/10(衣美機)</a
+          >
+          <p name="gdtname">商品規格：無</p>
+          <p></p>
+          <p class="itemnumber">
+            品號:10987293&nbsp;&nbsp;&nbsp;&nbsp;宅配單號：300217020176&nbsp;&nbsp;&nbsp;&nbsp;<a
+              class="distributionbtn paymentBtn1P"
+              style="cursor: pointer"
+              rseq="0000000007"
+              sid=""
+              ecseqyn="0"
+              >訂購資訊/付款</a
+            ><a
+              class="btnStyle"
+              href="/order/BuyProveInfo.jsp?order_no=24052990956149&amp;g_seq=001&amp;_3CDiyYn=0"
+              target="_blank"
+              >購買證明</a
+            >
+          </p>
+        </td>
+        <td class="noSpace" width="570px">
+          <table class="orderDetailStatusTable">
+            <thead>
+              <tr>
+                <td>1件</td>
+                <td id="price">$799</td>
+                <td class="delivery">
+                  <div class="delyStatus" changeoutdelydate="">已送達</div>
+                  <a
+                    name="order"
+                    style="cursor: pointer; display: none"
+                    shipdisplay="0"
+                    advancedyn=""
+                    delycountry="0886"
+                    appshipping="0"
+                    jarpay="0"
+                    dt="90"
+                    rmk1="2024/05/29 23:23:01"
+                    rmk2="2024/05/30 07:04:30"
+                    rmk3="2024/05/30 08:25:49"
+                    rmk4="2024/05/30 08:48:17"
+                    rmk5=""
+                    rmk6="2024/05/30 13:57:01"
+                    dh="2024/05/30"
+                    gseq="001"
+                    whcode="155"
+                    payflag="40"
+                    >查看配送進度</a
+                  ><input
+                    type="hidden"
+                    value="https://tms.momo.com.tw/search-result?ship_num1=300217020176"
+                    name="delyurl001"
+                  />
+                </td>
+                <td
+                  class="returntd"
+                  return_do_flag=""
+                  return_resq="undefined"
+                  sid=""
+                  msg="over_checkDay"
+                  style="display: none"
+                >
+                  &nbsp;&nbsp;&nbsp;&nbsp;<input
+                    type="hidden"
+                    class="claimdata"
+                    value=""
+                    shop_12h_yn="1"
+                    dely_type="10"
+                    entpcode="001854 "
+                    entppattern="00"
+                    returnable="0"
+                    whcode="155"
+                    gdscode="10987293"
+                    gdtcode="001"
+                  />
+                </td>
+                <td class="change" style="display: none">
+                  <button
+                    title=""
+                    class="changeBtn"
+                    haspreexchange="undefined"
+                    ispreexchange="undefined"
+                    delstatus="已送達"
+                    changechkresult="over11days"
+                    changeable="0"
+                    gcode="10987293"
+                    gseq="001"
+                    sid=""
+                    recseq="0000000007"
+                    doflag="1"
+                    ptype=""
+                    procdate="2024/05/30 08:48:17"
+                    gdtcode="001"
+                    doflagorg="40"
+                    delycountry="0886"
+                    is_travel="0"
+                    delytype="10"
+                    isslipproc40="1"
+                    isslipproc80="1"
+                    ismall="undefined"
+                  >
+                    換貨
+                  </button>
+                </td>
+                <td class="resend" style="display: none"></td>
+              </tr>
+            </thead>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="1">
+    <tbody>
+      <tr
+        class="orderDetailEach botLine noStore"
+        isorderneedconfirmmember="0"
+        isslipproc40="1"
+        isslipproc80="1"
+        returnchkmsg="over_checkDay"
+      >
+        <td
+          width="570px"
+          class="prdname"
+          orderg="001"
+          orderd="001"
+          orderw="001"
+          ismall="undefined"
+        >
+          <input type="hidden" value="undefined" name="insuranceKind" /><a
+            href="/goods/GoodsDetail.jsp?i_code=10987293"
+            target="_blank"
+            name="001"
+            class="goodsName"
+            >【Philips 飛利浦】充電智能三段式除毛球機 GCA2200/10(衣美機)</a
+          >
+          <p name="gdtname">商品規格：無</p>
+          <p></p>
+          <p class="itemnumber">
+            品號:10987293&nbsp;&nbsp;&nbsp;&nbsp;宅配單號：300217020176&nbsp;&nbsp;&nbsp;&nbsp;<a
+              class="distributionbtn paymentBtn1P"
+              style="cursor: pointer"
+              rseq="0000000007"
+              sid=""
+              ecseqyn="0"
+              >訂購資訊/付款</a
+            ><a
+              class="btnStyle"
+              href="/order/BuyProveInfo.jsp?order_no=24052990956149&amp;g_seq=001&amp;_3CDiyYn=0"
+              target="_blank"
+              >購買證明</a
+            >
+          </p>
+        </td>
+        <td class="noSpace" width="570px">
+          <table class="orderDetailStatusTable">
+            <thead>
+              <tr>
+                <td>1件</td>
+                <td id="price">$799</td>
+                <td class="delivery">
+                  <div class="delyStatus" changeoutdelydate="">已送達</div>
+                  <a
+                    name="order"
+                    style="cursor: pointer; display: none"
+                    shipdisplay="0"
+                    advancedyn=""
+                    delycountry="0886"
+                    appshipping="0"
+                    jarpay="0"
+                    dt="90"
+                    rmk1="2024/05/29 23:23:01"
+                    rmk2="2024/05/30 07:04:30"
+                    rmk3="2024/05/30 08:25:49"
+                    rmk4="2024/05/30 08:48:17"
+                    rmk5=""
+                    rmk6="2024/05/30 13:57:01"
+                    dh="2024/05/30"
+                    gseq="001"
+                    whcode="155"
+                    payflag="40"
+                    >查看配送進度</a
+                  ><input
+                    type="hidden"
+                    value="https://tms.momo.com.tw/search-result?ship_num1=300217020176"
+                    name="delyurl001"
+                  />
+                </td>
+                <td
+                  class="returntd"
+                  return_do_flag=""
+                  return_resq="undefined"
+                  sid=""
+                  msg="over_checkDay"
+                  style="display: none"
+                >
+                  &nbsp;&nbsp;&nbsp;&nbsp;<input
+                    type="hidden"
+                    class="claimdata"
+                    value=""
+                    shop_12h_yn="1"
+                    dely_type="10"
+                    entpcode="001854 "
+                    entppattern="00"
+                    returnable="0"
+                    whcode="155"
+                    gdscode="10987293"
+                    gdtcode="001"
+                  />
+                </td>
+                <td class="change" style="display: none">
+                  <button
+                    title=""
+                    class="changeBtn"
+                    haspreexchange="undefined"
+                    ispreexchange="undefined"
+                    delstatus="已送達"
+                    changechkresult="over11days"
+                    changeable="0"
+                    gcode="10987293"
+                    gseq="001"
+                    sid=""
+                    recseq="0000000007"
+                    doflag="1"
+                    ptype=""
+                    procdate="2024/05/30 08:48:17"
+                    gdtcode="001"
+                    doflagorg="40"
+                    delycountry="0886"
+                    is_travel="0"
+                    delytype="10"
+                    isslipproc40="1"
+                    isslipproc80="1"
+                    ismall="undefined"
+                  >
+                    換貨
+                  </button>
+                </td>
+                <td class="resend" style="display: none"></td>
+              </tr>
+            </thead>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="1">
+    <tbody>
+      <tr
+        class="orderDetailEach botLine noStore"
+        isorderneedconfirmmember="0"
+        isslipproc40="1"
+        isslipproc80="1"
+        returnchkmsg="over_checkDay"
+      >
+        <td
+          width="570px"
+          class="prdname"
+          orderg="001"
+          orderd="001"
+          orderw="001"
+          ismall="undefined"
+        >
+          <input type="hidden" value="undefined" name="insuranceKind" /><a
+            href="/goods/GoodsDetail.jsp?i_code=10987293"
+            target="_blank"
+            name="001"
+            class="goodsName"
+            >【Philips 飛利浦】充電智能三段式除毛球機 GCA2200/10(衣美機)</a
+          >
+          <p name="gdtname">商品規格：無</p>
+          <p></p>
+          <p class="itemnumber">
+            品號:10987293&nbsp;&nbsp;&nbsp;&nbsp;宅配單號：300217020176&nbsp;&nbsp;&nbsp;&nbsp;<a
+              class="distributionbtn paymentBtn1P"
+              style="cursor: pointer"
+              rseq="0000000007"
+              sid=""
+              ecseqyn="0"
+              >訂購資訊/付款</a
+            ><a
+              class="btnStyle"
+              href="/order/BuyProveInfo.jsp?order_no=24052990956149&amp;g_seq=001&amp;_3CDiyYn=0"
+              target="_blank"
+              >購買證明</a
+            >
+          </p>
+        </td>
+        <td class="noSpace" width="570px">
+          <table class="orderDetailStatusTable">
+            <thead>
+              <tr>
+                <td>1件</td>
+                <td id="price">$799</td>
+                <td class="delivery">
+                  <div class="delyStatus" changeoutdelydate="">已送達</div>
+                  <a
+                    name="order"
+                    style="cursor: pointer; display: none"
+                    shipdisplay="0"
+                    advancedyn=""
+                    delycountry="0886"
+                    appshipping="0"
+                    jarpay="0"
+                    dt="90"
+                    rmk1="2024/05/29 23:23:01"
+                    rmk2="2024/05/30 07:04:30"
+                    rmk3="2024/05/30 08:25:49"
+                    rmk4="2024/05/30 08:48:17"
+                    rmk5=""
+                    rmk6="2024/05/30 13:57:01"
+                    dh="2024/05/30"
+                    gseq="001"
+                    whcode="155"
+                    payflag="40"
+                    >查看配送進度</a
+                  ><input
+                    type="hidden"
+                    value="https://tms.momo.com.tw/search-result?ship_num1=300217020176"
+                    name="delyurl001"
+                  />
+                </td>
+                <td
+                  class="returntd"
+                  return_do_flag=""
+                  return_resq="undefined"
+                  sid=""
+                  msg="over_checkDay"
+                  style="display: none"
+                >
+                  &nbsp;&nbsp;&nbsp;&nbsp;<input
+                    type="hidden"
+                    class="claimdata"
+                    value=""
+                    shop_12h_yn="1"
+                    dely_type="10"
+                    entpcode="001854 "
+                    entppattern="00"
+                    returnable="0"
+                    whcode="155"
+                    gdscode="10987293"
+                    gdtcode="001"
+                  />
+                </td>
+                <td class="change" style="display: none">
+                  <button
+                    title=""
+                    class="changeBtn"
+                    haspreexchange="undefined"
+                    ispreexchange="undefined"
+                    delstatus="已送達"
+                    changechkresult="over11days"
+                    changeable="0"
+                    gcode="10987293"
+                    gseq="001"
+                    sid=""
+                    recseq="0000000007"
+                    doflag="1"
+                    ptype=""
+                    procdate="2024/05/30 08:48:17"
+                    gdtcode="001"
+                    doflagorg="40"
+                    delycountry="0886"
+                    is_travel="0"
+                    delytype="10"
+                    isslipproc40="1"
+                    isslipproc80="1"
+                    ismall="undefined"
+                  >
+                    換貨
+                  </button>
+                </td>
+                <td class="resend" style="display: none"></td>
+              </tr>
+            </thead>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="1">
+    <tbody>
+      <tr
+        class="orderDetailEach botLine noStore"
+        isorderneedconfirmmember="0"
+        isslipproc40="1"
+        isslipproc80="1"
+        returnchkmsg="over_checkDay"
+      >
+        <td
+          width="570px"
+          class="prdname"
+          orderg="001"
+          orderd="001"
+          orderw="001"
+          ismall="undefined"
+        >
+          <input type="hidden" value="undefined" name="insuranceKind" /><a
+            href="/goods/GoodsDetail.jsp?i_code=10987293"
+            target="_blank"
+            name="001"
+            class="goodsName"
+            >【Philips 飛利浦】充電智能三段式除毛球機 GCA2200/10(衣美機)</a
+          >
+          <p name="gdtname">商品規格：無</p>
+          <p></p>
+          <p class="itemnumber">
+            品號:10987293&nbsp;&nbsp;&nbsp;&nbsp;宅配單號：300217020176&nbsp;&nbsp;&nbsp;&nbsp;<a
+              class="distributionbtn paymentBtn1P"
+              style="cursor: pointer"
+              rseq="0000000007"
+              sid=""
+              ecseqyn="0"
+              >訂購資訊/付款</a
+            ><a
+              class="btnStyle"
+              href="/order/BuyProveInfo.jsp?order_no=24052990956149&amp;g_seq=001&amp;_3CDiyYn=0"
+              target="_blank"
+              >購買證明</a
+            >
+          </p>
+        </td>
+        <td class="noSpace" width="570px">
+          <table class="orderDetailStatusTable">
+            <thead>
+              <tr>
+                <td>1件</td>
+                <td id="price">$799</td>
+                <td class="delivery">
+                  <div class="delyStatus" changeoutdelydate="">已送達</div>
+                  <a
+                    name="order"
+                    style="cursor: pointer; display: none"
+                    shipdisplay="0"
+                    advancedyn=""
+                    delycountry="0886"
+                    appshipping="0"
+                    jarpay="0"
+                    dt="90"
+                    rmk1="2024/05/29 23:23:01"
+                    rmk2="2024/05/30 07:04:30"
+                    rmk3="2024/05/30 08:25:49"
+                    rmk4="2024/05/30 08:48:17"
+                    rmk5=""
+                    rmk6="2024/05/30 13:57:01"
+                    dh="2024/05/30"
+                    gseq="001"
+                    whcode="155"
+                    payflag="40"
+                    >查看配送進度</a
+                  ><input
+                    type="hidden"
+                    value="https://tms.momo.com.tw/search-result?ship_num1=300217020176"
+                    name="delyurl001"
+                  />
+                </td>
+                <td
+                  class="returntd"
+                  return_do_flag=""
+                  return_resq="undefined"
+                  sid=""
+                  msg="over_checkDay"
+                  style="display: none"
+                >
+                  &nbsp;&nbsp;&nbsp;&nbsp;<input
+                    type="hidden"
+                    class="claimdata"
+                    value=""
+                    shop_12h_yn="1"
+                    dely_type="10"
+                    entpcode="001854 "
+                    entppattern="00"
+                    returnable="0"
+                    whcode="155"
+                    gdscode="10987293"
+                    gdtcode="001"
+                  />
+                </td>
+                <td class="change" style="display: none">
+                  <button
+                    title=""
+                    class="changeBtn"
+                    haspreexchange="undefined"
+                    ispreexchange="undefined"
+                    delstatus="已送達"
+                    changechkresult="over11days"
+                    changeable="0"
+                    gcode="10987293"
+                    gseq="001"
+                    sid=""
+                    recseq="0000000007"
+                    doflag="1"
+                    ptype=""
+                    procdate="2024/05/30 08:48:17"
+                    gdtcode="001"
+                    doflagorg="40"
+                    delycountry="0886"
+                    is_travel="0"
+                    delytype="10"
+                    isslipproc40="1"
+                    isslipproc80="1"
+                    ismall="undefined"
+                  >
+                    換貨
+                  </button>
+                </td>
+                <td class="resend" style="display: none"></td>
+              </tr>
+            </thead>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

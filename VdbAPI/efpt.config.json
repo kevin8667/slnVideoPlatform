@@ -31,6 +31,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ChatRoom]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Cinema]",
          "ObjectType": 0
       },
@@ -159,6 +163,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[PostUserReactions]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ProductList]",
          "ObjectType": 0
       },
@@ -216,6 +224,10 @@
       },
       {
          "Name": "[dbo].[TypeOfTicket]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserReactions]",
          "ObjectType": 0
       },
       {

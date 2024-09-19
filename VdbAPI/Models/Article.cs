@@ -17,23 +17,27 @@ public partial class Article
 
     public string ArticleContent { get; set; }
 
-    public DateTime? PostDate { get; set; }
+    public DateTime PostDate { get; set; }
 
-    public DateTime? UpdateDate { get; set; }
+    public DateTime UpdateDate { get; set; }
 
-    public int? ReplyCount { get; set; }
+    public int ReplyCount { get; set; }
 
-    public bool? Lock { get; set; }
+    public bool Lock { get; set; }
 
     public string ArticleImage { get; set; }
 
-    public int? LikeCount { get; set; }
+    public int LikeCount { get; set; }
 
-    public int? DislikeCount { get; set; }
+    public int DislikeCount { get; set; }
 
     public virtual MemberInfo Author { get; set; }
 
-    public virtual Post Post { get; set; }
+    public virtual ICollection<PostUserReaction> PostUserReactions { get; set; } = new List<PostUserReaction>();
+
+    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual Theme Theme { get; set; }
+
+    public virtual ICollection<UserReaction> UserReactions { get; set; } = new List<UserReaction>();
 }

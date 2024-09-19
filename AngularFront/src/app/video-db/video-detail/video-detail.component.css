@@ -1,0 +1,258 @@
+.custom-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  max-height: 700px;
+  border-left: none;
+  border-right: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 16px;
+  box-sizing: border-box;
+  position: relative;
+  background-size: cover;  /* 背景圖片覆蓋整個區域 */
+  background-position: center; /* 背景圖片居中顯示 */
+  color: white;
+}
+
+  .custom-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* 半透明黑色背景 */
+    z-index: 1; /* 確保這層在內容之上 */
+  }
+
+  .card-header {
+    background-color: #f5f5f5;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* 確保內容水平置中 */
+    align-items: center; /* 垂直置中 */
+    position: relative;
+    z-index: 2;
+    gap: 20px; /* 圖片和文字之間的間距 */
+    width: 100%; /* 設置寬度為100%，避免脫離父容器 */
+  }
+
+  .image-container {
+    flex: 0 0 auto;
+    margin-right: 16px; /* 圖片與文字之間的間距 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 300px; /* 限制圖片容器的最大寬度 */
+
+  }
+  .video-image {
+    width: 100%;
+    height: auto; /* 保持圖片比例 */
+    max-height: 450px; /* 限制圖片的最大高度 */
+    object-fit: cover; /* 保持圖片比例，裁剪多餘部分 */
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: row;
+  }
+  .text-content {
+    flex: 1; /* 讓文字內容占據剩餘的空間 */
+    max-width: 500px; /* 限制文字內容區塊的最大寬度，避免過於寬大 */
+  }
+
+.button {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: 5px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .custom-card {
+    flex-direction: column;
+  }
+  .card-body {
+    flex-direction: column;
+    padding: 0px;
+  }
+  .image-container {
+    align-items: center;
+    margin-right: 0;
+    max-width: 100%; /* 確保圖片容器的最大寬度適應視窗 */
+  }
+  .video-image {
+    max-height: 300px; /* 在小視窗下限制圖片高度 */
+  }
+}
+
+.recommended-videos .video-carousel-item {
+    transition: transform 0.3s ease-in-out;
+}
+
+.recommended-videos .video-carousel-item:hover {
+    transform: scale(1.05);
+}
+
+h2
+{
+  margin-bottom: 5px;
+}
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 增加內容之間的間距 */
+  padding: 20px;
+}
+
+
+.content-container {
+  display: flex; /* 使用 Flexbox 進行排列 */
+  gap: 20px; /* 主要演員和 carousel 之間的間距 */
+}
+
+
+
+.actors-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 設定兩列，根據需要調整列數 */
+  gap: 10px; /* 調整卡片間距 */
+}
+
+.actor-card {
+  padding: 10px;
+  text-align: center;
+  width: 150px;
+}
+
+p-carousel {
+  margin-top: 30px; /* 確保 Carousel 與演員區域分開 */
+  max-width: 1100px;
+}
+
+.actor-image {
+  width: 100px; /* 設定固定寬度 */
+  height: 150px; /* 設定固定高度 */
+  object-fit: cover; /* 保持圖片比例，裁切多餘部分以適應容器 */
+}
+
+:host ::ng-deep .actor-card .p-card-body {
+  padding: 5px; /* 調整內邊距 */
+}
+
+:host ::ng-deep .actor-card .p-card-content {
+  padding-top: 10px; /* 調整內邊距 */
+  padding-bottom: 10px;
+}
+
+/* 修正圖片縮放效果 */
+.gallery-container {
+  text-align: center;
+  transition: transform 0.5s ease; /* 增加動畫效果 */
+  padding: 10px;
+  transform: scale(0.8); /* 預設縮小圖片 */
+}
+
+.gallery-container.active {
+  transform: scale(2); /* 當前選中的圖片放大 */
+}
+
+.gallery-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* 修正左右箭頭按鈕的大小和位置 */
+.p-carousel .p-carousel-prev,
+.p-carousel .p-carousel-next {
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  position: absolute;
+}
+
+.p-carousel .p-carousel-prev {
+  left: -40px; /* 調整位置，避免按鈕太靠右 */
+}
+
+.p-carousel .p-carousel-next {
+  right: -40px; /* 調整位置，避免按鈕太靠右 */
+}
+
+/* 確保 Carousel 容器內的圖片不會超出 */
+.p-carousel .p-carousel-items-container {
+  display: flex;
+  justify-content: center; /* 中央對齊圖片 */
+  overflow: hidden; /* 防止內容溢出 */
+}
+
+.p-carousel .p-carousel-items-container .p-carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(1); /* 預設縮放 */
+  transition: transform 0.5s ease; /* 動畫效果 */
+}
+
+.p-carousel .p-carousel-items-container .p-carousel-item.active {
+  transform: scale(2); /* 中央圖片放大 */
+}
+
+.rating-link {
+  color: yellow; /* 設定文字顏色 */
+  text-decoration: none; /* 去除預設的底線 */
+  font-size: 18px; /* 根據需求設定字體大小 */
+  display: inline-flex; /* 讓圖標和文字在一行 */
+  align-items: center; /* 垂直置中 */
+  cursor: pointer; /* 當滑鼠移上去時顯示手型圖標 */
+  margin-left: 15px;
+}
+
+.rating-link i {
+  margin-right: 5px; /* 設置圖示與文字的間距 */
+}
+
+::ng-deep .p-dialog  {
+  width: 400px !important;  /* 修改寬度 */
+  max-width: 100%;          /* 確保在小螢幕上不會超出 */
+  z-index: 5;
+}
+
+::ng-deep .full-width-btn {
+  width: 100% !important; /* 確保按鈕佔滿父容器的寬度 */
+}
+
+
+::ng-deep .p-button-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+::ng-deep .p-button-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}

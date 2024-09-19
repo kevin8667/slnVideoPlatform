@@ -1,0 +1,18 @@
+.payment-success {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 垂直方向對齊上方 */
+  align-items: center; /* 水平方向置中 */
+  height: 60vh; /* 使容器高度有一定比例 */
+}
+
+.payment-success h1,
+.payment-success p {
+  color: red; /* 設置文字顏色為紅色 */
+  font-size: 2rem; /* 放大文字 */
+  margin: 0.5rem 0; /* 行間距 */
+}
+
+.payment-success h1 {
+  margin-top: 2rem; /* 額外的上邊距 */
+}

@@ -1,0 +1,14 @@
+.scTopBar{
+  border: 1px solid black;
+  display: flex;
+  line-height: 50px;
+}
+.flexBox50{
+  flex: 50%;
+}
+.btnBarSubItem{
+  font-size: 20px;
+}
+.btnBarSubItem:active{
+  background-color: lightgray;
+}

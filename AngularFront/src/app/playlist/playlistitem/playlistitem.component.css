@@ -1,0 +1,141 @@
+.playlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  min-height: 60px;
+}
+
+.playlist-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.playlist-item-info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.playlist-item-info h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #343a40;
+}
+
+.playlist-item-info p {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.playlist-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .playlist-item-actions .p-button-success {
+  background: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  margin-right: 10px;
+}
+
+::ng-deep .playlist-item-actions .p-button-success .pi {
+  font-size: 20px;
+  color: #17A2B8;
+}
+
+::ng-deep .playlist-item-actions .p-button-success:hover .pi {
+  color: #138496;
+}
+
+::ng-deep .playlist-item-actions .p-button-success:focus {
+  outline: none;
+}
+
+.draggable-handle {
+  cursor: grab;
+  color: #17A2B8;
+  font-size: 18px;
+}
+
+.draggable-handle:active {
+  cursor: grabbing;
+}
+
+@keyframes fly-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(300px) translateY(-100px);
+  }
+}
+
+.removing {
+  animation: fly-out 0.7s forwards;
+}
+
+.cdk-drag-preview {
+  z-index: 10000 !important;
+}
+
+.cdk-overlay-container, .ui-dialog {
+  z-index: 1050 !important;
+}
+
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  width: 680px;
+  height: 400px;
+}
+
+button.p-button-danger {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button.p-button-danger i {
+  font-size: 16px;
+}
+
+.video-js {
+  width: 640px;
+  height: 360px;
+}

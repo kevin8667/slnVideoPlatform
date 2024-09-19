@@ -1,0 +1,78 @@
+
+<div class="container">
+  <div class="topFlex">
+      <div class="button-container">
+          <button [routerLink]="['/shoppingCart/cart']">上一步</button>
+      </div>
+  </div>
+
+
+  <div class="title-box">
+      <img src={{imagePath}} alt="重點圖片" class="title-image">
+      <div class="title-text">
+          <h1>{{videoName}} - {{planName}}</h1>
+          <h4>${{price}}</h4>
+          <div>編號：{{shoppingCartId}}</div>
+      </div>
+  </div>
+  <div class="content">
+      <!-- Left Panel -->
+      <div class="left-panel">
+          <div class="side-card mainOne" *ngFor="let product of displayedProducts">
+              <img src="assets/img/NoImage.jpg" alt="{{product.productName}}" class="product-image">
+              <div class="product-info2">
+                <h3>{{product.productName}}</h3>
+                <p>{{product.productDescription}}</p>
+                <p class="price">${{product.productPrice}}</p>
+              </div>
+              <div class="product-action">
+                <button class="add-button"
+                        [ngClass]="{'added': product.isAdded}"
+                        (click)="addProductToCart(product)">
+                  {{ product.isAdded ? '取消' : '加購' }}
+                </button>
+              </div>
+            </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <!-- 價錢計算區 -->
+        <div class="summary">
+            <div class="textLeftValueRight">
+              <span class="up-Text">小計</span>
+              <span class="up-Value">${{totalAmount}}</span>
+            </div>
+            <div class="textLeftValueRight">
+              <span class="up-Text">運費</span>
+              <span class="up-Value">$0</span>
+            </div>
+            <div class="textLeftValueRight">
+              <span class="up-Text">折價券</span>
+              <input type="text" class="up-Value" value={{discountCode}}>
+            </div>
+            <div class="textLeftValueRight">
+              <span class="up-Text finalPrice">總額</span>
+              <span class="up-Value finalPrice">${{finalPrice}}</span>
+            </div>
+        </div>
+        <!-- 收件資料填寫 -->
+        <div class="address">
+          <div class="textLeftValueLeft">
+            <span class="down-Text">收件人</span>
+            <input type="text" class="down-Value w233" value="王小名">
+          </div>
+          <div class="textLeftValueLeft">
+            <span class="down-Text">地址</span>
+
+            <textarea name="forAddress" id="forAddress" placeholder="請在此輸入內容" class="textareaAddress down-Value w233">台北市大安區復興南路一段390號2樓</textarea>
+          </div>
+        </div>
+        <div>
+          <!-- [routerLink]="['/shoppingCart/order']" -->
+          <button class="red-button" (click)="toLinePay()">下一步</button>
+          <button [routerLink]="['/shoppingCart/finish']">回首頁</button>
+        </div>
+      </div>
+  </div>
+</div>
