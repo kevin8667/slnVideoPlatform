@@ -21,7 +21,7 @@ export class JwtInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-  
+
     //const token = this.oauthService.getAccessToken(); // Use OAuthService to get token
     const token = this.getCookie('JwtToken');
     if (token) {
@@ -34,7 +34,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        debugger;
+        // debugger;
 
         if (error.status === 666) {
           this.authService.Logout();
@@ -44,7 +44,7 @@ export class JwtInterceptor implements HttpInterceptor {
     );
   }
 
- 
+
 
   getCookie(name: string): string | null {
     const nameEQ = name + '=';

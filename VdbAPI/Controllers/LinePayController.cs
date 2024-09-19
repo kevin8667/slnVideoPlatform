@@ -51,7 +51,7 @@ namespace VdbAPI.Controllers
                 },
                 redirectUrls = new
                 {
-                    confirmUrl = "https://c70d-1-160-11-201.ngrok-free.app/api/linepay/confirm",  // 支付完成後的回調 URL
+                    confirmUrl = "https://32d1-1-160-11-201.ngrok-free.app/api/linepay/confirm",  // 支付完成後的回調 URL
                     cancelUrl = "http://localhost:4200/shoppingCart/finish"  // 用戶取消支付的回調 URL
                 }
             };
@@ -123,7 +123,7 @@ namespace VdbAPI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 /*Console.WriteLine($"Response: {responseData}");*/  // 檢查 LINE Pay 回應內容
-                return Redirect("http://localhost:4200/shoppingCart/finish");
+                return Redirect("http://localhost:4200/shoppingCart#/shoppingCart/finish");
             }
             else
             {

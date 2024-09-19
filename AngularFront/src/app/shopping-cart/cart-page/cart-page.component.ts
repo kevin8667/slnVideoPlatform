@@ -13,22 +13,23 @@ import { Router } from '@angular/router';
 export class CartPageComponent {
   sc: cartPage[] = []; //用model定義介面數據
   plans: any[] = [];
-  filterMemberId: number = 2;
+  filterMemberId: number = 0;
 
 
   constructor(
-    private CartPageService: CartPageService,
+    private cartPageService: CartPageService,
     private router: Router  // 注入 Angular 的 Router
   ){}
 
   ngOnInit(): void {
     this.loadshoppingCart();
     this.loadPlans();
+    this.cartPageService.userId$.subscribe(user => this.filterMemberId=user.memberId);
   }
 
   loadshoppingCart(){
     // 訂閱服務返回的數據
-    this.CartPageService.GetShoppingCarts().subscribe(
+    this.cartPageService.GetShoppingCarts().subscribe(
       data => {
         this.sc = data
         .filter(item => item.memberId === this.filterMemberId)
@@ -111,14 +112,14 @@ export class CartPageComponent {
 
   //購物車model
   newShoppingCart = {
-    memberId : 2,
+    memberId : this.filterMemberId,
     planId: null,
     videoId: null
   };
 
   //新增購物車(提交表單)
   onSubmit(): void {
-    this.CartPageService.createShoppingCart(this.newShoppingCart)
+    this.cartPageService.createShoppingCart(this.newShoppingCart)
       .subscribe(
         response => {
           console.log('Shopping cart added:', response);
@@ -146,7 +147,7 @@ export class CartPageComponent {
     const confirmed = window.confirm('確定要刪除嗎？');
 
     if (confirmed) {
-      this.CartPageService.deleteShoppingCart(id).subscribe(() => {
+      this.cartPageService.deleteShoppingCart(id).subscribe(() => {
         console.log(`購物車 ${id} 已刪除`);
         this.loadshoppingCart(); // 刪除後重新載入資料
       }, error => {
@@ -157,7 +158,7 @@ export class CartPageComponent {
 
   // 加載方案資料
   loadPlans() {
-    this.CartPageService.GetPlans().subscribe(data => {
+    this.cartPageService.GetPlans().subscribe(data => {
       this.plans = data;  // 從API獲取的方案賦值給 plans
       console.log(data)
     });
@@ -167,7 +168,7 @@ export class CartPageComponent {
   updatePlan(item: any) {
 
     console.log('已更新項目的 planId:', item);
-    this.CartPageService.updateShoppingCart(Number(item.shoppingCartId), { planId: Number(item.planId), videoId: Number(item.videoId), memberId: this.filterMemberId})
+    this.cartPageService.updateShoppingCart(Number(item.shoppingCartId), { planId: Number(item.planId), videoId: Number(item.videoId), memberId: this.filterMemberId})
       .subscribe(response => {
         console.log('購物車已更新:', response);
         this.loadshoppingCart();

@@ -88,8 +88,7 @@ export class AuthService {
     this.removeCookie('JwtToken');
     this.removeCookie('MemberData');
     this.memberBehaviorSubject.next(null);
-
-    this.router.navigateByUrl('login');
+    location.reload();
   }
   SetLoginValue(): void {
     this.isLogin.next(true);
