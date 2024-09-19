@@ -29,26 +29,21 @@ export class TicketReservationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // 1. 獲取從上一個畫面傳來的 queryParams
-    this.route.queryParams.subscribe((params) => {
-      this.reservationID = +params['reservationId']; // 轉為數字
-      this.movieId = +params['movieId']; // 轉為數字
-      this.movieName = params['movieName'];
-      this.hallName = params['hallName'];
-      this.showtimeId = +params['showtimeId']; // 轉為數字
-      this.showtime = params['showtime'];
-      this.totalPrice = +params['totalPrice']; // 轉為數字
-      this.ticketCount = +params['ticketCount']; // 轉為數字
-      this.fullVote = +params['fullVote'];
-      this.studentVote = +params['studentVote'];
-      this.oldpeopleTicket = +params['oldpeopleTicket'];
+    // 從 Local Storage 中讀取資料
+    this.reservationID = parseInt(localStorage.getItem('reservationId') || '0', 10);
+    this.movieId = parseInt(localStorage.getItem('movieId') || '0', 10);
+    this.movieName = localStorage.getItem('movieName') || '';
+    this.hallName = localStorage.getItem('hallName') || '';
+    this.showtimeId = parseInt(localStorage.getItem('showtimeId') || '0', 10);
+    this.showtime = localStorage.getItem('showtime') || '';
+    this.totalPrice = parseInt(localStorage.getItem('totalPrice') || '0', 10);
+    this.ticketCount = parseInt(localStorage.getItem('ticketCount') || '0', 10);
+    this.fullVote = parseInt(localStorage.getItem('fullVote') || '0', 10);
+    this.studentVote = parseInt(localStorage.getItem('studentVote') || '0', 10);
+    this.oldpeopleTicket = parseInt(localStorage.getItem('oldpeopleTicket') || '0', 10);
 
-      // 調用方法載入訂單詳細資料
-      // this.loadReservationDetails();
-
-      // 根據票數生成座位號
-      this.generateSeats();
-    });
+    // 調用方法載入訂單詳細資料或生成座位號
+    this.generateSeats();
   }
 
   // 根據票數生成座位號
@@ -68,5 +63,7 @@ export class TicketReservationComponent implements OnInit {
   // 新增 goBack() 方法，用於返回上一頁
   goBack() {
     this.location.back(); // 使用 location.back() 返回上一頁
+
+    //this.currentStep = this.step[0];
   }
 }

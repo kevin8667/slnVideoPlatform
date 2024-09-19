@@ -1,4 +1,4 @@
-import { TicketOrderComponent } from './ticket-order/ticket-order.component';
+// import { TicketOrderComponent } from './ticket-order/ticket-order.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,7 +19,7 @@ const routes: Routes = [
   declarations: [
     TicketComponent,
     TicketSelectionComponent,
-    TicketOrderComponent,
+    // TicketOrderComponent,
   ],
   imports: [
     CommonModule,

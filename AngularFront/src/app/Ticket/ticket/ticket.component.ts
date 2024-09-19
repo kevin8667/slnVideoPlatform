@@ -51,6 +51,7 @@ export class TicketComponent implements OnInit {
     } else {
       console.error('沒有電影ID');
     }
+
   }
 
   onCinemaChange(event: any) {
@@ -121,27 +122,43 @@ export class TicketComponent implements OnInit {
       this.cdr.detectChanges();
     });
   }
-
-  // 當點擊選擇時間按鈕時，傳遞選中的上映時間至下一頁面
+  // 當點擊選擇時間按鈕時，將選中的資料儲存到 Local Storage，並跳轉至下一個頁面
   onTimeSelect(hallName: string, time: string, showTimeID: number) {
     console.log('選中的 showtimeId:', showTimeID);
 
-    // 傳遞選中的上映時間至第二個畫面
-    this.router.navigate(['ticket/ticketselection'], {
-      queryParams: {
-        cinemaName: this.selectedCinema.CinemaName,
-        hallName: hallName,
-        showtime: time, // 傳遞選中的上映時間
-        selectedShowtimeId: showTimeID,
-        movieId: this.movieId,
-        movieName: 'Deadpool & Wolverine',
-        posterUrl: '../../../../assets/image/Deadpool_Wolverine.png',
-        releaseDate: '2024/07/24',
-      },
-    });
-  }
+    // 儲存選中的資料到 localStorage
+    localStorage.setItem('cinemaName', this.selectedCinema.CinemaName);
+    localStorage.setItem('hallName', hallName);
+    localStorage.setItem('showtime', time);
+    localStorage.setItem('selectedShowtimeId', showTimeID.toString());
+    localStorage.setItem('movieId', this.movieId.toString());
+    localStorage.setItem('movieName', 'Deadpool & Wolverine');
+    localStorage.setItem('posterUrl', '../../../../assets/image/Deadpool_Wolverine.png');
+    localStorage.setItem('releaseDate', '2024/07/24');
 
-  goToSelection() {
-    window.location.href = '../../../ticketselection'; // 進入選擇票券頁面
+    // 跳轉到下一個頁面
+    this.router.navigate(['ticket/ticketselection']);
   }
+  // // 當點擊選擇時間按鈕時，傳遞選中的上映時間至下一頁面
+  // onTimeSelect(hallName: string, time: string, showTimeID: number) {
+  //   console.log('選中的 showtimeId:', showTimeID);
+
+  //   // 傳遞選中的上映時間至第二個畫面
+  //   this.router.navigate(['ticket/ticketselection'], {
+  //     queryParams: {
+  //       cinemaName: this.selectedCinema.CinemaName,
+  //       hallName: hallName,
+  //       showtime: time, // 傳遞選中的上映時間
+  //       selectedShowtimeId: showTimeID,
+  //       movieId: this.movieId,
+  //       movieName: 'Deadpool & Wolverine',
+  //       posterUrl: '../../../../assets/image/Deadpool_Wolverine.png',
+  //       releaseDate: '2024/07/24',
+  //     },
+  //   });
+  // }
+
+  // goToSelection() {
+  //   window.location.href = '../../../ticketselection'; // 進入選擇票券頁面
+  // }
 }
