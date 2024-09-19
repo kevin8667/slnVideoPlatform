@@ -1,0 +1,73 @@
+<div class="ticket-selection-container">
+  <div class="movie-details">
+    <div class="movie-poster">
+      <img
+        src="../../../../assets/image/Deadpool_Wolverine.png"
+        alt="Deadpool & Wolverine"
+      />
+    </div>
+    <div class="movie-info">
+      <h2>{{ movieName }}</h2>
+      <!-- 動態顯示電影名稱 -->
+      <p>級別: 15+</p>
+      <p>地點: {{ hallName }}</p>
+      <!-- 動態顯示影廳 -->
+      <p>開演時間: {{ showtime }}</p>
+      <!-- 動態顯示放映時間 -->
+    </div>
+  </div>
+
+  <div class="ticket-selection">
+    <h3>選取票種</h3>
+    <div class="ticket-options">
+      <div class="ticket-option">
+        <label>全票</label>
+        <select
+          [(ngModel)]="selectedTicket['fullVote']"
+          (change)="calculateTotal()"
+        >
+          <option *ngFor="let option of ticketOptions" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+        <span>$200</span>
+      </div>
+      <div class="ticket-option">
+        <label>優待票</label>
+        <select
+          [(ngModel)]="selectedTicket['studentVote']"
+          (change)="calculateTotal()"
+        >
+          <option *ngFor="let option of ticketOptions" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+        <span>$180</span>
+      </div>
+      <div class="ticket-option">
+        <label>敬老票</label>
+        <select
+          [(ngModel)]="selectedTicket['oldpeopleTicket']"
+          (change)="calculateTotal()"
+        >
+          <option *ngFor="let option of ticketOptions" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+        <span>$100</span>
+      </div>
+    </div>
+
+    <div class="total-price">
+      <h4>總計: ${{ totalPrice }}</h4>
+    </div>
+  </div>
+
+  <!-- 將按鈕放在 ticket-selection 容器外，並居中 -->
+  <div class="btn-container">
+    <button (click)="submitReservation()" class="btn">選擇票券</button>
+
+    <!-- 返回上頁按鈕 -->
+    <button (click)="goBack()" class="btn">返回上頁</button>
+  </div>
+</div>

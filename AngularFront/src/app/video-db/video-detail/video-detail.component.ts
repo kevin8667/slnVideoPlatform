@@ -4,15 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
 import { ConfirmationService, MessageService  } from 'primeng/api';
+import { data } from 'jquery';
 import { RatingRateEvent } from 'primeng/rating';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AddtoplaylistComponent } from '../addtoplaylist/addtoplaylist.component';
 
 @Component({
   selector: 'app-video-detail',
   templateUrl: './video-detail.component.html',
   styleUrls: ['./video-detail.component.css'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService, DialogService],
   // encapsulation:ViewEncapsulation.None
 })
 
@@ -20,7 +23,10 @@ export class VideoDetailComponent implements OnInit{
 
   video!:any ;
 
+  videoIDForFunctions:number=0;
+
   season: Season | undefined;
+  
 
   videos:Video[] = [];
 
@@ -68,7 +74,13 @@ export class VideoDetailComponent implements OnInit{
     }
   ]
 
-  constructor(private route: ActivatedRoute, private videoService: VideoDBService, private confirmationService: ConfirmationService, private messageService: MessageService, private sanitizer: DomSanitizer)
+  constructor(
+    private route: ActivatedRoute,
+    private videoService: VideoDBService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private dialogService: DialogService
+  , private sanitizer: DomSanitizer)
   {
   //   this.video = {
   //     videoId: 1,
@@ -89,10 +101,10 @@ export class VideoDetailComponent implements OnInit{
   //     views: 1000,
   //     ageRating: 'PG',
   //     trailerUrl: 'https://example.com/trailer',
-  //     mainGenreName:' ',
+  //     mainGenreName: ' ',
   //     seasonName: ' ',
-  //     bgpath:''
-  // };
+  //     bgpath: '',
+    // };
   }
 
   onValueChange(newValue: any) {
@@ -151,6 +163,8 @@ onReject() {
     var videoID: string | null
       this.route.paramMap.subscribe(params => {
         videoID = params.get('id');
+
+        this.videoIDForFunctions = Number(videoID);
 
       if (videoID) {
         this.videoService.getVideoApiWithID(videoID).subscribe(data => {

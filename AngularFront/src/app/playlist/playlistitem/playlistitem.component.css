@@ -1,0 +1,182 @@
+.playlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  min-height: 60px;
+}
+
+.playlist-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.playlist-item-info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.playlist-item-info h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #343a40;
+}
+
+.playlist-item-info p {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.playlist-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .playlist-item-actions .p-button-success {
+  background: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  margin-right: 10px;
+}
+
+::ng-deep .playlist-item-actions .p-button-success .pi {
+  font-size: 20px;
+  color: #17A2B8;
+}
+
+::ng-deep .playlist-item-actions .p-button-success:hover .pi {
+  color: #138496;
+}
+
+::ng-deep .playlist-item-actions .p-button-success:focus {
+  outline: none;
+}
+
+.draggable-handle {
+  cursor: grab;
+  color: #17A2B8;
+  font-size: 18px;
+}
+
+.draggable-handle:active {
+  cursor: grabbing;
+}
+
+@keyframes fly-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(300px) translateY(-100px);
+  }
+}
+
+.removing {
+  animation: fly-out 0.7s forwards;
+}
+
+.cdk-drag-preview {
+  z-index: 10000 !important;
+}
+
+.cdk-overlay-container {
+  z-index: 1050 !important;
+}
+
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  width: 680px;
+  height: 400px;
+}
+
+button.p-button-danger {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button.p-button-danger i {
+  font-size: 16px;
+}
+
+.video-js {
+  width: 640px;
+  height: 360px;
+}
+
+.floating-button {
+  position: absolute;
+  bottom: 40px;
+  right: 30px;
+  width: 90px; /* 按鈕寬度應根據圖片大小調整 */
+  height: 120px; /* 按鈕高度應根據圖片大小調整 */
+  cursor: pointer;
+  z-index: 1001; /* 保持在 overlay 上 */
+  background-color: transparent; /* 移除背景色，讓它變透明 */
+  box-shadow: none; /* 去掉陰影 */
+  border-radius: 0; /* 移除邊框圓角，保證只有圖片 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: pulse 1.5s infinite; /* 保留閃動效果 */
+  padding: 0; /* 移除內間距 */
+}
+
+.floating-button img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px; /* 保持圖片圓角，根據需求可移除 */
+}
+
+.floating-button img:hover {
+  transform: scale(1.05); /* 鼠標懸停時輕微放大效果 */
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 211, 51, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 211, 51, 1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 211, 51, 0.7);
+  }
+}

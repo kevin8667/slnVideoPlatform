@@ -13,9 +13,8 @@
         public string? SeasonName { get; set; } // 季名稱
         public int MainGenreId { get; set; }
         public string? MainGenreName { get; set; } // 內容類型名稱
-
+        public int? Episode { get; set; }
         public string? ThumbnailPath { get; set; }
-
         public string? Bgpath { get; set; }
     }
 }

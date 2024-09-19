@@ -39,6 +39,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 
+import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     EpisodeListComponent,
     PersonDetailComponent,
     NewVideoComponent,
+    AddtoplaylistComponent,
   ],
   imports: [
     CommonModule,
@@ -74,6 +78,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     RatingModule,
     ToastModule,
     ConfirmDialogModule,
+    DynamicDialogModule,
     ReactiveFormsModule,
     CalendarModule,
     FileUploadModule,
@@ -81,6 +86,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     PanelModule,
     FieldsetModule,
     InputTextareaModule
-  ]
+  ],
+  providers: [DialogService, MessageService],
 })
 export class VideoDbModule { }

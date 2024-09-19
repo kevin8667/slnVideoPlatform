@@ -27,5 +27,7 @@ public partial class Post
 
     public virtual Article Article { get; set; }
 
+    public virtual ICollection<PostUserReaction> PostUserReactions { get; set; } = new List<PostUserReaction>();
+
     public virtual MemberInfo Poster { get; set; }
 }

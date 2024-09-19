@@ -1,0 +1,27 @@
+<div class="playlist-item" [attr.data-id]="item.videoId" cdkDrag>
+  <img [src]="getThumbnailUrl(item.thumbnailPath)" alt="{{ item.videoName }}" class="playlist-thumbnail">
+
+  <div class="playlist-item-info">
+    <h4>{{ item.videoName }}</h4>
+    <p *ngIf="item.episode">集數: {{ item.episode }}</p>
+  </div>
+
+  <div class="playlist-item-actions">
+    <button pButton type="button" icon="pi pi-play" class="p-button-success" (click)="playItem()"></button>
+    <i class="pi pi-arrows-alt draggable-handle" cdkDragHandle></i>
+  </div>
+</div>
+
+<div *ngIf="displayOverlay" class="video-overlay">
+  <div class="overlay-content">
+    <button pButton type="button" icon="pi pi-times" class="p-button-danger" (click)="closeOverlay()"></button>
+    <video id="youtube-player" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
+      <source type="video/youtube">
+    </video>
+
+    <!-- 按鈕顯示 -->
+    <div *ngIf="displayButton" class="floating-button">
+      <img src="/assets/img/Dark Knight.jpg" alt="影片封面" (click)="goToVideo()" />
+    </div>
+  </div>
+</div>

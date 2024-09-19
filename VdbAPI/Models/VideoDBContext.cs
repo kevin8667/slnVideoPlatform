@@ -23,6 +23,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<CastList> CastLists { get; set; }
 
+    public virtual DbSet<ChatRoom> ChatRooms { get; set; }
+
     public virtual DbSet<Cinema> Cinemas { get; set; }
 
     public virtual DbSet<CouponInfo> CouponInfos { get; set; }
@@ -31,7 +33,7 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<DirectorList> DirectorLists { get; set; }
 
-    public virtual DbSet<FriendChat> FriendChats { get; set; }
+    public virtual DbSet<Fidocredential> Fidocredentials { get; set; }
 
     public virtual DbSet<FriendList> FriendLists { get; set; }
 
@@ -56,6 +58,8 @@ public partial class VideoDBContext : DbContext
     public virtual DbSet<KeywordList> KeywordLists { get; set; }
 
     public virtual DbSet<MemberCoupon> MemberCoupons { get; set; }
+
+    public virtual DbSet<MemberCreatedPlayList> MemberCreatedPlayLists { get; set; }
 
     public virtual DbSet<MemberInfo> MemberInfos { get; set; }
 
@@ -83,6 +87,8 @@ public partial class VideoDBContext : DbContext
 
     public virtual DbSet<Post> Posts { get; set; }
 
+    public virtual DbSet<PostUserReaction> PostUserReactions { get; set; }
+
     public virtual DbSet<ProductList> ProductLists { get; set; }
 
     public virtual DbSet<ReservationDetail> ReservationDetails { get; set; }
@@ -92,6 +98,8 @@ public partial class VideoDBContext : DbContext
     public virtual DbSet<Seat> Seats { get; set; }
 
     public virtual DbSet<SeriesList> SeriesLists { get; set; }
+
+    public virtual DbSet<SessionSeat> SessionSeats { get; set; }
 
     public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
@@ -110,6 +118,8 @@ public partial class VideoDBContext : DbContext
     public virtual DbSet<TypeList> TypeLists { get; set; }
 
     public virtual DbSet<TypeOfTicket> TypeOfTickets { get; set; }
+
+    public virtual DbSet<UserReaction> UserReactions { get; set; }
 
     public virtual DbSet<ValidCode> ValidCodes { get; set; }
 
@@ -139,7 +149,14 @@ public partial class VideoDBContext : DbContext
 
             entity.ToTable("Article");
 
+            entity.HasIndex(e => new { e.Lock, e.UpdateDate, e.ThemeId, e.ArticleId, e.Title }, "IX_Article")
+                .IsDescending(true, true, false, false, false)
+                .IsClustered();
+
+            entity.HasIndex(e => new { e.Lock, e.UpdateDate, e.ArticleId, e.Title, e.ThemeId }, "NX_Article").IsDescending(true, true, false, false, false);
+
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
+            entity.Property(e => e.ArticleContent).IsRequired();
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
             entity.Property(e => e.Lock).HasDefaultValue(true);
             entity.Property(e => e.PostDate)
@@ -233,6 +250,33 @@ public partial class VideoDBContext : DbContext
                 .HasConstraintName("FK_StaringList_VideoList");
         });
 
+        modelBuilder.Entity<ChatRoom>(entity =>
+        {
+            entity.HasKey(e => e.ChatRoomId).IsClustered(false);
+
+            entity.ToTable("ChatRoom");
+
+            entity.HasIndex(e => new { e.SendTime, e.SenderId, e.ChatRoomId }, "IX_ChatRoom")
+                .IsDescending(true, false, false)
+                .IsClustered();
+
+            entity.HasIndex(e => e.SendTime, "NX_ChatRoom").IsDescending();
+
+            entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
+            entity.Property(e => e.ChatMessage)
+                .IsRequired()
+                .HasMaxLength(2000);
+            entity.Property(e => e.SendTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.SenderId).HasColumnName("SenderID");
+
+            entity.HasOne(d => d.Sender).WithMany(p => p.ChatRooms)
+                .HasForeignKey(d => d.SenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ChatRoom_MemberInfo");
+        });
+
         modelBuilder.Entity<Cinema>(entity =>
         {
             entity.ToTable("Cinema");
@@ -313,31 +357,30 @@ public partial class VideoDBContext : DbContext
                 .HasMaxLength(50);
         });
 
-        modelBuilder.Entity<FriendChat>(entity =>
+        modelBuilder.Entity<Fidocredential>(entity =>
         {
-            entity.HasKey(e => e.FriendChatId).HasName("PK_FriendChat_1");
+            entity.HasKey(e => e.FidocredentialId).HasName("PK__FIDOCred__935B270A20A53E8C");
 
-            entity.ToTable("FriendChat");
+            entity.ToTable("FIDOCredential");
 
-            entity.Property(e => e.FriendChatId).HasColumnName("FriendChatID");
-            entity.Property(e => e.FriendChat1)
+            entity.Property(e => e.FidocredentialId).HasColumnName("FIDOCredentialID");
+            entity.Property(e => e.CredType)
                 .IsRequired()
-                .HasColumnName("FriendChat");
-            entity.Property(e => e.ReceiverId).HasColumnName("ReceiverID");
-            entity.Property(e => e.SendTime)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.SenderId).HasColumnName("SenderID");
+                .HasMaxLength(50);
+            entity.Property(e => e.CredentialId)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("CredentialID");
+            entity.Property(e => e.LastUsedDateTime).HasColumnType("datetime");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.PublicKey).IsRequired();
+            entity.Property(e => e.RegDateTime).HasColumnType("datetime");
+            entity.Property(e => e.UserHandle).IsRequired();
 
-            entity.HasOne(d => d.Receiver).WithMany(p => p.FriendChatReceivers)
-                .HasForeignKey(d => d.ReceiverId)
+            entity.HasOne(d => d.Member).WithMany(p => p.Fidocredentials)
+                .HasForeignKey(d => d.MemberId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FriendChat_MemberInfo1");
-
-            entity.HasOne(d => d.Sender).WithMany(p => p.FriendChatSenders)
-                .HasForeignKey(d => d.SenderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FriendChat_MemberInfo");
+                .HasConstraintName("FK__FIDOCrede__Membe__469D7149");
         });
 
         modelBuilder.Entity<FriendList>(entity =>
@@ -579,9 +622,7 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.CouponId)
                 .HasComment("優惠券編號")
                 .HasColumnName("CouponID");
-            entity.Property(e => e.ExpireTime)
-                .HasComment("失效時間")
-                .HasColumnType("datetime");
+            entity.Property(e => e.ExpireTime).HasComment("失效時間");
             entity.Property(e => e.GetTime)
                 .HasComment("得到優惠券時間")
                 .HasColumnType("datetime");
@@ -614,6 +655,26 @@ public partial class VideoDBContext : DbContext
                 .HasConstraintName("FK_MemberCoupon_MemberInfo");
         });
 
+        modelBuilder.Entity<MemberCreatedPlayList>(entity =>
+        {
+            entity.ToTable("MemberCreatedPlayList");
+
+            entity.Property(e => e.MemberCreatedPlayListId).HasColumnName("MemberCreatedPlayListID");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.PlayListId).HasColumnName("PlayListID");
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.MemberCreatedPlayLists)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_MemberCreatedPlayList_MemberInfo");
+
+            entity.HasOne(d => d.PlayList).WithMany(p => p.MemberCreatedPlayLists)
+                .HasForeignKey(d => d.PlayListId)
+                .HasConstraintName("FK_MemberCreatedPlayList_PlayList");
+        });
+
         modelBuilder.Entity<MemberInfo>(entity =>
         {
             entity.HasKey(e => e.MemberId).HasName("PK_MemberInformation");
@@ -628,6 +689,9 @@ public partial class VideoDBContext : DbContext
                 .HasMaxLength(100)
                 .HasComment("地址");
             entity.Property(e => e.Banned).HasDefaultValue(false);
+            entity.Property(e => e.BindingLine)
+                .HasMaxLength(1)
+                .IsFixedLength();
             entity.Property(e => e.Birth).HasComment("生日");
             entity.Property(e => e.Email)
                 .IsRequired()
@@ -646,6 +710,9 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.LastLoginDate)
                 .HasComment("最後登入時間")
                 .HasColumnType("datetime");
+            entity.Property(e => e.LineUserId)
+                .HasMaxLength(50)
+                .IsFixedLength();
             entity.Property(e => e.MemberIdentity).HasMaxLength(10);
             entity.Property(e => e.MemberName)
                 .IsRequired()
@@ -674,6 +741,10 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.UpdateUser)
                 .HasMaxLength(50)
                 .HasComment("更新人員或系統功能");
+
+            entity.HasOne(d => d.Fidocredential).WithMany(p => p.MemberInfos)
+                .HasForeignKey(d => d.FidocredentialId)
+                .HasConstraintName("FK_MemberInfo_FIDOCredential");
         });
 
         modelBuilder.Entity<MemberNotice>(entity =>
@@ -919,6 +990,10 @@ public partial class VideoDBContext : DbContext
 
             entity.ToTable("Post");
 
+            entity.HasIndex(e => new { e.ArticleId, e.PostDate, e.PostId }, "IX_Post").IsClustered();
+
+            entity.HasIndex(e => new { e.ArticleId, e.Lock, e.PostId, e.PostDate }, "NX_Post");
+
             entity.Property(e => e.PostId).HasColumnName("PostID");
             entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
             entity.Property(e => e.Lock).HasDefaultValue(true);
@@ -936,6 +1011,29 @@ public partial class VideoDBContext : DbContext
                 .HasForeignKey(d => d.PosterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Post_MemberInfo");
+        });
+
+        modelBuilder.Entity<PostUserReaction>(entity =>
+        {
+            entity.HasKey(e => e.CountId)
+                .HasName("PK__PostUserReac")
+                .IsClustered(false);
+
+            entity.HasIndex(e => new { e.ArticleId, e.PostId, e.MemberId, e.ReactionType, e.CountId }, "IX_PostUserReactions").IsClustered();
+
+            entity.HasOne(d => d.Article).WithMany(p => p.PostUserReactions)
+                .HasForeignKey(d => d.ArticleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostUserReactions_Article");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.PostUserReactions)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostUserReactions_MemberInfo");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.PostUserReactions)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("FK_PostUserReactions_Post");
         });
 
         modelBuilder.Entity<ProductList>(entity =>
@@ -999,12 +1097,10 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.HallsId).HasColumnName("HallsID");
             entity.Property(e => e.RowNumber).HasMaxLength(50);
-            entity.Property(e => e.SeatStatus).HasMaxLength(50);
 
             entity.HasOne(d => d.Halls).WithMany(p => p.Seats)
                 .HasForeignKey(d => d.HallsId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_Seat_Hall");
+                .HasConstraintName("FK_Seat_Hall1");
         });
 
         modelBuilder.Entity<SeriesList>(entity =>
@@ -1017,6 +1113,26 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.SeriesName)
                 .IsRequired()
                 .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<SessionSeat>(entity =>
+        {
+            entity.Property(e => e.SessionSeatId).HasColumnName("SessionSeatID");
+            entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
+            entity.Property(e => e.SeatId).HasColumnName("SeatID");
+            entity.Property(e => e.ShowtimeId).HasColumnName("ShowtimeID");
+
+            entity.HasOne(d => d.Reservation).WithMany(p => p.SessionSeats)
+                .HasForeignKey(d => d.ReservationId)
+                .HasConstraintName("FK_SessionSeats_ReservationDetail");
+
+            entity.HasOne(d => d.Seat).WithMany(p => p.SessionSeats)
+                .HasForeignKey(d => d.SeatId)
+                .HasConstraintName("FK_SessionSeats_Seat");
+
+            entity.HasOne(d => d.Showtime).WithMany(p => p.SessionSeats)
+                .HasForeignKey(d => d.ShowtimeId)
+                .HasConstraintName("FK_SessionSeats_Showtime");
         });
 
         modelBuilder.Entity<ShoppingCart>(entity =>
@@ -1127,19 +1243,6 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.ShowtimeId).HasColumnName("ShowtimeID");
-
-            entity.HasOne(d => d.Seat).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.SeatId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK_Ticket_Seat1");
-
-            entity.HasOne(d => d.Showtime).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.ShowtimeId)
-                .HasConstraintName("FK_Ticket_Showtime");
-
-            entity.HasOne(d => d.TypeOfTicketNavigation).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.TypeOfTicket)
-                .HasConstraintName("FK_Ticket_TypeOfTicket");
         });
 
         modelBuilder.Entity<TypeList>(entity =>
@@ -1162,6 +1265,26 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.TypeOfTicket1).HasColumnName("TypeOfTicket");
             entity.Property(e => e.TypeOfTicketName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<UserReaction>(entity =>
+        {
+            entity.HasKey(e => e.CountId)
+                .HasName("PK__UserReac")
+                .IsClustered(false);
+
+            entity.HasIndex(e => new { e.ArticleId, e.MemberId, e.ReactionType, e.CountId }, "IX_UserReactions").IsClustered();
+
+            entity.HasIndex(e => new { e.ArticleId, e.MemberId }, "NX_UserReactions");
+
+            entity.HasOne(d => d.Article).WithMany(p => p.UserReactions)
+                .HasForeignKey(d => d.ArticleId)
+                .HasConstraintName("FK_UserReactions_Article");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.UserReactions)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserReactions_MemberInfo");
         });
 
         modelBuilder.Entity<ValidCode>(entity =>

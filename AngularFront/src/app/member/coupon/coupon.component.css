@@ -1,0 +1,128 @@
+h1,h2,h3,h4,h5,label,div {
+  color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+a {
+  cursor: pointer;
+}
+.custom-dialog .p-dialog-header {
+  background-color: #007ad9; /* PrimeNG Blue */
+  color: white;
+}
+
+.custom-dialog .p-dialog-title {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.custom-dialog .p-dialog-footer {
+  display: none; /* Hide footer if not needed */
+}
+
+.main{
+  margin-top: 30px;
+}
+
+.dialog-content {
+  padding: 16px;
+}
+
+.gift-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+.gift-item:last-child {
+  border-bottom: none;
+}
+
+.gift-icon img {
+  width: 24px;
+  height: 24px;
+}
+
+.gift-details {
+  flex: 1;
+}
+
+.gift-label {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.gift-desc {
+  margin: 4px 0;
+}
+
+.gift-images {
+  display: flex;
+  gap: 8px;
+}
+
+.default-img,
+.custom-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+}
+
+.custom-img {
+  object-fit: cover;
+}
+
+.carddiv img {
+    padding-top: 10px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+  gap: 16px; 
+}
+
+.maincontainer{
+  margin-top: 30px;
+}
+
+:host ::ng-deep .p-card-body{
+  height: 279px !important;
+}
+
+:host ::ng-deep .p-card{
+  align-items:center; justify-content:center; text-align:center; margin-top: 10px;
+}
+
+
+
+.main {
+  width: 100%;
+  display: flex;
+}
+
+.cornercontainer {
+  flex: 0 0 auto; /* 让这个容器保持固定宽度 */
+  width: 8.33%; /* 根据需要设置宽度 (例如 col-1 是 1/12) */
+}
+
+.content-container {
+  flex: 1; /* 让内容区域占满剩余空间 */
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* 左对齐 */
+  padding: 10px; /* 添加内边距 */
+}
+
+.carddiv {
+  margin: 10px; /* 卡片之间的间距 */
+}

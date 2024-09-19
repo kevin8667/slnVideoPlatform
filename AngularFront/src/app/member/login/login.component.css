@@ -1,0 +1,225 @@
+  .h1{
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+input{
+  background-color: #e6e6e6;
+  color: #333;
+  padding: 20px 20px;
+  border: 0px;
+  margin-bottom: 10px;
+  width: 300px;
+  border-radius: 0%;
+}
+
+.g-recaptcha {
+  margin: 20px 0;
+}
+
+button { 
+  width: 300px;
+  text-align: center;
+  border-radius: 0%;
+  padding: 10px 10px;
+  background-color: #17A2B8;
+  color: #212529;
+  border: none;
+  outline: none;
+  margin-top: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100px;
+  width: 100px;
+  height: 100%;
+  background-image: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 70%);
+  animation: shine 3s infinite linear;
+}
+
+button:hover, button:focus{
+  background-color:  #00c8d6
+} 
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+.btnline:active{
+  transform: scale(1.1); 
+  transition: transform 0.2s ease; 
+}
+
+
+label{
+  color: #333;
+}
+
+
+:host {
+  display: block;
+  height: 100vh; /* 視口高度 */
+  margin: 0; /* 去除默認邊距 */
+}
+
+:host::ng-deep {
+  background-image: url('/assets/img/Member/STARcircle.jpg'); 
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 使容器高度為視口高度 */
+  width: 100vw; /* 使容器寬度為視口寬度 */
+  text-align: center; /* 文字置中 */
+  color: white; /* 設定文字顏色 */
+}

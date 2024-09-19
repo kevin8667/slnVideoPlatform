@@ -48,7 +48,7 @@ namespace Backstage.Controllers {
                 article = sortArticle(searchDTO,article);
 
                 // 計算總筆數
-                int dataCount = await article.CountAsync();
+                int dataCount =  article.Count();
 
                 // 分頁
                 int PagesSize = searchDTO.pageSize ?? 10;
@@ -87,10 +87,7 @@ namespace Backstage.Controllers {
                 article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.Title) :
                                                             article.OrderByDescending(s => s.Title);
                 break;
-                case "postDate":
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.PostDate) :
-                                                            article.OrderByDescending(s => s.PostDate);
-                break;
+               
                 case "replyCount":
                 article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ReplyCount) :
                                                             article.OrderByDescending(s => s.ReplyCount);
@@ -100,8 +97,8 @@ namespace Backstage.Controllers {
                                                             article.OrderByDescending(s => s.Lock);
                 break;
                 default:
-                article = searchDTO.sortType == "asc" ? article.OrderBy(s => s.ArticleId) :
-                                                            article.OrderByDescending(s => s.ArticleId);
+                article = searchDTO.sortType == "asc" ? article.OrderByDescending(s => s.UpdateDate) :
+                                                            article.OrderBy(s => s.UpdateDate);
                 break;
             }
 
@@ -140,7 +137,7 @@ namespace Backstage.Controllers {
                 return NotFound();
             }
 
-            var article = await _dbContext.ArticleViews
+            ArticleView? article = await _dbContext.ArticleViews
                 .FirstOrDefaultAsync(m => m.ArticleId == id);
             if(article == null) {
                 return NotFound();

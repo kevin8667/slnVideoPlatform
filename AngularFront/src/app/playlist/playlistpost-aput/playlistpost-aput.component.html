@@ -1,0 +1,188 @@
+<p-dialog
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '35vw' }"
+  [baseZIndex]="10000"
+>
+  <ng-template pTemplate="header">
+    {{ isEditing ? "編輯播放清單" : "新增播放清單" }}
+  </ng-template>
+
+  <div class="form-group">
+    <label for="collaborators">協作者</label>
+    <p-multiSelect
+      [options]="availableCollaborators"
+      [(ngModel)]="playlistCollaborators"
+      optionLabel="memberName"
+      placeholder="選擇協作者"
+      [showClear]="true"
+    >
+      <ng-template let-collaborator pTemplate="item">
+        <div class="collaborator-item">
+          <img
+            [src]="collaborator.photoPath || '/assets/img/memberooo.png'"
+            alt="Collaborator Image"
+            class="collaborator-img"
+            (error)="onImageError($event)"
+          />
+          <span>{{ collaborator.memberName }}</span>
+        </div>
+      </ng-template>
+
+      <ng-template let-collaborator pTemplate="selectedItem">
+        <div class="collaborator-item">
+          <img
+            [src]="collaborator.photoPath || '/assets/img/memberooo.png'"
+            alt="Collaborator Image"
+            class="collaborator-img"
+            (error)="onImageError($event)"
+          />
+          <span>{{ collaborator.memberName }}</span>
+        </div>
+      </ng-template>
+    </p-multiSelect>
+  </div>
+
+  <ng-template pTemplate="content">
+    <div>
+      <div class="form-group">
+        <label for="playListName">片單名稱</label>
+        <input
+          type="text"
+          id="playListName"
+          [(ngModel)]="playlist.playListName"
+          name="playListName"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="playListDescription">片單描述</label>
+        <textarea
+          id="playListDescription"
+          [(ngModel)]="playlist.playListDescription"
+          name="playListDescription"
+          class="form-control"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="playListImage">片單圖片</label>
+        <img
+          [src]="getImagePreview()"
+          alt="Image Preview"
+          class="image-preview"
+        />
+        <input
+          type="file"
+          id="playListImage"
+          (change)="onImageSelected($event)"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>播放清單內容</label>
+
+        <p-multiSelect
+          [options]="allAvailableVideos"
+          [(ngModel)]="selectedVideos"
+          optionLabel="videoName"
+          placeholder="選擇影片"
+          [showClear]="true"
+        >
+
+        <ng-template let-video pTemplate="item">
+          <div class="video-item">
+            <img
+              [src]="video.thumbnailPath || '/assets/img/movie.png'"
+              alt="Video Thumbnail"
+              class="thumbnail"
+            />
+            <span>{{ video.videoName }}</span>
+            <span *ngIf="video.episode !== null && video.episode > 0">
+              - 第 {{ video.episode }} 集
+            </span>
+          </div>
+        </ng-template>
+
+          <ng-template let-video pTemplate="selectedItem">
+            <div class="video-item">
+              <img
+                [src]="video.thumbnailPath || '/assets/img/movie.png'"
+                alt="Video Thumbnail"
+                class="thumbnail"
+              />
+              <span>{{ video.videoName }}</span>
+              <span *ngIf="video.episode !== null && video.episode > 0">
+                - 第 {{ video.episode }} 集
+              </span>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+
+        <div class="video-list">
+          <div
+            cdkDropList
+            (cdkDropListDropped)="drop($event)"
+            class="cdk-drop-list"
+          >
+            <div
+              class="video-item"
+              *ngFor="let video of selectedVideos; let i = index"
+              cdkDrag
+            >
+              <div class="card">
+                <div class="card-content">
+                  <img
+                    [src]="video.thumbnailPath || '/assets/img/movie.png'"
+                    alt="Video Thumbnail"
+                    class="thumbnail"
+                  />
+                  <div>
+                    <span>{{ video.videoName }}</span>
+                    <span *ngIf="video.episode"
+                      >- 第 {{ video.episode }} 集</span
+                    >
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <button
+                    pButton
+                    icon="pi pi-trash"
+                    (click)="removePlaylistItem(i)"
+                    class="remove-button"
+                    pTooltip="刪除影片"
+                  ></button>
+                  <i
+                    class="pi pi-arrows-alt drag-handle"
+                    cdkDragHandle
+                    pTooltip="移動影片"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="button-group">
+      <button
+        pButton
+        icon="pi pi-times"
+        (click)="onCancel()"
+        class="p-button-text"
+      ></button>
+      <button
+        pButton
+        icon="pi pi-check"
+        (click)="onSubmit()"
+        class="p-button-primary"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

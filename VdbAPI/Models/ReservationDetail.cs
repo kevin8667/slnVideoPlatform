@@ -29,5 +29,7 @@ public partial class ReservationDetail
 
     public virtual MemberInfo Member { get; set; }
 
+    public virtual ICollection<SessionSeat> SessionSeats { get; set; } = new List<SessionSeat>();
+
     public virtual Showtime Showtime { get; set; }
 }

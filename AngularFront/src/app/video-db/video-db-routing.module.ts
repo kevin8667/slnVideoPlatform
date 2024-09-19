@@ -7,6 +7,7 @@ import { SeasonListComponent } from './season-list/season-list.component';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
 import { NewVideoComponent } from './new-video/new-video.component';
+import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component';
 
 const routes: Routes = [
   { path: '', component: VideoDBFrontPageComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'episodes', component: EpisodeListComponent },
   { path: 'person/:id', component: PersonDetailComponent },
   { path: 'newvideo', component: NewVideoComponent },
+  { path: 'addtoplaylist', component: AddtoplaylistComponent }
 ];
 
 @NgModule({

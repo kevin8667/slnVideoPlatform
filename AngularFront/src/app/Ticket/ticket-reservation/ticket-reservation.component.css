@@ -1,0 +1,86 @@
+/* 訂單明細容器樣式 */
+.reservation-summary-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.movie-details {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.movie-poster img {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.movie-info {
+  flex: 1;
+  color: #343a40;
+}
+
+.movie-info h2 {
+  color: #17A2B8; /* 主色調 */
+  margin-bottom: 10px;
+}
+
+.movie-info h4 {
+  color: #6C757D; /* 次要色調 */
+  margin-bottom: 10px;
+}
+
+.reservation-summary {
+  margin-top: 20px;
+}
+
+.reservation-summary ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.reservation-summary li {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.reservation-summary .total {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* 按鈕容器樣式 */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 60px; /* 控制按鈕之間的間距 */
+  margin-top: 20px;
+}
+
+/* 按鈕樣式 */
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #17A2B8;
+  color: #ffffff !important; /* 確保按鈕文字為白色 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #138496;
+}
+
+h2 {
+  color: #131414;
+}
+h3 {
+  color: #131414;
+}

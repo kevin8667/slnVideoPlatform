@@ -33,7 +33,11 @@ public partial class Article
 
     public virtual MemberInfo Author { get; set; }
 
+    public virtual ICollection<PostUserReaction> PostUserReactions { get; set; } = new List<PostUserReaction>();
+
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public virtual Theme Theme { get; set; }
+
+    public virtual ICollection<UserReaction> UserReactions { get; set; } = new List<UserReaction>();
 }
