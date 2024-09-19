@@ -77,6 +77,118 @@ button:hover, button:focus{
  
 }
 
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
+@keyframes shine {
+  0% {
+      left: -100px;
+  }
+  10% {
+      left: 100%;
+  }
+  50% {
+      left: 200%;
+  }
+  80% {
+      left: 100%;
+  }
+  100% {
+      left: -100%;
+  }
+}
+
+.btnline {
+  cursor: pointer;
+  width: 40px; /* 根據需要調整圖片的寬度 */
+  height: 40px; /* 根據需要調整圖片的高度 */
+  margin-right: 260px;
+  border-radius: 50%; /* 圓形邊框 */
+  clip-path: inset(2px); /* 裁切 */
+ 
+}
+
 .btnline:active{
   transform: scale(1.1); 
   transition: transform 0.2s ease; 

@@ -25,7 +25,7 @@ export class MmainComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
+
     this.authService.MemberBehaviorData.subscribe((memberData) => {
       console.log("MemberBehabiorData >>")
       console.log(memberData);
@@ -113,31 +113,56 @@ export class MmainComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  loadLatestNews() {
-    this.memberService.readmemberNotice().subscribe({
-      next: (response) => {
-        this.latestNews = Array.isArray(response.datas)
-          ? response.datas.map((item: any) => ({
-              id: item.memberNoticeId,
-              date: item.creTime,
-              title: item.title,
-              summary: item.noticeContent,
-              showSummary: false,
-            }))
-          : [];
+  // loadLatestNews() {
+  //   this.memberService.readmemberNotice().subscribe({
+  //     next: (response) => {
+  //       this.latestNews = Array.isArray(response.datas)
+  //         ? response.datas.map((item: any) => ({
+  //             id: item.memberNoticeId,
+  //             date: item.creTime,
+  //             title: item.title,
+  //             summary: item.noticeContent,
+  //             showSummary: false,
+  //           }))
+  //         : [];
 
-        if (response.hasAlertMsg) {
-          alert(response.alertMsg);
-        }
-      },
-      error: (error) => {
-        console.error('loadLatestNews error:', error);
-        alert('加載最新消息失敗');
-      },
-    });
-  }
+  //       if (response.hasAlertMsg) {
+  //         alert(response.alertMsg);
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.error('loadLatestNews error:', error);
+  //       alert('加載最新消息失敗');
+  //     },
+  //   });
+  // }
+loadLatestNews() {
+  this.memberService.readmemberNotice().subscribe({
+    next: (response) => {
+      this.latestNews = Array.isArray(response.datas)
+        ? response.datas.map((item: any) => ({
+            id: item.memberNoticeId,
+            date: item.creTime,
+            title: item.title,
+            summary: item.noticeContent,
+            showSummary: false,
+          }))
+        : [];
+
+      if (response.hasAlertMsg) {
+        alert(response.alertMsg);
+      }
+    },
+    error: (error) => {
+      console.error('loadLatestNews error:', error);
+      alert('加载最新消息失败');
+    },
+  });
+}
+
 
   toggleSummary(newsId: number) {
+    debugger;
     const newsItem = this.latestNews.find((news) => news.id === newsId);
     if (newsItem) {
       newsItem.showSummary = !newsItem.showSummary;
@@ -239,13 +264,38 @@ export class MmainComponent implements OnInit {
     }
   }
 
-  BindingLine():void{
-      this.authService.loginWithLine(true);
-
-  }
-
   goToPlaylist() {
     this.router.navigate(['/playlist/member']); // 導航到會員播放清單頁面
   }
 
+  BindingLine(): void {
+
+    // const currentLineId:string = this.getCurrentLineId();
+
+
+    // this.memberService.readmemberdata(currentLineId).subscribe(
+    //     (response) => {
+
+    //         const isDuplicate = response.some(member => member.LINEID === currentLineId);
+
+    //         if (isDuplicate) {
+    //             console.log("The LINE ID already exists in the database. Returning.");
+    //             return;
+    //         } else {
+
+                this.authService.loginWithLine(true);
+    //         }
+    //     },
+    //     (error) => {
+    //         console.error("Error reading member data:", error);
+
+    //     }
+    // );
+}
+
+
+private getCurrentLineId(): string {
+
+    return "example_line_id";
+}
 }

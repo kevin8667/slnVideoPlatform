@@ -8,6 +8,18 @@ a {
   cursor: pointer;
 }
 
+.main{
+margin-top: 30px;
+}
+
+.container{
+  margin-top: 30px;
+}
+
+.maincontainer {
+margin-top: 30px;
+}
+
 .card-container {
   flex-wrap:nowrap; /* 允許換行 */
 }
@@ -124,3 +136,6 @@ button:hover, button:focus{
   background-color:  #00c8d6
 } 
 
+.p-breadcrumb{
+  margin-bottom: 30px;
+}

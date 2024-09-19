@@ -72,6 +72,13 @@ export class ArticleComponent implements OnInit, AfterViewInit {
     });
     this.forumService.loadCss('../../../assets/css/quill.snow.css');
 
+    this.forumService.user$.subscribe((data) => {
+      this.user.memberId = data.memberId;
+      this.user.nickName = data.nickName;
+      if (data.memberId > 0) this.getReactions();
+    });
+    this.forumService.loadCss('../../../assets/css/quill.snow.css');
+
     this.forumService.getArticle(this.articleId).subscribe((data) => {
       if (!data.lock) {
         this.router.navigateByUrl('forum');
