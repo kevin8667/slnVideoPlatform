@@ -9,10 +9,12 @@ import { TicketSelectionComponent } from './ticket-selection/ticket-selection.co
 import { TicketComponent } from './ticket/ticket.component';
 import { TicketReservationComponent } from './ticket-reservation/ticket-reservation.component';
 
+
 const routes: Routes = [
   { path: '', component: TicketComponent },
   { path: 'ticketselection', component: TicketSelectionComponent },
   { path: 'ticketreservation', component: TicketReservationComponent },
+
 ];
 
 @NgModule({
