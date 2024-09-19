@@ -26,8 +26,7 @@ import { CouponComponent } from './coupon/coupon.component';
 import { MessageComponent } from './message/message.component';
 import { FriendsComponent } from './friends/friends.component';
 import { HistoryComponent } from './history/history.component';
-// import { CrazygridComponent } from './crazygrid/crazygrid.component';
-
+// import { PassComponent } from './pass/pass.component';
 // import { LoginCallbackComponent } from './login-callback/login-callback.component';
 
 
@@ -52,7 +51,10 @@ const routes: Routes = [
     MessageComponent,
     FriendsComponent,
     HistoryComponent,
-    // CrazygridComponent,
+
+
+    // PassComponent,
+
   
     // LoginCallbackComponent
   ],

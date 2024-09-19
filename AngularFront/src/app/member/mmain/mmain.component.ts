@@ -114,31 +114,56 @@ export class MmainComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  loadLatestNews() {
-    this.memberService.readmemberNotice().subscribe({
-      next: (response) => {
-        this.latestNews = Array.isArray(response.datas)
-          ? response.datas.map((item: any) => ({
-              id: item.memberNoticeId,
-              date: item.creTime,
-              title: item.title,
-              summary: item.noticeContent,
-              showSummary: false,
-            }))
-          : [];
+  // loadLatestNews() {
+  //   this.memberService.readmemberNotice().subscribe({
+  //     next: (response) => {
+  //       this.latestNews = Array.isArray(response.datas)
+  //         ? response.datas.map((item: any) => ({
+  //             id: item.memberNoticeId,
+  //             date: item.creTime,
+  //             title: item.title,
+  //             summary: item.noticeContent,
+  //             showSummary: false,
+  //           }))
+  //         : [];
 
-        if (response.hasAlertMsg) {
-          alert(response.alertMsg);
-        }
-      },
-      error: (error) => {
-        console.error('loadLatestNews error:', error);
-        alert('加載最新消息失敗');
-      },
-    });
-  }
+  //       if (response.hasAlertMsg) {
+  //         alert(response.alertMsg);
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.error('loadLatestNews error:', error);
+  //       alert('加載最新消息失敗');
+  //     },
+  //   });
+  // }
+loadLatestNews() {
+  this.memberService.readmemberNotice().subscribe({
+    next: (response) => {
+      this.latestNews = Array.isArray(response.datas)
+        ? response.datas.map((item: any) => ({
+            id: item.memberNoticeId,
+            date: item.creTime,
+            title: item.title,
+            summary: item.noticeContent,
+            showSummary: false,
+          }))
+        : [];
+
+      if (response.hasAlertMsg) {
+        alert(response.alertMsg);
+      }
+    },
+    error: (error) => {
+      console.error('loadLatestNews error:', error);
+      alert('加载最新消息失败');
+    },
+  });
+}
+
 
   toggleSummary(newsId: number) {
+    debugger;
     const newsItem = this.latestNews.find((news) => news.id === newsId);
     if (newsItem) {
       newsItem.showSummary = !newsItem.showSummary;

@@ -1,39 +1,34 @@
-<div class="main flex justify-content-center flex-wrap">
-  <div class="cornercontainer col-1"></div>
-  <div class="maincontainer col-10 ">
+<div class="main flex flex-wrap">
+  <div class="cornercontainer col-1"></div> <!-- 保留这个 div -->
+  
+  <div class="content-container col-10"> <!-- 新增内容容器 -->
     <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
-    <div class="container flex flex-wrap justify-content-between" *ngIf="hasData">
-      <div *ngFor="let coupon of couponData"
-        class="carddiv align-items-center justify-content-center text-align-center">
+    
+    <div class="container flex flex-wrap" *ngIf="hasData">
+      <div *ngFor="let coupon of couponData" class="carddiv">
         <p-card [header]="coupon.couponName" [subheader]="coupon.couponDesc" [style]="{ width: '360px' }">
           <ng-template pTemplate="header">
-            <img *ngIf="coupon.type === 'A'" class="card-img-top padding-top 10px"
-              src="./../../../assets/img/Member/coupon.png" alt="a" style="width: 130px" />
-            <img *ngIf="coupon.type === 'B'" class="card-img-top padding-top 10px"
-              src="./../../../assets/img/Member/giftbox.png" alt="b" style="width: 130px" />
-            <img *ngIf="coupon.type === 'C'" class="card-img-top padding-top 10px"
-              src="./../../../assets/img/Member/gift-card.png" alt="c" style="width: 130px" />
+            <img *ngIf="coupon.type === 'A'" class="card-img-top" src="./../../../assets/img/Member/coupon.png" alt="a" style="width: 130px" />
+            <img *ngIf="coupon.type === 'B'" class="card-img-top" src="./../../../assets/img/Member/giftbox.png" alt="b" style="width: 130px" />
+            <img *ngIf="coupon.type === 'C'" class="card-img-top" src="./../../../assets/img/Member/gift-card.png" alt="c" style="width: 130px" />
           </ng-template>
           <p>
             使用期限: {{ coupon.expireTime }}
           </p>
           <ng-template pTemplate="footer">
-            <p-button *ngIf="coupon.type !== 'A'" (onClick)="ShowGiftList(coupon.giftListID)" label="贈品清單">
-            </p-button>
+            <p-button *ngIf="coupon.type !== 'A'" (onClick)="ShowGiftList(coupon.giftListID)" label="贈品清單"></p-button>
           </ng-template>
         </p-card>
       </div>
     </div>
     <div *ngIf="!hasData">
-      <p>沒有可使用的優惠券</p> 
+      <p>沒有可使用的優惠券</p>
     </div>
   </div>
-  <div class="cornercontainer col-1"></div>
 </div>
-<p-dialog header="Gift List" [modal]="true" [(visible)]="visible" [style]="{ width: '600px' }" [closable]="true"
+<p-dialog header="贈品清單" [modal]="true" [(visible)]="visible" [style]="{ width: '600px' }" [closable]="true"
   [responsive]="true" [styleClass]="'custom-dialog'">
   <div class="dialog-content">
-    <span class="p-text-secondary block mb-5">贈品清單</span>
     <div *ngFor="let gift of giftList" class="gift-item">
       <div class="gift-icon">
         <img src="./../../../assets/img/Member/giftbox.png" alt="Gift Box" class="gift-box-img" />

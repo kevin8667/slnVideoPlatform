@@ -7,6 +7,7 @@ using VdbAPI.Member.Helper;
 using VdbAPI.Models;
 using VdbAPI.Member.Service;
 using VdbAPI.Filters;
+using VdbAPI.Member.Model;
 
 namespace VdbAPI.Controllers
 {
@@ -15,10 +16,10 @@ namespace VdbAPI.Controllers
     public class AuthController : BaseController
     {
         [HttpPost("callback")]
-        public async Task<ReturnResult<string>> HandleCallback([FromBody] AuthCallbackRequest request)
+        public async Task<ReturnResult<mMemberInfo>> HandleCallback([FromBody] AuthCallbackRequest request)
         {
             var code = request.Code;
-            ReturnResult<string> rtn = new ReturnResult<string>();
+            ReturnResult<mMemberInfo> rtn = new ReturnResult<mMemberInfo>();
             // 交換授權碼為 access token
             var accessToken = await ExchangeCodeForTokenAsync(code);
 
@@ -34,7 +35,8 @@ namespace VdbAPI.Controllers
 
                     string jwtToken = AccountService.CreateJwtToken(memberInfo.FirstOrDefault());
                     rtn.IsSuccess = true;
-                    rtn.Data = jwtToken;
+                    rtn.Data = memberInfo.FirstOrDefault();
+                    rtn.Data.JwtToken = jwtToken;
                     return rtn;
 
                 }

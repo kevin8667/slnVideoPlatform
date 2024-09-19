@@ -5,7 +5,7 @@
     <div *ngIf="isLoading">正在加载好友信息...</div>
     <button class="shine-button" (click)="AddFriendClick()">新增好友</button>
     <div *ngIf="!isLoading">
-      <p-carousel *ngIf="friends.length>0" [value]="friends" [numVisible]="3" [numScroll]="1"
+      <p-carousel *ngIf="friends.length>0" [value]="friends" [numVisible]="5" [numScroll]="1"
         [responsiveOptions]="responsiveOptions">
         <ng-template pTemplate="header">
           <p>好友名單:</p>

@@ -24,6 +24,7 @@
     "@popperjs/core": "^2.11.6",
     "@types/quill": "^1.3.10",
     "angular-oauth2-oidc": "^17.0.2",
+    "animejs": "^3.2.2",
     "bootstrap": "^5.3.3",
     "jest-editor-support": "*",
     "jquery": "^3.7.1",

@@ -102,6 +102,7 @@ namespace VdbAPI.Member.Dao
                     sqlQuery += @" and NoticeContent = @NoticeContent ";
                     pars.Add(new SqlParameter("NoticeContent", data.NoticeContent));
                 }
+                sqlQuery += " ORDER BY CreTime DESC";
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
 
