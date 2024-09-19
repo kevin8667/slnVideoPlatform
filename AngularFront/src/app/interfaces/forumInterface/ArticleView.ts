@@ -1,12 +1,12 @@
 export interface ArticleView {
   articleContent: string;
   articleId: number;
-  articleImage: '';
+  articleImage: string;
   authorId: number;
   lock: boolean;
   nickName: string;
   postDate: Date;
-  replyCount: 0;
+  replyCount: number;
   themeId: number;
   themeName: string;
   title: string;
