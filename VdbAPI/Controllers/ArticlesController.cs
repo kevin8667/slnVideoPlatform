@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
+using NuGet.Protocol;
+
 using System.Text;
 
 using VdbAPI.DTO;
@@ -182,7 +184,8 @@ namespace VdbAPI.Controllers {
                 await _context.SaveChangesAsync();
 
                 await transaction.CommitAsync();
-                return Ok("新增文章成功");
+                return new JsonResult("新增文章成功");
+
             }
             catch(Exception ex) {
                 await transaction.RollbackAsync();
