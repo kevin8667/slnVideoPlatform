@@ -1,31 +1,37 @@
-import { LikeDTO } from './../../interfaces/forumInterface/LikeDTO';
-import { Component, HostListener, OnInit } from '@angular/core'; // 引入 ViewEncapsulation
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'; // Angular
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 第三方庫
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
 import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
 import ForumService from 'src/app/services/forumService/forum.service'; // 自定義模組
-import { AllReactionsDTO } from 'src/app/interfaces/forumInterface/AllReactionsDTO';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.css'],
+  providers: [MessageService, ConfirmationService],
+
 })
-export class ArticleComponent implements OnInit {
+export class ArticleComponent implements OnInit, AfterViewInit {
   article: ArticleView = {} as ArticleView;
   articleId!: number;
   posts: Post[] = [];
   menuItems: MenuItem[] = [];
   debounceTimer!: number;
-  currentUserId!: number;
   pendingReaction: any = null;
+  show = false;
+  user: memberName = {
+    memberId: 0,
+    nickName: '',
+  };
   constructor(
     private router: Router,
     private forumService: ForumService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
   ) {}
+
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification(event: any): void {
     // 清除計時器
@@ -57,11 +63,34 @@ export class ArticleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.forumService.loadQuill();
-    this.currentUserId = this.forumService.getCurrentUser().id;
     this.articleId = Number(this.actRoute.snapshot.paramMap.get('id'));
+
+    this.forumService.user$.subscribe((data) => {
+      this.user.memberId = data.memberId;
+      this.user.nickName = data.nickName;
+      if (data.memberId > 0) this.getReactions();
+    });
+    this.forumService.loadCss('../../../assets/css/quill.snow.css');
+
+    this.forumService.getArticle(this.articleId).subscribe((data) => {
+      if (!data.lock) {
+        this.router.navigateByUrl('forum');
+        return;
+      }
+
+      this.article = data;
+    });
+
+    this.forumService.getPosts(this.articleId).subscribe((data) => {
+      this.posts = data;
+    });
+
+    this.initializeMenu();
+  }
+  ngAfterViewInit(): void {}
+  private getReactions() {
     this.forumService
-      .getUserReaction(this.currentUserId, this.articleId)
+      .getUserReaction(this.user.memberId, this.articleId)
       .subscribe({
         next: (reactions) => {
           const articleReactionType = reactions.articleReaction?.reactionType;
@@ -93,21 +122,6 @@ export class ArticleComponent implements OnInit {
         error: (error) =>
           console.error('Error fetching user reactions:', error),
       });
-
-    this.forumService.getArticle(this.articleId).subscribe((data) => {
-      if (!data.lock) {
-        this.router.navigateByUrl('forum');
-        return;
-      }
-
-      this.article = data;
-    });
-
-    this.forumService.getPosts(this.articleId).subscribe((data) => {
-      this.posts = data;
-    });
-
-    this.initializeMenu();
   }
 
   private initializeMenu() {
@@ -160,7 +174,7 @@ export class ArticleComponent implements OnInit {
         this.forumService.deleteArticle(articleId).subscribe({
           next: () => {
             this.showMessage('success', '成功', '文章已刪除');
-            this.router.navigate(['/forum']);
+            this.router.navigate(['forum']);
           },
           error: (err) => this.handleError('刪除文章失敗', err),
         });
@@ -173,20 +187,30 @@ export class ArticleComponent implements OnInit {
   }
 
   edit(id: number, type: string) {
-    this.router.navigate(['/forum', 'ed', type, id]);
+    this.router.navigate(['forum', 'ed', type, id]);
   }
 
   navToReply(articleId: number) {
-    this.router.navigate(['/forum', 'new', 'post', articleId]);
+    if (this.user.memberId < 1) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url },
+      });
+    }
+
+    this.router.navigate(['forum', 'new', 'post', articleId]);
   }
   // 使用 Map 來追踪每個內容的反應狀態
   reactionMap: { [contentId: number]: 'like' | 'dislike' | null } = {}; // 記錄用戶對每篇文章的反應
 
-  getReaction(contentId: number) {
+  getReaction(contentId: number = -1) {
     return this.reactionMap[contentId] || null; // 返回當前用戶對該文章的反應
   }
 
   toggleReaction(reaction: 'like' | 'dislike' | null, contentId: number) {
+    if (this.user.memberId < 1) {
+      this.showMessage('info', '注意', '需登入才可評價');
+      return;
+    }
     const currentReaction = this.getReaction(contentId);
 
     // 決定新的反應狀態
@@ -211,7 +235,7 @@ export class ArticleComponent implements OnInit {
     newReaction: 'like' | 'dislike' | null
   ) {
     return {
-      memberId: this.currentUserId,
+      memberId: this.user.memberId,
       contentId: contentId === 0 ? this.articleId : contentId,
       reactionType:
         newReaction === 'like'
@@ -233,7 +257,7 @@ export class ArticleComponent implements OnInit {
     }
 
     const likeDTO = {
-      memberId: this.currentUserId,
+      memberId: this.user.memberId,
       contentId: contentId === 0 ? this.articleId : contentId,
       reactionType:
         newReaction === 'like'

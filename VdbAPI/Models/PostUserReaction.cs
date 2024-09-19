@@ -7,7 +7,7 @@ namespace VdbAPI.Models;
 
 public partial class PostUserReaction
 {
-    public int CountId { get; set; }
+    public int? CountId { get; set; }
 
     public int ArticleId { get; set; }
 

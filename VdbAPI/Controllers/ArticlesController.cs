@@ -2,18 +2,20 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+
+using NuGet.Protocol;
 
 using System.Text;
 
 using VdbAPI.DTO;
+using VdbAPI.Filters;
 using VdbAPI.Models;
 
 namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArticlesController : ControllerBase {
+    public class ArticlesController : BaseController {
         private readonly VideoDBContext _context;
         private readonly string? _connection;
 
@@ -26,34 +28,51 @@ namespace VdbAPI.Controllers {
         public async Task<ActionResult<AllReactionsDTO>> GetUserReactions(ArticleReactionDTO dTO)
         {
             using var connection = new SqlConnection(_connection);
-            var sql = @"
-                        SELECT MemberId, ArticleId AS ContentId, ReactionType
-            FROM UserReactions
-            WHERE MemberId = @MemberId and ArticleId = @ArticleId;
+            // 第一次查詢 - 查詢文章反應
+            var articleReactionSql = @"
+        SELECT * 
+        FROM UserReactions
+        WHERE MemberId = @MemberId AND ArticleId = @ArticleId";
 
-            SELECT MemberId, PostId AS ContentId, ReactionType
-            FROM PostUserReactions
-            WHERE ArticleId = @ArticleId and MemberId = @MemberId";
-
-            using var multi = await connection.QueryMultipleAsync(sql,new {
+            var articleReaction = await connection.QueryFirstOrDefaultAsync<UserReaction>(articleReactionSql,new {
                 ArticleId = dTO.ArticleId,
                 MemberId = dTO.MemberId
             });
-            var articleReaction = await multi.ReadFirstOrDefaultAsync<LikeDTO>();
-            var postReactions = await multi.ReadAsync<LikeDTO>();
-            
+            var postReactionsSql = @"
+                SELECT * 
+                FROM PostUserReactions
+                WHERE ArticleId = @ArticleId AND MemberId = @MemberId";
+
+            var postReactions = await connection.QueryAsync<PostUserReaction>(postReactionsSql,new {
+                ArticleId = dTO.ArticleId,
+                MemberId = dTO.MemberId
+            });
+            // 檢查 articleReaction 是否為 null，確保有反應結果
+            var article = articleReaction != null ? new LikeDTO {
+                ContentId = articleReaction.ArticleId,  // 確認使用正確的屬性名稱
+                MemberId = articleReaction.MemberId,
+                ReactionType = articleReaction.ReactionType,
+            } : null;
+            // 將 postReactions 中的每個 PostUserReaction 轉換為 PostDTO
+            var posts = postReactions.Select(pr => new LikeDTO {
+                ContentId = pr.PostId,
+                MemberId = pr.MemberId,
+                ReactionType = pr.ReactionType
+            });
             var result = new AllReactionsDTO {
-                ArticleReaction = articleReaction,
-                PostReactions = postReactions.ToList()
+                ArticleReaction = article,
+                PostReactions = posts.ToList()
             };
 
             return Ok(result);
         }
+        //[JwtActionFilter]
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
             var userReaction = await _context.UserReactions
-            .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId);
+    .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId && ur.MemberId == likeDTO.MemberId);
+
             try {
                 if(likeDTO.ReactionType.HasValue) {
                     if(userReaction == null) {
@@ -135,17 +154,14 @@ namespace VdbAPI.Controllers {
             return Ok(articleView);
         }
         //新增
+        //[JwtActionFilter]
         [HttpPost]
         public async Task<IActionResult> CreateArticle(ArticleView articleView)
         {
-
             if(articleView == null) {
                 return BadRequest(new {
-                    error = "沒收到封包"
+                    error = "封包無資料"
                 });
-            }
-            if(!ModelState.IsValid) {
-                return BadRequest("傳入值不符合規範" + ModelState);
             }
 
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -168,19 +184,16 @@ namespace VdbAPI.Controllers {
                 await _context.SaveChangesAsync();
 
                 await transaction.CommitAsync();
+                return new JsonResult("新增文章成功");
 
-                return Ok(new {
-                    OK = "新增文章成功"
-                });
             }
             catch(Exception ex) {
                 await transaction.RollbackAsync();
-                return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
-
+                return StatusCode(500,"錯誤原因:" + ex.Message + ex.InnerException);
             }
-
         }
         //編輯
+        //[JwtActionFilter]
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchArticle(int id,ArticleUpdate articleUpdate)
         {
@@ -227,6 +240,7 @@ namespace VdbAPI.Controllers {
         }
 
         // DELETE: api/Articles/5 刪除
+        //[JwtActionFilter]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {

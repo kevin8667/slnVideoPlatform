@@ -4,16 +4,21 @@ import ForumService from 'src/app/services/forumService/forum.service';
 
 export const forumGuard: CanActivateFn = (route, state) => {
   const router = inject(Router); // 使用 inject() 來獲取服務
-  const forumService = inject(ForumService);
   const type = route.paramMap.get('type');
+  const articleId = route.paramMap.get('articleId');
   const requiresAuth = route.data['requiresAuth'];
+  const forumService = inject(ForumService);
   if (requiresAuth) {
-    const userId = forumService.getCurrentUser().id;
-    if (userId === null) {
-      router.navigate(['/login']);
+    let userId = 0;
+    forumService.user$.subscribe((data) => {
+      if (data) userId = data.memberId;
+    });
+    if (userId < 1) {
+      router.navigate(['login'], { queryParams: { returnUrl: state.url } });
       return false;
     }
   }
+
   if (type) {
     // 檢查 type 是否為 'post' 或 'article'
     if (type !== 'post' && type !== 'article') {
@@ -32,7 +37,6 @@ export const forumGuard: CanActivateFn = (route, state) => {
       return false;
     }
   }
-
 
   return true;
 };

@@ -69,6 +69,7 @@ namespace VdbAPI.Member.Model
         public int? FIDOCredentialID { get; set; }
         public string BindingLine { get; set; }
         public string LineUserId { get; set; }
+        public string JwtToken { get; set; }
 
 
         public MemberInfoProcess Process { get; set; }

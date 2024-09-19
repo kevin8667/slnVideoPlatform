@@ -1,8 +1,14 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillEditorComponent } from 'ngx-quill';
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { Post } from 'src/app/interfaces/forumInterface/Post';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
 import ForumService from 'src/app/services/forumService/forum.service';
@@ -32,7 +38,7 @@ export class EditComponent implements OnInit {
   id?: number | null;
   type!: string;
   themeTag: Theme[] = [];
-
+  user!: memberName;
   constructor(
     private fb: FormBuilder,
     private forumService: ForumService,
@@ -40,8 +46,11 @@ export class EditComponent implements OnInit {
     private router: Router
   ) {}
 
+
+
   ngOnInit(): void {
-    this.forumService.loadQuill();
+    this.forumService.user$.subscribe((data) => (this.user = data));
+    this.forumService.loadCss('../../../assets/css/quill.snow.css');
     this.initializeParams();
 
     this.initializeForm();
@@ -157,7 +166,7 @@ export class EditComponent implements OnInit {
         themeId: formData.theme,
         title: formData.title,
         articleImage: '',
-        authorId: this.forumService.getCurrentUser().id, // 使用方法獲取當前用戶ID
+        authorId: this.user.memberId, // 使用方法獲取當前用戶ID
         lock: true,
         nickName: '',
         postDate: new Date(),
@@ -173,7 +182,7 @@ export class EditComponent implements OnInit {
         postContent: formData.content,
         articleId: this.articleId,
         postId: 0, // 新帖子ID由後端生成
-        posterId: this.forumService.getCurrentUser().id, // 使用方法獲取當前用戶ID
+        posterId: this.user.memberId, // 使用方法獲取當前用戶ID
         postDate: new Date(),
         lock: true,
         postImage: '',
@@ -183,7 +192,6 @@ export class EditComponent implements OnInit {
       } as Post);
     }
   }
-
 
   openFile() {
     this.fileInput.nativeElement.click();
@@ -244,9 +252,9 @@ export class EditComponent implements OnInit {
   private navigateBack(): void {
     setTimeout(() => {
       if (this.type === 'post' && this.articleId) {
-        this.router.navigate(['/forum', this.articleId]);
+        this.router.navigate(['forum', this.articleId]);
       } else {
-        this.router.navigate(['/forum']);
+        this.router.navigate(['forum']);
       }
     }, 0);
   }

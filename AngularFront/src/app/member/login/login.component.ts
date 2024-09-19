@@ -2,7 +2,7 @@ import { AuthService } from '../../auth.service';
 import { Component, AfterViewInit } from '@angular/core';
 import { MemberService } from './../member.service';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from './../../../environments/environment';
 
@@ -23,16 +23,12 @@ export class LoginComponent implements AfterViewInit {
   constructor(
     private memberService: MemberService,
     private authService:AuthService,
-    private router: Router /*private oauthService: OAuthService*/
+    private router: Router, /*private oauthService: OAuthService*/
+    private route:ActivatedRoute
   ) {
     console.log('Google Client ID:', this.googleClientId);
   }
 
-  login() {
-    debugger;
-    console.log('Login()');
-    /* this.oauthService.initLoginFlow();*/
-  }
   LineLogin() {
     this.authService.loginWithLine(false);
   }
@@ -54,7 +50,6 @@ export class LoginComponent implements AfterViewInit {
     }
   }
   onLogin() {
-    debugger;
     const recaptchaResponse = grecaptcha.getResponse();
     if (!recaptchaResponse) {
       alert('請進行圖形認證');
@@ -70,9 +65,12 @@ export class LoginComponent implements AfterViewInit {
             alert(response.alertMsg);
           }
           if (response.isSuccess) {
-            this.setCookie('JwtToken', response.data, 1);
+            this.setCookie('JwtToken', response.data.jwtToken, 1);
+
             this.authService.SetLoginValue();
-            this.router.navigateByUrl('login/mmain');
+            this.authService.SetMemberData(response.data);
+            const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+            this.router.navigateByUrl(returnUrl);
           }
         },
         error: (error) => {
@@ -110,6 +108,4 @@ export class LoginComponent implements AfterViewInit {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
-
-  
 }

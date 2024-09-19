@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { Chatroom } from 'src/app/interfaces/forumInterface/Chatroom';
 import { ForumPagingDTO } from 'src/app/interfaces/forumInterface/ForumPagingDTO';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { Theme } from 'src/app/interfaces/forumInterface/Theme';
 import ForumService from 'src/app/services/forumService/forum.service';
 import { SignalRService } from 'src/app/services/forumService/signal-r.service';
@@ -25,11 +26,12 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   themeTag: Theme[] = [];
   debounceTimer!: number;
   forumPagingDTO: ForumPagingDTO | undefined;
-
+  user!: memberName;
+  loading = false;
   message = '';
   messages: Chatroom[] = [];
   private messageSubscription?: Subscription;
-  currentUserId = 0;
+  private previousMessageCount = 0;
   forumDto = {
     categoryId: 0,
     keyword: '',
@@ -76,22 +78,19 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   ];
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
   constructor(
-    private route: Router,
+    private router: Router,
     private forumService: ForumService,
     private signalRService: SignalRService
   ) {}
-  ngAfterViewChecked(): void {
-    this.scrollToBottom();
-  }
-  loading = false;
+
   ngOnInit(): void {
-    this.currentUserId = this.forumService.getCurrentUser().id
-      ? this.forumService.getCurrentUser().id
-      : 0;
     this.load();
+    this.forumService.user$.subscribe((data) => {
+      if (data) this.user = data;
+    });
     this.messageSubscription = this.signalRService.messages$.subscribe({
       next: (data: Chatroom[]) => {
-        this.messages = data
+        this.messages = data;
       },
       error: (err) => console.error('接收訊息發生例外:', err),
     });
@@ -99,21 +98,35 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
       this.themeTag = data;
     });
   }
+
+  ngAfterViewChecked() {
+    if (this.messages.length !== this.previousMessageCount) {
+      this.scrollToBottom();
+      this.previousMessageCount = this.messages.length; // 更新訊息數量
+    }
+  }
+
   private scrollToBottom(): void {
     try {
-      this.chatContainer.nativeElement.scrollTop =
-        this.chatContainer.nativeElement.scrollHeight;
-    } catch (err) {}
+      this.chatContainer.nativeElement.scroll({
+        top: this.chatContainer.nativeElement.scrollHeight,
+        behavior: 'smooth', // 平滑滾動
+      });
+    } catch (err) {
+      console.error('滾動到底部失敗', err);
+    }
   }
+
   sendMessage(message: string) {
     if (!message.trim()) return;
     const chatroom: Chatroom = {
-      senderId: this.forumService.getCurrentUser().id,
+      senderId: this.user.memberId,
       chatMessage: message,
-      nickname: this.forumService.getCurrentUser().name,
+      nickname: this.user.nickName,
+      sendtime: new Date().toISOString(),
     };
     this.signalRService.sendMessage(chatroom);
-    this.scrollToBottom();
+    setTimeout(() => this.scrollToBottom(), 0);
     this.message = '';
   }
   private async load() {
@@ -165,7 +178,20 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     this.load();
   }
   openCreateArticleDialog() {
-    this.route.navigateByUrl('forum/new/article');
+    if (this.user.memberId < 1) {
+      // 捕获当前的URL（用户想要访问的页面）
+      this.redirect();
+    } else {
+      // 用户已登录，导航到创建文章页面
+      this.router.navigateByUrl('forum/new/article');
+    }
+  }
+
+  private redirect() {
+    const currentUrl = this.router.url;
+
+    // 导航到登录页面，并传递 returnUrl 查询参数
+    this.router.navigate(['login'], { queryParams: { returnUrl: currentUrl } });
   }
 
   truncateText(articleContent: string, maxLength: number) {
@@ -179,5 +205,23 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     const truncatedText =
       text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
     return truncatedText;
+  }
+  getFirstImageSrc(htmlContent: string): string | null {
+    const imgTagStart = htmlContent.indexOf('<img');
+    if (imgTagStart === -1) {
+      return null; // 沒有找到 img 元素
+    }
+
+    const srcStart = htmlContent.indexOf('src="', imgTagStart);
+    if (srcStart === -1) {
+      return null; // 沒有找到 src 屬性
+    }
+
+    const srcEnd = htmlContent.indexOf('"', srcStart + 5); // 5 是 `src="` 的長度
+    const imgSrc = htmlContent.substring(srcStart + 5, srcEnd);
+    return imgSrc;
+  }
+  navToArticle(id: any) {
+    this.router.navigate(['forum', id]);
   }
 }
