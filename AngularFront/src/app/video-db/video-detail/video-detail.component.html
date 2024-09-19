@@ -1,6 +1,6 @@
 
 
-<div class="custom-card"  [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
+<div class="custom-card" *ngIf="video" [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
   <div class="card-body">
     <div class="image-container">
       <p-image
@@ -29,6 +29,14 @@
           [href]="video.trailerUrl"
           target="_blank"
         >購買或租借</a>
+        <a *ngIf="isShowing"
+          class="button"
+          style="text-decoration-line: none;"
+          pButton
+          pRipple
+          [href]="video.trailerUrl"
+          target="_blank"
+        >訂票</a>
       </div>
     </div>
     <div class="text-content">

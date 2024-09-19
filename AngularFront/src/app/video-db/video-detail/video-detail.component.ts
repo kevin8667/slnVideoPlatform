@@ -18,7 +18,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 export class VideoDetailComponent implements OnInit{
 
-  video:Video;
+  video!:any ;
 
   season: Season | undefined;
 
@@ -28,7 +28,6 @@ export class VideoDetailComponent implements OnInit{
 
   images:any[] =[];
 
-
   userRating!:number;
 
   visible: boolean = false;
@@ -37,6 +36,7 @@ export class VideoDetailComponent implements OnInit{
 
   videoUrl: SafeResourceUrl ="";
 
+  isShowing:boolean = false;
 
   selectedIndex = 0; // 初始為第一張圖片
   selectedImage: string = this.images[this.selectedIndex]; // 預設選中第一個
@@ -68,30 +68,31 @@ export class VideoDetailComponent implements OnInit{
     }
   ]
 
-  constructor(private route: ActivatedRoute, private videoService: VideoDBService, private confirmationService: ConfirmationService, private messageService: MessageService, private sanitizer: DomSanitizer) {
-    this.video = {
-      videoId: 1,
-      videoName: 'Sample Video',
-      typeId: 2,
-      seriesId: 3,
-      mainGenreId: 4,
-      seasonId: 1,
-      episode: 1,
-      runningTime: '01:30:00',
-      isShowing: true,
-      releaseDate: new Date('2024-01-01'),
-      rating: 4.5,
-      popularity: 100,
-      thumbnailPath: '',
-      lang: 'English',
-      summary: 'This is a sample video summary.',
-      views: 1000,
-      ageRating: 'PG',
-      trailerUrl: 'https://example.com/trailer',
-      mainGenreName:' ',
-      seasonName: ' ',
-      bgpath:''
-  };
+  constructor(private route: ActivatedRoute, private videoService: VideoDBService, private confirmationService: ConfirmationService, private messageService: MessageService, private sanitizer: DomSanitizer)
+  {
+  //   this.video = {
+  //     videoId: 1,
+  //     videoName: 'Sample Video',
+  //     typeId: 2,
+  //     seriesId: 3,
+  //     mainGenreId: 4,
+  //     seasonId: 1,
+  //     episode: 1,
+  //     runningTime: '01:30:00',
+  //     isShowing: true,
+  //     releaseDate: new Date('2024-01-01'),
+  //     rating: 4.5,
+  //     popularity: 100,
+  //     thumbnailPath: '',
+  //     lang: 'English',
+  //     summary: 'This is a sample video summary.',
+  //     views: 1000,
+  //     ageRating: 'PG',
+  //     trailerUrl: 'https://example.com/trailer',
+  //     mainGenreName:' ',
+  //     seasonName: ' ',
+  //     bgpath:''
+  // };
   }
 
   onValueChange(newValue: any) {
