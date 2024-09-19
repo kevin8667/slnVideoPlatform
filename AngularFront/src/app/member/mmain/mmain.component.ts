@@ -265,8 +265,34 @@ loadLatestNews() {
     }
   }
 
-  BindingLine():void{
-      this.authService.loginWithLine(true);
-    
-  }
+  BindingLine(): void {
+   
+    // const currentLineId:string = this.getCurrentLineId(); 
+
+ 
+    // this.memberService.readmemberdata(currentLineId).subscribe(
+    //     (response) => {
+           
+    //         const isDuplicate = response.some(member => member.LINEID === currentLineId);
+
+    //         if (isDuplicate) {
+    //             console.log("The LINE ID already exists in the database. Returning.");
+    //             return; 
+    //         } else {
+              
+                this.authService.loginWithLine(true);
+    //         }
+    //     },
+    //     (error) => {
+    //         console.error("Error reading member data:", error);
+           
+    //     }
+    // );
+}
+
+
+private getCurrentLineId(): string {
+   
+    return "example_line_id";
+}
 }

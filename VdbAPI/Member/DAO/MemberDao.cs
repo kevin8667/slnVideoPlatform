@@ -213,6 +213,12 @@ namespace VdbAPI.Member.Dao
                     sqlQuery += @" and Grade = @Grade ";
                     pars.Add(new SqlParameter("Grade", data.Grade));
                 }
+                if (!string.IsNullOrEmpty(data.LineUserId))
+                {
+                    sqlQuery += @" and LineUserId = @LineUserId ";
+                    pars.Add(new SqlParameter("LineUserId", data.LineUserId));
+                }
+        
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
                     connection.Open();
