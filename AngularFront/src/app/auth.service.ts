@@ -40,13 +40,14 @@ export interface MemberIdResponse {
 export class AuthService {
   private apiUrl = 'https://localhost:7193/api/Member/GetMemberId'; // 替換為您的實際 API URL
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {}
 
   private isLogin = new BehaviorSubject<boolean>(this.hasToken());
 
   private memberBehaviorSubject = new BehaviorSubject<MemberIdResponse | null>(
     this.getMemberData()
   );
+
 
   removeCookie(name: string): void {
     // 设置一个过期时间为过去的时间
@@ -126,7 +127,27 @@ export class AuthService {
     );
   }
 
+    // 發送請求獲取會員 ID
+    return this.http.get<MemberIdResponse>(this.apiUrl).pipe(
+      tap(data => this.cachedMemberId = data.MemberId), // 緩存數據
+      shareReplay(1), // 緩存最後一次的結果，避免重複 HTTP 請求
+      catchError(err => {
+        console.error('獲取會員 ID 失敗', err);
+        return of({ MemberId: -1, error: true }); // 返回錯誤標記
+      })
+    );
+  }
 
+    // 發送請求獲取會員 ID
+    return this.http.get<MemberIdResponse>(this.apiUrl).pipe(
+      tap(data => this.cachedMemberId = data.MemberId), // 緩存數據
+      shareReplay(1), // 緩存最後一次的結果，避免重複 HTTP 請求
+      catchError(err => {
+        console.error('獲取會員 ID 失敗', err);
+        return of({ MemberId: -1, error: true }); // 返回錯誤標記
+      })
+    );
+  }
 
   private redirectUri = 'http://localhost:4200/auth/callback';
   private redirectUri = 'http://localhost:4200/auth/callback';

@@ -86,8 +86,8 @@ addProductToCart(product: any) {
 
   //給linepay的資料
   linePay: linePay ={
-    orderId : "9",
-    amount: 100
+    orderId : "5",
+    amount: 99999
   }
 
   toLinePay(){

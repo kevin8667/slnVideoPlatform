@@ -966,10 +966,7 @@ public partial class VideoDBContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserReactions_MemberInfo");
 
-            entity.HasOne(d => d.Member).WithMany(p => p.UserReactions)
-                .HasForeignKey(d => d.MemberId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserReactions_MemberInfo");
+            entity.HasIndex(e => new { e.MemberId, e.ArticleId }, "UQ_UserReactions_MemberArticle").IsUnique();
         });
 
         modelBuilder.Entity<ValidCode>(entity =>
