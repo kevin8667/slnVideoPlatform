@@ -25,10 +25,9 @@
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/video.js/dist/video-js.css",
-              "node_modules/primeflex/primeflex.css",
-              "node_modules/primeicons/primeicons.css"
+              "node_modules/primeflex/primeflex.css"
                         ],
-            "scripts": ["node_modules/video.js/dist/video.js"
+            "scripts": ["node_modules/video.js/dist/video.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/owl.carousel/dist/owl.carousel.min.js"
             ]
