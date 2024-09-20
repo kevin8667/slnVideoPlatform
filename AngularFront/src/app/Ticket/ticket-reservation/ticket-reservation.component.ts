@@ -19,6 +19,8 @@ export class TicketReservationComponent implements OnInit {
 
   //場次地點
   hallName: string = ''; // 儲存影廳名稱
+  date: string = '';
+  day:string = '';
   showtime: string = ''; // 儲存放映時間
   showtimeId: number = 0; // 儲存放映場次ID
   runningTime: string = '';
@@ -49,6 +51,8 @@ export class TicketReservationComponent implements OnInit {
     this.hallName = localStorage.getItem('hallName') || '';
     this.showtimeId = parseInt(localStorage.getItem('showtimeId') || '0', 10);
     this.showtime = localStorage.getItem('showtime') || '';
+    this.date = localStorage.getItem('date') || '';
+    this.day = localStorage.getItem('day') || '';
     this.runningTime = localStorage.getItem('runningTime') || '';
     this.totalPrice = parseInt(localStorage.getItem('totalPrice') || '0', 10);
     this.ticketCount = parseInt(localStorage.getItem('ticketCount') || '0', 10);

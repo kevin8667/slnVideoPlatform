@@ -4,7 +4,6 @@ import { DataService } from 'src/app/data.service';
 import { Router } from '@angular/router'; // 用於跳轉到下一個畫面
 import { Location } from '@angular/common'; // 新增 Location 模組來實現返回功能
 
-
 @Component({
   selector: 'app-ticket-selection',
   templateUrl: './ticket-selection.component.html',
@@ -25,9 +24,12 @@ export class TicketSelectionComponent implements OnInit {
   movieId: number = 0;
   cinemaName: string = '';
   hallName: string = '';
+  date: string = '';
+  day: string = '';
   showtime: string = '';
   showtimeId: number = 0; // 儲存放映的場次 ID
   posterUrl: string = '';
+  summary: string = '';
   runningTime: string = '';
 
   constructor(
@@ -47,9 +49,15 @@ export class TicketSelectionComponent implements OnInit {
     this.movieId = parseInt(localStorage.getItem('movieId') || '0', 10);
     this.cinemaName = localStorage.getItem('cinemaName') || '';
     this.hallName = localStorage.getItem('hallName') || '';
+    this.date = localStorage.getItem('date') || '';
+    this.day = localStorage.getItem('day') || '';
     this.showtime = localStorage.getItem('showtime') || '';
-    this.showtimeId = parseInt( localStorage.getItem('selectedShowtimeId') || '0',10 );
+    this.showtimeId = parseInt(
+      localStorage.getItem('selectedShowtimeId') || '0',
+      10
+    );
     this.posterUrl = localStorage.getItem('posterUrl') || '';
+    this.summary = localStorage.getItem('summary') || '';
     this.runningTime = localStorage.getItem('runningTime') || '';
 
     console.log('從 Local Storage 中讀取的資料:', {
@@ -57,6 +65,8 @@ export class TicketSelectionComponent implements OnInit {
       movieId: this.movieId,
       cinemaName: this.cinemaName,
       hallName: this.hallName,
+      date: this.date,
+      day: this.day,
       showtime: this.showtime,
       showtimeId: this.showtimeId,
       posterUrl: this.posterUrl,
@@ -111,16 +121,26 @@ export class TicketSelectionComponent implements OnInit {
         localStorage.setItem('movieName', this.movieName);
         localStorage.setItem('hallName', this.hallName);
         localStorage.setItem('showtimeId', this.showtimeId.toString());
+        localStorage.setItem('date', this.date);
+        localStorage.setItem('day', this.day);
         localStorage.setItem('showtime', this.showtime);
         localStorage.setItem('runningTime', this.runningTime);
-
 
         localStorage.setItem('totalPrice', this.totalPrice.toString());
         localStorage.setItem('ticketCount', this.TicketCount.toString());
         //票
-        localStorage.setItem('fullVote',this.selectedTicket.fullVote.toString());
-        localStorage.setItem('studentVote',this.selectedTicket.studentVote.toString());
-        localStorage.setItem('oldpeopleTicket',this.selectedTicket.oldpeopleTicket.toString() );
+        localStorage.setItem(
+          'fullVote',
+          this.selectedTicket.fullVote.toString()
+        );
+        localStorage.setItem(
+          'studentVote',
+          this.selectedTicket.studentVote.toString()
+        );
+        localStorage.setItem(
+          'oldpeopleTicket',
+          this.selectedTicket.oldpeopleTicket.toString()
+        );
 
         // 跳轉到下一個畫面，這裡不再使用 queryParams
         this.router.navigate(['ticket/ticketreservation']);

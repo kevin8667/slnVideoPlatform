@@ -7,9 +7,9 @@
     <div class="movie-info">
       <h2>{{ movieName }}</h2>
       <!-- <h4>Deadpool & Wolverine</h4> -->
-      <p><strong>片長:</strong> {{runningTime}}</p>
+      <p><strong>片長: </strong> {{runningTime}}</p>
       <p>
-        簡介：準備好見證終極太銀幕至尊對決拍檔《死侍與金鋼狼》！史上最另類超級英雄，諧不驚人死不休的死侍，睽違六年終於在萬眾矚目下重返大銀幕，更與睽別15年的金鋼狼攜手首度加入漫威電影宇宙！金鋼狼應聲重出江湖，與死侍再續兄弟情，時間變異管理局卻突然找上門帶走死侍，但他依然老神在在，並自認只有自己能當漫威救世主，改寫漫威電影宇宙！
+       <strong>簡介: </strong>{{summary}}
       </p>
     </div>
   </div>
@@ -39,11 +39,7 @@
           <div class="showtime-details">
             <strong>{{ showtime.date }} {{ showtime.day }}</strong>
             <!-- 傳遞選中的時間按鈕 -->
-            <button
-              (click)="
-                onTimeSelect(hall.HallName, showtime.time, showtime.showTimeID)
-              "
-            >
+            <button (click)="onTimeSelect(hall.HallName, showtime.time, showtime.date, showtime.day,showtime.showTimeID)">
               {{ showtime.time }}
             </button>
           </div>
@@ -51,6 +47,4 @@
       </ul>
     </div>
   </div>
-
-  <!-- <button routerLink="ticketreservation" class="btn">選擇票券</button> -->
 </div>

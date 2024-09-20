@@ -18,27 +18,34 @@ export class TicketComponent implements OnInit {
   showTimeID: number = 0;
   movieName: string = ''; // 從 API 獲取的電影名稱
   posterUrl: string = ''; // 從 API 獲取的電影海報 URL
-  runningTime:string = '';
+  summary: string = ''; //簡介
+  runningTime: string = '';
 
   constructor(
     private router: Router,
     private dataService: DataService,
     private cdr: ChangeDetectorRef,
-    private videoDBService: VideoDBService  // 注入 VideoDBService,
+    private videoDBService: VideoDBService // 注入 VideoDBService,
   ) {}
+  // 傳換片長時間為""時""分
+  formatRunningTime(time: string): string {
+    const parts = time.split(':'); // 將時間字串分為小時、分鐘、秒
+    const hours = parseInt(parts[0], 10); // 小時部分
+    const minutes = parseInt(parts[1], 10); // 分鐘部分
 
+    // 返回格式化的時間
+    return `${hours}時${minutes}分`;
+  }
   ngOnInit(): void {
     // 呼叫 VideoDBService 來取得電影資訊
     this.videoDBService.getVideoApiWithID(this.movieId.toString()).subscribe(
       (video: Video) => {
-        // 更新元件的電影資訊
-        console.log(video); // 確認 API 返回的資料中包含 posterUrl
+        console.log(video); // 確認 API 返回的資料
         this.movieName = video.videoName;
         this.posterUrl = video.thumbnailPath; // 確保 API 回傳中有海報 URL
-        this.runningTime = video.runningTime;
-
-
-
+        this.summary = video.summary;
+        // 使用格式化函數將 runningTime 轉換為 "X時X分"
+        this.runningTime = this.formatRunningTime(video.runningTime);
 
         // 手動觸發變更檢測
         this.cdr.detectChanges();
@@ -149,26 +156,28 @@ export class TicketComponent implements OnInit {
     });
   }
   // 當點擊選擇時間按鈕時，將選中的資料儲存到 Local Storage，並跳轉至下一個頁面
-  onTimeSelect(hallName: string, time: string, showTimeID: number) {
+  onTimeSelect(
+    hallName: string,
+    time: string,
+    date: string,
+    day: string,
+    showTimeID: number
+  ) {
     console.log('選中的 showtimeId:', showTimeID);
 
     // 儲存選中的資料到 localStorage
     localStorage.setItem('cinemaName', this.selectedCinema.CinemaName);
     localStorage.setItem('hallName', hallName);
-    localStorage.setItem('showtime', time);
+    localStorage.setItem('showtime', time); // 儲存時間
+    localStorage.setItem('date', date); // 儲存日期
+    localStorage.setItem('day', day); // 儲存星期
+
     localStorage.setItem('selectedShowtimeId', showTimeID.toString());
     localStorage.setItem('movieId', this.movieId.toString());
     localStorage.setItem('movieName', this.movieName);
     localStorage.setItem('posterUrl', this.posterUrl);
+    localStorage.setItem('summary', this.summary);
     localStorage.setItem('runningTime', this.runningTime);
-    // localStorage.setItem('movieName', 'Deadpool & Wolverine');
-    // localStorage.setItem(
-    //   'posterUrl',
-    //   '../../../../assets/image/Deadpool_Wolverine.png'
-    // );
-    // localStorage.setItem('releaseDate', '2024/07/24');
-
-    // 跳轉到下一個頁面
     this.router.navigate(['ticket/ticketselection']);
   }
 }
