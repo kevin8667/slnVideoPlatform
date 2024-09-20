@@ -5,7 +5,7 @@ import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
 import { ConfirmationService, MessageService  } from 'primeng/api';
 import { data } from 'jquery';
-import { RatingRateEvent } from 'primeng/rating';
+import { Rating, RatingRateEvent } from 'primeng/rating';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -20,6 +20,8 @@ import { AddtoplaylistComponent } from '../addtoplaylist/addtoplaylist.component
 })
 
 export class VideoDetailComponent implements OnInit{
+
+  userID = 0;
 
   video!:any ;
 
@@ -135,7 +137,7 @@ export class VideoDetailComponent implements OnInit{
     event.originalEvent.stopPropagation();
 
     if (!this.visible) {
-      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: '確定要留下評分?', detail: '確認評分' });
+      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: '確定要留下評分?', detail: '評分：'+event.value });
       this.visible = true;
     }
   }
@@ -163,6 +165,9 @@ onReject() {
   }
 
   ngOnInit() {
+
+    this.videoService.user$.subscribe((data) => (this.userID = data));
+
     var videoID: string | null
       this.route.paramMap.subscribe(params => {
         videoID = params.get('id');

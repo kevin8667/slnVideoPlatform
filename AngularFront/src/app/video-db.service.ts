@@ -3,18 +3,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Video } from './video-db/interfaces/video';
 import { HttpParams } from '@angular/common/http';
-import { PagedResult } from './video-db/interfaces/PagedResult';
+// import { PagedResult } from './video-db/interfaces/PagedResult';
 import {Genre} from './video-db/interfaces/genre';
 import { Actor } from './video-db/interfaces/actor';
 import { CreateVideoDTO } from './video-db/interfaces/CreateVideoDTO';
 import { Observable } from 'rxjs/internal/Observable';
+import { BehaviorSubject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VideoDBService {
 
-  constructor(private httpClient:HttpClient ) { }
+  private userSubject = new BehaviorSubject<number>(0);
+
+  public user$ = this.userSubject.asObservable();
+
+  constructor(private httpClient:HttpClient , private auth: AuthService ) { 
+    this.loadMember();
+   }
 
   // videoName: string | null = null;
   // typeId: number | null = null;
@@ -23,6 +31,28 @@ export class VideoDBService {
   // seriesName:string | null = null;
   // seasonName:string | null = null;
 
+  loadMember() {
+    this.auth.MemberBehaviorData?.subscribe({
+      next: (data) => {
+        // console.log(data?.MemberId);
+        // 檢查 data 是否為 null 並做防範性處理
+        if (
+          data &&
+          typeof data.memberID === 'number'
+        ) {
+          // 更新 userSubject 的值
+          this.userSubject.next(
+            data.memberID);
+        } else {
+          // 如果資料無效，更新為 null
+          this.userSubject.next(0);
+        }
+      },
+      error(err) {
+        console.error('獲取會員失敗', err);
+      },
+    });
+  }
 
 
   getVideoApi(){
