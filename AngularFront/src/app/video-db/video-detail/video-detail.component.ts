@@ -10,6 +10,7 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddtoplaylistComponent } from '../addtoplaylist/addtoplaylist.component';
+import { RatingDTO } from '../interfaces/ratingDTO';
 
 @Component({
   selector: 'app-video-detail',
@@ -25,18 +26,21 @@ export class VideoDetailComponent implements OnInit{
 
   video!:any ;
 
-  videoIDForFunctions:number=0;
+  videoIDForFunctions:number =0;
 
   season: Season | undefined;
-  
 
   videos:Video[] = [];
+
+  avgRating:number =0;
 
   responsiveOptions: any[] | undefined;
 
   images:any[] =[];
 
   userRating!:number;
+
+  ratingInfo:RatingDTO|undefined;
 
   visible: boolean = false;
 
@@ -112,88 +116,65 @@ export class VideoDetailComponent implements OnInit{
     // };
   }
 
-  onValueChange(newValue: any) {
-    this.images = newValue;
-  }
-
-  onCarouselPageChange(event: any) {
-    const visibleImagesCount = 3; // 假設 Carousel 可見圖片數量是 3
-
-    // 透過 % 避免溢出，實現無限循環
-    this.selectedIndex = (event.page + Math.floor(visibleImagesCount / 2)) % this.images.length;
-
-    // 更新選中的圖片
-    this.selectedImage = this.images[this.selectedIndex];
-  }
-  onImageClick(index: number) {
-    this.selectedIndex = index;
-    this.selectedImage = this.images[index];
-  }
-
-  confirm(event: RatingRateEvent , op: OverlayPanel) {
-
-    op.hide();
-
-    event.originalEvent.stopPropagation();
-
-    if (!this.visible) {
-      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: '確定要留下評分?', detail: '評分：'+event.value });
-      this.visible = true;
-    }
-  }
-  onConfirm() {
-    this.messageService.clear('confirm');
-
-    this.visible = false;
-
-    this.messageService.add({
-      key: 'global',
-      severity: 'success',
-      summary: '已成功留下評分!',
-      detail: `您留下的評分為：${this.userRating}`
-    });
-  }
-
-onReject() {
-    this.messageService.clear('confirm');
-    this.visible = false;
-  }
-
-  overLayToggle(){
-    this.trailerVisibility = !this.trailerVisibility;
-    console.log(this.trailerVisibility)
-  }
-
   ngOnInit() {
 
     this.videoService.user$.subscribe((data) => (this.userID = data));
+
+    this.avgRating =0;
 
     var videoID: string | null
       this.route.paramMap.subscribe(params => {
         videoID = params.get('id');
 
-        this.videoIDForFunctions = Number(videoID);
-
       if (videoID) {
         this.videoService.getVideoApiWithID(videoID).subscribe(data => {
           this.video = data;
+
+          
+          this.videoIDForFunctions = data.videoId;
           console.log(data);
           if(this.video.seasonId){
             this.videoService.getSeasonWithID(data.seasonId.toString()).subscribe((data)=>{this.season = data})
           }
           this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.video.trailerUrl);
+
+          this.ratingInfo=
+          {
+            memberId : this.userID,
+            videoId : this.videoIDForFunctions,
+            rating : 0
+          }
+          console.log(this.ratingInfo);
+
         });
 
-        this.videoService.getImagesByVideoID(videoID).subscribe(images=>{
-          this.images=images;
-          console.log(images);
+        this.videoService.getRatingsByVideo(videoID).subscribe(ratings=>{
+          this.avgRating = 0;
+          if(ratings.length>0)
+          {
+            let tempSum : number= ratings.reduce((partialSum, a) => partialSum + a.rating, 0);
+            this.avgRating = tempSum/ratings.length;
+            console.log(this.avgRating);
+          }
         })
+
+        this.videoService.getImagesByVideoID(videoID).subscribe(images=>{
+          if(images){
+            this.images=images;
+            console.log(images);
+          }
+
+        })
+
+
+
       }
     });
 
     this.selectedImage = this.images[this.selectedIndex];
 
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
+
 
     this.responsiveOptions = [
       {
@@ -233,6 +214,79 @@ onReject() {
       });
   }
 
+  onValueChange(newValue: any) {
+    this.images = newValue;
+  }
+
+  onCarouselPageChange(event: any) {
+    const visibleImagesCount = 3; // 假設 Carousel 可見圖片數量是 3
+
+    // 透過 % 避免溢出，實現無限循環
+    this.selectedIndex = (event.page + Math.floor(visibleImagesCount / 2)) % this.images.length;
+
+    // 更新選中的圖片
+    this.selectedImage = this.images[this.selectedIndex];
+  }
+  onImageClick(index: number) {
+    this.selectedIndex = index;
+    this.selectedImage = this.images[index];
+  }
+
+  confirm(event: RatingRateEvent , op: OverlayPanel) {
+
+    op.hide();
+
+    event.originalEvent.stopPropagation();
+
+    if (!this.visible) {
+      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: '確定要留下評分?', detail: '評分：'+event.value });
+      this.visible = true;
+    }
+  }
+  onConfirm() {
+    this.messageService.clear('confirm');
+
+    this.visible = false;
+
+    this.ratingInfo!.rating=this.userRating;
+
+    console.log(this.ratingInfo);
+
+    this.postRating();
+
+    this.messageService.add({
+      key: 'global',
+      severity: 'success',
+      summary: '已成功留下評分!',
+      detail: `您留下的評分為：${this.userRating}`
+    });
+  }
+
+onReject() {
+    this.messageService.clear('confirm');
+    this.visible = false;
+  }
+
+  overLayToggle(){
+    this.trailerVisibility = !this.trailerVisibility;
+    console.log(this.trailerVisibility)
+  }
+
+
+
+  postRating()
+  {
+    this.videoService.createNewRating(this.ratingInfo!).subscribe(ratingResult=>{
+      console.log(ratingResult);
+    })
+  }
+
+  getRating()
+  {
+    this.videoService.getRatingsByVideo(this.videoIDForFunctions!.toString()).subscribe(data=>{
+        console.log(data);
+      })
+  }
 
   hideOverlay() {
     this.displayOverlay = false;

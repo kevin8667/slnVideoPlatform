@@ -10,6 +10,7 @@ import { CreateVideoDTO } from './video-db/interfaces/CreateVideoDTO';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
+import { RatingDTO } from './video-db/interfaces/ratingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -213,5 +214,19 @@ export class VideoDBService {
     const apiUrl = 'https://your-api-url/api/videos';
 
     return this.httpClient.post<Video>(apiUrl, video);
+  }
+
+  createNewRating(rating:RatingDTO)
+  {
+    const apiUrl = 'https://localhost:7193/api/MemberRatings';
+
+    return this.httpClient.post<RatingDTO>(apiUrl, rating);
+  }
+
+  getRatingsByVideo(videoId:string)
+  {
+    const apiUrl = `https://localhost:7193/api/MemberRatings/Video=${videoId}`;
+
+    return this.httpClient.get<RatingDTO[]>(apiUrl);
   }
 }

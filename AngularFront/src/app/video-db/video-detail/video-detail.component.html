@@ -72,7 +72,10 @@
         <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
         <p><strong>片長:</strong> {{ video.runningTime }}</p>
         <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
-        <p><strong>評分:</strong> 8.5 / 10<a (click)="op.toggle($event)" class="rating-link">
+        <p *ngIf="avgRating>0"><strong>評分:</strong> {{avgRating}} / 10<a (click)="op.toggle($event)" class="rating-link">
+          <i class="pi pi-star-fill"></i> 留下評分
+        </a></p>
+        <p *ngIf="avgRating === 0 || avgRating === undefined"><strong>評分:</strong> 尚無評分 <a (click)="op.toggle($event)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分
         </a></p>
         <p-toast position="center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">

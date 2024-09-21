@@ -27,6 +27,19 @@ namespace VdbAPI.Controllers
             return await _context.MemberRatings.ToListAsync();
         }
 
+        [HttpGet("Video={videoID}")]
+        public async Task<ActionResult<MemberRating>> GetMemberRatingByVideo(int videoID)
+        {
+            var memberRating = await _context.MemberRatings.Where(r=>r.VideoId==videoID).ToListAsync();
+
+            if (memberRating == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(memberRating);
+        }
+
         // GET: api/MemberRatings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MemberRating>> GetMemberRating(int id)
@@ -40,6 +53,7 @@ namespace VdbAPI.Controllers
 
             return memberRating;
         }
+
 
 
 
