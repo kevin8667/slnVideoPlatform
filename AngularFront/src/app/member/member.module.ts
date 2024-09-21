@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { RecaptchaModule } from 'ng-recaptcha';
 // import { LuckyWheel, LuckyGrid } from 'lucky-canvas'
-
+import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TableModule } from 'primeng/table';
@@ -55,7 +55,7 @@ const routes: Routes = [
 
     // PassComponent,
 
-  
+
     // LoginCallbackComponent
   ],
   imports: [
@@ -74,7 +74,8 @@ const routes: Routes = [
     InputTextareaModule,
     BreadcrumbModule,
     CheckboxModule,
-    MessagesModule
+    MessagesModule,
+    DropdownModule
   ],
   exports: [RouterModule],
 

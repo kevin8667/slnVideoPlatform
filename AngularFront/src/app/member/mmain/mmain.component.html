@@ -1,7 +1,6 @@
 <div class="main p-grid p-nogutter">
   <div class="secend p-grid p-nogutter" *ngIf="memberData">
-    <div class="cornercontainer col-1"></div>
-
+    <div class="cornercontainer col-1">  <img class="demo" src="./../../../assets/img/Member/addM.png" (click)="demo()"></div>
     <div class="leftcontainer col-3">
       <div id="MemberModifyArea" class="modify-area" style="height:900px">
         <div class="picdiv p-grid">
@@ -23,7 +22,7 @@
             <img class="gradepic" src="./../../../assets/img/Member/crown.png" alt="crown" />
             <label class="gradetxt" style="margin-left: 10px;">會員等級: {{ getMemberGradeDescription() }}</label>
             <img src="./../../../assets/img/Member/line-logo.jpg" style="height: 30px; margin-left: 10px;"><button
-              (click)="BindingLine()" *ngIf="memberData?.BindingLine != 'Y'" style="margin-left: 10px;">綁定</button>
+              (click)="BindingLine()" *ngIf="disableline" style="margin-left: 10px;">綁定</button>
               <div class="playlist-button-container">
                 <button (click)="goToPlaylist()" class="playlist-button" title="播放清單">
                   <i class="fas fa-file-video playlist-icon"></i> <!-- 使用 FontAwesome 的 file-video 圖示 -->
@@ -161,13 +160,10 @@
           <div class="btncancel" *ngIf="cantSee" (click)="modifyClick()">
             <h4>修改會員資料</h4>
           </div>
-
-          <div class="btncancel" *ngIf="canSee" (click)="SaveData()">
-            <h4>確認修改</h4>
-          </div>
           <div class="btncancel" *ngIf="canSee" (click)="Return()">
-            <h4>取消修改</h4>
-          </div>
+            <h4>取消 </h4></div>
+            <div class="btncancel" *ngIf="canSee" (click)="SaveData()">
+              <h4>確認 </h4></div>
         </div>
       </div>
     </div>
@@ -246,10 +242,11 @@
           </ng-template>
         </p-table>
       </div>
+
     </div>
 
     <div class="end col-1">
-      <div></div>
+      <div> </div>
     </div>
   </div>
 </div>

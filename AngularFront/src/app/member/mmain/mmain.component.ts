@@ -1,3 +1,4 @@
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 import { Component, OnInit, Input } from '@angular/core';
 import { MemberService } from './../member.service';
 import { Router } from '@angular/router';
@@ -17,6 +18,7 @@ export class MmainComponent implements OnInit {
   password = '';
   canSee: boolean = false; // 控制顯示輸入框或標籤
   canSeepwd: boolean = false; // 控制密碼的顯示/隱藏
+  disableline: boolean =true;
 
   constructor(
     private memberService: MemberService,
@@ -51,11 +53,21 @@ export class MmainComponent implements OnInit {
     this.canSeepwd = false;
   }
 
+  disablelinebtn(){
+    if(this.memberData.bindingLine !='Y'){
+      this.disableline = true;
+    }
+    else{
+      this.disableline = false;
+    }
+
+  }
+
   modifyClick() {
-    this.canSee = !this.canSee; // 切換 canSee
+    this.canSee = !this.canSee;
     this.cantSee = !this.cantSee;
     if (!this.canSee) {
-      this.canSeepwd = false; // 如果隱藏輸入框，則隱藏密碼
+      this.canSeepwd = false;
     }
   }
   Return() {
@@ -65,6 +77,8 @@ export class MmainComponent implements OnInit {
   }
 
   SaveData() {
+    const confirmation = confirm("確定修改資料嗎？");
+  if (confirmation){
     this.memberService.updatememberdata(this.memberData).subscribe({
       next: (response) => {
         if (response.hasAlertMsg) {
@@ -79,7 +93,11 @@ export class MmainComponent implements OnInit {
         console.error('SaveData error:', error);
         alert('儲存資料失敗');
       },
-    });
+    });}
+    else{
+      this.readMemberData();
+      return;
+    }
   }
 
   readMemberData() {
@@ -90,10 +108,10 @@ export class MmainComponent implements OnInit {
         }
         if (response.isSuccess) {
           this.memberData = response.data;
-          // 確保 birth 日期是 'YYYY-MM-DD' 格式
           if (typeof this.memberData.birth === 'string') {
             this.memberData.birth = this.formatDate(this.memberData.birth);
           }
+          this.disablelinebtn();
         }
       },
       error: (error) => {
@@ -104,38 +122,14 @@ export class MmainComponent implements OnInit {
     });
   }
 
-  // 添加 formatDate 方法
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份從0開始
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
 
-  // loadLatestNews() {
-  //   this.memberService.readmemberNotice().subscribe({
-  //     next: (response) => {
-  //       this.latestNews = Array.isArray(response.datas)
-  //         ? response.datas.map((item: any) => ({
-  //             id: item.memberNoticeId,
-  //             date: item.creTime,
-  //             title: item.title,
-  //             summary: item.noticeContent,
-  //             showSummary: false,
-  //           }))
-  //         : [];
-
-  //       if (response.hasAlertMsg) {
-  //         alert(response.alertMsg);
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('loadLatestNews error:', error);
-  //       alert('加載最新消息失敗');
-  //     },
-  //   });
-  // }
 loadLatestNews() {
   this.memberService.readmemberNotice().subscribe({
     next: (response) => {
@@ -155,7 +149,7 @@ loadLatestNews() {
     },
     error: (error) => {
       console.error('loadLatestNews error:', error);
-      alert('加载最新消息失败');
+      alert('讀取訊息失敗');
     },
   });
 }
@@ -265,37 +259,25 @@ loadLatestNews() {
   }
 
   goToPlaylist() {
-    this.router.navigate(['/playlist/member']); // 導航到會員播放清單頁面
+    this.router.navigate(['/playlist/member']);
   }
 
   BindingLine(): void {
-
-    // const currentLineId:string = this.getCurrentLineId();
-
-
-    // this.memberService.readmemberdata(currentLineId).subscribe(
-    //     (response) => {
-
-    //         const isDuplicate = response.some(member => member.LINEID === currentLineId);
-
-    //         if (isDuplicate) {
-    //             console.log("The LINE ID already exists in the database. Returning.");
-    //             return;
-    //         } else {
-
                 this.authService.loginWithLine(true);
-    //         }
-    //     },
-    //     (error) => {
-    //         console.error("Error reading member data:", error);
-
-    //     }
-    // );
 }
 
 
 private getCurrentLineId(): string {
 
     return "example_line_id";
+}
+
+demo(){
+  this.memberData.memberName='陳俊廷'
+  this.memberData.password='Ting54ting'
+  this.memberData.nickName='小Paul'
+  this.memberData.gender='M'
+  this.memberData.phone='0956566566'
+  this.memberData.address='台北市中正區重慶南路二段5號'
 }
 }

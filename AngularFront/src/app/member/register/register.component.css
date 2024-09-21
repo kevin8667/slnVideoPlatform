@@ -1,44 +1,79 @@
-div{
-  color:black;
-}
-#container{
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  :is(h1){
-  color: #333;
+.h1 label {
+  color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
 }
 
-input{
-  background-color: #e6e6e6;
-  color: #666;
+
+#container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 95%, #f5f9f9 100%), url('/assets/img/Member/STARcircle.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh; /* 使容器高度為視口高度 */
+  width: 100vw; /* 使容器寬度為視口寬度 */
+  text-align: center; /* 文字置中 */
+  color: white; /* 設定文字顏色 */
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+.demo{
+  width: 60px;
+  position: absolute;
+  left: 0px;
+}
+
+input[type="date"] {
+  background-color: transparent; /* 背景透明 */
+  color: #ffffff; /* 文字顏色 */
   padding: 20px 20px;
-  border: 0px;
+  border: 1px solid white; /* 白色邊框 */
   margin-bottom: 10px;
   width: 300px;
-  border-radius: 0%;
+  border-radius: 8px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* 反轉顏色，使圖示變成白色 */
 }
 
 
-button, .p-button{
+.p-float-label label {
+  color: #ffffff; /* 設置文字顏色為白色 */
+}
+
+input {
+  background-color: transparent; /* 背景透明 */
+  color: #ffffff;
+  padding: 20px 20px;
+  border: 1px solid white; /* 白色邊框 */
+  margin-bottom: 10px;
+  width: 300px;
+  border-radius: 8px;
+}
+
+
+button, .p-button {
   width: 300px;
   text-align: center;
-  border-radius: 0%;
+  border-radius: 8px;
   padding: 10px 10px;
-  background-color: #17A2B8;
-  color:#212529;
-  border: 0px;
+  background-color: transparent; /* 背景透明 */
+  color: #ffffff;
+  border: 1px solid white; /* 白色邊框 */
   outline: none;
   margin-top: 10px;
   text-transform: uppercase;
   cursor: pointer;
-
 }
 
-.p-button:hover, .p-button:focus, button:hover, button:focus{
-  background-color:  #00c8d6
-}
-
+.p-button:hover, .p-button:focus, button:hover, button:focus {
+  background-color: transparent; /* 背景透明 */
+  border-color: #ffffff; /* 邊框顏色變化 */
+  color: #ffffff; /* 文字顏色變化 */
+  background-color: #00c8d6;
 }
