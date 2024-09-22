@@ -34,7 +34,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-
+debugger;
         if (error.status === 666) {
           this.authService.Logout();
         }
