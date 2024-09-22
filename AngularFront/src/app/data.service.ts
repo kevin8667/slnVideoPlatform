@@ -23,6 +23,15 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
+  // 根據影院和影片 ID 取得放映時間
+  getShowtimesByCinemaAndMovie(
+    cinemaId: number,
+    videoId: number
+  ): Observable<any> {
+    const url = `${this.apiUrl}/cinema/${cinemaId}/movie/${videoId}`;
+    return this.http.get<any>(url);
+  }
+
   // 生成訂單的 API 調用
   createReservation(reservationData: any): Observable<any> {
     const url = `${this.apiUrl}`; // 調用 POST /api/Showtimes 生成訂單
@@ -39,7 +48,7 @@ export class DataService {
     const url = `${this.apiUrl}/member/${memberId}/reservation`; // 根據會員ID取得訂單
     return this.http.get<any[]>(url);
   }
-   // 根據當前登入會員的ID取得訂單資料
+  // 根據當前登入會員的ID取得訂單資料
   //  getOrdersForCurrentMember(): Observable<any[]> {
   //   return this.auth.getMemberId().pipe( // 調用 AuthService 的 getMemberId 方法
   //     switchMap((response) => {
@@ -53,5 +62,4 @@ export class DataService {
   //     })
   //   );
   // }
-
 }

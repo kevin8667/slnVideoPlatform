@@ -42,20 +42,7 @@ export class TicketComponent implements OnInit {
     return `${hours}時${minutes}分`;
   }
   ngOnInit(): void {
-    // 1. 獲取會員ID
-    // this.dataService.getOrdersForCurrentMember().subscribe(
-    //   (response) => {
-    //     if (response && response.length > 0) {
-    //       this.memberId = response[0].MemberId; // 獲取會員ID
-    //       console.log('獲取的會員ID:', this.memberId);
-    //     } else {
-    //       console.error('無法獲取會員ID');
-    //     }
-    //   },
-    //   (error) => {
-    //     console.error('Error fetching member ID:', error);
-    //   }
-    // );
+
 
     //接MOVIEID
     this.route.queryParams.subscribe((params) => {
@@ -129,7 +116,7 @@ export class TicketComponent implements OnInit {
   }
 
   loadShowtimes(cinemaId: number) {
-    this.dataService.getShowtimesByCinema(cinemaId).subscribe((data: any) => {
+    this.dataService.getShowtimesByCinemaAndMovie(cinemaId, this.movieId).subscribe((data: any) => {
       const halls = data.reduce((acc: any[], showtime: any) => {
         let hall = acc.find((h) => h.HallName === showtime.hallsName);
         if (!hall) {
@@ -160,25 +147,19 @@ export class TicketComponent implements OnInit {
         return acc;
       }, []);
 
-      // 對每個影廳的 Showtimes 進行日期和時間排序
       halls.forEach((hall: { Showtimes: any[] }) => {
         hall.Showtimes.sort((a: any, b: any) => {
-          // 首先比較日期，然後比較時間
           const dateComparison =
             new Date(a.showTimeDate).getTime() -
             new Date(b.showTimeDate).getTime();
           if (dateComparison !== 0) {
-            return dateComparison; // 如果日期不同，按照日期排序
+            return dateComparison;
           }
-          // 如果日期相同，則按照時間排序
           return a.time.localeCompare(b.time);
         });
       });
 
-      // 更新選中的影院的 Halls
       this.selectedCinema.Halls = halls;
-
-      // 手動觸發變更檢測
       this.cdr.detectChanges();
     });
   }
