@@ -1,6 +1,6 @@
 import { Season } from '../interfaces/season';
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
 import { ConfirmationService, MessageService  } from 'primeng/api';
@@ -12,6 +12,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddtoplaylistComponent } from '../addtoplaylist/addtoplaylist.component';
 import { RatingDTO } from '../interfaces/ratingDTO';
 import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-video-detail',
@@ -91,7 +92,8 @@ export class VideoDetailComponent implements OnInit{
     private messageService: MessageService,
     private dialogService: DialogService,
     private sanitizer: DomSanitizer,
-    private cd: ChangeDetectorRef)
+    private cd: ChangeDetectorRef, 
+    private router: Router)
   {
   //   this.video = {
   //     videoId: 1,
@@ -347,5 +349,9 @@ onReject() {
     if (this.ref) {
       this.ref.close();
     }
+  }
+
+  onBookTicket(){
+    this.router.navigate(['/ticket'], {queryParams:{videoID:this.videoIDForFunctions}});
   }
 }

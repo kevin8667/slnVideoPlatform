@@ -32,12 +32,13 @@
           [href]="video.trailerUrl"
           target="_blank"
         >購買或租借</a>
-        <a *ngIf="isShowing"
+        <a *ngIf="video.isShowing"
           class="button"
           style="text-decoration-line: none;"
           pButton
           pRipple
-          [href]="video.trailerUrl"
+          (click) = "onBookTicket()"
+          [routerLink]="['/ticket']" [queryParams]="videoIDForFunctions.toString"
           target="_blank"
         >訂票</a>
       </div>
@@ -50,7 +51,6 @@
         style="text-decoration-line: none;"
         pButton
         pRipple
-        [href]="video.trailerUrl"
         target="_blank"
         icon="pi pi-heart"
         >加入最愛</a>
