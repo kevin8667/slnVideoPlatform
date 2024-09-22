@@ -86,7 +86,7 @@ export default class ForumService {
       .pipe(
         catchError(() => {
           // 處理錯誤
-          history.back();
+          this.router.navigate(['error'])
           return throwError(
             () => new Error('服務異常：Failed to fetch article')
           );

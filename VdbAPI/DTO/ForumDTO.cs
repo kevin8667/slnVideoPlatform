@@ -4,11 +4,11 @@
             get; set;
         } = "";
         public int? categoryId { get; set; } = 0;
-        public string? sortBy {
+        public required int page {
             get; set;
         }
-        public string? sortType { get; set; } = "asc";
-        public int? page { get; set; } = 1;
-        public int? pageSize { get; set; } = 10; 
+        public required int pageSize {
+            get; set;
+        }
     }
 }

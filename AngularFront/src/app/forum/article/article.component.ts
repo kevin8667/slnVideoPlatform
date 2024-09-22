@@ -10,9 +10,8 @@ import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.css'],
   providers: [MessageService, ConfirmationService],
-
 })
-export class ArticleComponent implements OnInit, AfterViewInit {
+export class ArticleComponent implements OnInit {
   article: ArticleView = {} as ArticleView;
   articleId!: number;
   posts: Post[] = [];
@@ -29,7 +28,7 @@ export class ArticleComponent implements OnInit, AfterViewInit {
     private forumService: ForumService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private actRoute: ActivatedRoute,
+    private actRoute: ActivatedRoute
   ) {}
 
   @HostListener('window:beforeunload', ['$event'])
@@ -73,11 +72,6 @@ export class ArticleComponent implements OnInit, AfterViewInit {
     this.forumService.loadCss('../../../assets/css/quill.snow.css');
 
     this.forumService.getArticle(this.articleId).subscribe((data) => {
-      if (!data.lock) {
-        this.router.navigateByUrl('forum');
-        return;
-      }
-
       this.article = data;
     });
 
@@ -87,7 +81,7 @@ export class ArticleComponent implements OnInit, AfterViewInit {
 
     this.initializeMenu();
   }
-  ngAfterViewInit(): void {}
+  reactionMap: { [contentId: number]: 'like' | 'dislike' | null } = {}; // 記錄用戶對每篇文章的反應
   private getReactions() {
     this.forumService
       .getUserReaction(this.user.memberId, this.articleId)
@@ -200,7 +194,6 @@ export class ArticleComponent implements OnInit, AfterViewInit {
     this.router.navigate(['forum', 'new', 'post', articleId]);
   }
   // 使用 Map 來追踪每個內容的反應狀態
-  reactionMap: { [contentId: number]: 'like' | 'dislike' | null } = {}; // 記錄用戶對每篇文章的反應
 
   getReaction(contentId: number = -1) {
     return this.reactionMap[contentId] || null; // 返回當前用戶對該文章的反應
