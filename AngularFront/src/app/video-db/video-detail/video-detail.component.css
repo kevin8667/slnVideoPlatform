@@ -50,7 +50,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 300px; /* 限制圖片容器的最大寬度 */
+    max-width: 320px; /* 限制圖片容器的最大寬度 */
 
   }
   .video-image {
@@ -112,113 +112,67 @@ h2
 {
   margin-bottom: 5px;
 }
-.content-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* 增加內容之間的間距 */
-  padding: 20px;
+/* 父容器 */
+.p-grid {
+  margin: 0;
+  padding: 0;
 }
 
-
-.content-container {
-  display: flex; /* 使用 Flexbox 進行排列 */
-  gap: 20px; /* 主要演員和 carousel 之間的間距 */
-}
-
-
-
-.actors-grid {
+/* 演員卡片樣式 */
+.actors-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 設定兩列，根據需要調整列數 */
-  gap: 10px; /* 調整卡片間距 */
+  gap: 10px; /* 卡片之間的間距 */
 }
 
 .actor-card {
-  padding: 10px;
+  width: 120px; /* 固定每個卡片的寬度 */
   text-align: center;
-  width: 150px;
 }
 
-p-carousel {
-  margin-top: 30px; /* 確保 Carousel 與演員區域分開 */
-  max-width: 1100px;
-}
-
-.actor-image {
-  width: 100px; /* 設定固定寬度 */
-  height: 150px; /* 設定固定高度 */
-  object-fit: cover; /* 保持圖片比例，裁切多餘部分以適應容器 */
-}
-
-:host ::ng-deep .actor-card .p-card-body {
-  padding: 5px; /* 調整內邊距 */
-}
-
-:host ::ng-deep .actor-card .p-card-content {
-  padding-top: 10px; /* 調整內邊距 */
-  padding-bottom: 10px;
-}
-
-/* 修正圖片縮放效果 */
-.gallery-container {
-  text-align: center;
-  transition: transform 0.5s ease; /* 增加動畫效果 */
-  padding: 10px;
-  transform: scale(0.8); /* 預設縮小圖片 */
-}
-
-.gallery-container.active {
-  transform: scale(2); /* 當前選中的圖片放大 */
-}
-
-.gallery-image {
-  width: 100px;
-  height: 150px;
+.actor-card img {
+  width: 100%;
+  height: 160px; /* 固定圖片高度 */
   object-fit: cover;
-  transition: transform 0.5s ease;
+  border-radius: 8px;
 }
 
-/* 修正左右箭頭按鈕的大小和位置 */
-.p-carousel .p-carousel-prev,
-.p-carousel .p-carousel-next {
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-  position: absolute;
+.actor-card p {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #333;
 }
 
-.p-carousel .p-carousel-prev {
-  left: -40px; /* 調整位置，避免按鈕太靠右 */
-}
-
-.p-carousel .p-carousel-next {
-  right: -40px; /* 調整位置，避免按鈕太靠右 */
-}
-
-/* 確保 Carousel 容器內的圖片不會超出 */
-.p-carousel .p-carousel-items-container {
-  display: flex;
-  justify-content: center; /* 中央對齊圖片 */
-  overflow: hidden; /* 防止內容溢出 */
-}
-
-.p-carousel .p-carousel-items-container .p-carousel-item {
+/* Carousel 容器 */
+.carousel-container {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: scale(1); /* 預設縮放 */
-  transition: transform 0.5s ease; /* 動畫效果 */
+  position: relative;
 }
 
-.p-carousel .p-carousel-items-container .p-carousel-item.active {
-  transform: scale(2); /* 中央圖片放大 */
+.carousel-item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* 調整圖片容器高度 */
 }
+
+.carousel-item-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.p-carousel {
+  width: 100%; /* 確保 Carousel 滿寬 */
+}
+
+
+
+
+
 
 .rating-link {
   color: yellow; /* 設定文字顏色 */
@@ -255,6 +209,36 @@ p-carousel {
   background-color: #6c757d;
   border-color: #6c757d;
   color: white;
+}
+
+.trailerOverlay {
+  position: fixed; /* 固定位置，使其相對於螢幕 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* 半透明背景 */
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  z-index: 9999; /* 確保位於最前層 */
+}
+
+iframe {
+  width: 720px;
+  height: 405px;
+  position: relative; /* 相對於父元素居中 */
+}
+
+
+.closeButton
+{
+  position: absolute;
+  top: 10px; /* 距離 iframe 上方10px */
+  right: 10px; /* 距離 iframe 右邊10px */
+  font-size: 24px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
 }
 
 /* 全屏黑色半透明 Overlay */

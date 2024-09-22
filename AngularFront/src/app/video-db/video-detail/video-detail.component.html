@@ -1,6 +1,9 @@
 
+<header>
+  <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css">   
+</header>
 
-<div class="custom-card"  [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
+<div class="custom-card" *ngIf="video" [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
   <div class="card-body">
     <div class="image-container">
       <p-image
@@ -29,6 +32,14 @@
           [href]="video.trailerUrl"
           target="_blank"
         >購買或租借</a>
+        <a *ngIf="isShowing"
+          class="button"
+          style="text-decoration-line: none;"
+          pButton
+          pRipple
+          [href]="video.trailerUrl"
+          target="_blank"
+        >訂票</a>
       </div>
     </div>
     <div class="text-content">
@@ -56,20 +67,22 @@
         style="text-decoration-line: none;"
         pButton
         pRipple
-        [href]="video.trailerUrl"
-        target="_blank"
         icon="pi pi-play"
-        >觀看預告片</a>
+        (click)="overLayToggle()">觀看預告片</a>
       </div>
       <div>
         <p *ngIf="season?.seasonName"><strong>季:</strong> {{ season?.seasonName }}</p>
         <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
         <p><strong>片長:</strong> {{ video.runningTime }}</p>
         <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
-        <p><strong>評分:</strong> 4.7 / 5<a (click)="op.toggle($event)" class="rating-link">
+        <p *ngIf="avgRating>0"><strong>評分:</strong> {{avgRating}} / 10<a (click)="openRatingPanel($event, op)" class="rating-link">
+          <i class="pi pi-star-fill"></i> 留下評分
+        </a></p>
+        <p *ngIf="avgRating === 0 || avgRating === undefined"><strong>評分:</strong> 尚無評分 <a (click)="openRatingPanel($event, op)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分
         </a></p>
         <p-toast position="center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
+
           <ng-template let-message pTemplate="message">
               <div class="flex flex-column" style="flex: 1">
                   <div class="text-center">
@@ -88,11 +101,14 @@
               </div>
           </ng-template>
       </p-toast>
+      <p-toast position="top-center" key="global"></p-toast>
         <p-overlayPanel #op>
           <ng-template pTemplate="content">
-              <h4>Custom Content</h4>
-              <div class="card flex justify-content-center">
+              <div class="card flex justify-content-center" *ngIf="userID !==0">
                 <p-rating [(ngModel)]="userRating" (onRate)="confirm($event, op)" [stars]="10"></p-rating>
+              </div>
+              <div class="card flex justify-content-center" *ngIf="userID ===0">
+                <p><strong>請先登入!</strong></p>
               </div>
           </ng-template>
         </p-overlayPanel>
@@ -113,28 +129,33 @@
   </div>
 </div>
 
-<div class="content-wrapper">
-  <div class="content-container">
-    <!-- 主要演員區域 -->
-    <div class="actors-grid">
-      <h2 class="starring" style="color: black;">主要演員</h2>
-      <div class="grid">
-        <div *ngFor="let actor of actors" class="card">
-          <a routerLink="/video-db/person/1" style="text-decoration: none;">
-          <p-card class="actor-card">
-            <ng-template pTemplate="header">
-              <div style="font-size:18px;">{{ actor.name }}</div>
-            </ng-template>
-            <ng-template pTemplate="content">
-              <img [src]="actor.imagePath" alt="{{ actor.name }}" class="actor-image">
-            </ng-template>
-          </p-card>
-          </a>
-        </div>
+<div class="p-grid p-nogutter">
+  <!-- 演員列表 -->
+  <div class="p-col-12 p-md-3">
+    <h2>主要演員</h2>
+    <div class="actors-container p-d-flex p-flex-wrap p-jc-start">
+      <div *ngFor="let actor of actors" class="actor-card p-mr-2 p-mb-3">
+        <img [src]="actor.imagePath" alt="{{ actor.name }}">
+        <p>{{ actor.name }}</p>
       </div>
     </div>
+  </div>
 
-    <p-carousel
+  <!-- 右邊的 Carousel -->
+  <div class="p-col-12 p-md-9">
+    <div class="carousel-container">
+      <p-carousel [value]="images" [numVisible]="1" [circular]="true" [autoplayInterval]="3500">
+        <ng-template pTemplate="item" let-image>
+          <div class="carousel-item-container">
+            <img [src]="image" alt="Image" />
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </div>
+</div>
+
+    <!-- <p-carousel
     [value]="images"
     [numVisible]="3"
     [circular]="true"
@@ -148,9 +169,7 @@
         <img [src]="image" class="gallery-image" />
       </div>
     </ng-template>
-  </p-carousel>
-  </div>
-</div>
+  </p-carousel> -->
 
 <h3 style="color: black; margin-top: 2rem;">推薦影片</h3>
 <div class="card recommended-videos">
@@ -167,7 +186,7 @@
         class="video-carousel-item border-1 surface-border border-round m-2 text-center py-5 px-3"
       >
         <div class="mb-3">
-          <a [routerLink]="['/details', video.videoId]"
+          <a [routerLink]="['/video-db/details', video.videoId]"
             ><img
               [src]="video.thumbnailPath"
               [alt]="video.name"
@@ -181,6 +200,13 @@
       </div>
     </ng-template>
   </p-carousel>
+</div>
+<div *ngIf="trailerVisibility" class="trailerOverlay" >
+  <a (click)="overLayToggle()"style="text-decoration: none;">
+    <i class="pi pi-times closeButton"></i>
+  </a>
+  <iframe [src]="videoUrl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" style="position: absolute;" allowfullscreen></iframe>
+
 </div>
 
 <!-- 全屏黑色半透明 Overlay -->

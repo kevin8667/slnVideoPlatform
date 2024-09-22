@@ -197,7 +197,9 @@ public partial class VideoDBContext : DbContext
             entity.Property(e => e.ThemeName)
                 .IsRequired()
                 .HasMaxLength(50);
-            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(50);
             entity.Property(e => e.UpdateDate).HasColumnType("datetime");
         });
 
@@ -811,7 +813,7 @@ public partial class VideoDBContext : DbContext
 
             entity.Property(e => e.RatingId).HasColumnName("RatingID");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
-            entity.Property(e => e.Rating).HasColumnType("decimal(2, 1)");
+            entity.Property(e => e.Rating).HasColumnType("decimal(3, 1)");
             entity.Property(e => e.VideoId).HasColumnName("VideoID");
 
             entity.HasOne(d => d.Member).WithMany(p => p.MemberRatings)

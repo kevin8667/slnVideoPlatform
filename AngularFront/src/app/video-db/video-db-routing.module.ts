@@ -6,6 +6,7 @@ import { VideoDbSearchComponent } from './video-db-search/video-db-search.compon
 import { SeasonListComponent } from './season-list/season-list.component';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
+import { NewVideoComponent } from './new-video/new-video.component';
 import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component';
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'seasons', component: SeasonListComponent },
   { path: 'episodes', component: EpisodeListComponent },
   { path: 'person/:id', component: PersonDetailComponent },
+  { path: 'newvideo', component: NewVideoComponent },
   { path: 'addtoplaylist', component: AddtoplaylistComponent }
 ];
 

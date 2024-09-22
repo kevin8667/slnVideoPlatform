@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
@@ -15,7 +16,8 @@ public partial class MemberRating
 
     public decimal Rating { get; set; }
 
+    [JsonIgnore]
     public virtual MemberInfo Member { get; set; }
-
+    [JsonIgnore]
     public virtual VideoList Video { get; set; }
 }

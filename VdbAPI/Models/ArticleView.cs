@@ -19,13 +19,13 @@ public partial class ArticleView
 
     public string ArticleContent { get; set; }
 
-    public DateTime? PostDate { get; set; }
+    public DateTime PostDate { get; set; }
 
-    public DateTime? UpdateDate { get; set; }
+    public DateTime UpdateDate { get; set; }
 
-    public int? ReplyCount { get; set; }
+    public int ReplyCount { get; set; }
 
-    public bool? Lock { get; set; }
+    public bool Lock { get; set; }
 
     public string ArticleImage { get; set; }
 
