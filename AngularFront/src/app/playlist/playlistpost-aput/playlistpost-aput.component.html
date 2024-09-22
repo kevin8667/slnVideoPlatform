@@ -54,6 +54,7 @@
           [(ngModel)]="playlist.playListName"
           name="playListName"
           class="form-control"
+          [placeholder]="isEditing ? '' : defaultPlaylistNamePlaceholder()"
         />
       </div>
 
@@ -64,6 +65,7 @@
           [(ngModel)]="playlist.playListDescription"
           name="playListDescription"
           class="form-control"
+          [placeholder]="isEditing ? '' : defaultPlaylistDescriptionPlaceholder()"
         ></textarea>
       </div>
 

@@ -88,7 +88,9 @@ export class PlaylistpostAputComponent implements OnInit {
       .getPlaylistItems(this.playlist.playListId ?? 0)
       .subscribe(
         (items: PlaylistitemDTO[]) => {
-          this.playlistItems = items.sort((a, b) => a.videoPosition - b.videoPosition);
+          this.playlistItems = items.sort(
+            (a, b) => a.videoPosition - b.videoPosition
+          );
 
           this.selectedVideos = this.playlistItems.map((item) => ({
             videoId: item.videoId,
@@ -101,7 +103,7 @@ export class PlaylistpostAputComponent implements OnInit {
           console.error('Error loading playlist items', error);
         }
       );
-    }
+  }
 
   loadCollaborators(): void {
     this.playlistService.getCollaborators().subscribe(
@@ -157,7 +159,33 @@ export class PlaylistpostAputComponent implements OnInit {
     this.displayDialog = false;
   }
 
+  defaultPlaylistNamePlaceholder(): string {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `片單${yyyy}-${mm}-${dd}`;
+  }
+
+  defaultPlaylistDescriptionPlaceholder(): string {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `該片單建立於${yyyy}-${mm}-${dd}`;
+  }
+
   onSubmit(): void {
+    if (!this.isEditing) {
+      if (this.playlist.playListName.trim() === '') {
+        this.playlist.playListName = this.defaultPlaylistNamePlaceholder();
+      }
+      if (this.playlist.playListDescription.trim() === '') {
+        this.playlist.playListDescription =
+          this.defaultPlaylistDescriptionPlaceholder();
+      }
+    }
+
     if (
       this.playlist.playListName.trim() === '' ||
       this.playlist.playListDescription.trim() === ''
@@ -179,7 +207,7 @@ export class PlaylistpostAputComponent implements OnInit {
         .editPlaylist(this.playlist.playListId ?? 0, playListCreateDTO)
         .subscribe(
           (response) => {
-            console.log('播放清單已編輯')
+            console.log('播放清單已編輯');
             this.playlistAdded.emit();
           },
           (error) => {
@@ -189,8 +217,8 @@ export class PlaylistpostAputComponent implements OnInit {
     } else {
       this.playlistService.addNewPlaylist(playListCreateDTO).subscribe(
         (response) => {
-            console.log('播放清單已新增');
-            this.playlistAdded.emit();
+          console.log('播放清單已新增');
+          this.playlistAdded.emit();
         },
         (error) => {
           console.error('新增播放清單時發生錯誤', error);
@@ -231,20 +259,24 @@ export class PlaylistpostAputComponent implements OnInit {
 
     this.playlistItems.forEach((video, index) => {
       video.videoPosition = index + 1;
-      console.log(`Updating position for videoId: ${video.videoId}, newPosition: ${video.videoPosition}`);
-
-      this.playlistService.updateVideoPosition(
-        this.playlist.playListId ?? 0,
-        video.videoId,
-        video.videoPosition
-      ).subscribe(
-        () => {
-          console.log('Video position updated');
-        },
-        (error) => {
-          console.error('Error updating video position:', error);
-        }
+      console.log(
+        `Updating position for videoId: ${video.videoId}, newPosition: ${video.videoPosition}`
       );
+
+      this.playlistService
+        .updateVideoPosition(
+          this.playlist.playListId ?? 0,
+          video.videoId,
+          video.videoPosition
+        )
+        .subscribe(
+          () => {
+            console.log('Video position updated');
+          },
+          (error) => {
+            console.error('Error updating video position:', error);
+          }
+        );
     });
 
     this.playlistItems.sort((a, b) => a.videoPosition - b.videoPosition);
@@ -266,9 +298,15 @@ export class PlaylistpostAputComponent implements OnInit {
     }
 
     this.playlistItems.forEach((item, index) => {
-      console.log(`Updating videoId: ${item.videoId}, newPosition: ${index + 1}`);
+      console.log(
+        `Updating videoId: ${item.videoId}, newPosition: ${index + 1}`
+      );
       this.playlistService
-        .updateVideoPosition(this.playlist.playListId??0, item.videoId, index + 1)
+        .updateVideoPosition(
+          this.playlist.playListId ?? 0,
+          item.videoId,
+          index + 1
+        )
         .subscribe(
           (response) => {
             console.log('影片位置已更新', response);
@@ -292,8 +330,8 @@ export class PlaylistpostAputComponent implements OnInit {
             console.error('Error updating playlist items', error);
           }
         );
-      }
     }
+  }
 
   onSelectVideo(item: VideoListDTO): void {
     const existingVideo = this.playlistItems.find(
@@ -325,5 +363,5 @@ export class PlaylistpostAputComponent implements OnInit {
           console.error('Error removing video from playlist:', error);
         }
       );
-    }
   }
+}
