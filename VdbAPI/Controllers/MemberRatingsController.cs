@@ -40,6 +40,22 @@ namespace VdbAPI.Controllers
             return Ok(memberRating);
         }
 
+        [HttpGet("Member={memberID}&Video={videoID}")]
+        public async Task<ActionResult<MemberRating>> GetMemberRatingByMember(int memberID, int videoID)
+        {
+            var memberRating = await _context.MemberRatings
+                                .Where(r => r.MemberId == memberID)
+                                .Where(r => r.VideoId == videoID)
+                                .ToListAsync();
+
+            if (memberRating == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(memberRating);
+        }
+
         // GET: api/MemberRatings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MemberRating>> GetMemberRating(int id)

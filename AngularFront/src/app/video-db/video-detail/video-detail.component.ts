@@ -11,13 +11,14 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddtoplaylistComponent } from '../addtoplaylist/addtoplaylist.component';
 import { RatingDTO } from '../interfaces/ratingDTO';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-video-detail',
   templateUrl: './video-detail.component.html',
   styleUrls: ['./video-detail.component.css'],
   providers: [ConfirmationService, MessageService, DialogService],
-  // encapsulation:ViewEncapsulation.None
+  //encapsulation:ViewEncapsulation.Emulated
 })
 
 export class VideoDetailComponent implements OnInit{
@@ -88,8 +89,9 @@ export class VideoDetailComponent implements OnInit{
     private videoService: VideoDBService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private dialogService: DialogService
-  , private sanitizer: DomSanitizer)
+    private dialogService: DialogService,
+    private sanitizer: DomSanitizer,
+    private cd: ChangeDetectorRef)
   {
   //   this.video = {
   //     videoId: 1,
@@ -130,7 +132,6 @@ export class VideoDetailComponent implements OnInit{
         this.videoService.getVideoApiWithID(videoID).subscribe(data => {
           this.video = data;
 
-          
           this.videoIDForFunctions = data.videoId;
           console.log(data);
           if(this.video.seasonId){
@@ -138,6 +139,7 @@ export class VideoDetailComponent implements OnInit{
           }
           this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.video.trailerUrl);
 
+          
           this.ratingInfo=
           {
             memberId : this.userID,
@@ -154,8 +156,17 @@ export class VideoDetailComponent implements OnInit{
           {
             let tempSum : number= ratings.reduce((partialSum, a) => partialSum + a.rating, 0);
             this.avgRating = tempSum/ratings.length;
+            this.avgRating = Math.round(this.avgRating*10)/10
             console.log(this.avgRating);
           }
+        })
+
+        this.videoService.getRatingByData(this.userID.toString(), videoID).subscribe(data=>{
+          console.log(data);
+          if(data)
+            {
+              this.userRating= data.rating;
+            }
         })
 
         this.videoService.getImagesByVideoID(videoID).subscribe(images=>{
@@ -165,9 +176,6 @@ export class VideoDetailComponent implements OnInit{
           }
 
         })
-
-
-
       }
     });
 
@@ -232,6 +240,28 @@ export class VideoDetailComponent implements OnInit{
     this.selectedImage = this.images[index];
   }
 
+  openRatingPanel(event: any, op: OverlayPanel) {
+    // 先檢查評分資料是否已經存在 (這部分邏輯應該已經存在)
+    if (this.userID !== 0) {
+      this.videoService.getRatingByData(this.userID.toString(), this.video.videoId).subscribe(data => {
+        if (data) {
+          this.userRating = data.rating;
+        } else {
+          this.userRating = 0; // 如果沒有評分，就設置為 0
+        }
+  
+        // 打開 OverlayPanel
+        op.toggle(event);
+  
+        // 手動觸發變更檢測，確保評分顯示正確
+        this.cd.detectChanges();
+      });
+    } else {
+      // 用戶未登入，直接打開 Panel
+      op.toggle(event);
+    }
+  }
+
   confirm(event: RatingRateEvent , op: OverlayPanel) {
 
     op.hide();
@@ -250,9 +280,9 @@ export class VideoDetailComponent implements OnInit{
 
     this.ratingInfo!.rating=this.userRating;
 
-    console.log(this.ratingInfo);
+    console.log(this.videoIDForFunctions);
 
-    this.postRating();
+    //this.postRating();
 
     this.messageService.add({
       key: 'global',

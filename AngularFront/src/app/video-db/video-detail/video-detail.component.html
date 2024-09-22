@@ -1,4 +1,7 @@
 
+<header>
+  <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css">   
+</header>
 
 <div class="custom-card" *ngIf="video" [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
   <div class="card-body">
@@ -72,10 +75,10 @@
         <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
         <p><strong>片長:</strong> {{ video.runningTime }}</p>
         <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
-        <p *ngIf="avgRating>0"><strong>評分:</strong> {{avgRating}} / 10<a (click)="op.toggle($event)" class="rating-link">
+        <p *ngIf="avgRating>0"><strong>評分:</strong> {{avgRating}} / 10<a (click)="openRatingPanel($event, op)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分
         </a></p>
-        <p *ngIf="avgRating === 0 || avgRating === undefined"><strong>評分:</strong> 尚無評分 <a (click)="op.toggle($event)" class="rating-link">
+        <p *ngIf="avgRating === 0 || avgRating === undefined"><strong>評分:</strong> 尚無評分 <a (click)="openRatingPanel($event, op)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分
         </a></p>
         <p-toast position="center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
@@ -126,28 +129,33 @@
   </div>
 </div>
 
-<div class="content-wrapper">
-  <div class="content-container">
-    <!-- 主要演員區域 -->
-    <div class="actors-grid">
-      <h2 class="starring" style="color: black;">主要演員</h2>
-      <div class="grid">
-        <div *ngFor="let actor of actors" class="card">
-          <a routerLink="/video-db/person/1" style="text-decoration: none;">
-          <p-card class="actor-card">
-            <ng-template pTemplate="header">
-              <div style="font-size:18px;">{{ actor.name }}</div>
-            </ng-template>
-            <ng-template pTemplate="content">
-              <img [src]="actor.imagePath" alt="{{ actor.name }}" class="actor-image">
-            </ng-template>
-          </p-card>
-          </a>
-        </div>
+<div class="p-grid p-nogutter">
+  <!-- 演員列表 -->
+  <div class="p-col-12 p-md-3">
+    <h2>主要演員</h2>
+    <div class="actors-container p-d-flex p-flex-wrap p-jc-start">
+      <div *ngFor="let actor of actors" class="actor-card p-mr-2 p-mb-3">
+        <img [src]="actor.imagePath" alt="{{ actor.name }}">
+        <p>{{ actor.name }}</p>
       </div>
     </div>
+  </div>
 
-    <p-carousel
+  <!-- 右邊的 Carousel -->
+  <div class="p-col-12 p-md-9">
+    <div class="carousel-container">
+      <p-carousel [value]="images" [numVisible]="1" [circular]="true" [autoplayInterval]="3500">
+        <ng-template pTemplate="item" let-image>
+          <div class="carousel-item-container">
+            <img [src]="image" alt="Image" />
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </div>
+</div>
+
+    <!-- <p-carousel
     [value]="images"
     [numVisible]="3"
     [circular]="true"
@@ -161,9 +169,7 @@
         <img [src]="image" class="gallery-image" />
       </div>
     </ng-template>
-  </p-carousel>
-  </div>
-</div>
+  </p-carousel> -->
 
 <h3 style="color: black; margin-top: 2rem;">推薦影片</h3>
 <div class="card recommended-videos">

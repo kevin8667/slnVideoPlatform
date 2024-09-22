@@ -229,4 +229,11 @@ export class VideoDBService {
 
     return this.httpClient.get<RatingDTO[]>(apiUrl);
   }
+
+  getRatingByData(memberId:string,videoId:string)
+  {
+    const apiUrl = `https://localhost:7193/api/MemberRatings/Member=${memberId}&Video=${videoId}`;
+
+    return this.httpClient.get<RatingDTO>(apiUrl);
+  }
 }
