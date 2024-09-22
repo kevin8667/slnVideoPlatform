@@ -26,18 +26,26 @@
 }
 
 .movie-info h2 {
-  color: #17A2B8; /* 主色調 */
+  color: #17a2b8; /* 主色調 */
   margin-bottom: 10px;
 }
 
 .movie-info h4 {
-  color: #6C757D; /* 次要色調 */
+  color: #6c757d; /* 次要色調 */
   margin-bottom: 10px;
 }
 
 .movie-info strong {
   color: #343a40 !important;
   font-size: 16px !important;
+}
+.movie-info p {
+  text-align: justify; /* 使文字兩端對齊 */
+  line-height: 1.6; /* 增加行距，提高可讀性 */
+  margin-bottom: 15px; /* 每段文字底部留空 */
+  max-width: 600px; /* 限制文字寬度 */
+  font-size: 16px; /* 調整字體大小 */
+
 }
 
 .cinema-selection {
@@ -68,7 +76,7 @@
 }
 
 .hall-container h4 {
-  color: #17A2B8;
+  color: #17a2b8;
   margin-bottom: 5px;
 }
 
@@ -97,16 +105,16 @@
 
 /* 滑鼠懸停效果 */
 .hall-container .showtime button:hover {
-  background-color: #17A2B8;
+  background-color: #17a2b8;
   color: #ffffff;
-  box-shadow: 0 0 0 1px #17A2B8; /* 滑鼠懸停時的邊框顏色 */
+  box-shadow: 0 0 0 1px #17a2b8; /* 滑鼠懸停時的邊框顏色 */
 }
 
 /* 按鈕選中狀態樣式 */
 .hall-container .showtime button.selected {
-  background-color: #17A2B8; /* 選中時的背景顏色 */
+  background-color: #17a2b8; /* 選中時的背景顏色 */
   color: #ffffff;
-  box-shadow: 0 0 0 1px #17A2B8; /* 選中時的邊框顏色 */
+  box-shadow: 0 0 0 1px #17a2b8; /* 選中時的邊框顏色 */
 }
 
 /* 清單樣式 */
@@ -123,7 +131,7 @@ li {
 .btn {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #17A2B8;
+  background-color: #17a2b8;
   color: white;
   border: none;
   border-radius: 4px;
@@ -141,7 +149,7 @@ li {
   font-size: 1.5em;
   font-weight: bold;
   color: #131414;
-  background-color: #17A2B8; /* 添加背景色 */
+  background-color: #17a2b8; /* 添加背景色 */
 }
 /* 控制時間和日期的樣式 */
 .showtime-details {

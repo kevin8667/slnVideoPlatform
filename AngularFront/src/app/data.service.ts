@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,16 @@ import { Observable } from 'rxjs';
 export class DataService {
   private apiUrl = 'https://localhost:7193/api/Showtimes'; // 確保您後端的API路徑是正確的
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService) {}
+    private userSubject = new BehaviorSubject<memberName>({
+      memberId: 0,
+      nickName: '',
+    }); // 初始化
+    public user$ = this.userSubject.asObservable();
+
+
 
   // 根據電影 ID 取得上映中的影院
   getCinemas(videoId: number): Observable<any> {
@@ -33,4 +43,6 @@ export class DataService {
     const url = `${this.apiUrl}/reservation/seats`; // 調用 POST /api/Showtimes/reservation/seats 分配座位
     return this.http.post<any>(url, seatSelectionData);
   }
+
+
 }

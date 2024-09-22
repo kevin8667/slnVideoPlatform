@@ -11,7 +11,7 @@ import { Video } from 'src/app/video-db/interfaces/video'; // 引入 Video 接�
   providers: [DataService, VideoDBService],
 })
 export class TicketComponent implements OnInit {
-  movieId: number = 4; // 測試用電影ID
+  movieId: number = 1; // 測試用電影ID
   selectedCinemaId: number | null = null; // 選中的影院ID
   selectedCinema: any = null; // 選中的影院
   cinemas: any[] = []; // 影院清單
