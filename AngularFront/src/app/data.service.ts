@@ -9,16 +9,7 @@ import { AuthService } from './auth.service';
 export class DataService {
   private apiUrl = 'https://localhost:7193/api/Showtimes'; // 確保您後端的API路徑是正確的
 
-  constructor(
-    private http: HttpClient,
-    private auth: AuthService) {}
-    private userSubject = new BehaviorSubject<memberName>({
-      memberId: 0,
-      nickName: '',
-    }); // 初始化
-    public user$ = this.userSubject.asObservable();
-
-
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
   // 根據電影 ID 取得上映中的影院
   getCinemas(videoId: number): Observable<any> {
@@ -43,6 +34,9 @@ export class DataService {
     const url = `${this.apiUrl}/reservation/seats`; // 調用 POST /api/Showtimes/reservation/seats 分配座位
     return this.http.post<any>(url, seatSelectionData);
   }
-
-
+  // **新增: 根據會員ID取得所有訂單資料**
+  getOrdersByMemberId(memberId: number): Observable<any[]> {
+    const url = `${this.apiUrl}/member/${memberId}/reservation`; // 根據會員ID取得訂單
+    return this.http.get<any[]>(url);
+  }
 }
