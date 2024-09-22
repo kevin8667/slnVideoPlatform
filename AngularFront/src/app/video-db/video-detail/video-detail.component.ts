@@ -282,7 +282,7 @@ export class VideoDetailComponent implements OnInit{
 
     console.log(this.videoIDForFunctions);
 
-    //this.postRating();
+    this.postRating();
 
     this.messageService.add({
       key: 'global',
