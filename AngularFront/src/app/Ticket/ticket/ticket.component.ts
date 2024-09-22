@@ -4,6 +4,7 @@ import { DataService } from 'src/app/data.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { VideoDBService } from 'src/app/video-db.service';
 import { Video } from 'src/app/video-db/interfaces/video'; // 引入 Video 接口
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
@@ -11,7 +12,8 @@ import { Video } from 'src/app/video-db/interfaces/video'; // 引入 Video 接�
   providers: [DataService, VideoDBService],
 })
 export class TicketComponent implements OnInit {
-  movieId: number = 1; // 測試用電影ID
+  videoIDForFunctions: number = 0;
+  movieId: number = this.videoIDForFunctions; // 測試用電影ID
   selectedCinemaId: number | null = null; // 選中的影院ID
   selectedCinema: any = null; // 選中的影院
   cinemas: any[] = []; // 影院清單
@@ -21,11 +23,14 @@ export class TicketComponent implements OnInit {
   summary: string = ''; //簡介
   runningTime: string = '';
 
+  memberId: number | null = null; // 用來保存會員ID
+
   constructor(
     private router: Router,
     private dataService: DataService,
     private cdr: ChangeDetectorRef,
-    private videoDBService: VideoDBService // 注入 VideoDBService,
+    private videoDBService: VideoDBService, // 注入 VideoDBService,
+    private route: ActivatedRoute // 注入 ActivatedRoute
   ) {}
   // 傳換片長時間為""時""分
   formatRunningTime(time: string): string {
@@ -37,6 +42,28 @@ export class TicketComponent implements OnInit {
     return `${hours}時${minutes}分`;
   }
   ngOnInit(): void {
+    // 1. 獲取會員ID
+    // this.dataService.getOrdersForCurrentMember().subscribe(
+    //   (response) => {
+    //     if (response && response.length > 0) {
+    //       this.memberId = response[0].MemberId; // 獲取會員ID
+    //       console.log('獲取的會員ID:', this.memberId);
+    //     } else {
+    //       console.error('無法獲取會員ID');
+    //     }
+    //   },
+    //   (error) => {
+    //     console.error('Error fetching member ID:', error);
+    //   }
+    // );
+
+    //接MOVIEID
+    this.route.queryParams.subscribe((params) => {
+      this.videoIDForFunctions = +params['videoID'] || 0;
+      console.log('接收到的 videoID:', this.videoIDForFunctions);
+    });
+    this.movieId = this.videoIDForFunctions;
+
     // 呼叫 VideoDBService 來取得電影資訊
     this.videoDBService.getVideoApiWithID(this.movieId.toString()).subscribe(
       (video: Video) => {
@@ -178,6 +205,7 @@ export class TicketComponent implements OnInit {
     localStorage.setItem('posterUrl', this.posterUrl);
     localStorage.setItem('summary', this.summary);
     localStorage.setItem('runningTime', this.runningTime);
+    localStorage.setItem('memberId', this.memberId?.toString() || ''); // 儲存會員ID
     this.router.navigate(['ticket/ticketselection']);
   }
 }

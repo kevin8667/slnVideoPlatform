@@ -13,6 +13,7 @@ interface MemberIdResponse {
   providedIn: 'root'
 })
 export class AuthService {
+  [x: string]: any;
   private apiUrl = 'https://localhost:7193/api/Member/GetMemberId'; // 替換為您的實際 API URL
   private cachedMemberId: number | null = null; // 緩存會員 ID
 
@@ -98,5 +99,5 @@ export class AuthService {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
-  
+
 }

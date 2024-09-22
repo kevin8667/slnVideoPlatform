@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs'; // 引入 of
 import { AuthService } from './auth.service';
-
+import { switchMap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -39,4 +39,19 @@ export class DataService {
     const url = `${this.apiUrl}/member/${memberId}/reservation`; // 根據會員ID取得訂單
     return this.http.get<any[]>(url);
   }
+   // 根據當前登入會員的ID取得訂單資料
+   getOrdersForCurrentMember(): Observable<any[]> {
+    return this.auth.getMemberId().pipe( // 調用 AuthService 的 getMemberId 方法
+      switchMap((response) => {
+        if (response.MemberId && !response.error) {
+          const url = `${this.apiUrl}/member/${response.MemberId}/reservation`; // 使用會員ID進行API請求
+          return this.http.get<any[]>(url);
+        } else {
+          // 如果沒有會員ID，返回一個空的結果
+          return of([]); // 返回空數組
+        }
+      })
+    );
+  }
+
 }

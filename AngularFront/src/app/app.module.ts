@@ -14,6 +14,7 @@ import { JwtInterceptor } from './jwt.interceptor';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { TicketReservationComponent } from './Ticket/ticket-reservation/ticket-reservation.component';
 import { OrderComponent } from './Ticket/order/order.component';
+import { TesttttttttComponent } from './Ticket/testttttttt/testttttttt.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { OrderComponent } from './Ticket/order/order.component';
     ShoppingCartComponent,
     AuthCallbackComponent,
     TicketReservationComponent,
-    OrderComponent
+    OrderComponent,
+    TesttttttttComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,25 @@
+<div class="seat-container">
+  <h2>座位選擇系統</h2>
+  <p>您可以選擇最多 {{ maxSelectableSeats }} 個座位。</p>
+
+  <!-- 渲染座位 -->
+  <div class="seat-row" *ngFor="let row of seatMap; let rowIndex = index">
+    <button
+      class="seat"
+      [class.selected]="seat.selected"
+      *ngFor="let seat of row; let colIndex = index"
+      (click)="selectSeat(rowIndex, colIndex)"
+    >
+      {{ rowIndex + 1 }}-{{ colIndex + 1 }}
+    </button>
+  </div>
+
+  <div class="selected-seats">
+    <h3>已選擇座位:</h3>
+    <ul>
+      <li *ngFor="let seat of selectedSeats">
+        Row: {{ seat.row + 1 }}, Seat: {{ seat.col + 1 }}
+      </li>
+    </ul>
+  </div>
+</div>

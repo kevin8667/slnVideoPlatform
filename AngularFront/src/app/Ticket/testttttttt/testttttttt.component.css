@@ -1,0 +1,75 @@
+.seat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+/* 修改座位按鈕的樣式，使其更像椅子 */
+.seat {
+  width: 50px;
+  height: 70px; /* 調整高度來讓按鈕看起來更像椅子 */
+  margin: 5px;
+  background-color: white;
+  border: 2px solid #6c757d; /* 椅子邊框 */
+  border-radius: 20px 20px 10px 10px; /* 更加圓潤的圓角，模擬椅背 */
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影讓按鈕看起來更有立體感 */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px; /* 調整字體大小 */
+}
+
+/* 當座位被選中時的樣式 */
+.seat.selected {
+  background-color: #28a745; /* 選擇時的顏色 */
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 當選中時陰影更深 */
+}
+
+/* 滑鼠懸停效果 */
+.seat:hover {
+  background-color: #17a2b8; /* 滑鼠懸停時的顏色 */
+  color: white;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* 懸停時更強的陰影 */
+}
+
+/* 添加椅子的細節 (座位的腿) */
+.seat::before,
+.seat::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  width: 12px;
+  height: 8px;
+  background-color: #6c757d;
+  border-radius: 2px;
+}
+
+.seat::before {
+  left: 10px; /* 左側的腿 */
+}
+
+.seat::after {
+  right: 10px; /* 右側的腿 */
+}
+
+/* 說明部分 */
+.selected-seats {
+  margin-top: 20px;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
