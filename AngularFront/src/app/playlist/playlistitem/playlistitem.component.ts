@@ -44,7 +44,7 @@ export class PlaylistitemComponent {
       sources: [
         {
           type: 'video/youtube',
-          src: 'https://www.youtube.com/watch?v=zaR3Pc2YYVw',
+          src: 'https://www.youtube.com/watch?v=FnCSee1k-ek',
         },
       ],
     });
@@ -58,7 +58,7 @@ export class PlaylistitemComponent {
 
   // 按鈕點擊方法
   goToVideo() {
-    this.router.navigate(['/video-db/details/3'], { queryParams: { showOverlay: 'true' } });
+    this.router.navigate(['/video-db/details/1'], { queryParams: { showOverlay: 'true' } });
   }
 
   closeOverlay() {
