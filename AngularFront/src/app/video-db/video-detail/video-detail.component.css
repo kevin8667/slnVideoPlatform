@@ -112,12 +112,11 @@ h2
 {
   margin-bottom: 5px;
 }
-/* 父容器 */
-.p-grid {
-  margin: 0;
-  padding: 0;
-}
 
+/* 讓主要演員和關鍵字區塊垂直置中 */
+.p-grid {
+  align-items: flex-start; /* 垂直方向的對齊方式，可選 'center' 或 'flex-start' */
+}
 /* 演員卡片樣式 */
 .actors-container {
   display: flex;
@@ -150,6 +149,7 @@ h2
   justify-content: center;
   align-items: center;
   position: relative;
+  margin-top: 20px; /* 與上方演員列表保持間距 */
 }
 
 .carousel-item-container {
@@ -169,10 +169,20 @@ h2
   width: 100%; /* 確保 Carousel 滿寬 */
 }
 
+.keywords-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-
-
-
+.keyword-badge {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
 
 .rating-link {
   color: yellow; /* 設定文字顏色 */

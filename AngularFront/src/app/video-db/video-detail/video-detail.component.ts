@@ -40,7 +40,9 @@ export class VideoDetailComponent implements OnInit{
 
   images:any[] =[];
 
-  userRating!:number;
+  userRating:number=0;
+
+  isUserHaveRated = false;
 
   ratingInfo:RatingDTO|undefined;
 
@@ -55,8 +57,8 @@ export class VideoDetailComponent implements OnInit{
 
   isShowing:boolean = false;
 
-  selectedIndex = 0; // 初始為第一張圖片
-  selectedImage: string = this.images[this.selectedIndex]; // 預設選中第一個
+  keywords:string[] = ["黑手黨","犯罪"]
+
 
   actors : any[]=[
     {
@@ -163,13 +165,13 @@ export class VideoDetailComponent implements OnInit{
           }
         })
 
-        this.videoService.getRatingByData(this.userID.toString(), videoID).subscribe(data=>{
-          console.log(data);
-          if(data)
-            {
-              this.userRating= data.rating;
-            }
-        })
+        // this.videoService.getRatingByData(this.userID.toString(), videoID).subscribe(data=>{
+        //   console.log(data);
+        //   if(data)
+        //     {
+        //       this.userRating= data.rating;
+        //     }
+        // })
 
         this.videoService.getImagesByVideoID(videoID).subscribe(images=>{
           if(images){
@@ -180,9 +182,7 @@ export class VideoDetailComponent implements OnInit{
         })
       }
     });
-
-    this.selectedImage = this.images[this.selectedIndex];
-
+    
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
 
 
@@ -228,26 +228,15 @@ export class VideoDetailComponent implements OnInit{
     this.images = newValue;
   }
 
-  onCarouselPageChange(event: any) {
-    const visibleImagesCount = 3; // 假設 Carousel 可見圖片數量是 3
-
-    // 透過 % 避免溢出，實現無限循環
-    this.selectedIndex = (event.page + Math.floor(visibleImagesCount / 2)) % this.images.length;
-
-    // 更新選中的圖片
-    this.selectedImage = this.images[this.selectedIndex];
-  }
-  onImageClick(index: number) {
-    this.selectedIndex = index;
-    this.selectedImage = this.images[index];
-  }
-
   openRatingPanel(event: any, op: OverlayPanel) {
     // 先檢查評分資料是否已經存在 (這部分邏輯應該已經存在)
     if (this.userID !== 0) {
       this.videoService.getRatingByData(this.userID.toString(), this.video.videoId).subscribe(data => {
         if (data) {
+          // console.log(data)
           this.userRating = data.rating;
+          this.isUserHaveRated = true;
+          
         } else {
           this.userRating = 0; // 如果沒有評分，就設置為 0
         }
@@ -262,6 +251,7 @@ export class VideoDetailComponent implements OnInit{
       // 用戶未登入，直接打開 Panel
       op.toggle(event);
     }
+    
   }
 
   confirm(event: RatingRateEvent , op: OverlayPanel) {

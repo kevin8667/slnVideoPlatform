@@ -46,7 +46,7 @@ namespace VdbAPI.Controllers
             var memberRating = await _context.MemberRatings
                                 .Where(r => r.MemberId == memberID)
                                 .Where(r => r.VideoId == videoID)
-                                .ToListAsync();
+                                .FirstOrDefaultAsync();
 
             if (memberRating == null)
             {

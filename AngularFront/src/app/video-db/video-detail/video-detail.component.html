@@ -103,8 +103,9 @@
       <p-toast position="top-center" key="global"></p-toast>
         <p-overlayPanel #op>
           <ng-template pTemplate="content">
+            <p style="margin-top: 0;"><strong>您的評分：{{userRating}}</strong></p>
               <div class="card flex justify-content-center" *ngIf="userID !==0">
-                <p-rating [(ngModel)]="userRating" (onRate)="confirm($event, op)" [stars]="10"></p-rating>
+                <p-rating [readonly]="isUserHaveRated" [(ngModel)]="userRating" (onRate)="confirm($event, op)" [stars]="10"></p-rating>
               </div>
               <div class="card flex justify-content-center" *ngIf="userID ===0">
                 <p><strong>請先登入!</strong></p>
@@ -129,8 +130,8 @@
 </div>
 
 <div class="p-grid p-nogutter">
-  <!-- 演員列表 -->
-  <div class="p-col-12 p-md-3">
+  <!-- 左邊: 主要演員列表 -->
+  <div class="p-col-12 p-md-9">
     <h2>主要演員</h2>
     <div class="actors-container p-d-flex p-flex-wrap p-jc-start">
       <div *ngFor="let actor of actors" class="actor-card p-mr-2 p-mb-3">
@@ -140,9 +141,20 @@
     </div>
   </div>
 
-  <!-- 右邊的 Carousel -->
+  <!-- 右側: 關鍵字區塊 -->
+  <div class="p-col-12 p-md-3">
+    <div class="keywords-container">
+      <h2>關鍵字</h2>
+      <div class="p-d-flex p-flex-wrap">
+        <span *ngFor="let keyword of keywords" class="keyword-badge p-m-1">{{ keyword }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- 下方: Carousel -->
   <div class="p-col-12 p-md-9">
-    <div class="carousel-container">
+    <div class="carousel-container p-mt-3">
       <p-carousel [value]="images" [numVisible]="1" [circular]="true" [autoplayInterval]="3500">
         <ng-template pTemplate="item" let-image>
           <div class="carousel-item-container">
@@ -152,7 +164,6 @@
       </p-carousel>
     </div>
   </div>
-</div>
 
     <!-- <p-carousel
     [value]="images"
