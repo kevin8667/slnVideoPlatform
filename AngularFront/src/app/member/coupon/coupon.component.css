@@ -21,9 +21,7 @@ a {
   display: none; /* Hide footer if not needed */
 }
 
-.main{
-  margin-top: 30px;
-}
+
 
 .dialog-content {
   padding: 16px;
@@ -82,8 +80,8 @@ a {
 .container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around; 
-  gap: 16px; 
+  justify-content: space-around;
+  gap: 16px;
 }
 
 .maincontainer{
@@ -103,6 +101,8 @@ a {
 .main {
   width: 100%;
   display: flex;
+  background: linear-gradient(to bottom, #DDD 0%, #DDD 80%, #f5f9f9 100%);
+  padding-top: 30px;
 }
 
 .cornercontainer {

@@ -15,6 +15,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics.Metrics;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Dapper;
 
 namespace VdbAPI.Member.Dao
 {
@@ -518,7 +519,7 @@ values
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                List<SqlParameter> pars = new List<SqlParameter>();
+                var pars = new DynamicParameters();
 
                 string sqlQuery = @"INSERT INTO dbo.MemberInfo
            (MemberId, Email,NickName,MemberName,Birth,Phone,Address,Gender,RegisterDate,Password,Grade,Point,Status,FIDOEnabled)
@@ -538,23 +539,26 @@ values
 0
           )
 ";
-                pars.Add(new SqlParameter("@Email", info.Email));
-                pars.Add(new SqlParameter("@NickName", info.NickName));
-                pars.Add(new SqlParameter("@MemberName", info.MemberName));
-                pars.Add(new SqlParameter("@Birth", info.Birth));
-                pars.Add(new SqlParameter("@Phone", info.Phone));
-                pars.Add(new SqlParameter("@Address", info.Address));
-                pars.Add(new SqlParameter("@Gender", info.Gender));
-                pars.Add(new SqlParameter("@Password", info.Password));
+                pars.Add("@Email", info.Email);
+                pars.Add("@NickName", info.NickName);
+                pars.Add("@MemberName", info.MemberName);
+                pars.Add("@Birth", info.Birth);
+                pars.Add("@Phone", info.Phone);
+                pars.Add("@Address", info.Address);
+                pars.Add("@Gender", info.Gender);
+                pars.Add("@Password", info.Password);
 
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
 
-                    connection.Open();
-                    command.Parameters.AddRange(pars.ToArray());
+                connection.Execute(sqlQuery, pars);
 
-                    command.ExecuteNonQuery();
-                }
+                //using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                //{
+
+                //    connection.Open();
+                //    command.Parameters.AddRange(pars.ToArray());
+
+                //    command.ExecuteNonQuery();
+                //}
             }
         }
 

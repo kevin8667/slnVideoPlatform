@@ -8,6 +8,7 @@ using VdbAPI.Models;
 using VdbAPI.Member.Service;
 using VdbAPI.Filters;
 using VdbAPI.Member.Model;
+using NuGet.Protocol;
 
 namespace VdbAPI.Controllers
 {
@@ -64,37 +65,45 @@ namespace VdbAPI.Controllers
 
             // 使用 access token 獲取使用者資訊
             var userInfo = await GetUserInfoAsync(accessToken);
+
             if (userInfo != null && !string.IsNullOrEmpty(userInfo.userId))
             {
                 MemberHelper mHelper = new MemberHelper(ConnString);
-                var memberInfo = mHelper.SelectMemberInfo(new Member.Model.mMemberInfo { MemberID = MemberId });
-
-                if (memberInfo.Any())
+                var mInfo = mHelper.SelectMemberInfo(new Member.Model.mMemberInfo { LineUserId = userInfo.userId, BindingLine = "Y" });
+                if (mInfo.Any())
                 {
-
-                    mHelper.UpdateMemberInfo(new Member.Model.mMemberInfo
-                    {
-                        MemberID = memberInfo.FirstOrDefault().MemberID,
-                        BindingLine = "Y",
-                        LineUserId = userInfo.userId,
-                        Process = Member.Model.mMemberInfo.MemberInfoProcess.UpdateLineUser
-                    });
                     rtn.IsSuccess = true;
+                    rtn.AlertMsg = "請勿重複綁定！";
                     rtn.Data = "Binding";
-                    rtn.AlertMsg = "已成功綁定!";
                     return rtn;
                 }
                 else
                 {
-                    rtn.AlertMsg = "查無會員資料";
-                    return rtn;
+
+                    var memberInfo = mHelper.SelectMemberInfo(new Member.Model.mMemberInfo { MemberID = MemberId });
+                    if (memberInfo.Any())
+                    {
+                        mHelper.UpdateMemberInfo(new Member.Model.mMemberInfo
+                        {
+                            MemberID = memberInfo.FirstOrDefault().MemberID,
+                            BindingLine = "Y",
+                            LineUserId = userInfo.userId,
+                            Process = Member.Model.mMemberInfo.MemberInfoProcess.UpdateLineUser
+                        });
+                        rtn.IsSuccess = true;
+                        rtn.Data = "Binding";
+                        rtn.AlertMsg = "已成功綁定!";
+                        return rtn;
+                    }
+                    else
+                    {
+                        rtn.AlertMsg = "查無會員資料";
+                        return rtn;
+                    }
                 }
-
             }
-
             rtn.AlertMsg = "登入失敗!!";
             return rtn;
-
         }
 
 

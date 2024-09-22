@@ -2,7 +2,7 @@
   <div class="cornercontainer col-1"></div>
   <div class="maincontainer col-10">
     <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
-    <div *ngIf="isLoading">正在加载好友信息...</div>
+    <div *ngIf="isLoading">好友過多...載入中...</div>
     <button class="shine-button" (click)="AddFriendClick()">新增好友</button>
     <div *ngIf="!isLoading">
       <p-carousel *ngIf="friends.length>0" [value]="friends" [numVisible]="5" [numScroll]="1"
@@ -21,7 +21,7 @@
                       [src]="friend.photoPath == null || friend.photoPath == '' ? './../../../assets/img/Member/defaultMember.png' : friend.photoPath " />
                   </div>
                 </ng-template>
-                <p>{{ friend.creationDate }}</p>
+                <p>成為好友時間:{{ friend.creationDate }}</p>
                 <ng-template pTemplate="footer">
                   <button class="shine-button" (click)="removeFriend(friend.friendId)">刪除好友</button>
                 </ng-template>
@@ -50,8 +50,8 @@
                     " />
                   </div>
                 </ng-template>
-                <p>{{ friend.invitedMessage }}</p>
-                <p>{{ friend.creationDate }}</p>
+                <p>邀請訊息:{{ friend.invitedMessage }}</p>
+                <p>邀請日期:{{ friend.creationDate }}</p>
                 <ng-template pTemplate="footer">
                   <button class="shine-button" (click)="removeFriend(friend.friendId)">取消邀請</button>
                 </ng-template>
@@ -81,8 +81,8 @@
                   />
                 </div>
               </ng-template>
-              <p>{{ friend.invitedMessage }}</p>
-              <p>{{ friend.creationDate }}</p>
+              <p>邀請訊息:{{ friend.invitedMessage }}</p>
+              <p>邀請日期：{{ friend.creationDate }}</p>
               <ng-template pTemplate="footer">
                 <p-button
                   label="拒絕邀請"
@@ -123,8 +123,8 @@
         aria-describedby="username-help"
         [(ngModel)]="friendId"
       />
-      <button class="btn" (click)="fetchFriendDetails()">
-        <img src="./../../../assets/img/Member/search.png" alt="Edit" />
+      <button class="btnsearch" (click)="fetchFriendDetails()">
+        <img class="imgs" src="./../../../assets/img/Member/search.jpeg" alt="Edit" />
       </button>
     </div>
 
