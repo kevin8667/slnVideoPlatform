@@ -352,6 +352,6 @@ onReject() {
   }
 
   onBookTicket(){
-    this.router.navigate(['/ticket'], {queryParams:{videoID:this.videoIDForFunctions}});
+    this.router.navigate(['/ticket'], {queryParams:{videoID:this.video.videoId}});
   }
 }
