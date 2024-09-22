@@ -1,8 +1,7 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { state } from '@angular/animations';
+import { BehaviorSubject } from 'rxjs';
 
 // 定義接口來處理返回的結果和錯誤狀態
 export interface MemberIdResponse {
