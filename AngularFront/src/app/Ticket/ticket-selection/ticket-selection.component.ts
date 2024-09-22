@@ -24,10 +24,13 @@ export class TicketSelectionComponent implements OnInit {
   movieId: number = 0;
   cinemaName: string = '';
   hallName: string = '';
+  date: string = '';
+  day: string = '';
   showtime: string = '';
   showtimeId: number = 0; // 儲存放映的場次 ID
   posterUrl: string = '';
-  releaseDate: string = '';
+  summary: string = '';
+  runningTime: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -46,53 +49,32 @@ export class TicketSelectionComponent implements OnInit {
     this.movieId = parseInt(localStorage.getItem('movieId') || '0', 10);
     this.cinemaName = localStorage.getItem('cinemaName') || '';
     this.hallName = localStorage.getItem('hallName') || '';
+    this.date = localStorage.getItem('date') || '';
+    this.day = localStorage.getItem('day') || '';
     this.showtime = localStorage.getItem('showtime') || '';
     this.showtimeId = parseInt(
       localStorage.getItem('selectedShowtimeId') || '0',
       10
     );
     this.posterUrl = localStorage.getItem('posterUrl') || '';
-    this.releaseDate = localStorage.getItem('releaseDate') || '';
+    this.summary = localStorage.getItem('summary') || '';
+    this.runningTime = localStorage.getItem('runningTime') || '';
 
     console.log('從 Local Storage 中讀取的資料:', {
       movieName: this.movieName,
       movieId: this.movieId,
       cinemaName: this.cinemaName,
       hallName: this.hallName,
+      date: this.date,
+      day: this.day,
       showtime: this.showtime,
       showtimeId: this.showtimeId,
       posterUrl: this.posterUrl,
-      releaseDate: this.releaseDate,
+      runningTime: this.runningTime,
     });
 
     this.calculateTotal(); // 初始化時計算總價
   }
-  // ngOnInit(): void {
-  //   // 使用 ActivatedRoute 來接收 URL 參數
-  //   this.route.queryParams.subscribe((params) => {
-  //     this.movieName = params['movieName'] || '';
-  //     this.movieId = +params['movieId'] || 0;
-  //     this.cinemaName = params['cinemaName'] || '';
-  //     this.hallName = params['hallName'] || '';
-  //     this.showtime = params['showtime'] || '';
-  //     this.showtimeId = +params['selectedShowtimeId'] || 0; // 轉換為數字類型的 showtimeId
-  //     this.posterUrl = params['posterUrl'] || '';
-  //     this.releaseDate = params['releaseDate'] || '';
-  //   });
-
-  //   console.log('接收到的參數:', {
-  //     movieName: this.movieName,
-  //     movieId: this.movieId,
-  //     cinemaName: this.cinemaName,
-  //     hallName: this.hallName,
-  //     showtime: this.showtime,
-  //     showtimeId: this.showtimeId,
-  //     posterUrl: this.posterUrl,
-  //     releaseDate: this.releaseDate,
-  //   });
-
-  //   this.calculateTotal(); // 初始化時計算總價
-  // }
 
   calculateTotal() {
     this.totalPrice =
@@ -139,9 +121,14 @@ export class TicketSelectionComponent implements OnInit {
         localStorage.setItem('movieName', this.movieName);
         localStorage.setItem('hallName', this.hallName);
         localStorage.setItem('showtimeId', this.showtimeId.toString());
+        localStorage.setItem('date', this.date);
+        localStorage.setItem('day', this.day);
         localStorage.setItem('showtime', this.showtime);
+        localStorage.setItem('runningTime', this.runningTime);
+
         localStorage.setItem('totalPrice', this.totalPrice.toString());
         localStorage.setItem('ticketCount', this.TicketCount.toString());
+        //票
         localStorage.setItem(
           'fullVote',
           this.selectedTicket.fullVote.toString()
@@ -163,53 +150,4 @@ export class TicketSelectionComponent implements OnInit {
       }
     );
   }
-  // submitReservation() {
-  //   // 檢查是否至少選擇了一張票
-  //   if (
-  //     this.selectedTicket.fullVote === 0 &&
-  //     this.selectedTicket.studentVote === 0 &&
-  //     this.selectedTicket.oldpeopleTicket === 0
-  //   ) {
-  //     window.alert('請選擇至少一張票');
-  //     return; // 如果未選擇票，終止後續提交操作
-  //   }
-
-  //   const reservationData = {
-  //     memberID: 1, // 使用者 ID，假設目前使用者是 1
-  //     showtimeID: this.showtimeId,
-  //     totalPrice: this.totalPrice,
-  //     ticketCount: this.TicketCount,
-  //     paymentMethod: '信用卡', // 您可以更改支付方式
-  //     couponID: null, // 如果有折扣券可以填入
-  //   };
-
-  //   console.log('傳入參數：' + reservationData);
-
-  //   // 調用 API 生成訂單
-  //   this.dataService.createReservation(reservationData).subscribe(
-  //     (reservationResponse) => {
-  //       // 成功後跳轉到下一個畫面
-  //       console.log('訂單成功生成:', reservationResponse);
-  //       // 跳轉到下一個畫面，並傳遞必要的參數
-  //       this.router.navigate(['ticket/ticketreservation'], {
-  //         queryParams: {
-  //           reservationId: reservationResponse,
-  //           movieId: this.movieId,
-  //           movieName: this.movieName,
-  //           hallName: this.hallName,
-  //           showtimeId: this.showtimeId,
-  //           showtime: this.showtime,
-  //           totalPrice: this.totalPrice,
-  //           ticketCount: this.TicketCount,
-  //           fullVote: this.selectedTicket.fullVote, // 新增全票數量
-  //           studentVote: this.selectedTicket.studentVote, // 新增學生票數量
-  //           oldpeopleTicket: this.selectedTicket.oldpeopleTicket, // 新增敬老票數量
-  //         },
-  //       });
-  //     },
-  //     (error) => {
-  //       console.error('生成訂單失敗:', error);
-  //     }
-  //   );
-  // }
 }

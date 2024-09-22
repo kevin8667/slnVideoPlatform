@@ -1,5 +1,6 @@
 export interface Video
 {
+    // posterUrl: string;
     videoId:number;
     videoName:string;
     typeId:number;

@@ -73,6 +73,7 @@ export class VideoDBService {
     this.httpClient.get<Video>(url)
     .subscribe(video => {
       console.log(video);
+      
     }, error => {
       console.error('Error fetching videos:', error);
     });

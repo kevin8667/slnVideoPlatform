@@ -13,6 +13,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { JwtInterceptor } from './jwt.interceptor';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { TicketReservationComponent } from './Ticket/ticket-reservation/ticket-reservation.component';
+import { OrderComponent } from './Ticket/order/order.component';
+import { TesttttttttComponent } from './Ticket/testttttttt/testttttttt.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { TicketReservationComponent } from './Ticket/ticket-reservation/ticket-r
     ErrorPageComponent,
     ShoppingCartComponent,
     AuthCallbackComponent,
-    TicketReservationComponent
+    TicketReservationComponent,
+    OrderComponent,
+    TesttttttttComponent
   ],
   imports: [
     BrowserModule,

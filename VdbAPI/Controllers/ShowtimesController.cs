@@ -171,6 +171,53 @@ namespace VdbAPI.Controllers
             });
         }
 
+        // 根據 MemberID 查詢訂單及明細
+        // 根據 MemberID 查詢訂單及明細
+        [HttpGet("member/{memberId}/reservation")]
+        public IActionResult GetReservationsByMemberId(int memberId)
+        {
+            var reservations = (from rd in _context.ReservationDetails
+                                join st in _context.Showtimes on rd.ShowtimeId equals st.ShowtimeId
+                                join h in _context.Halls on st.HallsId equals h.HallsId
+                                join c in _context.Cinemas on h.CinemaId equals c.CinemaId
+                                join vl in _context.VideoLists on st.ViedoId equals vl.VideoId
+                                where rd.MemberId == memberId
+                                // 按購買日期降序排序
+                                orderby rd.PurchaseDate descending
+                                select new
+                                {
+                                    rd.ReservationId,
+                                    rd.PurchaseDate,
+                                    rd.Price,
+                                    rd.TicketCount,
+                                    rd.PaymentMethod,
+                                    Showtime = st.ShowTimeDatetime,
+                                    CinemaName = c.CinemaName,
+                                    HallName = h.HallsName,
+                                    MovieName = vl.VideoName,
+                                    seats = (from ss in _context.SessionSeats
+                                             join s in _context.Seats on ss.SeatId equals s.SeatId
+                                             where ss.ReservationId == rd.ReservationId
+                                             select new
+                                             {
+                                                 s.SeatNumber,
+                                                 s.RowNumber,
+                                                 ss.SeatStatus
+                                             }).ToList()
+                                }).ToList();
+
+            if (!reservations.Any())
+            {
+                return NotFound("找不到該會員的訂單");
+            }
+
+            return Ok(reservations);
+        }
+
+
+
+
+
 
         ////座位生成，並確保沒有重複
         //[HttpPost("reservation/seats")]

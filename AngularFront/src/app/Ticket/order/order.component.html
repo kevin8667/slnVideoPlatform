@@ -1,0 +1,26 @@
+<div class="order-container">
+  <!-- <h2>我的訂單</h2> -->
+  <div *ngIf="orders.length === 0">
+    <p>沒有找到訂單。</p>
+  </div>
+  <div *ngIf="orders.length > 0" class="order-list">
+    <div *ngFor="let order of orders" class="card order-item">
+      <div class="card-body">
+        <h3 class="card-title">訂單號: {{ order.reservationId }}</h3>
+        <p class="card-text">購買日期: {{ order.purchaseDate | date: 'yyyy-MM-dd HH:mm' }}</p>
+        <p class="card-text">總金額: {{ order.price }} 元</p>
+        <p class="card-text">票數: {{ order.ticketCount }}</p>
+        <!-- <p class="card-text">支付方式: {{ order.paymentMethod }}</p> -->
+        <p class="card-text">電影名稱: {{ order.movieName }}</p>
+        <p class="card-text">放映時間: {{ order.showtime | date: 'yyyy-MM-dd HH:mm' }}</p>
+        <p class="card-text">影院: {{ order.hallName }}</p>
+        <!-- <p class="card-text">座位:
+          <span *ngFor="let seat of order.seats">
+            {{ seat.rowNumber }}排{{ seat.seatNumber }}號,
+          </span>
+        </p> -->
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>

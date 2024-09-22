@@ -10,25 +10,33 @@ import { Router } from '@angular/router';
   styleUrls: ['./ticket-reservation.component.css'],
 })
 export class TicketReservationComponent implements OnInit {
+
+  //訂單電影
   reservationID: number = 0; // 儲存訂單 ID
   movieId: number = 0; // 儲存電影ID
   movieName: string = ''; // 儲存電影名稱
+  posterUrl: string = '';
+
+  //場次地點
   hallName: string = ''; // 儲存影廳名稱
+  date: string = '';
+  day:string = '';
   showtime: string = ''; // 儲存放映時間
   showtimeId: number = 0; // 儲存放映場次ID
-  totalPrice: number = 0; // 儲存總價
-  ticketCount: number = 0; // 儲存票數
+  runningTime: string = '';
+
+  //票
   seats: string[] = []; // 儲存座位列表
   fullVote: number = 0;
   studentVote: number = 0;
   oldpeopleTicket: number = 0;
+  totalPrice: number = 0; // 儲存總價
+  ticketCount: number = 0; // 儲存票數
 
   constructor(
     private dataService: DataService,
     private location: Location, // 注入 Location 服務
-    private router: Router, // 注入 Router 服務來進行導航
-    // private route: ActivatedRoute,
-
+    private router: Router // 注入 Router 服務來進行導航 // private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -39,9 +47,13 @@ export class TicketReservationComponent implements OnInit {
     );
     this.movieId = parseInt(localStorage.getItem('movieId') || '0', 10);
     this.movieName = localStorage.getItem('movieName') || '';
+    this.posterUrl = localStorage.getItem('posterUrl') || '';
     this.hallName = localStorage.getItem('hallName') || '';
     this.showtimeId = parseInt(localStorage.getItem('showtimeId') || '0', 10);
     this.showtime = localStorage.getItem('showtime') || '';
+    this.date = localStorage.getItem('date') || '';
+    this.day = localStorage.getItem('day') || '';
+    this.runningTime = localStorage.getItem('runningTime') || '';
     this.totalPrice = parseInt(localStorage.getItem('totalPrice') || '0', 10);
     this.ticketCount = parseInt(localStorage.getItem('ticketCount') || '0', 10);
     this.fullVote = parseInt(localStorage.getItem('fullVote') || '0', 10);
@@ -73,7 +85,7 @@ export class TicketReservationComponent implements OnInit {
   // 跳轉到付款頁面的邏輯
   goToPayment() {
     // 可以在這裡存儲需要傳遞到付款頁面的資訊到 Local Storage 或 Session Storage
-    this.router.navigate(['shoppingCart','finish']); // 跳轉到 FinishPaymentComponent
+    this.router.navigate(['shoppingCart', 'finish']); // 跳轉到 FinishPaymentComponent
   }
 
   // 新增 goBack() 方法，用於返回上一頁
