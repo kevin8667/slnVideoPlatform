@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VdbAPI.Member.ViewModel;
+using Dapper;
 
 namespace VdbAPI.Member.Dao
 {
@@ -19,30 +20,42 @@ namespace VdbAPI.Member.Dao
         }
         internal List<mCoupondata> GetCouponData(mCoupondata data)
         {
-            using var connection = new SqlConnection(_connectionString);
+            //using var connection = new SqlConnection(_connectionString);
 
             string sqlQuery = @"SELECT C.CouponID, C.CouponName, C.CouponDesc,c.GiftListId,
             C.Type, MC.ExpireTime, MC.MemberID FROM CouponInfo C INNER JOIN MemberCoupon MC ON C.CouponID = MC.CouponID WHERE 1=1 ";
-            List<SqlParameter> pars = new List<SqlParameter>();
-            if (data.MemberID != null)
+            //List<SqlParameter> pars = new List<SqlParameter>();
+            var pars=new DynamicParameters();
+
+            if (data.MemberID >-1)
             {
                 sqlQuery += @" and MC.MemberID = @MemberID ";
-                pars.Add(new SqlParameter("MemberID", data.MemberID));
+                pars.Add("@MemberID", data.MemberID);
+
+                //pars.Add(new SqlParameter("MemberID", data.MemberID));
             }
-            using var command = new SqlCommand(sqlQuery, connection);
 
-
-
-
-            command.Parameters.AddRange(pars.ToArray());
-
-            using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+            using (var conn = new SqlConnection(_connectionString))
             {
-                DataSet dataSet = new DataSet();
-                adapter.Fill(dataSet);
-
-                return BindingCouponData(dataSet.Tables[0]);
+                var result = conn.Query<mCoupondata>(sqlQuery, pars);
+                return result.ToList();
             }
+
+
+            //using var command = new SqlCommand(sqlQuery, connection);
+
+
+
+
+            //command.Parameters.AddRange(pars.ToArray());
+
+            //using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+            //{
+            //    DataSet dataSet = new DataSet();
+            //    adapter.Fill(dataSet);
+
+            //    return BindingCouponData(dataSet.Tables[0]);
+            //}
 
 
         }

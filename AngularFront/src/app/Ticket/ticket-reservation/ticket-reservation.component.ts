@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/data.service';
 import { ActivatedRoute } from '@angular/router'; // 用於接收 reservationID
+import { Location } from '@angular/common'; // 用於返回上頁
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-reservation',
@@ -8,74 +10,88 @@ import { ActivatedRoute } from '@angular/router'; // 用於接收 reservationID
   styleUrls: ['./ticket-reservation.component.css'],
 })
 export class TicketReservationComponent implements OnInit {
-  reservationID: number = 0; // 儲存訂單 ID
-  movieName: string = '';
-  hallName: string = '';
-  showtime: string = '';
-  ticketDetails: any; // 儲存訂單詳細資料
-  seats: string[] = []; // 儲存座位列表
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) {}
+  //訂單電影
+  reservationID: number = 0; // 儲存訂單 ID
+  movieId: number = 0; // 儲存電影ID
+  movieName: string = ''; // 儲存電影名稱
+  posterUrl: string = '';
+
+  //場次地點
+  hallName: string = ''; // 儲存影廳名稱
+  date: string = '';
+  day:string = '';
+  showtime: string = ''; // 儲存放映時間
+  showtimeId: number = 0; // 儲存放映場次ID
+  runningTime: string = '';
+
+  //票
+  seats: string[] = []; // 儲存座位列表
+  fullVote: number = 0;
+  studentVote: number = 0;
+  oldpeopleTicket: number = 0;
+  totalPrice: number = 0; // 儲存總價
+  ticketCount: number = 0; // 儲存票數
+
+  constructor(
+    private dataService: DataService,
+    private location: Location, // 注入 Location 服務
+    private router: Router // 注入 Router 服務來進行導航 // private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
-    // 1. 獲取訂單 ID 從 URL
-    this.route.queryParams.subscribe((params) => {
-      this.reservationID = +params['reservationID']; // 確保轉成數字
-      this.loadReservationDetails(); // 載入訂單詳情
-    });
+    // 從 Local Storage 中讀取資料
+    this.reservationID = parseInt(
+      localStorage.getItem('reservationId') || '0',
+      10
+    );
+    this.movieId = parseInt(localStorage.getItem('movieId') || '0', 10);
+    this.movieName = localStorage.getItem('movieName') || '';
+    this.posterUrl = localStorage.getItem('posterUrl') || '';
+    this.hallName = localStorage.getItem('hallName') || '';
+    this.showtimeId = parseInt(localStorage.getItem('showtimeId') || '0', 10);
+    this.showtime = localStorage.getItem('showtime') || '';
+    this.date = localStorage.getItem('date') || '';
+    this.day = localStorage.getItem('day') || '';
+    this.runningTime = localStorage.getItem('runningTime') || '';
+    this.totalPrice = parseInt(localStorage.getItem('totalPrice') || '0', 10);
+    this.ticketCount = parseInt(localStorage.getItem('ticketCount') || '0', 10);
+    this.fullVote = parseInt(localStorage.getItem('fullVote') || '0', 10);
+    this.studentVote = parseInt(localStorage.getItem('studentVote') || '0', 10);
+    this.oldpeopleTicket = parseInt(
+      localStorage.getItem('oldpeopleTicket') || '0',
+      10
+    );
+
+    // 調用方法載入訂單詳細資料或生成座位號
+    this.generateSeats();
   }
 
-  // 2. 調用 API 生成座位並取得訂單詳情
-  loadReservationDetails() {
-    const seatSelectionData = {
-      reservationId: this.reservationID,
-      showtimeId: 2, // 假設該場次的 ID
-      hallId: 1, // 假設影廳 ID
-      ticketCount: 3, // 假設票數
-    };
+  // 根據票數生成座位號
+  generateSeats() {
+    const rowNumber = Math.floor(Math.random() * 5) + 1; // 假設為第2排
+    let startingSeat = Math.floor(Math.random() * 15) + 1; // 隨機生成1到15的座位號
 
-    this.dataService.assignSeats(seatSelectionData).subscribe(
-      (response) => {
-        // 解析 API 回應
-        this.movieName = 'Deadpool & Wolverine'; // 您可以從後端獲取這些資料
-        this.hallName = '秀泰板橋1廳'; // 假設影廳名稱
-        this.showtime = '2024/08/06 11:30'; // 假設放映時間
-        this.seats = response.SelectedSeats; // 儲存分配的座位
-        this.ticketDetails = response; // 假設完整訂單資訊在這裡
-        
-      },
-      (error) => {
-        console.error('生成座位失敗:', error);
-      }
-    );
+    // 清空之前的座位資料，以避免重新生成座位後重複顯示
+    this.seats = [];
+
+    for (let i = 0; i < this.ticketCount; i++) {
+      this.seats.push(`${rowNumber}排${startingSeat + i}號`);
+    }
+
+    console.log('生成的座位:', this.seats); // 檢查生成的座位
+  }
+
+  // 跳轉到付款頁面的邏輯
+  goToPayment() {
+    // 可以在這裡存儲需要傳遞到付款頁面的資訊到 Local Storage 或 Session Storage
+    this.router.navigate(['shoppingCart', 'finish']); // 跳轉到 FinishPaymentComponent
+  }
+
+  // 新增 goBack() 方法，用於返回上一頁
+  goBack() {
+    this.location.back(); // 使用 location.back() 返回上一頁
+
+    //this.currentStep = this.step[0];
   }
 }
-
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-ticket-reservation',
-//   templateUrl: './ticket-reservation.component.html',
-//   styleUrls: ['./ticket-reservation.component.css'],
-// })
-// export class TicketReservationComponent {
-//   ticketOptions = [0, 1, 2, 3, 4, 5]; // 可以選擇的票數
-//   selectedTicket = {
-//     earlyBird: 0,
-//     cardDiscount: 0,
-//     loveTicket: 0,
-//   };
-//   totalPrice: number = 0;
-
-//   ngOnInit(): void {
-//     this.calculateTotal(); // 初始化時計算總價
-//   }
-
-//   calculateTotal() {
-//     this.totalPrice =
-//       this.selectedTicket.earlyBird * 200 +
-//       this.selectedTicket.cardDiscount * 180 +
-//       this.selectedTicket.loveTicket * 100;
-//   }
-// }

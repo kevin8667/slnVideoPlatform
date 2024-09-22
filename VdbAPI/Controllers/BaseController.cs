@@ -1,4 +1,5 @@
 ﻿using Jose;
+
 using Microsoft.AspNetCore.Mvc;
 
 using System;
@@ -21,10 +22,6 @@ namespace VdbAPI.Controllers {
                 return -1;  // 如果 MemberId 不存在，則返回 0 或其他合適的值
             }
         }
-
-    
-        //create jwt token 
-      
 
     }
 }

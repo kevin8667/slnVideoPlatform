@@ -1,57 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 using VdbAPI.Models;
 
 namespace VdbAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] 
     [ApiController]
     public class PlayListController : ControllerBase
     {
         private readonly VideoDBContext _context;
+        private readonly string? _connection;
 
-        public PlayListController(VideoDBContext context)
+        public PlayListController(VideoDBContext context,IConfiguration configuration)
         {
             _context = context;
+            _connection = configuration.GetConnectionString("VideoDB");
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
-        //{
-        //    var playlists = await _context.PlayLists
-        //        .Include(pl => pl.PlayListItems)
-        //            .ThenInclude(pli => pli.Video)
-        //        .Select(pl => new PlaylistDTO
-        //        {
-        //            PlayListId = pl.PlayListId,
-        //            PlayListName = pl.PlayListName,
-        //            PlayListDescription = pl.PlayListDescription,
-        //            ViewCount = pl.ViewCount,
-        //            LikeCount = pl.LikeCount,
-        //            AddedCount = pl.AddedCount,
-        //            SharedCount = pl.SharedCount,
-        //            ShowImage = pl.ShowImage,
-                    
-        //            Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
-        //            {
-        //                PlayListId = pli.PlayListId,
-        //                VideoId = pli.Video.VideoId,
-        //                VideoPosition = pli.VideoPosition,
-        //                VideoName = pli.Video.VideoName,
-        //                ThumbnailPath = pli.Video.ThumbnailPath,
-        //                Episode = pli.Video.Episode
-        //            }).ToList()
-        //        })
-        //        .ToListAsync();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PlaylistDTO>>> GetPlayLists()
+        {
+            var playlists = await _context.PlayLists
+                .Include(pl => pl.PlayListItems)
+                    .ThenInclude(pli => pli.Video)
+                .Select(pl => new PlaylistDTO
+                {
+                    PlayListId = pl.PlayListId,
+                    PlayListName = pl.PlayListName,
+                    PlayListDescription = pl.PlayListDescription,
+                    ViewCount = pl.ViewCount,
+                    LikeCount = pl.LikeCount,
+                    AddedCount = pl.AddedCount,
+                    SharedCount = pl.SharedCount,
+                    ShowImage = pl.ShowImage,
 
-        //    return Ok(playlists);
-        //}
+                    Videos = pl.PlayListItems.Select(pli => new PlaylistitemDTO
+                    {
+                        PlayListId = pli.PlayListId,
+                        VideoId = pli.Video.VideoId,
+                        VideoPosition = pli.VideoPosition,
+                        VideoName = pli.Video.VideoName,
+                        ThumbnailPath = pli.Video.ThumbnailPath,
+                        Episode = pli.Video.Episode
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(playlists);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PlaylistDTO>> GetPlayList(int id)
@@ -278,10 +276,10 @@ namespace VdbAPI.Controllers
 
         // GET: api/PlayList/videos
         [HttpGet("videos")]
-        public async Task<ActionResult<IEnumerable<VideoListDTO>>> GetAllVideos()
+        public async Task<ActionResult<IEnumerable<VideoForPlaylistDTO>>> GetAllVideos()
         {
             var videos = await _context.VideoLists
-                .Select(v => new VideoListDTO
+                .Select(v => new VideoForPlaylistDTO
                 {
                     VideoId = v.VideoId,
                     VideoName = v.VideoName,
@@ -549,6 +547,40 @@ namespace VdbAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "成功將播放清單添加到收藏！" });
+        }
+
+        [HttpPost("{playlistId}/items")]
+        public async Task<IActionResult> AddVideoToPlaylist(int playlistId, [FromBody] VideoAddToDTO dto)
+        {
+            var playlist = await _context.PlayLists
+                .Include(p => p.PlayListItems)
+                .FirstOrDefaultAsync(p => p.PlayListId == playlistId);
+
+            if (playlist == null)
+            {
+                return NotFound(new { message = "播放清單不存在" });
+            }
+
+            // 檢查影片是否已經存在於播放清單中
+            var existingItem = playlist.PlayListItems.FirstOrDefault(i => i.VideoId == dto.VideoId);
+            if (existingItem != null)
+            {
+                return BadRequest(new { message = "影片已經存在於播放清單中" });
+            }
+
+            // 新增影片到播放清單
+            var newItem = new PlayListItem
+            {
+                PlayListId = dto.PlayListId,
+                VideoId = dto.VideoId,
+                VideoPosition = playlist.PlayListItems.Count + 1, // 設置最新的位置
+                VideoAddedAt = DateTime.Now // 設置當前時間
+            };
+
+            _context.PlayListItems.Add(newItem);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "成功將影片添加到播放清單！" });
         }
     }
 }

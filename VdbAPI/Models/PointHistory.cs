@@ -36,4 +36,6 @@ public partial class PointHistory
     /// 積分
     /// </summary>
     public int Point { get; set; }
+
+    public virtual MemberInfo Member { get; set; }
 }

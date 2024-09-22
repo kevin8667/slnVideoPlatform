@@ -1,61 +1,43 @@
 <div class="reservation-summary-container">
-  <h2>確認訂單</h2>
-  <div class="movie-details">
-    <div class="movie-poster">
-      <img src="../../../../assets/image/Deadpool_Wolverine.png" alt="Deadpool & Wolverine">
-    </div>
-    <div class="movie-info">
-      <h2>{{ movieName }}</h2> <!-- 動態顯示電影名稱 -->
-      <h4>DEADPOOL & WOLVERINE</h4>
-      <p>地點: {{ hallName }}</p> <!-- 動態顯示影廳 -->
-      <p>開演時間: {{ showtime }}</p> <!-- 動態顯示放映時間 -->
-    </div>
-  </div>
-
-  <div class="reservation-summary">
-    <h3>訂單明細</h3>
-    <ul>
-      <li><strong>票種：</strong> 全票 X 1、優待票 X 2、敬老票 X 1</li>
-      <li><strong>明細：</strong> 電影票 X 1</li>
-      <li><strong>座位：</strong> {{ seats.join(', ') }}</li> <!-- 動態顯示座位號 -->
-      <li class="total"><strong>總計：</strong> ${{ ticketDetails.totalPrice || 680 }}</li>
-    </ul>
-  </div>
-
-  <button class="btn btn-primary">前往付款</button>
-</div>
-
-
-
-<!-- <p>ticket-reservation works!</p>
-<div class="reservation-summary-container">
-  <h2>確認訂單</h2>
+  <!-- <h2>確認訂單</h2> -->
   <div class="movie-details">
     <div class="movie-poster">
       <img
-        src="../../../../assets/image/Deadpool_Wolverine.png"
-        alt="Deadpool & Wolverine"
+        src={{posterUrl}}
+        alt="{{ movieName }}"
       />
     </div>
     <div class="movie-info">
-      <h2>死侍與金鋼狼</h2>
-      <h4>DEADPOOL & WOLVERINE</h4>
-      <p>級別: 15+</p>
-      <p>地點: 新北板橋秀泰影城1廳</p>
-      <p>開演時間: 2024/08/06 11:30 (10 小時後)</p>
+      <h2>{{ movieName }}</h2>
+      <p><strong>地點: </strong>{{ hallName }}</p>
+      <p><strong>開演時間: </strong>{{date}} {{ showtime }}</p>
+      <p><strong>片長: </strong>{{runningTime}}</p>
     </div>
   </div>
 
   <div class="reservation-summary">
     <h3>訂單明細</h3>
     <ul>
-      <li><strong>票種：</strong> 全票 X 1、優待票 X 2、敬老票 X 1</li>
-      <li><strong>明細：</strong> 電影票 X 1</li>
-      <li><strong>座位：</strong> 3排5號、3排6號、3排7號、3排8號</li>
-      <li><strong>手續費：</strong> $20</li>
-      <li class="total"><strong>總計：</strong> $680</li>
+      <li>
+        <strong>票種：</strong>
+        <span *ngIf="fullVote > 0">
+          全票 X {{ fullVote }}
+          <span *ngIf="studentVote > 0 || oldpeopleTicket > 0">、</span>
+        </span>
+        <span *ngIf="studentVote > 0">
+          優待票 X {{ studentVote }}
+          <span *ngIf="oldpeopleTicket > 0">、</span>
+        </span>
+        <span *ngIf="oldpeopleTicket > 0">敬老票 X {{ oldpeopleTicket }}</span>
+      </li>
+      <li><strong>明細：</strong> 電影票 X {{ ticketCount }}</li>
+      <li><strong>座位：</strong> {{ seats.join(", ") }}</li>
+      <li class="total"><strong>總計：</strong> ${{ totalPrice }}</li>
     </ul>
   </div>
 
-  <button class="btn btn-primary">前往付款</button>
-</div> -->
+  <div class="btn-container">
+    <button class="btn btn-primary" (click)="goToPayment()">前往付款</button>
+    <button class="btn btn-primary" (click)="goBack()">返回上頁</button>
+  </div>
+</div>

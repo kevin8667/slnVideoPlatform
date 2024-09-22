@@ -95,6 +95,17 @@ export class RegisterComponent {
     const expiresString = "expires=" + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
 }
+
+demo(){
+  this.email='Jajajademo28825252@gmail.com';
+  this.pwd='Jajajademo28825252';
+  this.membername='黃嘉宇';
+  this.nickname='資展轉職仔';
+  this.phone='0933682666';
+  this.birth = new Date('1991/03/29')
+  this.gender='M';
+  this.address='台北市萬華區西藏路424號';
+}
 }
 
 

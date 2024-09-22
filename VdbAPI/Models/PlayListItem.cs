@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
@@ -16,4 +17,8 @@ public partial class PlayListItem
     public int VideoPosition { get; set; }
 
     public DateTime? VideoAddedAt { get; set; }
+    [JsonIgnore]
+    public virtual PlayList PlayList { get; set; }
+
+    public virtual VideoList Video { get; set; }
 }

@@ -9,8 +9,6 @@ public partial class ArticleView
 {
     public string ThemeName { get; set; }
 
-    public string NickName { get; set; }
-
     public int ArticleId { get; set; }
 
     public int AuthorId { get; set; }
@@ -31,7 +29,9 @@ public partial class ArticleView
 
     public string ArticleImage { get; set; }
 
-    public int LikeCount { get; set; }
+    public int? LikeCount { get; set; }
 
-    public int DislikeCount { get; set; }
+    public int? DislikeCount { get; set; }
+
+    public string NickName { get; set; }
 }

@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(options =>
     options.AuthorizationEndpoint = "https://access.line.me/oauth2/v2.1/authorize";
     options.TokenEndpoint = "https://api.line.me/oauth2/v2.1/token";
     options.UserInformationEndpoint = "https://api.line.me/v2/profile";
-    options.CallbackPath = "/auth/callback"; // é€™è£¡è¨­ç½® CallbackPath
+    options.CallbackPath = "/auth/callback"; // ³o¸Ì³]¸m CallbackPath
 
     options.Scope.Add("profile");
     options.Scope.Add("openid");
@@ -91,5 +91,6 @@ app.MapHub<ChatHub>("/chathub");
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseStaticFiles();
 
 app.Run();

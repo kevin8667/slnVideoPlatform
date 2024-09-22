@@ -25,7 +25,15 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: inline-block;
+  margin-right: 60px; /* 添加右側間距 */
 }
+
+
+/* 當按鈕為最後一個子元素時，移除 margin-right，避免過多間距 */
+.btn-container .btn:last-child {
+  margin-right: 0;
+}
+
 
 /* 票選擇容器樣式 */
 .ticket-selection-container {
@@ -60,9 +68,14 @@
   margin-bottom: 10px;
 }
 
-.movie-info p {
-  color: #6C757D; /* 次要色調 */
+/* .movie-info p {
+  color: #6C757D; 次要色調
   margin-bottom: 10px;
+} */
+ 
+.movie-info strong {
+  color: #343a40 !important;
+  font-size: 16px !important;
 }
 
 /* 票選擇部分樣式 */

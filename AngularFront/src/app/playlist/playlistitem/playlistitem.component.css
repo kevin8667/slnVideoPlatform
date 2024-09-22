@@ -90,7 +90,7 @@
   z-index: 10000 !important;
 }
 
-.cdk-overlay-container, .ui-dialog {
+.cdk-overlay-container {
   z-index: 1050 !important;
 }
 
@@ -138,4 +138,45 @@ button.p-button-danger i {
 .video-js {
   width: 640px;
   height: 360px;
+}
+
+.floating-button {
+  position: absolute;
+  bottom: 40px;
+  right: 30px;
+  width: 90px;
+  height: 120px;
+  cursor: pointer;
+  z-index: 1001;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: pulse 1.5s infinite;
+  padding: 0;
+}
+
+.floating-button img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.floating-button img:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 211, 51, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 211, 51, 1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 211, 51, 0.7);
+  }
 }

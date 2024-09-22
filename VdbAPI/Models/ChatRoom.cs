@@ -14,4 +14,6 @@ public partial class ChatRoom
     public DateTime SendTime { get; set; }
 
     public string ChatMessage { get; set; }
+
+    public virtual MemberInfo Sender { get; set; }
 }

@@ -145,10 +145,10 @@ namespace VdbAPI.Controllers
         {
             ReturnResult<mMemberNotice> rtn = new ReturnResult<mMemberNotice>();
             MemberHelper mHelper = new MemberHelper(ConnString);
-            var mInfo = mHelper.GetMemberNotice(new mMemberNotice { MemberID = MemberId });
-            if (mInfo != null)
+            var mNotice = mHelper.GetMemberNotice(new mMemberNotice { MemberID = MemberId });
+            if (mNotice != null)
             {
-                rtn.Datas = mInfo;
+                rtn.Datas = mNotice;
                 rtn.IsSuccess = true;
                 return rtn;
             }

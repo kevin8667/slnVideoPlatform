@@ -14,5 +14,6 @@ export interface PlaylistDTO {
   playListUpdatedAt?: Date;
   analysisTimestamp?: Date;
   showLikeEffect?: boolean;
+  isCreatedByUser?: boolean; // 新增此屬性來區分自建或協作
   videos?: PlaylistitemDTO[];
 }

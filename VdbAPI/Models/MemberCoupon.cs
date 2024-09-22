@@ -30,7 +30,7 @@ public partial class MemberCoupon
     /// <summary>
     /// 失效時間
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public int? ExpireTime { get; set; }
 
     /// <summary>
     /// 使用時間
@@ -56,4 +56,10 @@ public partial class MemberCoupon
     /// 兌換的贈品編號
     /// </summary>
     public int? GiftId { get; set; }
+
+    public virtual CouponInfo Coupon { get; set; }
+
+    public virtual GiftInfo Gift { get; set; }
+
+    public virtual MemberInfo Member { get; set; }
 }

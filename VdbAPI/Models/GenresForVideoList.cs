@@ -12,4 +12,8 @@ public partial class GenresForVideoList
     public int? VideoId { get; set; }
 
     public int? GenreId { get; set; }
+
+    public virtual GenreList Genre { get; set; }
+
+    public virtual VideoList Video { get; set; }
 }

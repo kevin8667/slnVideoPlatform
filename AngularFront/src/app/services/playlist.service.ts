@@ -5,6 +5,7 @@ import { PlaylistDTO } from '../interfaces/PlaylistDTO';
 import { PlaylistitemDTO } from '../interfaces/PlaylistitemDTO';
 import { MemberInfoDTO } from '../interfaces/MemberInfoDTO';
 import { VideoListDTO } from '../interfaces/VideoListDTO';
+import { VideoAddToDTO } from '../interfaces/VideoAddToDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -83,10 +84,7 @@ export class PlaylistService {
     );
   }
 
-  addVideoToPlaylist(
-    playlistId: number,
-    video: PlaylistitemDTO
-  ): Observable<void> {
+  addVideoToPlaylist(playlistId: number, video: VideoAddToDTO): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${playlistId}/items`, video);
   }
 
@@ -133,5 +131,21 @@ export class PlaylistService {
     return this.http.delete<void>(
       `${this.apiUrl}/${playlistId}/collaborators/${memberId}`
     );
+  }
+
+  loadVideoCss(){
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '../../../assets/css/video-js.min.css';
+    document.head.appendChild(link);
+    this.loadVideoJs();
+  }
+
+  loadVideoJs(){
+    const script = document.createElement('script');
+    script.src = '../../../assets/css/video.min.js';
+    script.type = 'text/javascript';
+    script.defer = true;
+    document.body.appendChild(script);
   }
 }

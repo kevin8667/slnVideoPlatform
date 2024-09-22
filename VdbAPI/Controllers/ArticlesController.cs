@@ -209,7 +209,7 @@ namespace VdbAPI.Controllers {
             try {
 
                 var rowsAffected = await con.ExecuteAsync(sql,new {
-                    articleUpdate.ArticleContent,
+                    ArticleContent = articleUpdate.ArticleContent,
                     articleUpdate.Title,
                     articleUpdate.ThemeId,
                     id,

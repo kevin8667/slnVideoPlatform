@@ -28,7 +28,7 @@ export class CouponComponent implements OnInit{
   }
 
   GetMemberCoupon() {
-  
+
     this.memberService.GetMemberCoupon().subscribe({
       next: (response) => {
         if (response.hasAlertMsg) {
@@ -42,7 +42,7 @@ export class CouponComponent implements OnInit{
       error: (error) => {
         console.error('GetMemberCoupon error:', error);
         alert('取不到會員優惠券');
-        this.hasData = false; 
+        this.hasData = false;
       },
     });
   }

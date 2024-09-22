@@ -8,6 +8,18 @@ a {
   cursor: pointer;
 }
 
+.main{
+  background: linear-gradient(to bottom, #DDD 0%, #DDD 80%, #f5f9f9 100%);
+}
+
+.container{
+  margin-top: 30px;
+}
+
+.maincontainer {
+margin-top: 30px;
+}
+
 .card-container {
   flex-wrap:nowrap; /* 允許換行 */
 }
@@ -68,17 +80,17 @@ a {
 
 img{
   margin-top: 10px;
-  border-radius: 50%; 
-  object-fit: cover; 
-  background-color: transparent; 
-  
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: transparent;
+
 }
 
-button { 
+button {
   width: 150px;
   height: 40px;
   text-align: center;
-  border-radius: 0%;
+  border-radius: 8%;
   padding: 10px 10px;
   background-color: #17A2B8;
   color: #212529;
@@ -122,5 +134,20 @@ button {
 
 button:hover, button:focus{
   background-color:  #00c8d6
-} 
+}
 
+.p-breadcrumb{
+  margin-bottom: 30px;
+}
+
+.btnsearch{
+  margin-left: 240px;
+  height: 60px;
+  width: 60px;
+  border-radius: 8px;
+}
+
+.imgs{
+  width: 40px;
+  margin-top: 0%;
+}

@@ -5,29 +5,29 @@ import { BehaviorSubject } from 'rxjs';
 
 // 定義接口來處理返回的結果和錯誤狀態
 export interface MemberIdResponse {
-  address: '789 Elm St, Anycity, USA';
+  address: string;
   banned: null;
-  bindingLine: '';
+  bindingLine: string;
   birth: Date;
-  email: 'example3@example.com';
+  email: string;
   fidoCredentialID: null;
   fidoEnabled: null;
-  gender: 'M';
-  grade: 'A';
-  jwtToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGUzQGV4YW1wbGUuY29tIiwiZXhwaXJlZFRpbWUiOjEzMzcxMTAxOTkwNzMwNDk1MSwibWVtYmVySWQiOjN9.YSkQqFyh7ICXphJBIcfVLa789EHRNsSPasLHI31pDas';
+  gender: string;
+  grade: string;
+  jwtToken: string;
   lastLoginDate: Date;
-  lineUserId: '';
+  lineUserId: string;
   memberID: 3;
   memberIdentity: null;
-  memberName: 'Michael Smith';
-  nickName: 'Moonlight';
-  password: Date;
-  phone: Date;
-  photoPath: '';
-  point: 120;
+  memberName: string;
+  nickName: string;
+  password: string;
+  phone: string;
+  photoPath: string;
+  point: number;
   process: 0;
   registerDate: Date;
-  status: 'Y';
+  status: string;
   updateTime: Date;
   updateUser: null;
   error: boolean;
@@ -37,6 +37,7 @@ export interface MemberIdResponse {
   providedIn: 'root',
 })
 export class AuthService {
+  [x: string]: any;
   private apiUrl = 'https://localhost:7193/api/Member/GetMemberId'; // 替換為您的實際 API URL
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -133,4 +134,5 @@ export class AuthService {
     const expiresString = 'expires=' + expires.toUTCString();
     document.cookie = `${name}=${value}; ${expiresString}; path=/`;
   }
+  
 }

@@ -4,48 +4,48 @@ h1,h2,h3,h4,h5,label,div {
   text-transform: uppercase;
 }
 
-div{
-  margin-top: 30px;
-}
+
 
 a {
   cursor: pointer;
 }
 
 table {
+  border-radius: 8px;
+
   margin-top: 20px;
-  border-collapse: collapse; 
-  width: 100%; 
+  border-collapse: collapse;
+  width: 100%;
 }
 
 table, th, td {
-  border: 2px solid #000000; 
-  background-color: #f9f9f9; 
+  border: 2px solid #000000;
+  background-color: #f9f9f9;
 }
 
 th, td {
-  padding: 10px; 
-  text-align: left; 
+  padding: 10px;
+  text-align: left;
 }
 
 thead th {
   background-color: #17a2b8;
-  
+
 }
 
 tr:hover td {
   cursor: pointer;
-  background-color: #00c8d6; 
+  background-color: #00c8d6;
 }
 
 input{
-border-radius: 0%;
+  border-radius: 8px;
 }
 
-button { 
+button {
   width: 300px;
   text-align: center;
-  border-radius: 0%;
+  border-radius: 8px;
   padding: 10px 10px;
   background-color: #17A2B8;
   color: #212529;
@@ -89,4 +89,12 @@ button {
 
 button:hover, button:focus{
   background-color:  #00c8d6
-} 
+}
+
+.maincontainer{
+  padding-top: 30px;
+}
+
+.main{
+  background: linear-gradient(to bottom, #DDD 0%, #DDD 80%, #f5f9f9 100%);
+}

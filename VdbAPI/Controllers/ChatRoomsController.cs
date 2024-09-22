@@ -42,13 +42,14 @@ namespace VdbAPI.Controllers {
             }
         }
 
-        // GET: api/ChatRooms/5
+        //GET: api/ChatRooms/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ChatRoom>> GetChatRoom(int id)
         {
             var chatRoom = await _context.ChatRooms.FindAsync(id);
 
-            if(chatRoom == null) {
+            if (chatRoom == null)
+            {
                 return NotFound();
             }
 

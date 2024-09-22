@@ -3,34 +3,38 @@
   <div class="maincontainer col-10">
     <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
     <div class="p-float-label">
-      <input pInputText id="searchbar" type="text" [(ngModel)]="searchTerm" />
+      <input pInputText id="searchbar" type="text" [(ngModel)]="searchTerm" (blur)="searchMessages()" />
       <label for="searchbar">搜尋訊息</label>
-      <button class="shine-button" (click)="searchMessages()" style="width: 80px; margin-left: 10px;">搜尋</button>
       <button class="shine-button" (click)="deleteMessages()" style="width: 80px; margin-left: 10px;">刪除訊息</button>
     </div>
     <div class="container w-full">
       <table class="table w-full">
         <thead class="thead w-full">
           <tr>
-            <th scope="col">
-              {{ checkedAllTxt }} 
-              <p-checkbox [(ngModel)]="checkedAll" (ngModelChange)="onCheckedAllChange($event)" [binary]="true" inputId="binary"></p-checkbox>
+            <th scope="col" style="width:60px">
+              <p-checkbox [(ngModel)]="checkedAll" (ngModelChange)="onCheckedAllChange($event)" [binary]="true"
+                inputId="binary"></p-checkbox>
+            </th>
+            <th style="width:60px">
+              No.
             </th>
             <th scope="col">信息標題</th>
             <th scope="col">訊息內容</th>
-            
+
             <th scope="col">建立時間</th>
           </tr>
         </thead>
         <tbody class="tbody w-full">
           <tr *ngFor="let message of filteredMessages; let i = index" (click)="toggleCheckbox(i)">
-            <td scope="row">{{ i + 1 }} 
-              <p-checkbox [(ngModel)]="checked[i]" (ngModelChange)="toggleCheckbox(i)" [binary]="true" inputId="checkbox-{{i}}"></p-checkbox>
-              <p style="visibility: hidden; font-size: 1px;">{{ message.memberNoticeID }}</p>
+            <td scope="row">
+              <p-checkbox [(ngModel)]="checked[i]" (ngModelChange)="toggleCheckbox(i)" [binary]="true"
+                inputId="checkbox-{{i}}"></p-checkbox>
+            </td>
+            <td> {{ i + 1 }}<span style="visibility: hidden; font-size: 1px;">{{ message.memberNoticeID }}</span>
             </td>
             <td>{{ message.title }}</td>
             <td>{{ message.noticeContent }}</td>
-      
+
             <td>{{ message.creTime }}</td>
           </tr>
         </tbody>

@@ -10,4 +10,6 @@ public partial class TypeList
     public int TypeId { get; set; }
 
     public string TypeName { get; set; }
+
+    public virtual ICollection<VideoList> VideoLists { get; set; } = new List<VideoList>();
 }

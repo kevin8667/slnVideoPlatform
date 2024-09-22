@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VdbAPI.Models;
+using static System.Net.WebRequestMethods;
 
 namespace VdbAPI.Controllers
 {
@@ -24,9 +25,30 @@ namespace VdbAPI.Controllers
 
         // GET: api/VideoList
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VideoList>>> GetVideoLists()
+        public async Task<ActionResult<IEnumerable<VideoListDTO>>> GetVideoLists()
         {
-            return await _context.VideoLists.ToListAsync();
+            var query = _context.VideoLists.AsQueryable();
+
+            var videoListDTOs = await query
+               .Select(v => new VideoListDTO
+               {
+                   VideoId = v.VideoId,
+                   VideoName = v.VideoName,
+                   TypeId = v.TypeId,
+                   TypeName = v.Type.TypeName,
+                   Summary = v.Summary,
+                   SeriesId = v.SeriesId,
+                   SeriesName = v.Series.SeriesName,
+                   SeasonId = v.SeasonId,
+                   SeasonName = v.Season.SeasonName,
+                   MainGenreId = v.MainGenreId,
+                   MainGenreName = v.MainGenre.GenreName,
+                   ThumbnailPath = v.ThumbnailPath,
+                   Bgpath = v.Bgpath
+
+               }).ToListAsync();
+
+            return Ok(videoListDTOs);
         }
 
         // GET: api/VideoList/5
@@ -42,6 +64,7 @@ namespace VdbAPI.Controllers
 
             return videoList;
         }
+
         [HttpGet("type={typeID}")]
         public async Task<ActionResult<VideoList>> GetVideoListByType(int typeID)
         {
@@ -57,73 +80,73 @@ namespace VdbAPI.Controllers
             return Ok(videoList);
         }
 
-        //[HttpGet("search")]
-        //public async Task<ActionResult<IEnumerable<VideoListDTO>>> SearchVideos(
-        //    string? videoName,
-        //    int? typeId,
-        //    string? summary,
-        //    [FromQuery(Name = "genreNames")] List<string>? genreNames,
-        //    string? seriesName,
-        //    string? seasonName)
-        //{
-        //    var query = _context.VideoLists
-        //        .Include(v => v.MainGenre)
-        //        .Include(v => v.Series)
-        //        .Include(v => v.Season)
-        //        .Include(v => v.Type)
-        //        .AsQueryable();
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<VideoListDTO>>> SearchVideos(
+            string? videoName,
+            int? typeId,
+            string? summary,
+            [FromQuery(Name = "genreNames")] List<string>? genreNames,
+            string? seriesName,
+            string? seasonName)
+        {
+            var query = _context.VideoLists
+                .Include(v => v.MainGenre)
+                .Include(v => v.Series)
+                .Include(v => v.Season)
+                .Include(v => v.Type)
+                .AsQueryable();
 
-        //    if (!string.IsNullOrEmpty(videoName))
-        //    {
-        //        query = query.Where(v => v.VideoName.Contains(videoName));
-        //    }
+            if (!string.IsNullOrEmpty(videoName))
+            {
+                query = query.Where(v => v.VideoName.Contains(videoName));
+            }
 
-        //    if (typeId.HasValue)
-        //    {
-        //        query = query.Where(v => v.TypeId == typeId);
-        //    }
+            if (typeId.HasValue)
+            {
+                query = query.Where(v => v.TypeId == typeId);
+            }
 
-        //    if (!string.IsNullOrEmpty(summary))
-        //    {
-        //        query = query.Where(v => v.Summary.Contains(summary));
-        //    }
+            if (!string.IsNullOrEmpty(summary))
+            {
+                query = query.Where(v => v.Summary.Contains(summary));
+            }
 
-        //    if (genreNames != null && genreNames.Any())
-        //    {
-        //        query = query.Where(v => genreNames.Contains(v.MainGenre.GenreName));
-        //    }
+            if (genreNames != null && genreNames.Any())
+            {
+                query = query.Where(v => genreNames.Contains(v.MainGenre.GenreName));
+            }
 
-        //    if (!string.IsNullOrEmpty(seriesName))
-        //    {
-        //        query = query.Where(v => v.Series.SeriesName.Contains(seriesName));
-        //    }
+            if (!string.IsNullOrEmpty(seriesName))
+            {
+                query = query.Where(v => v.Series.SeriesName.Contains(seriesName));
+            }
 
-        //    if (!string.IsNullOrEmpty(seasonName))
-        //    {
-        //        query = query.Where(v => v.Season.SeasonName.Contains(seasonName));
-        //    }
+            if (!string.IsNullOrEmpty(seasonName))
+            {
+                query = query.Where(v => v.Season.SeasonName.Contains(seasonName));
+            }
 
-        //    var videoListDTOs = await query
-        //        .Select(v => new VideoListDTO
-        //        {
-        //            VideoId = v.VideoId,
-        //            VideoName = v.VideoName,
-        //            TypeId = v.TypeId,
-        //            TypeName = v.Type.TypeName,
-        //            Summary = v.Summary,
-        //            SeriesId = v.SeriesId,
-        //            SeriesName = v.Series.SeriesName,
-        //            SeasonId = v.SeasonId,
-        //            SeasonName = v.Season.SeasonName,
-        //            MainGenreId = v.MainGenreId,
-        //            MainGenreName = v.MainGenre.GenreName,
-        //            ThumbnailPath = v.ThumbnailPath,
-        //            Bgpath = v.Bgpath
+            var videoListDTOs = await query
+                .Select(v => new VideoListDTO
+                {
+                    VideoId = v.VideoId,
+                    VideoName = v.VideoName,
+                    TypeId = v.TypeId,
+                    TypeName = v.Type.TypeName,
+                    Summary = v.Summary,
+                    SeriesId = v.SeriesId,
+                    SeriesName = v.Series.SeriesName,
+                    SeasonId = v.SeasonId,
+                    SeasonName = v.Season.SeasonName,
+                    MainGenreId = v.MainGenreId,
+                    MainGenreName = v.MainGenre.GenreName,
+                    ThumbnailPath = v.ThumbnailPath,
+                    Bgpath = v.Bgpath
 
-        //        }).ToListAsync();
+                }).ToListAsync();
 
-        //    return Ok(videoListDTOs);
-        //}
+            return Ok(videoListDTOs);
+        }
 
         // PUT: api/VideoList/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -158,13 +181,97 @@ namespace VdbAPI.Controllers
 
         // POST: api/VideoList
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<VideoList>> PostVideoList(VideoList videoList)
+        //[HttpPost]
+        //public async Task<ActionResult<VideoList>> PostVideoList(VideoList videoList)
+        //{
+        //    _context.VideoLists.Add(videoList);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetVideoList", new { id = videoList.VideoId }, videoList);
+        //}
+
+        [HttpPost("newVideo={videoName}")]
+        public async Task<IActionResult> PostVideoList([FromBody] VideoCreateDTO videoDTO)
         {
-            _context.VideoLists.Add(videoList);
+            var video = new VideoList
+            {
+                VideoName = videoDTO.VideoName,
+                TypeId = videoDTO.TypeId,
+                SeriesId = videoDTO.SeriesId,
+                MainGenreId = videoDTO.MainGenreId,
+                RunningTime = TimeSpan.Parse(videoDTO.RunningTime),
+                IsShowing = videoDTO.IsShowing,
+                ReleaseDate = videoDTO.ReleaseDate,
+                Lang = videoDTO.Lang,
+                Summary = videoDTO.Summary,
+                AgeRating = videoDTO.AgeRating,
+                TrailerUrl = videoDTO.TrailerUrl,
+                ThumbnailPath = videoDTO.ThumbnailPath,
+                Bgpath = videoDTO.Bgpath    
+
+            };
+            _context.VideoLists.Add(video);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetVideoList", new { id = videoList.VideoId }, videoList);
+            // Now handle images
+            foreach (var imageDTO in videoDTO.Images)
+            {
+                var image = new ImageList { ImagePath = imageDTO.ImagePath };
+                _context.ImageLists.Add(image);
+                await _context.SaveChangesAsync();
+
+                var imageForVideo = new ImageForVideoList
+                {
+                    VideoId = video.VideoId,
+                    ImageId = image.ImageId
+                };
+                _context.ImageForVideoLists.Add(imageForVideo);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetVideoList", new { id = video.VideoId }, video);
+        }
+
+        [HttpPost("uploadImages")]
+        public async Task<IActionResult> UploadImages([FromForm] IFormFile thumbnail, [FromForm] List<IFormFile> images)
+        {
+            // 處理縮圖圖片
+            string thumbnailPath = string.Empty;
+            if (thumbnail != null)
+            {
+                var filePath = Path.Combine("wwwroot/assets/img", thumbnail.FileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await thumbnail.CopyToAsync(stream);
+                }
+
+                // 複製到 Angular 專案的 assets 目錄
+                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", thumbnail.FileName);
+                System.IO.File.Copy(filePath, angularAssetsPath, overwrite: true);
+
+                thumbnailPath = "/assets/img/" + thumbnail.FileName;
+            }
+
+            // 處理其他圖片
+            List<string> imagePaths = new List<string>();
+            foreach (var image in images)
+            {
+                var filePath = Path.Combine("wwwroot/assets/img", image.FileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                // 複製到 Angular 專案的 assets 目錄
+                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", image.FileName);
+                System.IO.File.Copy(filePath, angularAssetsPath, overwrite: true);
+
+                imagePaths.Add("/assets/img/" + image.FileName);
+            }
+            
+
+            return Ok(new { thumbnailPath, imagePaths });
         }
 
         // DELETE: api/VideoList/5

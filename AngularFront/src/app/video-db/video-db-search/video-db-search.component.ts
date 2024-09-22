@@ -74,8 +74,7 @@ export class VideoDbSearchComponent implements OnInit {
   ngOnInit() {
     this.types = [
       { typeName: '電影', typeId: 1 },
-      { typeName: '影集', typeId: 2 },
-      { typeName: '其他', typeId: 3 }
+      { typeName: '影集', typeId: 2 }
     ];
 
     this.genreNames = [];
@@ -138,7 +137,7 @@ export class VideoDbSearchComponent implements OnInit {
     } else {
       this.typeId = null;
     }
-    this.searchVideos();
+    //this.searchVideos();
   }
 
   searchVideos(): void {

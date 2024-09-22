@@ -10,25 +10,19 @@
   height: 300px; /* 设置父组件高度 */
 }
 
+.demo{
+  -ms-flex-align: start;
+  width: 60px;
+  height: 30px;
+  cursor: pointer;
+}
 
 
-/* .leftcontainer {
-
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  max-width: 100%;
-  max-height: 100%;
-
-} */
 
 .rightcontainer {
-
   display: flex;
   flex-direction: column;
   text-align: center;
-
-
 }
 
 .lightcontroller{
@@ -64,7 +58,7 @@ padding:1px;
 display: flex;
 flex-direction: row;
 text-align: right;
-justify-content: flex-end; 
+justify-content: flex-end;
 }
 
 .btnedit{
@@ -81,6 +75,7 @@ height:40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 8px;
   margin-left: 10px;
   h4{
     color:  #4a525c ;
@@ -93,6 +88,7 @@ height:40px;
 
 button{
   height: 28px; border: 0; background-color: #17a2b8;
+  border-radius: 8px;
 }
 
 
@@ -104,6 +100,7 @@ button:hover , :focus {
 
 .btncancel:hover ,:focus {
   cursor: pointer ;
+  border-radius: 8px;
   background: #00c8d6;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
   h4{
@@ -113,6 +110,7 @@ button:hover , :focus {
 
 .txtbtn{
   display: flex;
+  border-radius: 8px;
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -164,17 +162,17 @@ button:hover , :focus {
 
 .news-section {
   margin-top: 20px;
-  padding: 20px; /* 添加内边距以保持美观 */
+  padding: 20px;
   border: 1px solid #ddd;
-  border-radius: 0px;
+  border-radius: 8px;
   background-color: #f9f9f9;
-  overflow-y: auto; 
+  overflow-y: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  flex-grow: 1; /* 使新闻区域填满剩余空间 */
+  flex-grow: 1;
 }
 
 .news-list {
-  padding-right: 10px; 
+  padding-right: 10px;
 }
 
 .news-section h3 {
@@ -183,27 +181,6 @@ button:hover , :focus {
   color: #333;
 }
 
-.news-section::-webkit-scrollbar {
-  width: 12px; 
-}
-
-.news-section::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-  border-radius: 10px; 
-}
-
-.news-section::-webkit-scrollbar-thumb {
-  background: #17a2b8; 
-  border-radius: 10px; 
-}
-
-.news-section::-webkit-scrollbar-thumb:hover {
-  background: #00c8d6; 
-}
-
-.news-section::-webkit-scrollbar-thumb:active {
-  background: #007bff; 
-}
 
 .news-header:hover, :focus{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
@@ -252,62 +229,65 @@ button:hover , :focus {
   padding: 2px;
   height: 30px;
 }
-
-.news-item:last-child {
-  border-bottom: none;
+p-table th {
+  background-color: #f8f9fa; /* 标题背景色 */
+  color: #343a40; /* 标题文字颜色 */
+  padding: 10px; /* 内边距 */
 }
 
+/* 整行点击效果 */
 .news-header {
-  display: flex;
-  cursor: pointer; /* 鼠標懸停顯示指針 */
-  padding: 5px;
-  border-radius: 4px;
-  background-color: #e9ecef; /* 背景顏色 */
+  cursor: pointer; /* 鼠标悬停显示指针 */
+  transition: background-color 0.3s; /* 动画效果 */
 }
 
 .news-header:hover {
-  background-color: #dee2e6; /* 懸停效果 */
-
+  background-color: #e2e6ea; /* 悬停效果 */
 }
 
 .news-date {
-  font-size: 0.9em; 
+  font-size: 0.9em;
   color: #6c757d;
+  padding: 10px; /* 内边距 */
 }
 
 .news-title {
   margin-left: 30px;
   font-size: 1.1em;
   font-weight: bold;
-  color: #17a2b8; 
+  color: #17a2b8;
 }
 
 .news-summary {
-  margin-top: 5px;
+  margin-top: 10px; /* 增加间距 */
   font-size: 0.95em;
   color: #333;
+  padding: 10px; /* 内边距 */
 }
+
+.expanded {
+  background-color: #d1ecf1; /* 展开后的背景颜色 */
+}
+
 
 .modify-area {
   background: #f9f9f9;
   border-radius: 0px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 }
 
-/* .mtb td{
-  width: 40%;
-} */
 
 .profile-header {
   display: flex;
-  align-items: flex-end; 
-  gap: 10px; 
+  align-items: flex-end;
+  gap: 10px;
 }
 
 .rounded-circle {
-  width: 100px; 
-  height: 100px; 
+  width: 100px;
+  height: 100px;
 }
 
 .profile-info {
@@ -322,27 +302,29 @@ flex-direction: row
 
 .crown {
   width: 25px;
-  margin-right: 5px; 
+  margin-right: 5px;
   margin-bottom: 10px;
 }
 
 .profile-info label {
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 
 .profile-image-container {
-  position: relative; 
-  display: inline-block; 
+  position: relative;
+  display: inline-block;
 
 }
 
 .mpic {
-  width: 150px; 
-  height: 150px; 
-  border-radius: 50%; 
-  object-fit: cover; 
-  background-color: transparent; 
+  width: 200px;
+  height: 200px;
+  border: #000000;
+  border-width: 2px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: transparent;
 }
 
 .mpicdiv {
@@ -364,13 +346,14 @@ flex-direction: row
 }
 
 .edit-button {
-  width: 150px; 
-  background-color: transparent; 
-  border: none; 
-  cursor: pointer; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+  width: 150px;
+  background-color: transparent;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight:900
 }
 
@@ -429,4 +412,25 @@ flex-direction: row
   border-radius: 4px; /* Rounded corners for input fields */
   border: 1px solid #ccc;
 }
+
+.playlist-icon {
+  color: #333; /* 設置圖示顏色 */
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.playlist-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.main {
+  background: linear-gradient(to bottom, #DDD 0%, #DDD 80%, #f5f9f9 100%);
+}
+
+
 

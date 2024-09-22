@@ -32,12 +32,12 @@ export class AuthCallbackComponent implements OnInit {
       }
     });
   }
-  
+
   private extractCodeFromUrl(url: string,name:string): string | null {
     try {
       // Create a URL object
       const urlObj = new URL(url);
-      
+
       // Use URLSearchParams to get the code parameter
       const searchParams = new URLSearchParams(urlObj.search);
 

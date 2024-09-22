@@ -13,10 +13,9 @@ export class MemberService {
 
   login(
     email: string,
-    password: string,
-    recaptchaResponse: string
+    password: string
   ): Observable<any> {
-    const body = { email, password, recaptchaResponse };
+    const body = { email, password };
     return this.http.post(this.apiUrl + 'Login/AccountLogin', body);
   }
 
