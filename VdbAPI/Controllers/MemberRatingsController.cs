@@ -50,7 +50,7 @@ namespace VdbAPI.Controllers
 
             if (memberRating == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Rating not found" });
             }
 
             return Ok(memberRating);

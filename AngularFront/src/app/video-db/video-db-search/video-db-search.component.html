@@ -1,10 +1,9 @@
- <div class="card search-container flex flex-row md:flex-row gap-3 p-3">
-
-</div>
 
 <div class="container flex">
+
   <!-- 左側篩選器 -->
   <div class="filters">
+
     <div class="p-inputgroup" style="margin-bottom: 25px;">
       <span class="p-float-label" style="width: 250px;">
       <input type="text" inputId="float-label" pInputText [(ngModel)]="inputName" />
@@ -39,10 +38,12 @@
     <div>
       <button type="button" pButton label="搜尋" (click)="searchVideos()" class="p-button-primary"></button>
     </div>
+    
   </div>
 
     <!-- 右側電影卡片列表 -->
     <div class="movie-list">
+      
       <button *ngIf="userID===1" type="button" pButton label="新增影片" (click)="newVideo()" class="p-button-primary custom-edit-btn"></button>
         <p-dataView #dv [value]="videos" [rows]="pageSize" [paginator]="true"  [rowsPerPageOptions]="pageSizeOptions" [totalRecords]="totalRecords" paginatorDropdownAppendTo="body"  layout="grid" >
             <!-- 網格佈局 -->
@@ -67,10 +68,8 @@
                           </div>
                         </div>
                     </div>
-
                 </div>
             </ng-template>
-
         </p-dataView>
       </div>
 </div>

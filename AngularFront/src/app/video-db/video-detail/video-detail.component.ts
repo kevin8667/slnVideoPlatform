@@ -228,25 +228,40 @@ export class VideoDetailComponent implements OnInit{
     this.images = newValue;
   }
 
+  openLoginWarning(event:any, lop:OverlayPanel){
+    if(this.userID ===0){
+      console.log(this.userID)
+      lop.toggle(event);
+    }
+    
+  }
+
+
   openRatingPanel(event: any, op: OverlayPanel) {
     // 先檢查評分資料是否已經存在 (這部分邏輯應該已經存在)
     if (this.userID !== 0) {
       this.videoService.getRatingByData(this.userID.toString(), this.video.videoId).subscribe(data => {
-        if (data) {
-          // console.log(data)
-          this.userRating = data.rating;
-          this.isUserHaveRated = true;
-
-        } else {
-          this.userRating = 0; // 如果沒有評分，就設置為 0
-        }
+        this.userRating = data.rating;
+        this.isUserHaveRated = true;
 
         // 打開 OverlayPanel
         op.toggle(event);
 
         // 手動觸發變更檢測，確保評分顯示正確
         this.cd.detectChanges();
-      });
+      },
+      error => {
+        // 如果返回 404，表示沒有評分
+        if (error.status === 404) {
+          this.userRating = 0; // 沒有找到評分，將評分設置為 0
+
+          op.toggle(event);
+
+        } else {
+          console.error('Error:', error);
+        }
+      }
+    );
     } else {
       // 用戶未登入，直接打開 Panel
       op.toggle(event);
@@ -294,6 +309,11 @@ export class VideoDetailComponent implements OnInit{
     console.log(this.trailerVisibility)
   }
 
+  onAddKeyword() {
+    // 在這裡寫新增關鍵字的邏輯，比如打開一個彈出框
+    console.log('Add new keyword clicked');
+    // 可以調用對話框或者處理其他邏輯
+  }
 
 
   postRating()
