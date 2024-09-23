@@ -49,8 +49,13 @@
             </div>
             <div class="textLeftValueRight">
               <span class="up-Text">折價券</span>
-              <input type="text" class="up-Value" value={{discountCode}}>
+              <!-- <input type="text" class="up-Value" value={{discountCode}}> -->
+              <select class="up-Value" [(ngModel)]="selectedDiscount" (change)="calculateDiscountedPrice()">
+                <option [value]="1">-10%</option>
+                <option [value]="2">-20%</option>
+              </select>
             </div>
+
             <div class="textLeftValueRight">
               <span class="up-Text finalPrice">總額</span>
               <span class="up-Value finalPrice">${{finalPrice}}</span>
@@ -70,7 +75,7 @@
         </div>
         <div>
           <!-- [routerLink]="['/shoppingCart/order']" -->
-          <button class="red-button" (click)="toLinePay()">下一步</button>
+          <button class="yellow-button" (click)="toLinePay()">下一步</button>
           <!-- <button [routerLink]="['/shoppingCart/finish']">回首頁</button> -->
         </div>
       </div>

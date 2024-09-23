@@ -57,4 +57,12 @@ export class OrderPageComponent {
   }
 
   sidebarVisible: boolean = false;
+
+  //選擇訂單資料
+  selectedOrder: any;
+
+  selectOrder(order: any){
+    this.selectedOrder = order;
+    this.sidebarVisible = true;
+  }
 }

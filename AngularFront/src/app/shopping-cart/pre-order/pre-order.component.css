@@ -280,9 +280,9 @@ font-weight: normal;
   box-sizing: border-box; /* 確保 padding 和 border 不會擴展按鈕超出父容器 */
 }
 
-.red-button {
-  background-color: #DC3545; /* 紅色背景 */
-  color: white; /* 文字顏色設為白色 */
+.yellow-button {
+  background-color: #f5d500; /* 黃色背景 */
+  color: #000; /* 文字顏色設為黑色 */
   border: none; /* 去除邊框 */
   padding: 10px 20px; /* 調整按鈕內部間距 */
   font-size: 16px; /* 調整字體大小 */

@@ -5,39 +5,43 @@
   <div class="table-container">
     <table class="general-table">
       <tr>
-        <th class="text_center" width="20%">影片與方案</th>
-        <th class="text_center" width="10%">優惠券</th>
-        <th class="text_center" width="10%">總價</th>
+        <th class="text_center" width="25%">影片與方案</th>
+        <th class="text_center" width="15%">優惠券</th>
+        <th class="text_center" width="15%">總價</th>
         <th class="text_center" width="10%">付款狀態</th>
-        <th class="text_center" width="10%">收件人</th>
-        <th class="text_center" width="10%">收件地址</th>
         <th class="text_center" width="10%">運送狀態</th>
-        <th class="text_center" width="10%">訂單日期</th>
+        <th class="text_center" width="15%">訂單日期</th>
         <th class="text_center" width="10%">訂單明細</th>
       </tr>
 
-      <tr *ngFor="let order of orders">
+      <tr *ngFor="let order of orders" >
 
         <td class="text_center">{{ order.videoName }}-{{ order.planName }}</td>
         <td class="text_center">{{ order.couponName }}</td>
         <td class="text_center">{{ order.orderTotalPrice | currency }}</td>
         <td class="text_center">{{ order.payments }}</td>
-        <td class="text_center">{{ order.deliveryName }}</td>
-        <td class="text_center">{{ order.deliveryAddress }}</td>
         <td class="text_center">{{ order.deliverys }}</td>
         <td class="text_center">{{ order.orderDate | date }}</td>
         <td style="margin:0;padding:0px 0px;border:0px;">
-          <button class="td_gray" (click)="sidebarVisible = true">檢視</button>
+          <button class="td_gray" (click)="selectOrder(order)">檢視</button>
         </td>
-        <div class="card flex justify-content-center">
-          <p-sidebar [(visible)]="sidebarVisible">
-              <h3>Sidebar</h3>
-          </p-sidebar>
-        </div>
       </tr>
+
+      <tr style="background-color: #f3f3f3;">
+        <td colspan=7 class="td_down"></td>
+    </tr>
     </table>
   </div>
 </div>
 
+<div class="card flex justify-content-center">
+  <p-sidebar [(visible)]="sidebarVisible">
+      <h3>收件資訊</h3>
+      <div>收件人：</div>
+      <div>{{selectedOrder?.deliveryName || "無"}}</div>
+      <div>收件地址：</div>
+      <div>{{selectedOrder?.deliveryAddress || "無"}}</div>
+  </p-sidebar>
+</div>
 
 

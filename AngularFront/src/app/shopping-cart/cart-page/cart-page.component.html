@@ -58,7 +58,7 @@
                 </button>
               </td>
               <td style="margin:0;padding:0px 0px;border:0px;">
-                  <button class="td_gray" [disabled]="!selectedItem" (click)="checkout()">結帳</button>
+                  <button [ngClass]="{'td_yellow': selectedItem, 'td_gray': !selectedItem}" [disabled]="!selectedItem" (click)="checkout()">結帳</button>
               </td>
           </tr>
       </table>
