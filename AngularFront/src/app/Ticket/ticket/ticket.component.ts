@@ -5,6 +5,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { VideoDBService } from 'src/app/video-db.service';
 import { Video } from 'src/app/video-db/interfaces/video'; // 引入 Video 接口
 import { ActivatedRoute } from '@angular/router';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
@@ -23,7 +24,12 @@ export class TicketComponent implements OnInit {
   summary: string = ''; //簡介
   runningTime: string = '';
 
-  memberId: number | null = null; // 用來保存會員ID
+  // memberId: number | null = null; // 用來保存會員ID
+
+  user: memberName = {
+    memberId: 0,
+    nickName: '',
+  };
 
   constructor(
     private router: Router,
@@ -42,7 +48,8 @@ export class TicketComponent implements OnInit {
     return `${hours}時${minutes}分`;
   }
   ngOnInit(): void {
-
+    //接會員
+    this.dataService.user$.subscribe((data) => (this.user = data));
 
     //接MOVIEID
     this.route.queryParams.subscribe((params) => {
@@ -186,7 +193,7 @@ export class TicketComponent implements OnInit {
     localStorage.setItem('posterUrl', this.posterUrl);
     localStorage.setItem('summary', this.summary);
     localStorage.setItem('runningTime', this.runningTime);
-    localStorage.setItem('memberId', this.memberId?.toString() || ''); // 儲存會員ID
+    // localStorage.setItem('memberId', this.memberId?.toString() || ''); // 儲存會員ID
     this.router.navigate(['ticket/ticketselection']);
   }
 }
