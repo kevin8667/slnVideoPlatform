@@ -1,3 +1,4 @@
+
 <div class="mem_page_border">
   <div class="table-container">
       <table class="general-table">
@@ -16,12 +17,18 @@
                   <div class="pic" style="position:relative;"><a><img src={{item.imagePath}}/></a></div>
               </td>
               <!-- 商品名稱 -->
-              <td width="37%" class="text_left">
+              <td width="37%" class="text_center">
                   <div class="blue">{{ item.videoName }}</div>
               </td>
 
               <!-- 預期是要放select -->
-              <td class="text_center">{{ item.planName }}</td>
+              <!-- <td class="text_center">{{ item.planName }}</td> -->
+              <td class="text_center">
+                <select [(ngModel)]="item.planId" (change)="updatePlan(item)" style="border-radius: 2px;">
+                  <option *ngFor="let plan of plans" [value]="plan.planId">{{ plan.planName }}</option>
+                </select>
+              </td>
+
 
               <!-- 數量 -->
               <td class="text_center">
@@ -35,9 +42,9 @@
               </td>
 
               <!-- 管理 -->
-              <td class="text_left">
+              <td class="text_center">
                   <div class="info">
-                      <a >修改</a>
+                      <!-- <a >修改</a> -->
                       <a (click)="deleteShoppingCart(item.shoppingCartId)">刪除</a>
                   </div>
               </td>
@@ -46,12 +53,12 @@
           <tr style="background-color: #f3f3f3;">
               <td colspan=4></td>
               <td style="margin:0;padding:0px 0px;border:0px;">
-                <button class="td_gray" (click)="toggleForm()">
+                <button class="td_background" (click)="toggleForm()">
                   {{ showForm ? '關閉表單' : '新增購物車' }}
                 </button>
               </td>
               <td style="margin:0;padding:0px 0px;border:0px;">
-                  <button class="td_gray" [disabled]="!selectedItem" (click)="checkout()">結帳</button>
+                  <button [ngClass]="{'td_yellow': selectedItem, 'td_gray': !selectedItem}" [disabled]="!selectedItem" (click)="checkout()">結帳</button>
               </td>
           </tr>
       </table>
