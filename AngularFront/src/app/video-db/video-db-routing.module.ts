@@ -16,8 +16,9 @@ const routes: Routes = [
   { path: 'seasons', component: SeasonListComponent },
   { path: 'episodes', component: EpisodeListComponent },
   { path: 'person/:id', component: PersonDetailComponent },
-  { path: 'newvideo', component: NewVideoComponent },
-  { path: 'addtoplaylist', component: AddtoplaylistComponent }
+  { path: 'edit/new', component: NewVideoComponent },
+  { path: 'addtoplaylist', component: AddtoplaylistComponent },
+  { path: 'edit', component:NewVideoComponent}
 ];
 
 @NgModule({

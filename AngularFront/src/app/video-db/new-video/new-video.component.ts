@@ -1,9 +1,12 @@
+
+import { VideoDBService } from 'src/app/video-db.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CreateVideoDTO } from '../interfaces/CreateVideoDTO';
 import { ImageDTO } from '../interfaces/CreateVideoDTO';
 import { HttpClient } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
+import { ActivatedRoute } from '@angular/router';
 
 interface VideoType
 {
@@ -32,9 +35,11 @@ export class NewVideoComponent implements OnInit {
     { typeName: '影集', typeId: 2 }
   ];
 
+  isEditing:boolean= false;
+
   selectedType: VideoType | undefined;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private route: ActivatedRoute, private videoDBService:VideoDBService) {
     // 初始化表單
     this.videoForm = this.fb.group({
       videoName: ['', Validators.required],
@@ -46,8 +51,6 @@ export class NewVideoComponent implements OnInit {
       runningTime: [''],
       isShowing: [false, Validators.required],
       releaseDate: [new Date(), Validators.required],
-      rating: [null],
-      popularity: [null],
       thumbnailPath: [''],
       lang: ['', Validators.required],
       summary: [''],
@@ -60,11 +63,43 @@ export class NewVideoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.route.queryParams.subscribe(params =>{
+      if(params["videoID"]){
+          this.isEditing= true;
+          this.videoDBService.getVideoApiWithID(params["videoID"]).subscribe(data=>{
+            this.videoDBService.getImagesByVideoID(data.videoId.toString()).subscribe(imgs=>{
+              console.log(imgs)
+              this.videoForm.patchValue({
+                image:imgs
+              })
+            })
+
+            this.videoForm.patchValue({
+              videoName: data.videoName,
+              typeId: data.typeId,
+              seriesId: data.seasonId,
+              mainGenreId: data.mainGenreId,
+              seasonId: data.seasonId,
+              episode: data.episode,
+              runningTime: data.runningTime,
+              isShowing: data.isShowing,
+              releaseDate: data.releaseDate,
+              thumbnailPath: '',
+              lang: data.lang,
+              summary: data.summary,
+              ageRating: data.ageRating,
+              trailerUrl: data.trailerUrl,
+              bgpath:data.bgpath,
+            });
+          })
+      }
+    })
   }
 
   testValue(){
     console.log(this.videoForm.value);
-    console.log(typeof this.videoForm.value.typeId);
+    //console.log(typeof this.videoForm.value.typeId);
   }
 
   completeForm()

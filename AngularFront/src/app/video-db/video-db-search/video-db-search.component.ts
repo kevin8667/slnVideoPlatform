@@ -170,7 +170,7 @@ export class VideoDbSearchComponent implements OnInit {
   }
 
   newVideo(){
-    this.router.navigate(['/newvideo']);
+    this.router.navigate(['/edit/new']);
   }
 
   deleteVideo(videoId:number){
@@ -214,7 +214,7 @@ export class VideoDbSearchComponent implements OnInit {
     this.visible = false;
   }
 
-  editVideo(){
-
+  editVideo(videoId:number){
+    this.router.navigate(["/edit"],{queryParams:{videoID:videoId}});
   }
 }
