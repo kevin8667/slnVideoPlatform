@@ -112,13 +112,14 @@ export class CartPageComponent {
 
   //購物車model
   newShoppingCart = {
-    memberId : this.filterMemberId,
-    planId: null,
-    videoId: null
+    memberId : 0,
+    planId: 1,
+    videoId: 1
   };
 
   //新增購物車(提交表單)
   onSubmit(): void {
+    this.newShoppingCart.memberId=this.filterMemberId
     this.cartPageService.createShoppingCart(this.newShoppingCart)
       .subscribe(
         response => {
