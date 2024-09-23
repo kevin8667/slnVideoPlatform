@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { TestComponent } from './test/test.component';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { ButtonModule } from 'primeng/button';
+
 import { HttpClientModule ,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -33,6 +35,8 @@ import { TesttttttttComponent } from './Ticket/testttttttt/testttttttt.component
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ButtonModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,

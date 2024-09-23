@@ -8,6 +8,9 @@ import { FinishPaymentComponent } from './finish-payment/finish-payment.componen
 import { FormsModule } from '@angular/forms';  // 用來處理表單
 import { HttpClientModule } from '@angular/common/http';  // 用來處理 HTTP 請求
 
+import { SidebarModule } from 'primeng/sidebar';
+import { ButtonModule } from 'primeng/button';
+
 
 
 @NgModule({
@@ -22,7 +25,9 @@ import { HttpClientModule } from '@angular/common/http';  // 用來處理 HTTP �
     CommonModule,
     ShoppingCartRoutingModule,
     FormsModule,       // 表單模組
-    HttpClientModule   // HttpClient 模組
+    HttpClientModule,   // HttpClient 模組
+    SidebarModule,
+    ButtonModule
   ]
 })
 export class ShoppingCartModule {
