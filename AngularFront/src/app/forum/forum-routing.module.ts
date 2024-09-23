@@ -13,9 +13,8 @@ const routes: Routes = [
     path: 'new/:type/:articleId', // 具有文章ID來加入該篇文章
     component: EditComponent,
     canActivate: [forumGuard], //利用路由守衛來檢查type是否為文章或是回文
-    canDeactivate: [unsavedChangesGuard], //做儲存前檢查
+    canDeactivate: [unsavedChangesGuard],
     data: { requiresAuth: true },
-    pathMatch: 'full', //需登入才能進入
   },
   //發表文章
   {
@@ -28,12 +27,11 @@ const routes: Routes = [
   },
   // 編輯文章或回文
   {
-    path: 'ed/:type/:id', //利用type來分辨要向文章還是回文讀取資料
+    path: 'ed/:type/:id',
     component: EditComponent,
     canActivate: [forumGuard],
     canDeactivate: [unsavedChangesGuard],
     data: { requiresAuth: true },
-    pathMatch: 'full',
   },
   // 閱覽文章頁面
   { path: ':id', component: ArticleComponent, canActivate: [forumGuard] },

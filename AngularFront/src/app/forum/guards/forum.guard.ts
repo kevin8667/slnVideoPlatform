@@ -33,12 +33,12 @@ export const forumGuard: CanActivateFn = (route, state) => {
       }
     }
 
-    if (type === 'post') {
-      if (Number(articleId) < 1 || !Number(articleId)) {
-        router.navigate(['error']); // 導向錯誤頁面
-        return false;
-      }
-    }
+    // if (type === 'post') {
+    //   if (Number(articleId) < 1 || !Number(articleId)) {
+    //     router.navigate(['error']); // 導向錯誤頁面
+    //     return false;
+    //   }
+    // }
   }
 
   const idRoute = route.paramMap.get('id');
