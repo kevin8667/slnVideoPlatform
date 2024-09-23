@@ -94,7 +94,7 @@ export class VideoDetailComponent implements OnInit{
     private messageService: MessageService,
     private dialogService: DialogService,
     private sanitizer: DomSanitizer,
-    private cd: ChangeDetectorRef, 
+    private cd: ChangeDetectorRef,
     private router: Router)
   {
   //   this.video = {
@@ -143,7 +143,7 @@ export class VideoDetailComponent implements OnInit{
           }
           this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.video.trailerUrl);
 
-          
+
           this.ratingInfo=
           {
             memberId : this.userID,
@@ -182,7 +182,7 @@ export class VideoDetailComponent implements OnInit{
         })
       }
     });
-    
+
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
 
 
@@ -206,14 +206,14 @@ export class VideoDetailComponent implements OnInit{
       this.route.queryParams.subscribe(params => {
         if (params['showOverlay'] === 'true') {
           this.displayOverlay = true;
-  
+
           setTimeout(() => {
             const button = document.querySelector('.add-to-playlist-button') as HTMLElement;
             const arrowContainer = document.querySelector('.arrow-container') as HTMLElement;
-  
+
             if (button && arrowContainer) {
               const buttonRect = button.getBoundingClientRect();
-  
+
               // 動態設置箭頭位置，使其對準按鈕
               arrowContainer.style.position = 'absolute'; // 確保是絕對定位
               arrowContainer.style.top = (buttonRect.top - 80) + 'px'; // 讓箭頭位於按鈕上方
@@ -236,14 +236,14 @@ export class VideoDetailComponent implements OnInit{
           // console.log(data)
           this.userRating = data.rating;
           this.isUserHaveRated = true;
-          
+
         } else {
           this.userRating = 0; // 如果沒有評分，就設置為 0
         }
-  
+
         // 打開 OverlayPanel
         op.toggle(event);
-  
+
         // 手動觸發變更檢測，確保評分顯示正確
         this.cd.detectChanges();
       });
@@ -251,7 +251,7 @@ export class VideoDetailComponent implements OnInit{
       // 用戶未登入，直接打開 Panel
       op.toggle(event);
     }
-    
+
   }
 
   confirm(event: RatingRateEvent , op: OverlayPanel) {
@@ -284,7 +284,7 @@ export class VideoDetailComponent implements OnInit{
     });
   }
 
-onReject() {
+  onReject() {
     this.messageService.clear('confirm');
     this.visible = false;
   }

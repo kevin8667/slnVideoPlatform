@@ -1,15 +1,22 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CreateVideoDTO } from '../interfaces/CreateVideoDTO';
 import { ImageDTO } from '../interfaces/CreateVideoDTO';
 import { HttpClient } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
+
+interface VideoType
+{
+  typeName:string;
+  typeId:number;
+}
+
 @Component({
   selector: 'app-new-video',
   templateUrl: './new-video.component.html',
   styleUrls: ['./new-video.component.css']
 })
-export class NewVideoComponent {
+export class NewVideoComponent implements OnInit {
   @ViewChild('thumbnailUpload') thumbnailUpload: FileUpload | undefined;
 
   videoForm: FormGroup;
@@ -20,11 +27,18 @@ export class NewVideoComponent {
   uploadedImages:  (File | undefined)[] = [];
   uploadedThumbnail!: File;  // 儲存縮圖
 
+  types = [
+    { typeName: '電影', typeId: 1 },
+    { typeName: '影集', typeId: 2 }
+  ];
+
+  selectedType: VideoType | undefined;
+
   constructor(private fb: FormBuilder, private http: HttpClient) {
     // 初始化表單
     this.videoForm = this.fb.group({
       videoName: ['', Validators.required],
-      typeId: ['', Validators.required],
+      typeId: [null, Validators.required],
       seriesId: [null],
       mainGenreId: ['', Validators.required],
       seasonId: [null],
@@ -42,8 +56,26 @@ export class NewVideoComponent {
       bgpath: [''],
       images: this.fb.array([]) // 確保這裡初始化為 FormArray
     });
+
   }
 
+  ngOnInit(): void {
+  }
+
+  testValue(){
+    console.log(this.videoForm.value);
+    console.log(typeof this.videoForm.value.typeId);
+  }
+
+  completeForm()
+  {
+  this.videoForm.patchValue({
+    videoName: "TEST",
+    typeId: 1,
+    mainGenreId: 1,
+    lang: "TEST"
+  });
+  }
 
   get imagesArray(): FormArray {
     return this.videoForm.get('images') as FormArray;
@@ -146,9 +178,7 @@ onThumbnailSelect(event: any) {
     this.thumbnailPreview = reader.result;
   };
   reader.readAsDataURL(file); // 預覽圖片
-
-
-}
+  }
 
   // 將 Base64 資料轉換為 Blob
   dataURLtoBlob(dataUrl: string): Blob {

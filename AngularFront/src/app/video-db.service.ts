@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { RatingDTO } from './video-db/interfaces/ratingDTO';
+import { data } from 'jquery';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class VideoDBService {
 
   public user$ = this.userSubject.asObservable();
 
-  constructor(private httpClient:HttpClient , private auth: AuthService ) { 
+  constructor(private httpClient:HttpClient , private auth: AuthService ) {
     this.loadMember();
    }
 
@@ -73,7 +74,7 @@ export class VideoDBService {
     this.httpClient.get<Video>(url)
     .subscribe(video => {
       console.log(video);
-      
+
     }, error => {
       console.error('Error fetching videos:', error);
     });
@@ -211,7 +212,7 @@ export class VideoDBService {
   }
 
   createVideo(video:CreateVideoDTO): Observable<Video> {
-    
+
     const apiUrl = 'https://your-api-url/api/videos';
 
     return this.httpClient.post<Video>(apiUrl, video);
@@ -236,5 +237,14 @@ export class VideoDBService {
     const apiUrl = `https://localhost:7193/api/MemberRatings/Member=${memberId}&Video=${videoId}`;
 
     return this.httpClient.get<RatingDTO>(apiUrl);
+  }
+
+  deleteVideo(videoId:number){
+    const url =`https://localhost:7193/api/VideoList/${videoId}`
+
+    this.httpClient.delete<Video>(url).subscribe((data)=>{
+    })
+
+    return this.httpClient.delete<Video>(url);
   }
 }

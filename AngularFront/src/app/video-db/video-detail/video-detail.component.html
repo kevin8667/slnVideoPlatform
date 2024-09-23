@@ -1,6 +1,6 @@
 
 <header>
-  <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css">   
+  <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css">
 </header>
 
 <div class="custom-card" *ngIf="video" [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
@@ -72,7 +72,8 @@
       <div>
         <p *ngIf="season?.seasonName"><strong>季:</strong> {{ season?.seasonName }}</p>
         <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
-        <p><strong>片長:</strong> {{ video.runningTime }}</p>
+        <p *ngIf="video.runningTime!=='00:00:00'"><strong>片長:</strong> {{ video.runningTime }}</p>
+        <p *ngIf="video.runningTime ==='00:00:00'"><strong>片長:</strong> 暫無資料</p>
         <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
         <p *ngIf="avgRating>0"><strong>評分:</strong> {{avgRating}} / 10<a (click)="openRatingPanel($event, op)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分

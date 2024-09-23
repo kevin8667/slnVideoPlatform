@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SearchStateService } from '../../search-state.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { data } from 'jquery';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 interface VideoType
 {
@@ -22,6 +24,7 @@ interface AutoCompleteCompleteEvent {
   selector: 'app-video-db-search',
   templateUrl: './video-db-search.component.html',
   styleUrls: ['./video-db-search.component.css'],
+  providers:[MessageService,ConfirmationService,DialogService],
   // encapsulation:ViewEncapsulation.None,
   animations: [
     trigger('listAnimation', [
@@ -61,14 +64,24 @@ export class VideoDbSearchComponent implements OnInit {
 
   totalRecords:number=0;
 
+  userID:number = 0;
 
   videos!: Video[];
+
+  visible: boolean = false;
+
+  videoIDForDelete:number=0;
+
+  videoNameForDelete:string="";
 
   constructor(
     private route: ActivatedRoute,
     private videoDbService: VideoDBService,
     private searchStateService: SearchStateService,
-    private router : Router
+    private router : Router,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private dialogService: DialogService,
   ) {}
 
   ngOnInit() {
@@ -86,7 +99,7 @@ export class VideoDbSearchComponent implements OnInit {
       this.genres=genres;
     });
 
-
+    this.videoDbService.user$.subscribe((data) => (this.userID = data));
 
     this.route.queryParams.subscribe(params => {
       this.videoName = params['videoName'] || null;
@@ -154,5 +167,54 @@ export class VideoDbSearchComponent implements OnInit {
       this.totalRecords = this.videos.length;
       console.log(this.videos);
     });
+  }
+
+  newVideo(){
+    this.router.navigate(['/newvideo']);
+  }
+
+  deleteVideo(videoId:number){
+    this.videoDbService.deleteVideo(videoId);
+  }
+
+  onConfirmDelete(videoId:number,videoName:string) {
+
+    if (!this.visible) {
+      this.messageService.add({ key: 'confirm', sticky: true, severity: 'warn', summary: '確定要刪除?', detail: '目標：'+videoName });
+      this.visible = true;
+      this.videoIDForDelete = videoId;
+      this.videoNameForDelete = videoName;
+    }
+  }
+
+  onConfirm() {
+    this.messageService.clear('confirm');
+
+    this.visible = false;
+
+    if(this.videoDbService.deleteVideo(this.videoIDForDelete))
+    {
+      this.messageService.add({
+        key: 'global',
+        severity: 'success',
+        summary: '已成功刪除!',
+        detail: `刪除目標： ${this.videoNameForDelete}`
+      });
+    }
+
+    // setInterval(() => {
+    //   location. reload();
+    // }, 400);
+
+    this.searchVideos();
+  }
+
+  onReject() {
+    this.messageService.clear('confirm');
+    this.visible = false;
+  }
+
+  editVideo(){
+
   }
 }
