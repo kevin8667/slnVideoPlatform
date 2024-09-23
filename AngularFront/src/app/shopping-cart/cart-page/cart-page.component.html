@@ -66,6 +66,7 @@
 </div>
 
 <div *ngIf="showForm">
+  <button (click)="addCart(2)">快速新增影片</button>
   <h2>新增購物車資料</h2>
   <form (ngSubmit)="onSubmit()">
     <label for="videoId">影片ID:</label>
