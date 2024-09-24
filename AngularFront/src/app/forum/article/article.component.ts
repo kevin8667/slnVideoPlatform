@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'; // Angular
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 第三方庫
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
