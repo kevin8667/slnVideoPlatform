@@ -1,4 +1,4 @@
-
+<br>
 <div class="container">
   <div class="topFlex">
       <div class="button-container">
@@ -12,14 +12,14 @@
       <div class="title-text">
           <h1>{{videoName}} - {{planName}}</h1>
           <h4>${{price}}</h4>
-          <div>編號：{{shoppingCartId}}</div>
+          <!-- <div>編號：{{shoppingCartId}}</div> -->
       </div>
   </div>
   <div class="content">
       <!-- Left Panel -->
       <div class="left-panel">
           <div class="side-card mainOne" *ngFor="let product of displayedProducts">
-              <img src="assets/img/NoImage.jpg" alt="{{product.productName}}" class="product-image">
+              <img src={{product.productImg}} alt="{{product.productName}}" class="product-image">
               <div class="product-info2">
                 <h3>{{product.productName}}</h3>
                 <p>{{product.productDescription}}</p>
@@ -49,8 +49,13 @@
             </div>
             <div class="textLeftValueRight">
               <span class="up-Text">折價券</span>
-              <input type="text" class="up-Value" value={{discountCode}}>
+              <!-- <input type="text" class="up-Value" value={{discountCode}}> -->
+              <select class="up-Value" [(ngModel)]="selectedDiscount" (change)="calculateDiscountedPrice()">
+                <option [value]="1">-10%</option>
+                <option [value]="2">-20%</option>
+              </select>
             </div>
+
             <div class="textLeftValueRight">
               <span class="up-Text finalPrice">總額</span>
               <span class="up-Value finalPrice">${{finalPrice}}</span>
@@ -70,8 +75,8 @@
         </div>
         <div>
           <!-- [routerLink]="['/shoppingCart/order']" -->
-          <button class="red-button" (click)="toLinePay()">下一步</button>
-          <button [routerLink]="['/shoppingCart/finish']">回首頁</button>
+          <button class="yellow-button" (click)="toLinePay()">下一步</button>
+          <!-- <button [routerLink]="['/shoppingCart/finish']">回首頁</button> -->
         </div>
       </div>
   </div>

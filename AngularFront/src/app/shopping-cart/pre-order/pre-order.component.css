@@ -114,6 +114,8 @@
   border: 1px solid #000;
   padding: 20px;
   box-sizing: border-box;
+  border-radius: 8px;
+
 }
 .summary p, .address p {
   margin: 10px 0;
@@ -124,6 +126,7 @@
   justify-content: space-between; /* 讓左邊和右邊的 div 分開 */
   align-items: center; /* 垂直居中，可選 */
   width: 100%; /* 設置容器的寬度 */
+
 }
 
 .button-container button, .add-button, .checkout-button {
@@ -144,11 +147,12 @@ margin-bottom: 15px;
 }
 
 .summary, .address {
-background-color: #f2f2f2; /* 輕微灰色背景，讓總結與地址區塊有區別 */
+background-color: #d6ecea; /* 輕微灰色背景，讓總結與地址區塊有區別 */
 color: #333;
 border: 1px solid #ddd;
 padding: 20px;
 box-sizing: border-box;
+border-radius: 8px;
 }
 
 .product-price {
@@ -159,10 +163,11 @@ display: flex;
 align-items: center;
 border: 1px solid #ddd;
 padding: 10px;
-background-color: #f2f2f2; /* 卡片淺灰色背景 */
+background-color: #d6ecea; /* 卡片淺灰色背景 */
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 transition: transform 0.3s ease, box-shadow 0.3s ease; /* 添加浮動效果 */
 justify-content: space-between;
+border-radius: 8px;
 }
 
 .side-card:hover {
@@ -211,11 +216,12 @@ background-color: #007BFF; /* 按鈕滑過時顏色變#66b2ff */
 .title-box {
 display: flex;
 align-items: center;
-background-color: #f2f2f2; /* 背景 */
+background-color: #c1e3df; /* 背景 */
 padding: 30px;
 margin-bottom: 20px;
 color: black;
 border: 1px solid #ddd;
+border-radius: 8px;
 }
 
 .title-image {
@@ -280,9 +286,9 @@ font-weight: normal;
   box-sizing: border-box; /* 確保 padding 和 border 不會擴展按鈕超出父容器 */
 }
 
-.red-button {
-  background-color: #DC3545; /* 紅色背景 */
-  color: white; /* 文字顏色設為白色 */
+.yellow-button {
+  background-color: #ce5f6a; /* 黃色背景 */
+  color: #fff; /* 文字顏色設為黑色 */
   border: none; /* 去除邊框 */
   padding: 10px 20px; /* 調整按鈕內部間距 */
   font-size: 16px; /* 調整字體大小 */

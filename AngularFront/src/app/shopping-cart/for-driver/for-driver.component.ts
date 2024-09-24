@@ -1,13 +1,13 @@
-import { OrderPageService } from './order-page.service';
-import { Component, OnInit } from '@angular/core';
-import { OrderPage } from './order-page.model';
+import { Component } from '@angular/core';
+import { OrderPageService } from '../order-page/order-page.service';
+import { OrderPage } from '../order-page/order-page.model';
 
 @Component({
-  selector: 'app-order-page',
-  templateUrl: './order-page.component.html',
-  styleUrls: ['./order-page.component.css']
+  selector: 'app-for-driver',
+  templateUrl: './for-driver.component.html',
+  styleUrls: ['./for-driver.component.css']
 })
-export class OrderPageComponent {
+export class ForDriverComponent {
   orders: OrderPage[] = [];
   filterMemberId: number = 2;
 
@@ -54,15 +54,5 @@ export class OrderPageComponent {
         console.error('Error fetching orders:', error);
       }
     );
-  }
-
-  sidebarVisible: boolean = false;
-
-  //選擇訂單資料
-  selectedOrder: any;
-
-  selectOrder(order: any){
-    this.selectedOrder = order;
-    this.sidebarVisible = true;
   }
 }

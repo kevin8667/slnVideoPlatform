@@ -1,36 +1,44 @@
-<table>
-  <thead>
-    <tr>
-      <th>Order ID</th>
-      <th>Shopping Cart ID</th>
-      <th>Member ID</th>
-      <th>Plan Name</th>
-      <th>Video Name</th>
-      <th>Coupon Name</th>
-      <th>Order Date</th>
-      <th>Order Total Price</th>
-      <th>Delivery Name</th>
-      <th>Delivery Address</th>
-      <th>Payment Status</th>
-      <th>Delivery Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let order of orders">
-      <td>{{ order.orderId }}</td>
-      <td>{{ order.shoppingCartId }}</td>
-      <td>{{ order.memberId }}</td>
-      <td>{{ order.planName }}</td>
-      <td>{{ order.videoName }}</td>
-      <td>{{ order.couponName }}</td>
-      <td>{{ order.orderDate | date }}</td>
-      <td>{{ order.orderTotalPrice | currency }}</td>
-      <td>{{ order.deliveryName }}</td>
-      <td>{{ order.deliveryAddress }}</td>
-      <td>{{ order.paymentStatus }}</td>
-      <td>{{ order.deliveryStatus }}</td>
-    </tr>
-  </tbody>
-</table>
 
-<br>
+
+
+<div class="mem_page_border">
+  <div class="table-container">
+    <table class="general-table">
+      <tr>
+        <th class="text_center" width="25%">影片與方案</th>
+        <th class="text_center" width="15%">優惠券</th>
+        <th class="text_center" width="15%">總價</th>
+        <th class="text_center" width="10%">付款狀態</th>
+        <th class="text_center" width="10%">運送狀態</th>
+        <th class="text_center" width="15%">訂單日期</th>
+        <th class="text_center" width="10%">訂單明細</th>
+      </tr>
+
+      <tr *ngFor="let order of orders" >
+
+        <td class="text_center">{{ order.videoName }}-{{ order.planName }}</td>
+        <td class="text_center">{{ order.couponName }}</td>
+        <td class="text_center">{{ order.orderTotalPrice | currency }}</td>
+        <td class="text_center">{{ order.payments }}</td>
+        <td class="text_center">{{ order.deliverys }}</td>
+        <td class="text_center">{{ order.orderDate | date }}</td>
+        <td style="margin:0;padding:0px 0px;border:0px;">
+          <button class="td_btn" (click)="selectOrder(order)">檢視</button>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+</div>
+
+<div class="card flex justify-content-center">
+  <p-sidebar [(visible)]="sidebarVisible">
+      <h3>收件資訊</h3>
+      <div>收件人：</div>
+      <div>{{selectedOrder?.deliveryName || "無"}}</div>
+      <div>收件地址：</div>
+      <div>{{selectedOrder?.deliveryAddress || "無"}}</div>
+  </p-sidebar>
+</div>
+
+

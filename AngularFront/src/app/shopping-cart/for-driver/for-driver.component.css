@@ -136,3 +136,18 @@ th {
 .td_mainbg{
   background-color: #65d2e4;
 }
+
+.td_btn{
+  color:#000;
+  background-color:lightgray;
+  font-size:16px;
+  padding:0 10px;
+  text-align:center;
+  border-radius: 5px;
+  border: 2px solid lightgray;
+}
+
+.td_btn:hover{
+  background-color:gray;
+  color: #fff;
+}
