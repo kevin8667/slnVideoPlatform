@@ -56,6 +56,25 @@ namespace VdbAPI.Controllers
 
             return Ok(showtimes);
         }
+        // 根據選擇的影院和影片取得放映時間
+        [HttpGet("cinema/{cinemaId}/movie/{videoId}")]
+        public IActionResult GetShowtimesByCinemaAndMovie(int cinemaId, int videoId)
+        {
+            var showtimes = (from showtime in _context.Showtimes
+                             join hall in _context.Halls on showtime.HallsId equals hall.HallsId
+                             where hall.CinemaId == cinemaId && showtime.ViedoId == videoId // 添加 VideoId 的過濾條件
+                             select new
+                             {
+                                 showtime.ShowtimeId,
+                                 showtime.ShowTimeDatetime,
+                                 hall.HallsName
+                             }).ToList();
+
+            if (!showtimes.Any())
+                return NotFound("沒有找到該影院的放映時間");
+
+            return Ok(showtimes);
+        }
 
 
         //訂單生成api

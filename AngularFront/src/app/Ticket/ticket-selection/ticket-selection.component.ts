@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/data.service';
 import { Router } from '@angular/router'; // 用於跳轉到下一個畫面
 import { Location } from '@angular/common'; // 新增 Location 模組來實現返回功能
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 
 @Component({
   selector: 'app-ticket-selection',
@@ -10,6 +11,12 @@ import { Location } from '@angular/common'; // 新增 Location 模組來實現�
   styleUrls: ['./ticket-selection.component.css'],
 })
 export class TicketSelectionComponent implements OnInit {
+  user: memberName = {
+    memberId: 0,
+    nickName: '',
+  };
+
+
   ticketOptions = [0, 1, 2, 3, 4, 5]; // 可以選擇的票數
   selectedTicket = {
     fullVote: 0,
@@ -44,6 +51,8 @@ export class TicketSelectionComponent implements OnInit {
     this.location.back(); // 調用 location.back() 返回上個頁面
   }
   ngOnInit(): void {
+
+    this.dataService.user$.subscribe((data) => (this.user = data));
     // 從 localStorage 中讀取資料
     this.movieName = localStorage.getItem('movieName') || '';
     this.movieId = parseInt(localStorage.getItem('movieId') || '0', 10);
@@ -102,7 +111,7 @@ export class TicketSelectionComponent implements OnInit {
     }
 
     const reservationData = {
-      memberID: 1, // 使用者 ID，假設目前使用者是 1
+      memberID: this.user.memberId, // 使用者 ID，
       showtimeID: this.showtimeId,
       totalPrice: this.totalPrice,
       ticketCount: this.TicketCount,
