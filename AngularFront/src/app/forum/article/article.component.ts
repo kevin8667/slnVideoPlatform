@@ -1,10 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'; // Angular
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // 第三方庫
 import { ArticleView } from 'src/app/interfaces/forumInterface/ArticleView'; // 自定義模組
 import { Post } from '../../interfaces/forumInterface/Post'; // 自定義模組
 import ForumService from 'src/app/services/forumService/forum.service'; // 自定義模組
 import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
+import { Menu } from 'primeng/menu';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
@@ -30,6 +31,7 @@ export class ArticleComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private actRoute: ActivatedRoute
   ) {}
+
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification(event: any): void {
@@ -71,12 +73,6 @@ export class ArticleComponent implements OnInit {
     });
     this.forumService.loadCss('../../../assets/css/quill.snow.css');
 
-    this.forumService.user$.subscribe((data) => {
-      this.user.memberId = data.memberId;
-      this.user.nickName = data.nickName;
-      if (data.memberId > 0) this.getReactions();
-    });
-    this.forumService.loadCss('../../../assets/css/quill.snow.css');
 
     this.forumService.getArticle(this.articleId).subscribe((data) => {
       this.article = data;
@@ -145,7 +141,9 @@ export class ArticleComponent implements OnInit {
       {
         label: '編輯',
         icon: 'pi pi-pencil',
-        command: () => this.edit(postId, 'post'),
+        command: () => {
+          this.edit(postId, 'post');
+        },
       },
       {
         label: '刪除',
@@ -154,6 +152,7 @@ export class ArticleComponent implements OnInit {
       },
     ];
   }
+
 
   deletePost(postId: number) {
     this.confirmationService.confirm({

@@ -18,7 +18,6 @@ export class EditComponent implements OnInit {
   isLoading: boolean = false;
   formSubmitted: boolean = false;
 
-
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
     // 只有當表單已修改且未提交時，才顯示提示
@@ -131,17 +130,28 @@ export class EditComponent implements OnInit {
     this.isSubmitting = true;
 
     const formData = this.articleForm.getRawValue();
-    const action = this.id ? this.updateContent : this.createContent;
 
-    action.call(this, formData).subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (err) => this.handleError(err),
-      complete: () => {
-        this.navigateBack();
-      },
-    });
+    if (this.id) {
+      // 如果存在 id，表示正在編輯，調用 updateContent
+      this.updateContent(formData).subscribe({
+        next: (response) => {
+          console.log(response);
+          if (this.articleId) this.router.navigate(['forum', this.articleId]);
+          else history.back();
+        },
+        error: (err) => this.handleError(err),
+      });
+    } else {
+      // 如果不存在 id，表示正在創建新內容，調用 createContent
+      this.createContent(formData).subscribe({
+        next: (response) => {
+          console.log(response);
+          if (this.articleId) this.router.navigate(['forum', this.articleId]);
+          else this.router.navigate(['forum']);
+        },
+        error: (err) => this.handleError(err),
+      });
+    }
   }
 
   private updateContent(formData: any) {
@@ -272,15 +282,5 @@ export class EditComponent implements OnInit {
     console.error('發生錯誤:', error);
     this.isSubmitting = false;
     // TODO: 添加顯示錯誤訊息給用戶的邏輯
-  }
-
-  private navigateBack(): void {
-    setTimeout(() => {
-      if (this.type === 'post' && this.articleId) {
-        this.router.navigate(['forum', this.articleId]);
-      } else {
-        this.router.navigate(['forum']);
-      }
-    }, 0);
   }
 }
