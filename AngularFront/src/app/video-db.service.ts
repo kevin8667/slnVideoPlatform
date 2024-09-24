@@ -276,10 +276,12 @@ export class VideoDBService {
   addKeyword(videoId: string, keyword: string) {
     const url = `https://localhost:7193/api/KeywordForVideoList/AddKeywordToVideo/${videoId}`;
     
-    const headers = { 'Content-Type': 'text/plain' };
-  
-    // 傳送單純的字串作為關鍵字
-    return this.httpClient.post(url, keyword, { headers, responseType: 'text' });
+    const body = new HttpParams().set('keyword', keyword);  // 使用 URL 編碼格式
+
+    return this.httpClient.post(url, body.toString(), {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        responseType: 'text',
+    });
   }
 
   getKeywordByVideo(videoId:string){

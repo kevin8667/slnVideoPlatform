@@ -360,21 +360,25 @@ export class VideoDetailComponent implements OnInit{
   }
 
   addKeyword() {
-    if (this.newKeyword) {
-      console.log(this.videoIDForFunctions);
-
-      this.videoService.addKeyword(this.videoIDForFunctions.toString(), this.newKeyword ).subscribe(() => {
-        this.loadKeywordsForVideo();
-        this.newKeyword = '';
-        this.messageService.add({ severity: 'success', summary: '成功', detail: '關鍵字已新增' });
-      },(error) => {
-        if (error.status === 409) {
-          this.messageService.add({ severity: 'warn', summary: '警告', detail: '該關鍵字已經存在' });
-        } else {
-          this.messageService.add({ severity: 'error', summary: '錯誤', detail: '無法新增關鍵字' });
+    if (this.newKeyword && typeof this.newKeyword === 'string') { // 確認 newKeyword 是字串
+      console.log('Adding keyword:', this.newKeyword); // 確認是否為純字串
+  
+      this.videoService.addKeyword(this.videoIDForFunctions.toString(), this.newKeyword).subscribe(
+        () => {
+          this.loadKeywordsForVideo();
+          this.newKeyword = '';
+          this.messageService.add({ severity: 'success', summary: '成功', detail: '關鍵字已新增' });
+        },
+        (error) => {
+          if (error.status === 409) {
+            this.messageService.add({ severity: 'warn', summary: '失敗', detail: '關鍵字已存在' });
+          } else {
+            this.messageService.add({ severity: 'error', summary: '錯誤', detail: '關鍵字新增失敗' });
+          }
         }
-      }
-    );
+      );
+    } else {
+      console.error('newKeyword is not a string or is empty.');
     }
   }
 

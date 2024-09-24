@@ -252,13 +252,7 @@
   <div class="p-fluid">
     <div class="p-field">
       <label for="keyword">新增關鍵字</label>
-      <p-autoComplete 
-        [(ngModel)]="newKeyword"
-        [suggestions]="filteredKeywords"
-        (completeMethod)="searchKeywords($event)"
-        [forceSelection]="false"
-        placeholder="輸入關鍵字...">
-      </p-autoComplete>
+      <input type="text" pInputText [(ngModel)]="newKeyword" placeholder="輸入關鍵字..." />
     </div>
     <button type="button" pButton label="新增" (click)="addKeyword()"></button>
   </div>
