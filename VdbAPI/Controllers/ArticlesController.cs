@@ -289,7 +289,7 @@ namespace VdbAPI.Controllers {
                 int page = searchDTO.page;
                 //int totalPages = (int)Math.Ceiling((decimal)dataCount / pageSize);
 
-                sql.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");  
+                sql.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");
 
                 var articles = await connection.QueryAsync<ArticleView>(sql.ToString(),new {
                     ThemeId = searchDTO.categoryId,
@@ -311,6 +311,25 @@ namespace VdbAPI.Controllers {
             }
         }
 
+        [HttpGet("HomePageArticle")]
+        public async Task<IActionResult> HomePageArticle()
+        {
+            var sql = @"select top 8 *
+                        from ArticleView order BY UpdateDate desc";
+            using var con = new SqlConnection(_connection);
+            try {
+                var articles = await con.QueryAsync<ArticleView>(sql);
+                if(!articles.Any()) {
+                    return NotFound(new {
+                        error = "資料庫沒有任何文章"
+                    });
+                }
+                return Ok(articles);
+            }
+            catch(Exception ex) {
+                return StatusCode(500,"例外的狀況，請詢問睿庭" + ex.Message);
+            }
+        }
         private bool ArticleExists(int id)
         {
             return _context.Articles.Any(e => e.ArticleId == id);

@@ -21,6 +21,7 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+
         //[JwtActionFilter]
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)
