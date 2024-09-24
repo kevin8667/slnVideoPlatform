@@ -3,7 +3,7 @@
         public LikeDTO? ArticleReaction {
             get; set;
         }
-        public List<LikeDTO>? PostReactions {
+        public IEnumerable<LikeDTO>? PostReactions {
             get; set;
         }
     }

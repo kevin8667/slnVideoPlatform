@@ -30,15 +30,12 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
   loading = false;
   message = '';
   messages: Chatroom[] = [];
-  private messageSubscription?: Subscription;
   private previousMessageCount = 0;
   forumDto = {
     categoryId: 0,
     keyword: '',
     page: 1,
     pageSize: 10,
-    sortType: 'asc',
-    sortBy: '',
   };
   pages = {
     first: 0,
@@ -88,7 +85,7 @@ export class ArticleListComponent implements OnInit, AfterViewChecked {
     this.forumService.user$.subscribe((data) => {
       if (data) this.user = data;
     });
-    this.messageSubscription = this.signalRService.messages$.subscribe({
+    this.signalRService.messages$.subscribe({
       next: (data: Chatroom[]) => {
         this.messages = data;
       },

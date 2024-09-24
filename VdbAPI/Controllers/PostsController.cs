@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Microsoft.AspNetCore.SignalR;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,6 @@ using System.Text;
 
 using VdbAPI.DTO;
 using VdbAPI.Models;
-using VdbAPI.Filters;
 
 namespace VdbAPI.Controllers {
     [Route("api/[controller]")]
@@ -22,6 +21,7 @@ namespace VdbAPI.Controllers {
             _context = context;
             _connection = configuration.GetConnectionString("VideoDB");
         }
+
         //[JwtActionFilter]
         [HttpPost("React")]
         public async Task<IActionResult> React(LikeDTO likeDTO)

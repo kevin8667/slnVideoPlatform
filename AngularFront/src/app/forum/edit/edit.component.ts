@@ -20,7 +20,8 @@ export class EditComponent implements OnInit {
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
     // 只有當表單已修改且未提交時，才顯示提示
-    if (this.articleForm.dirty) {
+    if (this.articleForm.dirty ) {
+      console.log('預設的')
       $event.returnValue = true;
     }
   }
@@ -52,6 +53,12 @@ export class EditComponent implements OnInit {
     this.initializeForm();
     if (this.type === 'post') {
       this.changeFormGroup();
+    }else{
+      this.forumService.themeTag$.subscribe({
+        next: (data) => (this.themeTag = data),
+        error: (err) => this.handleError(err),
+        complete: () => (this.isLoading = false),
+      });
     }
 
     this.loadingContent();
@@ -78,17 +85,11 @@ export class EditComponent implements OnInit {
 
   private loadingContent() {
     this.isLoading = true;
-    this.forumService.themeTag$.subscribe({
-      next: (data) => (this.themeTag = data),
-      error: (err) => this.handleError(err),
-      complete: () => (this.isLoading = false),
-    });
 
     if (!this.id) {
       this.isLoading = false;
       return;
     }
-
     if (this.type === 'post') {
       this.loadPost();
     } else {
@@ -105,6 +106,7 @@ export class EditComponent implements OnInit {
       error: (err) => this.handleError(err),
       complete: () => (this.isLoading = false),
     });
+
   }
 
   private loadArticle() {

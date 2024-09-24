@@ -7,11 +7,7 @@ namespace VdbAPI.DTO {
             get;
             set;
         }
-        public int TotalPages {
-            get;
-            set;
-        }
-        public List<ArticleView>? ForumResult {
+        public IEnumerable<ArticleView>? ForumResult {
             get;
             set;
         }

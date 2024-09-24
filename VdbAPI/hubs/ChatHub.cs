@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-using NuGet.Protocol.Plugins;
-
 using VdbAPI.DTO;
 using VdbAPI.Models;
 

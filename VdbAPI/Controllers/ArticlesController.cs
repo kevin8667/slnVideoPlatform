@@ -61,7 +61,7 @@ namespace VdbAPI.Controllers {
             });
             var result = new AllReactionsDTO {
                 ArticleReaction = article,
-                PostReactions = posts.ToList()
+                PostReactions = posts
             };
 
             return Ok(result);
@@ -71,7 +71,7 @@ namespace VdbAPI.Controllers {
         public async Task<IActionResult> React(LikeDTO likeDTO)
         {
             var userReaction = await _context.UserReactions
-    .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId && ur.MemberId == likeDTO.MemberId);
+                              .FirstOrDefaultAsync(ur => ur.ArticleId == likeDTO.ContentId && ur.MemberId == likeDTO.MemberId);
 
             try {
                 if(likeDTO.ReactionType.HasValue) {
@@ -121,16 +121,12 @@ namespace VdbAPI.Controllers {
                 return StatusCode(500,"錯誤原因: " + ex.Message);
             }
         }
-
-
-
         // GET: api/Articles  取得主題標籤
         [HttpGet("Theme")]
         public ActionResult<IEnumerable<Theme>> GetThemes()
         {
             return _context.Themes;
         }
-
         // GET: api/Articles/5 取得文章內文
         [HttpGet("{id}")]
         public async Task<ActionResult<ArticleView>> GetArticle(int id)
@@ -238,7 +234,6 @@ namespace VdbAPI.Controllers {
                 });
             }
         }
-
         // DELETE: api/Articles/5 刪除
         //[JwtActionFilter]
         [HttpDelete("{id}")]
@@ -272,7 +267,6 @@ namespace VdbAPI.Controllers {
                 if(searchDTO.categoryId != 0) {
                     sql.Append(" AND ThemeId = @ThemeId");
                 }
-                // 關鍵字篩選
                 // 定義變數
                 string likePattern = $"%{searchDTO.keyword}%";
                 // 根據條件添加搜尋詞
@@ -280,29 +274,22 @@ namespace VdbAPI.Controllers {
                     sql.Append(" AND (ArticleContent LIKE @LikePattern OR Title LIKE @LikePattern OR NickName LIKE @LikePattern)");
                 }
 
-                // 排序
-
                 // 計算總筆數
                 var countSql = $"SELECT COUNT(1) FROM ({sql}) AS CountQuery";
-
-
                 var dataCount = await connection.ExecuteScalarAsync<int>(countSql,new {
                     ThemeId = searchDTO.categoryId,
                     LikePattern = $"%{searchDTO.keyword}%"
                 });
 
-                // 排序條件
-                sql.Append(" ORDER BY [Lock] DESC, UpdateDate Desc"); // 根據你的排序需求修改
+                // 排序條件 上架
+                sql.Append(" ORDER BY UpdateDate Desc"); // 根據你的排序需求修改
 
                 // 分頁
-                int pageSize = searchDTO.pageSize ?? 10;
-                int page = searchDTO.page ?? 1;
-                int totalPages = (int)Math.Ceiling((decimal)dataCount / pageSize);
+                int pageSize = searchDTO.pageSize;
+                int page = searchDTO.page;
+                //int totalPages = (int)Math.Ceiling((decimal)dataCount / pageSize);
 
                 sql.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");
-                Console.WriteLine($"Count SQL: {countSql}");
-                Console.WriteLine($"Parameters: ThemeId={searchDTO.categoryId}, LikePattern={likePattern}, " +
-                    $"Offset={(page - 1) * pageSize}, PageSize={pageSize}");
 
                 var articles = await connection.QueryAsync<ArticleView>(sql.ToString(),new {
                     ThemeId = searchDTO.categoryId,
@@ -311,30 +298,43 @@ namespace VdbAPI.Controllers {
                     PageSize = pageSize
                 });
 
-                // 跳過指定頁數的資料並取出當前頁面的資料
-
                 // 準備回傳的 DTO
                 var pagingDTO = new ForumPagingDTO {
                     TotalCount = dataCount,
-                    TotalPages = totalPages,
-                    ForumResult = articles.Take(pageSize > dataCount ? dataCount : pageSize).ToList(),
+                    ForumResult = articles,
                 };
-
                 return Ok(pagingDTO); // 返回 OK 和 DTO
             }
             catch(Exception ex) {
                 // 返回 500 錯誤和錯誤信息
-                return StatusCode(StatusCodes.Status500InternalServerError,"錯誤原因:" + ex.Message);
+                return StatusCode(500,"錯誤原因:" + ex.Message);
             }
         }
 
+        [HttpGet("HomePageArticle")]
+        public async Task<IActionResult> HomePageArticle()
+        {
+            var sql = @"select top 8 *
+                        from ArticleView order BY UpdateDate desc";
+            using var con = new SqlConnection(_connection);
+            try {
+                var articles = await con.QueryAsync<ArticleView>(sql);
+                if(!articles.Any()) {
+                    return NotFound(new {
+                        error = "資料庫沒有任何文章"
+                    });
+                }
+                return Ok(articles);
+            }
+            catch(Exception ex) {
+                return StatusCode(500,"例外的狀況，請詢問睿庭" + ex.Message);
+            }
+        }
         private bool ArticleExists(int id)
         {
             return _context.Articles.Any(e => e.ArticleId == id);
         }
-
     }
-
     public class ArticleUpdate {
         public required string ArticleContent {
             get;

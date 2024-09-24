@@ -38,16 +38,17 @@
 }
 .d1 {
   margin: 0 20px;
-  flex: 15%;
 }
 .ad-container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加陰影，提升立體感 */
   cursor: pointer;
+  width: 100%;
 }
 
 .d3 {
   margin: 0 20px;
   flex: 20%;
+  min-width: 357px;
 }
 .article {
   margin-top: 2%;

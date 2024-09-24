@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class SignalRService implements OnDestroy {
+export class SignalRService {
   private hubConnection!: signalR.HubConnection;
   private messagesSubject = new BehaviorSubject<Chatroom[]>([]);
   public messages$ = this.messagesSubject.asObservable();
@@ -15,10 +15,6 @@ export class SignalRService implements OnDestroy {
   constructor(private client: HttpClient) {
     this.startConnection();
   }
-  ngOnDestroy(): void {
-    console.log('SignalR connection stopped')
-  }
-
   private startConnection() {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl('https://localhost:7193/chathub') // 替換為您的 Hub URL
@@ -27,7 +23,6 @@ export class SignalRService implements OnDestroy {
     this.hubConnection
       .start()
       .then(() => {
-        console.log('Connection started');
         this.addReceiveMessageListener();
         this.getMessages();
       })

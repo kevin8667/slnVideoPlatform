@@ -5,7 +5,6 @@ import ForumService from 'src/app/services/forumService/forum.service';
 export const forumGuard: CanActivateFn = (route, state) => {
   const router = inject(Router); // 使用 inject() 來獲取服務
   const type = route.paramMap.get('type');
-  const articleId = route.paramMap.get('articleId');
   const requiresAuth = route.data['requiresAuth'];
   const forumService = inject(ForumService);
   if (requiresAuth) {
@@ -25,14 +24,30 @@ export const forumGuard: CanActivateFn = (route, state) => {
       router.navigate(['/error']); // 導向錯誤頁面
       return false;
     }
+    const articleId = route.paramMap.get('articleId');
+
+    if (type === 'article') {
+      if (articleId) {
+        router.navigate(['error']); // 導向錯誤頁面
+        return false;
+      }
+    }
+
+    // if (type === 'post') {
+    //   if (Number(articleId) < 1 || !Number(articleId)) {
+    //     router.navigate(['error']); // 導向錯誤頁面
+    //     return false;
+    //   }
+    // }
   }
 
   const idRoute = route.paramMap.get('id');
+
   if (idRoute) {
     const id = Number(idRoute);
 
     //id填非數字
-    if (isNaN(id)) {
+    if (isNaN(id) || !idRoute) {
       router.navigate(['/error']); // 導向錯誤頁面
       return false;
     }

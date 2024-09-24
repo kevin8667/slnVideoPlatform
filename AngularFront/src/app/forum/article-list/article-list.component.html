@@ -52,9 +52,8 @@
   <main class="mainPart">
     <!-- 左側廣告區-->
     <div class="d1">
-      <div id="ad-container">
+      <div id="ad-container" class="ad-container">
         <!-- 廣告 -->
-        <a href="Https://www.google.com.tw">
           <p-galleria
             [value]="images"
             [autoPlay]="true"
@@ -67,7 +66,6 @@
               <img [src]="item.pic" />
             </ng-template>
           </p-galleria>
-        </a>
       </div>
     </div>
     <!-- 中間上方篩選主題 -->
@@ -121,7 +119,7 @@
                       <p
                         [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }"
                       >
-                        {{ truncateText(article.articleContent, 60) }}
+                        {{ truncateText(article.articleContent,55) }}
                       </p>
                     </a>
                     <p>
