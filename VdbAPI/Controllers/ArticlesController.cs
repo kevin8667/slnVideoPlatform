@@ -287,7 +287,6 @@ namespace VdbAPI.Controllers {
                 // 分頁
                 int pageSize = searchDTO.pageSize;
                 int page = searchDTO.page;
-                //int totalPages = (int)Math.Ceiling((decimal)dataCount / pageSize);
 
                 sql.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");  
 
