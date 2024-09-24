@@ -5,6 +5,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { VideoDBService } from 'src/app/video-db.service';
 import { Video } from 'src/app/video-db/interfaces/video'; // 引入 Video 接口
 import { ActivatedRoute } from '@angular/router';
+import { memberName } from 'src/app/interfaces/forumInterface/memberIName';
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
@@ -23,7 +24,12 @@ export class TicketComponent implements OnInit {
   summary: string = ''; //簡介
   runningTime: string = '';
 
-  memberId: number | null = null; // 用來保存會員ID
+  // memberId: number | null = null; // 用來保存會員ID
+
+  user: memberName = {
+    memberId: 0,
+    nickName: '',
+  };
 
   constructor(
     private router: Router,
@@ -42,20 +48,8 @@ export class TicketComponent implements OnInit {
     return `${hours}時${minutes}分`;
   }
   ngOnInit(): void {
-    // 1. 獲取會員ID
-    // this.dataService.getOrdersForCurrentMember().subscribe(
-    //   (response) => {
-    //     if (response && response.length > 0) {
-    //       this.memberId = response[0].MemberId; // 獲取會員ID
-    //       console.log('獲取的會員ID:', this.memberId);
-    //     } else {
-    //       console.error('無法獲取會員ID');
-    //     }
-    //   },
-    //   (error) => {
-    //     console.error('Error fetching member ID:', error);
-    //   }
-    // );
+    //接會員
+    this.dataService.user$.subscribe((data) => (this.user = data));
 
     //接MOVIEID
     this.route.queryParams.subscribe((params) => {
@@ -129,7 +123,7 @@ export class TicketComponent implements OnInit {
   }
 
   loadShowtimes(cinemaId: number) {
-    this.dataService.getShowtimesByCinema(cinemaId).subscribe((data: any) => {
+    this.dataService.getShowtimesByCinemaAndMovie(cinemaId, this.movieId).subscribe((data: any) => {
       const halls = data.reduce((acc: any[], showtime: any) => {
         let hall = acc.find((h) => h.HallName === showtime.hallsName);
         if (!hall) {
@@ -160,25 +154,19 @@ export class TicketComponent implements OnInit {
         return acc;
       }, []);
 
-      // 對每個影廳的 Showtimes 進行日期和時間排序
       halls.forEach((hall: { Showtimes: any[] }) => {
         hall.Showtimes.sort((a: any, b: any) => {
-          // 首先比較日期，然後比較時間
           const dateComparison =
             new Date(a.showTimeDate).getTime() -
             new Date(b.showTimeDate).getTime();
           if (dateComparison !== 0) {
-            return dateComparison; // 如果日期不同，按照日期排序
+            return dateComparison;
           }
-          // 如果日期相同，則按照時間排序
           return a.time.localeCompare(b.time);
         });
       });
 
-      // 更新選中的影院的 Halls
       this.selectedCinema.Halls = halls;
-
-      // 手動觸發變更檢測
       this.cdr.detectChanges();
     });
   }
@@ -205,7 +193,7 @@ export class TicketComponent implements OnInit {
     localStorage.setItem('posterUrl', this.posterUrl);
     localStorage.setItem('summary', this.summary);
     localStorage.setItem('runningTime', this.runningTime);
-    localStorage.setItem('memberId', this.memberId?.toString() || ''); // 儲存會員ID
+    // localStorage.setItem('memberId', this.memberId?.toString() || ''); // 儲存會員ID
     this.router.navigate(['ticket/ticketselection']);
   }
 }

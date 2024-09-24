@@ -193,13 +193,23 @@ namespace VdbAPI.Controllers
         [HttpPost("newVideo={videoName}")]
         public async Task<IActionResult> PostVideoList([FromBody] VideoCreateDTO videoDTO)
         {
+
+            TimeSpan parsedTime;
+            if (!string.IsNullOrEmpty(videoDTO.RunningTime))
+            {
+                parsedTime = TimeSpan.Parse(videoDTO.RunningTime);
+            }
+            else
+            {
+                parsedTime= TimeSpan.Zero;
+            }
             var video = new VideoList
             {
                 VideoName = videoDTO.VideoName,
                 TypeId = videoDTO.TypeId,
                 SeriesId = videoDTO.SeriesId,
                 MainGenreId = videoDTO.MainGenreId,
-                RunningTime = TimeSpan.Parse(videoDTO.RunningTime),
+                RunningTime = parsedTime,
                 IsShowing = videoDTO.IsShowing,
                 ReleaseDate = videoDTO.ReleaseDate,
                 Lang = videoDTO.Lang,

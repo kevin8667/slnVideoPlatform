@@ -1,18 +1,3 @@
-/* table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background-color: #f2f2f2;
-} */
-
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td , select { font-family: Arial , "敺株��迤暺煾�𥪯耨甇�" , "敺株��迤暺煾��" , "�鰵蝝唳�𡡞��" , Tahoma , Verdana , Helvetica , sans-serif; margin: 0; padding: 0; }
 body { font-size: 12px; color: #333333;}
 table { font-size: 12px; border-spacing: 0; border-collapse: collapse; }
@@ -121,4 +106,19 @@ th {
 .td_down{
   width:100%;
   height:44px;
+}
+
+.td_btn{
+  color:#000;
+  background-color:lightgray;
+  font-size:16px;
+  padding:0 10px;
+  text-align:center;
+  border-radius: 5px;
+  border: 2px solid lightgray;
+}
+
+.td_btn:hover{
+  background-color:gray;
+  color: #fff;
 }

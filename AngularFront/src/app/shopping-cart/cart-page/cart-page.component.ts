@@ -112,13 +112,14 @@ export class CartPageComponent {
 
   //購物車model
   newShoppingCart = {
-    memberId : this.filterMemberId,
-    planId: null,
-    videoId: null
+    memberId : 0,
+    planId: 1,
+    videoId: 1
   };
 
   //新增購物車(提交表單)
   onSubmit(): void {
+    this.newShoppingCart.memberId=this.filterMemberId
     this.cartPageService.createShoppingCart(this.newShoppingCart)
       .subscribe(
         response => {
@@ -130,7 +131,24 @@ export class CartPageComponent {
           console.error('Error adding shopping cart:', error);
         }
       );
-  }
+    }
+    //快速新增購物車
+    addCart(vId:number): void{
+      this.newShoppingCart.memberId=this.filterMemberId
+      this.newShoppingCart.videoId=vId
+
+      this.cartPageService.createShoppingCart(this.newShoppingCart)
+      .subscribe(
+        response => {
+          console.log('Shopping cart added:', response);
+          this.loadshoppingCart();
+          // 可以在這裡加入跳轉或成功訊息提示
+        },
+        error => {
+          console.error('Error adding shopping cart:', error);
+        }
+      );
+    }
 
   //開關表單
   showForm = false;  // 控制表單顯示狀態的布林變數

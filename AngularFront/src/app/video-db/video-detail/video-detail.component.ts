@@ -1,3 +1,4 @@
+import { CartPageService } from './../../shopping-cart/cart-page/cart-page.service';
 import { Season } from '../interfaces/season';
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,7 +41,9 @@ export class VideoDetailComponent implements OnInit{
 
   images:any[] =[];
 
-  userRating!:number;
+  userRating:number=0;
+
+  isUserHaveRated = false;
 
   ratingInfo:RatingDTO|undefined;
 
@@ -55,8 +58,13 @@ export class VideoDetailComponent implements OnInit{
 
   isShowing:boolean = false;
 
-  selectedIndex = 0; // 初始為第一張圖片
-  selectedImage: string = this.images[this.selectedIndex]; // 預設選中第一個
+  keywords:string[] = ["黑手黨","犯罪"]
+
+  newShoppingCart = {
+    memberId : 0,
+    planId: 1,
+    videoId: 1
+  };
 
   actors : any[]=[
     {
@@ -92,8 +100,9 @@ export class VideoDetailComponent implements OnInit{
     private messageService: MessageService,
     private dialogService: DialogService,
     private sanitizer: DomSanitizer,
-    private cd: ChangeDetectorRef, 
-    private router: Router)
+    private cd: ChangeDetectorRef,
+    private router: Router,
+    private cartSerice:CartPageService)
   {
   //   this.video = {
   //     videoId: 1,
@@ -141,7 +150,7 @@ export class VideoDetailComponent implements OnInit{
           }
           this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.video.trailerUrl);
 
-          
+
           this.ratingInfo=
           {
             memberId : this.userID,
@@ -163,13 +172,13 @@ export class VideoDetailComponent implements OnInit{
           }
         })
 
-        this.videoService.getRatingByData(this.userID.toString(), videoID).subscribe(data=>{
-          console.log(data);
-          if(data)
-            {
-              this.userRating= data.rating;
-            }
-        })
+        // this.videoService.getRatingByData(this.userID.toString(), videoID).subscribe(data=>{
+        //   console.log(data);
+        //   if(data)
+        //     {
+        //       this.userRating= data.rating;
+        //     }
+        // })
 
         this.videoService.getImagesByVideoID(videoID).subscribe(images=>{
           if(images){
@@ -180,8 +189,6 @@ export class VideoDetailComponent implements OnInit{
         })
       }
     });
-
-    this.selectedImage = this.images[this.selectedIndex];
 
     this.videoService.getVideoApi().subscribe((datas)=>{this.videos=datas})
 
@@ -206,14 +213,14 @@ export class VideoDetailComponent implements OnInit{
       this.route.queryParams.subscribe(params => {
         if (params['showOverlay'] === 'true') {
           this.displayOverlay = true;
-  
+
           setTimeout(() => {
             const button = document.querySelector('.add-to-playlist-button') as HTMLElement;
             const arrowContainer = document.querySelector('.arrow-container') as HTMLElement;
-  
+
             if (button && arrowContainer) {
               const buttonRect = button.getBoundingClientRect();
-  
+
               // 動態設置箭頭位置，使其對準按鈕
               arrowContainer.style.position = 'absolute'; // 確保是絕對定位
               arrowContainer.style.top = (buttonRect.top - 80) + 'px'; // 讓箭頭位於按鈕上方
@@ -224,44 +231,79 @@ export class VideoDetailComponent implements OnInit{
       });
   }
 
+
+  addCart(vId:number): void{
+    this.newShoppingCart.memberId=this.userID
+    this.newShoppingCart.videoId=vId
+
+    this.cartSerice.createShoppingCart(this.newShoppingCart)
+    .subscribe(
+      response => {
+        console.log('Shopping cart added:', response);
+        // 可以在這裡加入跳轉或成功訊息提示
+      },
+      error => {
+        console.error('Error adding shopping cart:', error);
+      }
+    );
+  }
+
   onValueChange(newValue: any) {
     this.images = newValue;
   }
 
-  onCarouselPageChange(event: any) {
-    const visibleImagesCount = 3; // 假設 Carousel 可見圖片數量是 3
+  openLoginWarning(event:any, lop:OverlayPanel){
+    if(this.userID ===0){
+      console.log(this.userID)
 
-    // 透過 % 避免溢出，實現無限循環
-    this.selectedIndex = (event.page + Math.floor(visibleImagesCount / 2)) % this.images.length;
+      lop.toggle(event);
+    }else{
+      this.addCart(this.videoIDForFunctions);
+      this.onAddCart();
+    }
 
-    // 更新選中的圖片
-    this.selectedImage = this.images[this.selectedIndex];
   }
-  onImageClick(index: number) {
-    this.selectedIndex = index;
-    this.selectedImage = this.images[index];
+
+  onAddCart(){
+    this.messageService.add({
+      key: 'global',
+      severity: 'success',
+      summary: '已成功加入購物車!',
+      detail: `${this.video.videoName}`
+    });
   }
+
 
   openRatingPanel(event: any, op: OverlayPanel) {
     // 先檢查評分資料是否已經存在 (這部分邏輯應該已經存在)
     if (this.userID !== 0) {
       this.videoService.getRatingByData(this.userID.toString(), this.video.videoId).subscribe(data => {
-        if (data) {
-          this.userRating = data.rating;
-        } else {
-          this.userRating = 0; // 如果沒有評分，就設置為 0
-        }
-  
+        this.userRating = data.rating;
+        this.isUserHaveRated = true;
+
         // 打開 OverlayPanel
         op.toggle(event);
-  
+
         // 手動觸發變更檢測，確保評分顯示正確
         this.cd.detectChanges();
-      });
+      },
+      error => {
+        // 如果返回 404，表示沒有評分
+        if (error.status === 404) {
+          this.userRating = 0; // 沒有找到評分，將評分設置為 0
+
+          op.toggle(event);
+
+        } else {
+          console.error('Error:', error);
+        }
+      }
+    );
     } else {
       // 用戶未登入，直接打開 Panel
       op.toggle(event);
     }
+
   }
 
   confirm(event: RatingRateEvent , op: OverlayPanel) {
@@ -275,6 +317,9 @@ export class VideoDetailComponent implements OnInit{
       this.visible = true;
     }
   }
+
+
+
   onConfirm() {
     this.messageService.clear('confirm');
 
@@ -294,7 +339,7 @@ export class VideoDetailComponent implements OnInit{
     });
   }
 
-onReject() {
+  onReject() {
     this.messageService.clear('confirm');
     this.visible = false;
   }
@@ -304,6 +349,11 @@ onReject() {
     console.log(this.trailerVisibility)
   }
 
+  onAddKeyword() {
+    // 在這裡寫新增關鍵字的邏輯，比如打開一個彈出框
+    console.log('Add new keyword clicked');
+    // 可以調用對話框或者處理其他邏輯
+  }
 
 
   postRating()

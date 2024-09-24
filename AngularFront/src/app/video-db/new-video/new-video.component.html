@@ -1,4 +1,6 @@
 <div class="custom-card p-fluid">
+  <button (click)="testValue()">測試內容按鈕</button>
+  <button (click)="completeForm()">快速輸入</button>
     <p-panel header="新增影片" styleClass="mb-3">
       <form [formGroup]="videoForm" (ngSubmit)="onSubmit()">
         <div class="p-grid p-formgrid">
@@ -19,12 +21,13 @@
               <!-- 類型 ID -->
               <div class="p-field">
                 <label for="typeId">類型 ID</label>
-                <input
-                  id="typeId"
-                  type="number"
-                  pInputText
+                <p-dropdown
+                  [options]="types"
+                  optionLabel="typeName"
+                  optionValue="typeId"
                   formControlName="typeId"
-                />
+                  placeholder="選擇類型">
+                </p-dropdown>
               </div>
 
               <!-- 系列 ID -->
@@ -101,18 +104,6 @@
                   [showIcon]="true"
                 ></p-calendar>
               </div>
-
-              <!-- 評分 -->
-              <div class="p-field">
-                <label for="rating">評分</label>
-                <p-inputNumber
-                  formControlName="rating"
-                  [min]="0"
-                  [max]="5"
-                  [step]="0.1"
-                ></p-inputNumber>
-              </div>
-
               <!-- 語言 -->
               <div class="p-field">
                 <label for="lang">語言</label>
@@ -160,7 +151,7 @@
           </div>
 
           <!-- 右邊欄位 (圖片) -->
-          <div class="p-col-12 p-md-6">
+          <div class="p-col-12 p-md-6" *ngIf="!isEditing">
             <p-fieldset legend="縮圖與圖片">
               <!-- 縮圖上傳 -->
               <div class="p-field">

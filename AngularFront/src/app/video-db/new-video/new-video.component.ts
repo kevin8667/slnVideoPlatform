@@ -1,15 +1,25 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+
+import { VideoDBService } from 'src/app/video-db.service';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CreateVideoDTO } from '../interfaces/CreateVideoDTO';
 import { ImageDTO } from '../interfaces/CreateVideoDTO';
 import { HttpClient } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
+import { ActivatedRoute } from '@angular/router';
+
+interface VideoType
+{
+  typeName:string;
+  typeId:number;
+}
+
 @Component({
   selector: 'app-new-video',
   templateUrl: './new-video.component.html',
   styleUrls: ['./new-video.component.css']
 })
-export class NewVideoComponent {
+export class NewVideoComponent implements OnInit {
   @ViewChild('thumbnailUpload') thumbnailUpload: FileUpload | undefined;
 
   videoForm: FormGroup;
@@ -20,11 +30,20 @@ export class NewVideoComponent {
   uploadedImages:  (File | undefined)[] = [];
   uploadedThumbnail!: File;  // 儲存縮圖
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  types = [
+    { typeName: '電影', typeId: 1 },
+    { typeName: '影集', typeId: 2 }
+  ];
+
+  isEditing:boolean= false;
+
+  selectedType: VideoType | undefined;
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private route: ActivatedRoute, private videoDBService:VideoDBService) {
     // 初始化表單
     this.videoForm = this.fb.group({
       videoName: ['', Validators.required],
-      typeId: ['', Validators.required],
+      typeId: [null, Validators.required],
       seriesId: [null],
       mainGenreId: ['', Validators.required],
       seasonId: [null],
@@ -32,8 +51,6 @@ export class NewVideoComponent {
       runningTime: [''],
       isShowing: [false, Validators.required],
       releaseDate: [new Date(), Validators.required],
-      rating: [null],
-      popularity: [null],
       thumbnailPath: [''],
       lang: ['', Validators.required],
       summary: [''],
@@ -42,8 +59,58 @@ export class NewVideoComponent {
       bgpath: [''],
       images: this.fb.array([]) // 確保這裡初始化為 FormArray
     });
+
   }
 
+  ngOnInit(): void {
+
+    this.route.queryParams.subscribe(params =>{
+      if(params["videoID"]){
+          this.isEditing= true;
+          this.videoDBService.getVideoApiWithID(params["videoID"]).subscribe(data=>{
+            this.videoDBService.getImagesByVideoID(data.videoId.toString()).subscribe(imgs=>{
+              console.log(imgs)
+              this.videoForm.patchValue({
+                image:imgs
+              })
+            })
+
+            this.videoForm.patchValue({
+              videoName: data.videoName,
+              typeId: data.typeId,
+              seriesId: data.seasonId,
+              mainGenreId: data.mainGenreId,
+              seasonId: data.seasonId,
+              episode: data.episode,
+              runningTime: data.runningTime,
+              isShowing: data.isShowing,
+              releaseDate: data.releaseDate,
+              thumbnailPath: '',
+              lang: data.lang,
+              summary: data.summary,
+              ageRating: data.ageRating,
+              trailerUrl: data.trailerUrl,
+              bgpath:data.bgpath,
+            });
+          })
+      }
+    })
+  }
+
+  testValue(){
+    console.log(this.videoForm.value);
+    //console.log(typeof this.videoForm.value.typeId);
+  }
+
+  completeForm()
+  {
+  this.videoForm.patchValue({
+    videoName: "TEST",
+    typeId: 1,
+    mainGenreId: 1,
+    lang: "TEST"
+  });
+  }
 
   get imagesArray(): FormArray {
     return this.videoForm.get('images') as FormArray;
@@ -146,9 +213,7 @@ onThumbnailSelect(event: any) {
     this.thumbnailPreview = reader.result;
   };
   reader.readAsDataURL(file); // 預覽圖片
-
-
-}
+  }
 
   // 將 Base64 資料轉換為 Blob
   dataURLtoBlob(dataUrl: string): Blob {

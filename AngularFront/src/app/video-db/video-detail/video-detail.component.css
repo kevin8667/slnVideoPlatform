@@ -3,7 +3,7 @@
   flex-direction: column;
   margin: 0 auto;
   width: 100%;
-  max-height: 700px;
+  max-height: 850px;
   border-left: none;
   border-right: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -112,12 +112,11 @@ h2
 {
   margin-bottom: 5px;
 }
-/* 父容器 */
-.p-grid {
-  margin: 0;
-  padding: 0;
-}
 
+/* 讓主要演員和關鍵字區塊垂直置中 */
+.p-grid {
+  align-items: flex-start; /* 垂直方向的對齊方式，可選 'center' 或 'flex-start' */
+}
 /* 演員卡片樣式 */
 .actors-container {
   display: flex;
@@ -150,6 +149,7 @@ h2
   justify-content: center;
   align-items: center;
   position: relative;
+  margin-top: 20px; /* 與上方演員列表保持間距 */
 }
 
 .carousel-item-container {
@@ -169,10 +169,20 @@ h2
   width: 100%; /* 確保 Carousel 滿寬 */
 }
 
+.keywords-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-
-
-
+.keyword-badge {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
 
 .rating-link {
   color: yellow; /* 設定文字顏色 */
@@ -290,4 +300,18 @@ iframe {
   }
 }
 
-
+.add-keyword-btn {
+  margin-left: 5px;
+  background-color: transparent;
+  color: #007ad9;
+  border: none; /* 移除按鈕的邊框 */
+  padding: 0; /* 移除內部邊距，讓按鈕的大小更接近關鍵字徽章 */
+  font-size: 16pt; /* 調整按鈕圖標的大小 */
+  line-height: 1; /* 確保按鈕與文字高度一致 */
+  display: inline-flex; /* 確保按鈕與關鍵字徽章保持在同一行 */
+  align-items: center; /* 垂直居中對齊 */
+  justify-content: center; /* 水平居中對齊 */
+  height: 20px;
+  width: 20px;
+  padding-bottom: 3px;
+}

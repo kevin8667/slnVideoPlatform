@@ -6,11 +6,13 @@
 
 .payment-success h1,
 .payment-success p {
-  color: red; /* 設置文字顏色為紅色 */
   font-size: 2rem; /* 放大文字 */
   margin: 0.5rem 0; /* 行間距 */
+  color: gray;
 }
 
 .payment-success h1 {
   margin-top: 2rem; /* 額外的上邊距 */
+  color: green;
+
 }

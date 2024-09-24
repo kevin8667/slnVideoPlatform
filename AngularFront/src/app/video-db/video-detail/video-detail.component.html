@@ -1,6 +1,6 @@
 
 <header>
-  <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css">   
+  <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css">
 </header>
 
 <div class="custom-card" *ngIf="video" [ngStyle]="{ 'background-image': 'url(' + video.bgpath+ ')' }">
@@ -29,9 +29,16 @@
           style="text-decoration-line: none;"
           pButton
           pRipple
-          [href]="video.trailerUrl"
           target="_blank"
+          (click)="openLoginWarning($event, lop)"
         >購買或租借</a>
+        <p-overlayPanel #lop>
+          <ng-template pTemplate="content">
+            <div class="card flex justify-content-center">
+              <p><strong>請先登入!</strong></p>
+            </div>
+          </ng-template>
+        </p-overlayPanel>
         <a *ngIf="video.isShowing"
           class="button"
           style="text-decoration-line: none;"
@@ -68,11 +75,22 @@
         pRipple
         icon="pi pi-play"
         (click)="overLayToggle()">觀看預告片</a>
+      <div class="p-col-12 p-md-3">
+        <div class="keywords-container">
+          <h3 style="margin-bottom: 10px;">關鍵字</h3>
+          <div class="p-d-flex p-flex-wrap align-items-center " >
+            <span *ngFor="let keyword of keywords" class="keyword-badge p-m-1" style="margin-right: 5px;">{{ keyword }}</span>
+
+            <button pButton pRipple icon="pi pi-plus-circle" class="p-button-rounded p-button-text p-button-icon-only add-keyword-btn" (click)="onAddKeyword()"></button>
+          </div>
+        </div>
+      </div>
       </div>
       <div>
         <p *ngIf="season?.seasonName"><strong>季:</strong> {{ season?.seasonName }}</p>
         <p *ngIf=" video?.episode"><strong>集:</strong> {{ video.episode }}</p>
-        <p><strong>片長:</strong> {{ video.runningTime }}</p>
+        <p *ngIf="video.runningTime!=='00:00:00'"><strong>片長:</strong> {{ video.runningTime }}</p>
+        <p *ngIf="video.runningTime ==='00:00:00'"><strong>片長:</strong> 暫無資料</p>
         <p><strong>上映日期:</strong> {{ video.releaseDate | date }}</p>
         <p *ngIf="avgRating>0"><strong>評分:</strong> {{avgRating}} / 10<a (click)="openRatingPanel($event, op)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分
@@ -80,6 +98,20 @@
         <p *ngIf="avgRating === 0 || avgRating === undefined"><strong>評分:</strong> 尚無評分 <a (click)="openRatingPanel($event, op)" class="rating-link">
           <i class="pi pi-star-fill"></i> 留下評分
         </a></p>
+
+        
+
+        <p-overlayPanel #op>
+          <ng-template pTemplate="content">
+            <p *ngIf="userID !==0" style="margin-top: 0;"><strong>您的評分：{{userRating}}</strong></p>
+              <div class="card flex justify-content-center" *ngIf="userID !==0">
+                <p-rating [readonly]="isUserHaveRated" [cancel]="!isUserHaveRated"  [(ngModel)]="userRating" (onRate)="confirm($event, op)"  class="custom-rating" [stars]="10"></p-rating>
+              </div>
+              <div class="card flex justify-content-center" *ngIf="userID ===0">
+                <p><strong>請先登入!</strong></p>
+              </div>
+          </ng-template>
+        </p-overlayPanel>
         <p-toast position="center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
 
           <ng-template let-message pTemplate="message">
@@ -101,16 +133,7 @@
           </ng-template>
       </p-toast>
       <p-toast position="top-center" key="global"></p-toast>
-        <p-overlayPanel #op>
-          <ng-template pTemplate="content">
-              <div class="card flex justify-content-center" *ngIf="userID !==0">
-                <p-rating [(ngModel)]="userRating" (onRate)="confirm($event, op)" [stars]="10"></p-rating>
-              </div>
-              <div class="card flex justify-content-center" *ngIf="userID ===0">
-                <p><strong>請先登入!</strong></p>
-              </div>
-          </ng-template>
-        </p-overlayPanel>
+       
 
         <p><strong>語言:</strong> {{ video.lang }}</p>
         <p><strong>簡介:</strong> 一場盛大熱鬧的婚禮派對即將展開，這是黑手黨黨魁唐柯里昂尼（馬龍白蘭度 飾）為女兒舉行的婚禮。當年由西西里隻身流浪到美國的唐，步步為營成為黑幫大亨，然而歲月不饒人讓他疲態盡現，所以想將衣缽傳承給兒子。老大桑尼（詹姆士肯恩 飾）衝動暴躁，老二佛雷多（約翰卡佐爾 飾）懦弱無能，老三麥可（艾爾帕西諾 飾）是戰爭英雄，卻不願捲入黑社會是非。<br>
@@ -119,8 +142,11 @@
       <div>
         <p><strong>導演:</strong> 法蘭西斯·科波拉</p>
         <p><strong>主演:</strong> 馬龍‧白蘭度 </p>
+
       </div>
+      
       <div class="flex ">
+
 
       </div>
 
@@ -129,8 +155,8 @@
 </div>
 
 <div class="p-grid p-nogutter">
-  <!-- 演員列表 -->
-  <div class="p-col-12 p-md-3">
+  <!-- 左邊: 主要演員列表 -->
+  <div class="p-col-12 p-md-9">
     <h2>主要演員</h2>
     <div class="actors-container p-d-flex p-flex-wrap p-jc-start">
       <div *ngFor="let actor of actors" class="actor-card p-mr-2 p-mb-3">
@@ -140,9 +166,10 @@
     </div>
   </div>
 
-  <!-- 右邊的 Carousel -->
+
+  <!-- 下方: Carousel -->
   <div class="p-col-12 p-md-9">
-    <div class="carousel-container">
+    <div class="carousel-container p-mt-3">
       <p-carousel [value]="images" [numVisible]="1" [circular]="true" [autoplayInterval]="3500">
         <ng-template pTemplate="item" let-image>
           <div class="carousel-item-container">
@@ -152,7 +179,6 @@
       </p-carousel>
     </div>
   </div>
-</div>
 
     <!-- <p-carousel
     [value]="images"

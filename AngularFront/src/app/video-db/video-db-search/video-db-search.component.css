@@ -19,16 +19,27 @@
 }
 
 .movie-card {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* 確保內容從上往下排 */
+  justify-content: space-between; /* 保證按鈕在底部 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 確保圖片保持比例，並不會變形 */
+.image-container {
+  width: 100%;
+  height: 300px; /* 固定高度，您可以根據需要調整 */
+  display: flex;
+  justify-content: center;
   align-items: center;
-  border-radius: 10px;
-  overflow: hidden;
+}
+
+.thumbnail {
+  width: 100%;
   height: 100%;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 0; /* 移除 padding 讓圖片緊貼上方 */
+  object-fit: cover; /* 確保圖片保持比例並覆蓋整個區域 */
+  border-radius: 8px;
 }
 
 .movie-card:hover {
@@ -53,10 +64,27 @@
   border-radius: 0; /* 圖片不應該有額外的邊角 */
 }
 
-.p-dataview-grid, .p-dataview-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* 保證卡片在不同屏幕寬度自適應 */
-  gap: 20px;
+.custom-grid-item {
+  width: 20%; /* 每行顯示5個卡片 */
+  padding: 10px;
+}
+
+@media (max-width: 1200px) {
+  .custom-grid-item {
+    width: 33.33%; /* 中等螢幕每行顯示3個卡片 */
+  }
+}
+
+@media (max-width: 992px) {
+  .custom-grid-item {
+    width: 50%; /* 小螢幕每行顯示2個卡片 */
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-grid-item {
+    width: 100%; /* 手機螢幕每行顯示1個卡片 */
+  }
 }
 
 .rating-indicator {
@@ -100,6 +128,7 @@
   margin: 20px 0;
 }
 
+/* 保持 genre-buttons 樣式 */
 .genre-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -107,7 +136,8 @@
   border-radius: 20px;
 }
 
-button {
+/* 通用 button 的樣式（僅針對 genre-buttons） */
+.genre-buttons button {
   padding: 10px 20px;
   border: 1px solid #ccc;
   background-color: white;
@@ -116,13 +146,40 @@ button {
   transition: background-color 0.3s;
 }
 
-button.selected {
+.genre-buttons button.selected {
   background-color: #007bff;
   color: white;
   border-color: #007bff;
 }
 
-button:hover {
+.genre-buttons button:hover {
   background-color: #0056b3;
   color: white;
 }
+
+/* 覆蓋 p-button 的樣式，編輯按鈕應用主題色 */
+.custom-edit-btn {
+  background-color: #007bff !important; /* 網頁主題色 */
+  border-color: #007bff !important;
+  color: white !important;
+}
+
+.custom-edit-btn:hover {
+  background-color: #0056b3 !important; /* 當鼠標懸停時的顏色 */
+  border-color: #0056b3 !important;
+}
+
+/* 覆蓋 p-button 的樣式，刪除按鈕應用紅色 */
+.custom-delete-btn {
+  background-color: #dc3545 !important; /* 刪除按鈕的紅色 */
+  border-color: #dc3545 !important;
+  color: white !important;
+}
+
+.custom-delete-btn:hover {
+  background-color: #c82333 !important; /* 當鼠標懸停時的深紅色 */
+  border-color: #c82333 !important;
+}
+
+
+

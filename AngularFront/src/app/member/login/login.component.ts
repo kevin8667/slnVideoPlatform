@@ -30,10 +30,10 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.demos = [
-      { name: '會員一' },
-      { name: '會員二' },
-      { name: '會員五' },
-      { name: '會員十' },
+      { name: '葉仲仁' },
+      { name: '江睿庭' },
+      { name: '詹喬琳' },
+      { name: '林韋廷' },
     ];
   }
 
@@ -68,16 +68,16 @@ export class LoginComponent implements AfterViewInit, OnInit {
   }
   ondemochange(selectdemo: demo) {
     switch (selectdemo.name) {
-      case '會員一':
+      case '葉仲仁':
         this.demo1();
         break;
-      case '會員二':
+      case '江睿庭':
         this.demo2();
         break;
-      case '會員五':
+      case '詹喬琳':
         this.demo5();
         break;
-      case '會員十':
+      case '林韋廷':
         this.demo10();
         break;
       default:

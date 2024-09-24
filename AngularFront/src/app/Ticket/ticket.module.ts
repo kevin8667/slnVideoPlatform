@@ -10,6 +10,7 @@ import { TicketRoutingModule } from './ticket.routing.module';
   declarations: [
     TicketComponent,
     TicketSelectionComponent,
+
     // TicketReservationComponent,
   ],
   imports: [

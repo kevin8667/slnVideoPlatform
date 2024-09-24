@@ -17,11 +17,13 @@ export class EditComponent implements OnInit {
   isSubmitting: boolean = false;
   isLoading: boolean = false;
   formSubmitted: boolean = false;
+
+
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
     // 只有當表單已修改且未提交時，才顯示提示
-    if (this.articleForm.dirty ) {
-      console.log('預設的')
+    if (this.articleForm.dirty) {
+      console.log('預設的');
       $event.returnValue = true;
     }
   }
@@ -53,7 +55,7 @@ export class EditComponent implements OnInit {
     this.initializeForm();
     if (this.type === 'post') {
       this.changeFormGroup();
-    }else{
+    } else {
       this.forumService.themeTag$.subscribe({
         next: (data) => (this.themeTag = data),
         error: (err) => this.handleError(err),
@@ -106,7 +108,6 @@ export class EditComponent implements OnInit {
       error: (err) => this.handleError(err),
       complete: () => (this.isLoading = false),
     });
-
   }
 
   private loadArticle() {
@@ -228,11 +229,38 @@ export class EditComponent implements OnInit {
             length: 0,
           };
         }
+        if (this.type === 'article') {
+          const newArticle =
+            '這是一篇推薦影評人最推崇的影片，內容涵蓋各類經典佳作。';
 
-        // 將圖片 URL 插入到 Quill 編輯器
-        quill.insertEmbed(range.index, 'image', response.filePath);
+          // 將圖片 URL 插入到 Quill 編輯器
+          quill.insertEmbed(range.index, 'image', response.filePath);
+          quill.insertText(range.index + 100, newArticle);
+          this.articleForm.patchValue({
+            content: quill.root.innerHTML, // 更新內容欄位
+            title: '推薦影評人必看的電影', // 填寫標題欄位
+            theme: 5, // 填寫主題欄位
+          });
+          this.articleForm.controls['content'].setValue(quill.root.innerHTML);
+        } else {
+          const newPost = `這部可以看啊！
+          從頭到尾沒有冷場啊！
 
-        this.articleForm.controls['content'].setValue(quill.root.innerHTML);
+          節奏拿捏的很好！
+
+          而且不得不說，這女主角演技很棒！
+
+          我會二刷~~
+          `;
+
+          // 將圖片 URL 插入到 Quill 編輯器
+          quill.insertEmbed(range.index, 'image', response.filePath);
+          quill.insertText(range.index + 100, newPost);
+          this.articleForm.patchValue({
+            content: quill.root.innerHTML, // 更新內容欄位
+          });
+          this.articleForm.controls['content'].setValue(quill.root.innerHTML);
+        }
       } else {
         console.error('圖片上傳失敗，未返回有效的文件路徑');
       }
@@ -240,7 +268,6 @@ export class EditComponent implements OnInit {
       console.error('圖片上傳發生錯誤:', error);
     }
   }
-
   private handleError(error: any) {
     console.error('發生錯誤:', error);
     this.isSubmitting = false;

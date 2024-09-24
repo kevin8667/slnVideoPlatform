@@ -49,10 +49,9 @@ public partial class VideoList
     public virtual ICollection<CastList> CastLists { get; set; } = new List<CastList>();
 
     public virtual ICollection<DirectorForVideoList> DirectorForVideoLists { get; set; } = new List<DirectorForVideoList>();
-
+    [JsonIgnore]
     public virtual ICollection<GenresForVideoList> GenresForVideoLists { get; set; } = new List<GenresForVideoList>();
 
-    [JsonIgnore]
     public virtual ICollection<ImageForVideoList> ImageForVideoLists { get; set; } = new List<ImageForVideoList>();
 
     public virtual ICollection<KeywordForVideoList> KeywordForVideoLists { get; set; } = new List<KeywordForVideoList>();
@@ -60,7 +59,7 @@ public partial class VideoList
     public virtual GenreList MainGenre { get; set; }
 
     public virtual ICollection<MemberRating> MemberRatings { get; set; } = new List<MemberRating>();
-
+    [JsonIgnore]
     public virtual ICollection<NowShowingTheater> NowShowingTheaters { get; set; } = new List<NowShowingTheater>();
 
     public virtual ICollection<PlayListItem> PlayListItems { get; set; } = new List<PlayListItem>();
@@ -68,9 +67,9 @@ public partial class VideoList
     public virtual SeasonList Season { get; set; }
 
     public virtual SeriesList Series { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
-
+    [JsonIgnore]
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
 
     public virtual TypeList Type { get; set; }

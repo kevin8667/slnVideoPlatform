@@ -1,0 +1,153 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td , select { font-family: Arial , "敺株��迤暺煾�𥪯耨甇�" , "敺株��迤暺煾��" , "�鰵蝝唳�𡡞��" , Tahoma , Verdana , Helvetica , sans-serif; margin: 0; padding: 0; }
+body { font-size: 12px; color: #333333;}
+table { font-size: 12px; border-spacing: 0; border-collapse: collapse; }
+fieldset, img { border: 0; }
+ol, ul { list-style: none; }
+caption, th { text-align: left; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal; }
+h4 { font-family: "敺株��迤暺煾��"; margin: 0; padding: 0; }
+q:before, q:after { content: ''; }
+a:link, a:visited { text-decoration: none; color: #424242; }
+a:hover { text-decoration: underline; color: #818181; }
+
+.mem_page_border {
+  width: 100%;
+}
+.mem_page_border .mem_page_head	{ width:100%; height:60px; }
+.mem_page_border .mem_page_head ul { list-style:none; width: 100%; overflow:hidden; height:60px; }
+.mem_page_border .mem_page_head li { float:left; height:60px; box-sizing: border-box; }
+.mem_page_border .mem_page_head li a {
+  display:block;
+  width:100%;
+  text-decoration:none;
+  font-size: 20px;
+  border-bottom:4px solid #e6e6e6;
+  text-align:center;
+  padding:10px;
+  box-sizing: border-box;
+}
+.mem_page_border .mem_page_head .mem_page_list_now { border-color: #ffcc80; }
+.mem_page_order_fast { width:100%; height:60px; background-color:#80d4ff; padding:10px 10px; box-sizing: border-box; }
+.mem_page_order_fast .mem_page_order_fast_text { float:left; width:10%; }
+.mem_page_order_fast .mem_page_order_fast_text p { width:100%; height:40px; line-height:40px; font-size:16px; text-align:center; }
+.mem_page_order_fast .mem_page_order_fast_box { width:100%; }
+.mem_page_order_fast .mem_page_order_fast_box ul { width:100%; }
+.mem_page_order_fast .mem_page_order_fast_box li { float:left; width:20%; height:40px; line-height:40px; font-size:16px; box-sizing: border-box; border:#e6e6e6 1px solid; border-radius:5px; background-color:#fff; text-align:center; margin:0px 5px; cursor:pointer; }
+.mem_page_border .mem_page_search { width:100%; padding:20px; box-sizing: border-box; }
+.mem_page_border .mem_page_search input, .mem_page_border .mem_page_search select , .mem_page_border .mem_page_search span { font-size: 14px; }
+.mem_page_border .mem_page_search ul { width:100%; height:40px; }
+.mem_page_border .mem_page_search li { float:left; height:40px; margin:auto; line-height:40px; }
+.mem_page_border .mem_page_search li p { font-size: 14px; line-height:40px; }
+
+.mem_page_border .mem_page_content { width: 100%; clear: both; box-sizing: border-box; padding:0px 20px; }
+.mem_page_border .mem_page_content .pic { overflow: hidden; width: 80px; height: 80px; margin: 0 auto; text-align: center; vertical-align: middle; border: 1px solid #ddd; }
+.mem_page_border .mem_page_content .pic span { font-size: 0; line-height: 0; display: inline-block; width: 0; height: 100%; vertical-align: middle; border: 0 none; }
+.mem_page_border .mem_page_content .pic img { max-width: 80px; max-height: 80px; vertical-align: middle; }
+.mem_page_border .mem_page_content .info { min-height: 40px; }
+.mem_page_border .mem_page_content .info a { display: block; margin: 8px 0 6px 0; color: #446faf; }
+
+
+
+.table-container { width:100%; overflow:hidden; }
+.table-container th i.down , .table-container td i.down { display: inline-block; width: 10px; height: 10px; margin-left: 3px; background-size: 100%; }
+.table-container th i.up , .table-container td i.up { display: inline-block; width: 10px; height: 10px; margin-left: 3px;  background-size: 100%; }
+.table-container th i.funnel , .table-container td i.funnel { display: inline-block; width: 8px; height: 8px; margin-left: 3px;   background-size: 100%; }
+.table-container th i.up_arrow , .table-container td i.up_arrow { display: inline-block; width: 15px; height: 15px; margin: auto 10px;  background-size: 100%; }
+.table-container th i.down_arrow , .table-container td i.down_arrow { display: inline-block; width: 15px; height: 15px; margin: auto 10px;   background-size: 100%; }
+
+
+.general-table { width:100%; background: #fff; margin:10px 0; }
+.general-table .text_center { text-align: center; }
+.general-table .text_left { text-align: left; }
+.general-table tr { border: 1px solid #e6e6e6; box-sizing: border-box; }
+.general-table th { line-height: 40px; height: 40px; background: none repeat scroll 0 0 #f3f3f3; text-align: center; }
+.general-table td { padding: 8px 2px; text-align: center; }
+.general-table td .pic { overflow: hidden; width: 80px; height: 80px; margin: 0 auto; text-align: center; vertical-align: middle; border: 1px solid #ddd; }
+.general-table td .pic span { font-size: 0; line-height: 0; display: inline-block; width: 0; height: 100%; vertical-align: middle; border: 0 none; }
+.general-table td .pic img { max-width: 80px; max-height: 80px; vertical-align: middle; }
+.general-table a { text-decoration:none; }
+.general-table a:hover { color:#ff7900; }
+.general-table .info { min-height: 40px; }
+.general-table .info a { display: block; margin: 8px 0; }
+
+.t_red { color: #e1153a; }
+.t_bold { font-weight: bold; color: #424242; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.td_gray {
+  display:block;
+  width:100%;
+  height:44px;
+  line-height:44px;
+  color:#fff;
+  background-color:#99b6b7;
+  font-size:16px;
+  padding:0 10px;
+  text-align:center;
+  box-sizing:border-box;
+  border: 1px solid #99b6b7;
+  }
+.td_background{
+  display:block;
+  width:100%;
+  height:44px;
+  line-height:44px;
+  color:#99b6b7;
+  background-color:#99b6b7;
+  font-size:large;
+  padding:0 10px;
+  text-align:center;
+  box-sizing:border-box;
+  border: 1px solid #99b6b7;
+}
+
+.selected{
+  background-color: #eaf6f4;
+}
+
+.td_yellow {
+  display:block;
+  width:100%;
+  height:44px;
+  line-height:44px;
+  color:#fff;
+  background-color:#ce5f6a;
+  font-size: large;
+  padding:0 10px;
+  text-align:center;
+  box-sizing:border-box;
+  border: 1px solid #ce5f6a;
+  }
+
+.td_mainbg{
+  background-color: #65d2e4;
+}
+
+.td_btn{
+  color:#000;
+  background-color:lightgray;
+  font-size:16px;
+  padding:0 10px;
+  text-align:center;
+  border-radius: 5px;
+  border: 2px solid lightgray;
+}
+
+.td_btn:hover{
+  background-color:gray;
+  color: #fff;
+}

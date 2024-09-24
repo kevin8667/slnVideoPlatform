@@ -1,10 +1,9 @@
- <div class="card search-container flex flex-row md:flex-row gap-3 p-3">
-
-</div>
 
 <div class="container flex">
+
   <!-- 左側篩選器 -->
   <div class="filters">
+
     <div class="p-inputgroup" style="margin-bottom: 25px;">
       <span class="p-float-label" style="width: 250px;">
       <input type="text" inputId="float-label" pInputText [(ngModel)]="inputName" />
@@ -37,31 +36,62 @@
     </div>
 
     <div>
-      <button type="button" pRipple pButton label="搜尋" (click)="searchVideos()" class="p-button-primary"></button>
+      <button type="button" pButton label="搜尋" (click)="searchVideos()" class="p-button-primary"></button>
     </div>
+    
   </div>
 
     <!-- 右側電影卡片列表 -->
     <div class="movie-list">
+      
+      <button *ngIf="userID===1" type="button" pButton label="新增影片" (click)="newVideo()" class="p-button-primary custom-edit-btn"></button>
         <p-dataView #dv [value]="videos" [rows]="pageSize" [paginator]="true"  [rowsPerPageOptions]="pageSizeOptions" [totalRecords]="totalRecords" paginatorDropdownAppendTo="body"  layout="grid" >
             <!-- 網格佈局 -->
             <ng-template let-video pTemplate="gridItem">
-                <div class="col-12 sm:col-6 lg:col-4 xl:col-2 p-2"> <!-- 每行顯示 5 個卡片 -->
-                    <a [routerLink]='"/video-db/details/"+video.videoId' style="text-decoration: none;">
+              <div class="custom-grid-item p-2"> <!-- 每行顯示 5 個卡片 -->
                     <div class="p-4 border-1 surface-border surface-card border-round movie-card">
+                      <a [routerLink]='"/video-db/details/"+video.videoId' style="text-decoration: none;">
                         <div class="image-container">
                             <img class="thumbnail"
                                   [src]="video.thumbnailPath"
                                   [alt]="video.videoName" />
                         </div>
                         <div class="flex flex-column align-items-center gap-3 py-4">
-                            <div class="text-2xl font-bold" >{{ video.videoName }}</div>
+                            <div class="text-2xl font-bold" >{{ video.videoName }}
+                            </div>
+                        </div>
+                      </a>
+                        <div *ngIf="userID===1">
+                          <div *ngIf="userID ===1">
+                            <button type="button" pButton label="編輯" (click)="editVideo(video.videoId)" class="p-button-primary custom-edit-btn" style="margin-right: 10px;"></button>
+                            <button type="button" pButton label="刪除" (click)="onConfirmDelete(video.videoId,video.videoName)" class="p-button-secondary custom-delete-btn"></button>
+                          </div>
                         </div>
                     </div>
-                    </a>
                 </div>
             </ng-template>
-
         </p-dataView>
       </div>
 </div>
+
+<p-toast position="center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
+
+  <ng-template let-message pTemplate="message">
+      <div class="flex flex-column" style="flex: 1">
+          <div class="text-center">
+              <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+              <h4>{{message.summary}}</h4>
+              <p>{{message.detail}}</p>
+          </div>
+          <div class="grid p-fluid">
+              <div>
+                  <button type="button" pButton (click)="onConfirm()" label="Yes" class="p-button-success  full-width-btn"></button>
+              </div>
+              <div>
+                  <button type="button" pButton (click)="onReject()" label="No" class="p-button-secondary full-width-btn"></button>
+              </div>
+          </div>
+      </div>
+  </ng-template>
+</p-toast>
+<p-toast position="top-center" key="global"></p-toast>

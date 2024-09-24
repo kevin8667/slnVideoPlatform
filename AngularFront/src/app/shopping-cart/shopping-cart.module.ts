@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';  // 用來處理 HTTP �
 
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
+import { ForDriverComponent } from './for-driver/for-driver.component';
 
 
 
@@ -18,7 +19,8 @@ import { ButtonModule } from 'primeng/button';
     CartPageComponent,
     OrderPageComponent,
     PreOrderComponent,
-    FinishPaymentComponent
+    FinishPaymentComponent,
+    ForDriverComponent
 
   ],
   imports: [
