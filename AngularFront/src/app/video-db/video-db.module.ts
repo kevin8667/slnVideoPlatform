@@ -40,7 +40,7 @@ import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component'
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
-import { forumDatePipe } from '../pipe/pipes/my-date.pipe';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -52,7 +52,6 @@ import { forumDatePipe } from '../pipe/pipes/my-date.pipe';
     PersonDetailComponent,
     NewVideoComponent,
     AddtoplaylistComponent,
-    forumDatePipe
   ],
   imports: [
     CommonModule,
@@ -86,7 +85,8 @@ import { forumDatePipe } from '../pipe/pipes/my-date.pipe';
     PanelModule,
     FieldsetModule,
     InputTextareaModule,
-    TagModule
+    TagModule,
+    DialogModule
   ],
   providers: [DialogService, MessageService],
 })

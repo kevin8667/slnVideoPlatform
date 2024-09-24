@@ -192,7 +192,7 @@
   color: #333;
 }
 
-::ng-deep .article-item-grid {
+:ng-deep .article-item-grid {
   background-color: #333;
   color: white;
   padding: 1rem;
@@ -202,17 +202,17 @@
   text-align: center;
 }
 
-::ng-deep .article-item-grid:hover {
+:ng-deep .article-item-grid:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-::ng-deep .card-content-grid {
+:ng-deep .card-content-grid {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-::ng-deep .card-image-grid img {
+:ng-deep .card-image-grid img {
   width: 80px;
   height: 80px;
   object-fit: cover;
@@ -220,46 +220,55 @@
   border-radius: 5px;
 }
 
-::ng-deep .p-card-title-grid {
+:ng-deep .p-card-title-grid {
   font-size: 1.25rem;
   font-weight: bold;
   color: #fff;
   margin-bottom: 0.5rem;
 }
 
-::ng-deep .p-card-subtitle-grid {
+:ng-deep .p-card-subtitle-grid {
   color: #ccc;
   margin-bottom: 1rem;
 }
 
-::ng-deep .p-card-body-content-grid p {
+:ng-deep  .p-card-body-content-grid p {
   color: #fff;
   font-size: 0.875rem;
 }
 
-/* Grid設置，定義列數，並根據螢幕大小調整 */
-.grid {
+/* PrimeFlex 的 grid 佈局 */
+:ng-deep .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 預設4列 */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 自適應列 */
   gap: 1rem;
 }
 
+/* 響應式佈局調整 */
 @media (max-width: 1200px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr); /* 中等螢幕顯示3列 */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr); /* 平板顯示2列 */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 576px) {
   .grid {
-    grid-template-columns: 1fr; /* 手機顯示1列 */
+    grid-template-columns: 1fr;
   }
+}
+
+/* 沒有文章時的提示信息 */
+.no-articles {
+  color: #999;
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 2rem;
 }
 
   body {

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   selector: 'app-video-dbfront-page',
   templateUrl: './video-dbfront-page.component.html',
   styleUrls: ['./video-dbfront-page.component.css'],
-  //encapsulation:ViewEncapsulation.None
+  // encapsulation:ViewEncapsulation.None
 })
 export class VideoDBFrontPageComponent implements OnInit{
   images:any[]=

@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { RatingDTO } from './video-db/interfaces/ratingDTO';
 import { data } from 'jquery';
+import { KeywordDTO } from './video-db/interfaces/keyword';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +113,7 @@ export class VideoDBService {
     typeId: number | null,
     summary: string | null,
     genreNames: string[] | null,
+    keywords:string[]|null,
     seriesName: string | null,
     seasonName: string | null
   ) {
@@ -124,14 +126,23 @@ export class VideoDBService {
     if (typeId) {
       params = params.set('typeId', typeId.toString());
     }
+
     if (summary) {
       params = params.set('summary', summary);
     }
+
     if (genreNames && genreNames.length > 0) {
       genreNames.forEach(genreName => {
         params = params.append('genreNames', genreName);
       });
     }
+
+    if (keywords && keywords.length > 0) {
+      keywords.forEach(keyword => {
+        params = params.append('keywords', keyword);
+      });
+    }
+
     if (seriesName) {
       params = params.set('seriesName', seriesName);
     }
@@ -211,6 +222,20 @@ export class VideoDBService {
     return this.httpClient.get<Video[]>(url)
   }
 
+  getActorsByVideo(videoId:string){
+    const url = `https://localhost:7193/api/CastList/GetActorsByVideo/${videoId}`;
+
+    this.httpClient.get<Actor[]>(url)
+    .subscribe(actors => {
+      console.log(actors);
+    }, error => {
+      console.error('Error fetching videos:', error);
+    });
+
+    return this.httpClient.get<Actor[]>(url)
+
+  }
+
   createVideo(video:CreateVideoDTO): Observable<Video> {
 
     const apiUrl = 'https://your-api-url/api/videos';
@@ -247,4 +272,40 @@ export class VideoDBService {
 
     return this.httpClient.delete<Video>(url);
   }
+
+  addKeyword(videoId: string, keyword: string) {
+    const url = `https://localhost:7193/api/KeywordForVideoList/AddKeywordToVideo/${videoId}`;
+    
+    const headers = { 'Content-Type': 'text/plain' };
+  
+    // 傳送單純的字串作為關鍵字
+    return this.httpClient.post(url, keyword, { headers, responseType: 'text' });
+  }
+
+  getKeywordByVideo(videoId:string){
+    const url= `https://localhost:7193/api/KeywordForVideoList/GetKeywordsByVideo/${videoId}`
+
+    return this.httpClient.get<KeywordDTO[]>(url);
+  }
+
+  deleteKeywordFromVideo(videoId: string, keywordId: number) {
+    const url = `https://localhost:7193/api/KeywordForVideoList/remove/${videoId}/${keywordId}`;
+    return this.httpClient.delete(url, { responseType: 'text' });
+  }
+
+  searchAllKeywords() {
+    const url = `https://localhost:7193/api/KeywordForVideoList/SearchAllKeywords`;
+    return this.httpClient.get<KeywordDTO[]>(url);
+  }
+
+  searchKeywords(query:string){
+    const url = `https://localhost:7193/api/KeywordForVideoList/search`;
+
+    // 使用 HttpParams 傳遞查詢參數
+    let params = new HttpParams().set('query', query);
+
+    // 發送 GET 請求並返回關鍵字列表
+    return this.httpClient.get<string[]>(url, { params });
+  }
+
 }

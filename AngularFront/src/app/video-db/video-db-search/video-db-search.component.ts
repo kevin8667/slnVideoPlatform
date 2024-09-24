@@ -44,7 +44,7 @@ interface AutoCompleteCompleteEvent {
 export class VideoDbSearchComponent implements OnInit {
 
   inputName: string = '';
-  keyword: string[] | undefined;
+  inputKeyword: string[] | undefined;
   types: VideoType[] | undefined;
   selectedType: VideoType | undefined;
 
@@ -56,6 +56,7 @@ export class VideoDbSearchComponent implements OnInit {
   typeId: number | null = null;
   summary: string | null = null;
   genreNames: string[]= [];
+  keywords:string[]=[];
   seriesName: string | null = null;
   seasonName: string | null = null;
 
@@ -106,19 +107,25 @@ export class VideoDbSearchComponent implements OnInit {
       this.typeId = params['typeId'] ? +params['typeId'] : null;
       this.summary = params['summary'] || null;
 
+
+
       // 解析逗號分隔的 genreNames 字符串為數組
       this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : [];
-      console.log("類型："+this.genreNames);
+
+      this.keywords = params['keywords'] ? params['keywords'].split(',') : [];
+      console.log(this.keywords)
+
+      //console.log("類型："+this.genreNames);
       this.urlGenre = this.genreNames;
       this.selectedGenres = this.genreNames;
-      console.log(this.selectedGenres);
+      //console.log(this.selectedGenres);
 
       this.seriesName = params['seriesName'] || null;
       this.seasonName = params['seasonName'] || null;
 
 
            // 如果有任何查詢參數存在，則執行搜索
-      if (this.videoName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || this.seriesName || this.seasonName) {
+      if (this.videoName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || (this.keywords && this.keywords.length > 0) || this.seriesName || this.seasonName) {
         // 執行搜索操作
         this.searchVideos();
       }
@@ -167,6 +174,7 @@ export class VideoDbSearchComponent implements OnInit {
       this.typeId,
       this.summary,
       this.selectedGenres,
+      this.keywords,
       this.seriesName,
       this.seasonName
     ).subscribe((response) => {

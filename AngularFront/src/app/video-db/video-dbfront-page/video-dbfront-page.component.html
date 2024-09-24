@@ -213,47 +213,48 @@
     <span>熱門文章</span>
   </h2>
 
-  <div class="grid article-list">
-    <p-dataView [value]="popularArticle" layout="grid" [paginator]="false">
-      <!-- 每個文章項目 -->
-      <ng-template pTemplate="gridItem" let-article>
-        <!-- 確保每個卡片的列數在不同屏幕大小上自動調整 -->
-        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
-          <div class="p-card p-component article-item-grid">
-            <!-- 卡片內容 -->
-            <div class="card-content-grid">
-              <div class="card-image-grid">
-                <img
-                  (click)="navToArticle(article.articleId)"
-                  class="article-cover-grid"
-                  [src]="
-                    getFirstImageSrc(article.articleContent) ||
-                    '/assets/images/defaultImg.png'
-                  "
-                  [alt]="article.title"
-                />
-              </div>
-              <div class="card-body-grid">
-                <a routerLink="forum/{{ article.articleId }}">
-                  <div class="p-card-title-grid">{{ article.title }}</div>
-                </a>
-                <div class="p-card-subtitle-grid">
-                  <p-tag class="label-tag" value="{{ article.themeName }}" />
-                  {{ article.nickName }}
-                </div>
-                <a routerLink="forum/{{ article.articleId }}">
-                  <p [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }">
-                    {{ truncateText(article.articleContent, 55) }}
-                  </p>
-                </a>
-                <p>
-                  <i class="pi pi-comments"></i> 回覆數: {{ article.replyCount }}
-                </p>
-              </div>
+  <!-- 使用 *ngIf 判斷是否有文章 -->
+  <div *ngIf="popularArticle && popularArticle.length > 0" class="grid article-list">
+    <!-- 使用 *ngFor 迭代顯示文章 -->
+    <div *ngFor="let article of popularArticle" class="col-12 sm:col-6 md:col-4 lg:col-3">
+      <div class="p-card p-component article-item-grid">
+        <div class="card-content-grid">
+          <div class="card-image-grid">
+            <img
+              (click)="navToArticle(article.articleId)"
+              class="article-cover-grid"
+              [src]="
+                getFirstImageSrc(article.articleContent) ||
+                '/assets/images/defaultImg.png'
+              "
+              [alt]="article.title"
+            />
+          </div>
+          <div class="card-body-grid">
+            <a routerLink="{{ article.articleId }}">
+              <div class="p-card-title-grid">{{ article.title }}</div>
+            </a>
+            <div class="p-card-subtitle-grid">
+              <p-tag class="label-tag" value="{{ article.themeName }}" />
+              {{ article.nickName }}
             </div>
+            <a routerLink="{{ article.articleId }}">
+              <p [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }">
+                {{ truncateText(article.articleContent, 55) }}
+              </p>
+            </a>
+
+            <p>
+              <i class="pi pi-comments"></i> 回覆數: {{ article.replyCount }}
+            </p>
           </div>
         </div>
-      </ng-template>
-    </p-dataView>
+      </div>
+    </div>
+  </div>
+
+  <!-- 如果沒有文章，顯示提示信息 -->
+  <div *ngIf="!popularArticle || popularArticle.length === 0" class="no-articles">
+    沒有文章可顯示。
   </div>
 </div>
