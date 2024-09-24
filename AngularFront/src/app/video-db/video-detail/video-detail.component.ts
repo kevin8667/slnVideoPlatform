@@ -1,3 +1,4 @@
+import { CartPageService } from './../../shopping-cart/cart-page/cart-page.service';
 import { Season } from '../interfaces/season';
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -59,6 +60,11 @@ export class VideoDetailComponent implements OnInit{
 
   keywords:string[] = ["黑手黨","犯罪"]
 
+  newShoppingCart = {
+    memberId : 0,
+    planId: 1,
+    videoId: 1
+  };
 
   actors : any[]=[
     {
@@ -95,7 +101,8 @@ export class VideoDetailComponent implements OnInit{
     private dialogService: DialogService,
     private sanitizer: DomSanitizer,
     private cd: ChangeDetectorRef,
-    private router: Router)
+    private router: Router,
+    private cartSerice:CartPageService)
   {
   //   this.video = {
   //     videoId: 1,
@@ -224,6 +231,23 @@ export class VideoDetailComponent implements OnInit{
       });
   }
 
+
+  addCart(vId:number): void{
+    this.newShoppingCart.memberId=this.userID
+    this.newShoppingCart.videoId=vId
+
+    this.cartSerice.createShoppingCart(this.newShoppingCart)
+    .subscribe(
+      response => {
+        console.log('Shopping cart added:', response);
+        // 可以在這裡加入跳轉或成功訊息提示
+      },
+      error => {
+        console.error('Error adding shopping cart:', error);
+      }
+    );
+  }
+
   onValueChange(newValue: any) {
     this.images = newValue;
   }
@@ -231,9 +255,22 @@ export class VideoDetailComponent implements OnInit{
   openLoginWarning(event:any, lop:OverlayPanel){
     if(this.userID ===0){
       console.log(this.userID)
+
       lop.toggle(event);
+    }else{
+      this.addCart(this.videoIDForFunctions);
+      this.onAddCart();
     }
-    
+
+  }
+
+  onAddCart(){
+    this.messageService.add({
+      key: 'global',
+      severity: 'success',
+      summary: '已成功加入購物車!',
+      detail: `${this.video.videoName}`
+    });
   }
 
 
@@ -280,6 +317,9 @@ export class VideoDetailComponent implements OnInit{
       this.visible = true;
     }
   }
+
+
+
   onConfirm() {
     this.messageService.clear('confirm');
 
