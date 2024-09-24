@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OrderPage } from './order-page.model';
 
@@ -14,5 +14,11 @@ export class OrderPageService {
 
   getOrders(): Observable<OrderPage[]> {
     return this.http.get<OrderPage[]>(this.apiUrl);
+  }
+
+   // 新增訂單的方法
+  addOrder(order: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(this.apiUrl, order, { headers });
   }
 }

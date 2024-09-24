@@ -21,7 +21,6 @@ export class ForDriverComponent {
     this.OrderPageService.getOrders().subscribe(
       data => {
         this.orders = data
-        .filter(item => item.memberId === this.filterMemberId)
         .map(item => {
           // 根據 planId 設定價格
           switch(item.paymentStatus) {
@@ -54,5 +53,30 @@ export class ForDriverComponent {
         console.error('Error fetching orders:', error);
       }
     );
+  }
+
+  newOrder={
+    shoppingCartId: 5,
+    couponId: 0,
+    orderDate: new Date(),
+    orderTotalPrice: 0,
+    deliveryName: "小王",
+    deliveryAddress: "資展國際",
+    paymentStatus: 1,
+    deliveryStatus: 0,
+    driverId: 10,
+    lastEditTime: new Date(),
+  }
+
+  addOrder(): void {
+    this.OrderPageService.addOrder(this.newOrder).subscribe({
+      next: (response) => {
+        console.log('訂單新增成功:', response);
+        this.loadOrders();
+      },
+      error: (error) => {
+        console.error('新增訂單時發生錯誤:', error);
+      },
+    });
   }
 }

@@ -14,7 +14,7 @@ export class PreOrderComponent {
   displayedProducts: preOrder[] = [];  // 用於顯示的產品數組
 
   //從購物車傳資料
-  shoppingCartId:number | undefined;
+  shoppingCartId:number =0;
   videoName:string | undefined;
   planName:string | undefined;
   price: number =0;
@@ -25,6 +25,7 @@ export class PreOrderComponent {
 
   //折扣影響finalPrice
   finalPrice: number = 99999;
+  OrderPageService: any;
 
 
 
@@ -150,6 +151,39 @@ addProductToCart(product: any) {
     discount = (1-(this.selectedDiscount/10));
 
     this.finalPrice = this.totalAmount * discount;
+  }
+
+  //新增到訂單
+  newOrder={
+    shoppingCartId: 5,
+    couponId: 1,
+    orderDate: new Date(),
+    orderTotalPrice: 0,
+    deliveryName: "小王",
+    deliveryAddress: "資展國際",
+    paymentStatus: 1,
+    deliveryStatus: 0,
+    driverId: 10,
+    lastEditTime: new Date(),
+  }
+
+  deliveryName: string = "仲仁";
+  deliveryAddress:string = "台北市大安區復興南路一段390號2樓";
+
+
+  addOrder(): void {
+    this.newOrder.shoppingCartId=this.shoppingCartId
+    this.newOrder.deliveryName=this.deliveryName || ""
+    this.newOrder.deliveryAddress=this.deliveryAddress || ""
+
+    this.OrderPageService.addOrder(this.newOrder).subscribe({
+      next: (response: any) => {
+        console.log('訂單新增成功:', response);
+      },
+      error: (error: any) => {
+        console.error('新增訂單時發生錯誤:', error);
+      },
+    });
   }
 
 }

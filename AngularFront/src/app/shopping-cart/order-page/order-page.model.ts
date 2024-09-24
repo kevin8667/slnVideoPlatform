@@ -1,13 +1,13 @@
 export interface OrderPage {
   orderId: number;
   shoppingCartId: number;
-  memberId: number;
-  planId: number;
-  planName: string;
-  videoId: number;
-  videoName: string;
+  memberId?: number;
+  planId?: number;
+  planName?: string;
+  videoId?: number;
+  videoName?: string;
   couponId: number;
-  couponName: string;
+  couponName?: string;
   orderDate: Date;
   orderTotalPrice: number;
   deliveryName: string;
