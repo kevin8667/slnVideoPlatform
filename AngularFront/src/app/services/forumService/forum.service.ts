@@ -173,4 +173,11 @@ export default class ForumService {
   nvaToLogion() {
     this.router.navigate(['/login']);
   }
+
+  getRecommendations(){
+
+    const url ="https://localhost:7193/api/Articles/HomePageArticle"
+
+    return this.client.get<ArticleView[]>(url);
+  }
 }

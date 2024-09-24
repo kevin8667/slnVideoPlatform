@@ -36,12 +36,11 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PanelModule } from 'primeng/panel';
 import { FieldsetModule } from 'primeng/fieldset';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-
-
-
 import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
+import { TagModule } from 'primeng/tag';
+import { forumDatePipe } from '../pipe/pipes/my-date.pipe';
 
 @NgModule({
   declarations: [
@@ -53,6 +52,7 @@ import { MessageService } from 'primeng/api';
     PersonDetailComponent,
     NewVideoComponent,
     AddtoplaylistComponent,
+    forumDatePipe
   ],
   imports: [
     CommonModule,
@@ -85,7 +85,8 @@ import { MessageService } from 'primeng/api';
     CheckboxModule,
     PanelModule,
     FieldsetModule,
-    InputTextareaModule
+    InputTextareaModule,
+    TagModule
   ],
   providers: [DialogService, MessageService],
 })

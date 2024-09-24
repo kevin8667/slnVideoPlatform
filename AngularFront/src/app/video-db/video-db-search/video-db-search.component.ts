@@ -155,6 +155,13 @@ export class VideoDbSearchComponent implements OnInit {
 
   searchVideos(): void {
 
+    this.router.navigate([], {
+      queryParams: {
+        'videoName': null,
+      },
+      queryParamsHandling: 'merge'
+    })
+
     this.videoDbService.getSearchVideoApi(
       this.videoName,
       this.typeId,
