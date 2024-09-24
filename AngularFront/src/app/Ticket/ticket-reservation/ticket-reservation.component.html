@@ -1,17 +1,17 @@
 <div class="reservation-summary-container">
-  <h2>確認訂單</h2>
+  <!-- <h2>確認訂單</h2> -->
   <div class="movie-details">
     <div class="movie-poster">
       <img
-        src="../../../../assets/image/Deadpool_Wolverine.png"
+        src={{posterUrl}}
         alt="{{ movieName }}"
       />
     </div>
     <div class="movie-info">
       <h2>{{ movieName }}</h2>
-      <h4>{{ movieName }}</h4>
-      <p>地點: {{ hallName }}</p>
-      <p>開演時間: {{ showtime }}</p>
+      <p><strong>地點: </strong>{{ hallName }}</p>
+      <p><strong>開演時間: </strong>{{date}} {{ showtime }}</p>
+      <p><strong>片長: </strong>{{runningTime}}</p>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
   </div>
 
   <div class="btn-container">
-    <button class="btn btn-primary">前往付款</button>
+    <button class="btn btn-primary" (click)="goToPayment()">前往付款</button>
     <button class="btn btn-primary" (click)="goBack()">返回上頁</button>
   </div>
 </div>

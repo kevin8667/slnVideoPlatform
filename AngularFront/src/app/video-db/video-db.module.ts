@@ -29,6 +29,16 @@ import { RatingModule } from 'primeng/rating';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { NewVideoComponent } from './new-video/new-video.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PanelModule } from 'primeng/panel';
+import { FieldsetModule } from 'primeng/fieldset';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+
+
+
 import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
@@ -69,6 +79,13 @@ import { MessageService } from 'primeng/api';
     ToastModule,
     ConfirmDialogModule,
     DynamicDialogModule,
+    ReactiveFormsModule,
+    CalendarModule,
+    FileUploadModule,
+    CheckboxModule,
+    PanelModule,
+    FieldsetModule,
+    InputTextareaModule
   ],
   providers: [DialogService, MessageService],
 })

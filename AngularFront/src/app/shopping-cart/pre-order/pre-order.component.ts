@@ -24,7 +24,6 @@ export class PreOrderComponent {
   totalAmount: number = 0;
 
   //折扣影響finalPrice
-  discountCode = '-10%';
   finalPrice: number = 99999;
 
 
@@ -38,7 +37,29 @@ export class PreOrderComponent {
     //顯示左下方的商品列表
     this.PreOrderService.getProduct().subscribe(
       data => {
-        this.products = data;
+        this.products = data
+        .map(item=>{
+          switch(item.productId){
+            case 1:
+              item.productImg = 'assets/img/nutBoostBar.png';
+              break;
+            case 2:
+              item.productImg = 'assets/img/fruitBox.png';
+              break;
+            case 3:
+              item.productImg = 'assets/img/cookieBox.png';
+              break;
+            case 4:
+              item.productImg = 'assets/img/fruitySplash.png';
+              break;
+            case 5:
+              item.productImg = 'assets/img/crunchyGrains.png';
+              break;
+            default:
+              item.productImg = 'assets/img/NoImage.png';
+          }
+          return item;
+        });
         // 為每個商品添加 isAdded 屬性，初始值設為 false
         this.products.forEach(product => {
           product.isAdded = false;
@@ -64,7 +85,7 @@ export class PreOrderComponent {
     });
 
     this.totalAmount = this.price;
-    this.finalPrice = this.calculateDiscountedPrice(this.totalAmount, this.discountCode);
+    this.calculateDiscountedPrice();
 
   }
 
@@ -81,7 +102,7 @@ addProductToCart(product: any) {
   product.isAdded = !product.isAdded;
 
   //調整總價
-  this.finalPrice = this.calculateDiscountedPrice(this.totalAmount, this.discountCode);
+  this.calculateDiscountedPrice();
   }
 
   //給linepay的資料
@@ -119,29 +140,16 @@ addProductToCart(product: any) {
     return `${year}${month}${day}${hours}${minutes}${seconds}`;
   }
 
+  selectedDiscount: number = 0; // 預設選擇第一個選項
+
   //折扣影響總價
-  calculateDiscountedPrice(price: number, discountCode: string): number {
+  calculateDiscountedPrice(): void {
     let discount: number;
 
-    // 根據字串判別折扣
-    switch (discountCode.toLowerCase()) {
-      case '-20%':
-        discount = 0.8;  // 20% 折扣
-        break;
-      case '-10%':
-        discount = 0.9;  // 10% 折扣
-        break;
-      case '-5%':
-        discount = 0.95; // 5% 折扣
-        break;
-      default:
-        discount = 1;    // 無折扣
-        break;
-    }
-
     // 計算總價
-    const totalPrice = price * discount;
-    return totalPrice;
+    discount = (1-(this.selectedDiscount/10));
+
+    this.finalPrice = this.totalAmount * discount;
   }
 
 }

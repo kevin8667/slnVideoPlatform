@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { TestComponent } from './test/test.component';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { ButtonModule } from 'primeng/button';
+
 import { HttpClientModule ,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -13,6 +15,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { JwtInterceptor } from './jwt.interceptor';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { TicketReservationComponent } from './Ticket/ticket-reservation/ticket-reservation.component';
+import { OrderComponent } from './Ticket/order/order.component';
+import { TesttttttttComponent } from './Ticket/testttttttt/testttttttt.component';
 
 
 @NgModule({
@@ -24,11 +28,15 @@ import { TicketReservationComponent } from './Ticket/ticket-reservation/ticket-r
     ErrorPageComponent,
     ShoppingCartComponent,
     AuthCallbackComponent,
-    TicketReservationComponent
+    TicketReservationComponent,
+    OrderComponent,
+    TesttttttttComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ButtonModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,

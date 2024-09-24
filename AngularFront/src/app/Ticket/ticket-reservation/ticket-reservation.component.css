@@ -26,14 +26,23 @@
 }
 
 .movie-info h2 {
-  color: #17A2B8; /* 主色調 */
+  color: #17a2b8; /* 主色調 */
   margin-bottom: 10px;
 }
 
 .movie-info h4 {
-  color: #6C757D; /* 次要色調 */
+  color: #6c757d; /* 次要色調 */
   margin-bottom: 10px;
 }
+.movie-info strong {
+  color: #343a40 !important;
+  font-size: 16px !important;
+}
+
+/* .movie-info p {
+  color: #6C757D; 次要色調
+  margin-bottom: 10px;
+} */
 
 .reservation-summary {
   margin-top: 20px;
@@ -66,7 +75,7 @@
 .btn {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #17A2B8;
+  background-color: #17a2b8;
   color: #ffffff !important; /* 確保按鈕文字為白色 */
   border: none;
   border-radius: 4px;

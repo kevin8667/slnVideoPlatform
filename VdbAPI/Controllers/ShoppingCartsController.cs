@@ -63,10 +63,11 @@ namespace VdbAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShoppingCart(int id, ShoppingCart shoppingCart)
         {
-            if (id != shoppingCart.ShoppingCartId)
-            {
-                return BadRequest();
-            }
+            //if (id != shoppingCart.ShoppingCartId)
+            //{
+            //    return BadRequest();
+            //}
+            shoppingCart.ShoppingCartId = id;
 
             _context.Entry(shoppingCart).State = EntityState.Modified;
 

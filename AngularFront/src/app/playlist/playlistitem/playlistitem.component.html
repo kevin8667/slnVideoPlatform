@@ -1,4 +1,4 @@
-<div class="playlist-item" [attr.data-id]="item.videoId" cdkDrag>
+<div class="playlist-item" [attr.data-id]="item.videoId">
   <img [src]="getThumbnailUrl(item.thumbnailPath)" alt="{{ item.videoName }}" class="playlist-thumbnail">
 
   <div class="playlist-item-info">
@@ -8,7 +8,7 @@
 
   <div class="playlist-item-actions">
     <button pButton type="button" icon="pi pi-play" class="p-button-success" (click)="playItem()"></button>
-    <i class="pi pi-arrows-alt draggable-handle" cdkDragHandle></i>
+    <i class="pi pi-arrows-alt draggable-handle"></i>
   </div>
 </div>
 
@@ -21,7 +21,7 @@
 
     <!-- 按鈕顯示 -->
     <div *ngIf="displayButton" class="floating-button">
-      <img src="/assets/img/Dark Knight.jpg" alt="影片封面" (click)="goToVideo()" />
+      <img src="/assets/img/godfather.jpg" alt="影片封面" (click)="goToVideo()" />
     </div>
   </div>
 </div>

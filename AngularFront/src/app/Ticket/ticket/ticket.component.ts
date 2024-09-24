@@ -2,27 +2,86 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
 import { ChangeDetectorRef } from '@angular/core';
-
+import { VideoDBService } from 'src/app/video-db.service';
+import { Video } from 'src/app/video-db/interfaces/video'; // 引入 Video 接口
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
   styleUrls: ['./ticket.component.css'],
-  providers: [DataService],
+  providers: [DataService, VideoDBService],
 })
 export class TicketComponent implements OnInit {
-  movieId: number = 4; // 測試用電影ID
+  videoIDForFunctions: number = 0;
+  movieId: number = this.videoIDForFunctions; // 測試用電影ID
   selectedCinemaId: number | null = null; // 選中的影院ID
   selectedCinema: any = null; // 選中的影院
   cinemas: any[] = []; // 影院清單
   showTimeID: number = 0;
+  movieName: string = ''; // 從 API 獲取的電影名稱
+  posterUrl: string = ''; // 從 API 獲取的電影海報 URL
+  summary: string = ''; //簡介
+  runningTime: string = '';
+
+  memberId: number | null = null; // 用來保存會員ID
 
   constructor(
     private router: Router,
     private dataService: DataService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private videoDBService: VideoDBService, // 注入 VideoDBService,
+    private route: ActivatedRoute // 注入 ActivatedRoute
   ) {}
+  // 傳換片長時間為""時""分
+  formatRunningTime(time: string): string {
+    const parts = time.split(':'); // 將時間字串分為小時、分鐘、秒
+    const hours = parseInt(parts[0], 10); // 小時部分
+    const minutes = parseInt(parts[1], 10); // 分鐘部分
 
+    // 返回格式化的時間
+    return `${hours}時${minutes}分`;
+  }
   ngOnInit(): void {
+    // 1. 獲取會員ID
+    // this.dataService.getOrdersForCurrentMember().subscribe(
+    //   (response) => {
+    //     if (response && response.length > 0) {
+    //       this.memberId = response[0].MemberId; // 獲取會員ID
+    //       console.log('獲取的會員ID:', this.memberId);
+    //     } else {
+    //       console.error('無法獲取會員ID');
+    //     }
+    //   },
+    //   (error) => {
+    //     console.error('Error fetching member ID:', error);
+    //   }
+    // );
+
+    //接MOVIEID
+    this.route.queryParams.subscribe((params) => {
+      this.videoIDForFunctions = +params['videoID'] || 0;
+      console.log('接收到的 videoID:', this.videoIDForFunctions);
+    });
+    this.movieId = this.videoIDForFunctions;
+
+    // 呼叫 VideoDBService 來取得電影資訊
+    this.videoDBService.getVideoApiWithID(this.movieId.toString()).subscribe(
+      (video: Video) => {
+        console.log(video); // 確認 API 返回的資料
+        this.movieName = video.videoName;
+        this.posterUrl = video.thumbnailPath; // 確保 API 回傳中有海報 URL
+        this.summary = video.summary;
+        // 使用格式化函數將 runningTime 轉換為 "X時X分"
+        this.runningTime = this.formatRunningTime(video.runningTime);
+
+        // 手動觸發變更檢測
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Error fetching video data:', error);
+      }
+    );
+
     if (this.movieId) {
       this.dataService.getCinemas(this.movieId).subscribe((data: any) => {
         this.cinemas = data.map((cinema: any) => ({
@@ -95,7 +154,7 @@ export class TicketComponent implements OnInit {
           date,
           day,
           showTimeID: showtime.showtimeId,
-          showTimeDate // 我們要保存原始日期進行排序
+          showTimeDate, // 我們要保存原始日期進行排序
         });
 
         return acc;
@@ -105,7 +164,9 @@ export class TicketComponent implements OnInit {
       halls.forEach((hall: { Showtimes: any[] }) => {
         hall.Showtimes.sort((a: any, b: any) => {
           // 首先比較日期，然後比較時間
-          const dateComparison = new Date(a.showTimeDate).getTime() - new Date(b.showTimeDate).getTime();
+          const dateComparison =
+            new Date(a.showTimeDate).getTime() -
+            new Date(b.showTimeDate).getTime();
           if (dateComparison !== 0) {
             return dateComparison; // 如果日期不同，按照日期排序
           }
@@ -121,27 +182,30 @@ export class TicketComponent implements OnInit {
       this.cdr.detectChanges();
     });
   }
-
-  // 當點擊選擇時間按鈕時，傳遞選中的上映時間至下一頁面
-  onTimeSelect(hallName: string, time: string, showTimeID: number) {
+  // 當點擊選擇時間按鈕時，將選中的資料儲存到 Local Storage，並跳轉至下一個頁面
+  onTimeSelect(
+    hallName: string,
+    time: string,
+    date: string,
+    day: string,
+    showTimeID: number
+  ) {
     console.log('選中的 showtimeId:', showTimeID);
 
-    // 傳遞選中的上映時間至第二個畫面
-    this.router.navigate(['ticket/ticketselection'], {
-      queryParams: {
-        cinemaName: this.selectedCinema.CinemaName,
-        hallName: hallName,
-        showtime: time, // 傳遞選中的上映時間
-        selectedShowtimeId: showTimeID,
-        movieId: this.movieId,
-        movieName: 'Deadpool & Wolverine',
-        posterUrl: '../../../../assets/image/Deadpool_Wolverine.png',
-        releaseDate: '2024/07/24',
-      },
-    });
-  }
+    // 儲存選中的資料到 localStorage
+    localStorage.setItem('cinemaName', this.selectedCinema.CinemaName);
+    localStorage.setItem('hallName', hallName);
+    localStorage.setItem('showtime', time); // 儲存時間
+    localStorage.setItem('date', date); // 儲存日期
+    localStorage.setItem('day', day); // 儲存星期
 
-  goToSelection() {
-    window.location.href = '../../../ticketselection'; // 進入選擇票券頁面
+    localStorage.setItem('selectedShowtimeId', showTimeID.toString());
+    localStorage.setItem('movieId', this.movieId.toString());
+    localStorage.setItem('movieName', this.movieName);
+    localStorage.setItem('posterUrl', this.posterUrl);
+    localStorage.setItem('summary', this.summary);
+    localStorage.setItem('runningTime', this.runningTime);
+    localStorage.setItem('memberId', this.memberId?.toString() || ''); // 儲存會員ID
+    this.router.navigate(['ticket/ticketselection']);
   }
 }

@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
@@ -21,11 +22,11 @@ public partial class VideoList
 
     public int? Episode { get; set; }
 
-    public TimeOnly? RunningTime { get; set; }
+    public TimeSpan? RunningTime { get; set; }
 
     public bool IsShowing { get; set; }
 
-    public DateOnly? ReleaseDate { get; set; }
+    public DateTime? ReleaseDate { get; set; }
 
     public decimal? Rating { get; set; }
 
@@ -51,6 +52,7 @@ public partial class VideoList
 
     public virtual ICollection<GenresForVideoList> GenresForVideoLists { get; set; } = new List<GenresForVideoList>();
 
+    [JsonIgnore]
     public virtual ICollection<ImageForVideoList> ImageForVideoLists { get; set; } = new List<ImageForVideoList>();
 
     public virtual ICollection<KeywordForVideoList> KeywordForVideoLists { get; set; } = new List<KeywordForVideoList>();

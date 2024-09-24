@@ -68,9 +68,14 @@
   margin-bottom: 10px;
 }
 
-.movie-info p {
-  color: #6C757D; /* 次要色調 */
+/* .movie-info p {
+  color: #6C757D; 次要色調
   margin-bottom: 10px;
+} */
+ 
+.movie-info strong {
+  color: #343a40 !important;
+  font-size: 16px !important;
 }
 
 /* 票選擇部分樣式 */

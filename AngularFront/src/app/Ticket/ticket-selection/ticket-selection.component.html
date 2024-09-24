@@ -2,18 +2,19 @@
   <div class="movie-details">
     <div class="movie-poster">
       <img
-        src="../../../../assets/image/Deadpool_Wolverine.png"
+        src={{posterUrl}}
         alt="Deadpool & Wolverine"
       />
     </div>
     <div class="movie-info">
       <h2>{{ movieName }}</h2>
       <!-- 動態顯示電影名稱 -->
-      <p>級別: 15+</p>
-      <p>地點: {{ hallName }}</p>
+      <!-- <p>級別: 15+</p> -->
+      <p><strong>地點: </strong> {{ hallName }}</p>
       <!-- 動態顯示影廳 -->
-      <p>開演時間: {{ showtime }}</p>
+      <p><strong>開演時間: </strong>{{date}} {{ showtime }}</p>
       <!-- 動態顯示放映時間 -->
+       <p><strong>片長: </strong>{{runningTime}}</p>
     </div>
   </div>
 

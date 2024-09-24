@@ -37,7 +37,7 @@
     </div>
 
     <div>
-      <button type="button" pRipple pButton label="搜尋" (click)="searchVideoByFilters()" class="p-button-primary"></button>
+      <button type="button" pRipple pButton label="搜尋" (click)="searchVideos()" class="p-button-primary"></button>
     </div>
   </div>
 
@@ -51,8 +51,8 @@
                     <div class="p-4 border-1 surface-border surface-card border-round movie-card">
                         <div class="image-container">
                             <img class="thumbnail"
-                                 [src]="video.thumbnailPath"
-                                 [alt]="video.videoName" />
+                                  [src]="video.thumbnailPath"
+                                  [alt]="video.videoName" />
                         </div>
                         <div class="flex flex-column align-items-center gap-3 py-4">
                             <div class="text-2xl font-bold" >{{ video.videoName }}</div>
