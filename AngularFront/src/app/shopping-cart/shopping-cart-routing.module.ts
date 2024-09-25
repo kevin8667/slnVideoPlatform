@@ -13,7 +13,7 @@ import { ForDriverComponent } from './for-driver/for-driver.component';
 
 const routes: Routes = [
   {path: 'cart', component: CartPageComponent, canActivate: [scGuardGuard]},
-  {path: 'preOrder/:shoppingCartId/:videoName/:planName/:price/:imagePath', component: PreOrderComponent, canActivate: [scGuardGuard]},
+  {path: 'preOrder/:shoppingCartId/:videoName/:planName/:price/:imagePath', component: PreOrderComponent},
   {path: 'order', component: OrderPageComponent, canActivate: [scGuardGuard]},
   {path: 'finish', component: FinishPaymentComponent},
   {path: 'driver', component: ForDriverComponent},

@@ -51,7 +51,7 @@ namespace VdbAPI.Controllers
                 },
                 redirectUrls = new
                 {
-                    confirmUrl = "https://32d1-1-160-11-201.ngrok-free.app/api/linepay/confirm",  // 支付完成後的回調 URL
+                    confirmUrl = "https://483a-1-160-11-201.ngrok-free.app/api/linepay/confirm",  // 支付完成後的回調 URL
                     cancelUrl = "http://localhost:4200/shoppingCart/finish"  // 用戶取消支付的回調 URL
                 }
             };

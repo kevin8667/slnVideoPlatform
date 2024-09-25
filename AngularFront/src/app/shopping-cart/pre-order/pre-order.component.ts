@@ -1,8 +1,10 @@
+import { OrderPageService } from './../order-page/order-page.service';
 import { Component, OnInit } from '@angular/core';
 import { PreOrderService } from './pre-order.service';
 import { preOrder } from './pre-order.model';
 import { ActivatedRoute } from '@angular/router';
 import { linePay } from './line-pay.model';
+
 
 @Component({
   selector: 'app-pre-order',
@@ -32,6 +34,7 @@ export class PreOrderComponent {
   constructor(
     private PreOrderService: PreOrderService,
     private ActivatedRoute: ActivatedRoute,
+    private OrderPageServices: OrderPageService
   ) { }
 
   ngOnInit(): void {
@@ -159,8 +162,8 @@ addProductToCart(product: any) {
     couponId: 1,
     orderDate: new Date(),
     orderTotalPrice: 0,
-    deliveryName: "小王",
-    deliveryAddress: "資展國際",
+    deliveryName: "",
+    deliveryAddress: "",
     paymentStatus: 1,
     deliveryStatus: 0,
     driverId: 10,
@@ -172,11 +175,13 @@ addProductToCart(product: any) {
 
 
   addOrder(): void {
-    this.newOrder.shoppingCartId=this.shoppingCartId
-    this.newOrder.deliveryName=this.deliveryName || ""
-    this.newOrder.deliveryAddress=this.deliveryAddress || ""
+    this.newOrder.shoppingCartId=this.shoppingCartId;
+    this.newOrder.deliveryName=this.deliveryName || "無";
+    this.newOrder.deliveryAddress=this.deliveryAddress || "無";
 
-    this.OrderPageService.addOrder(this.newOrder).subscribe({
+    console.log(this.newOrder);
+
+    this.OrderPageServices.addOrder(this.newOrder).subscribe({
       next: (response: any) => {
         console.log('訂單新增成功:', response);
       },
@@ -186,4 +191,8 @@ addProductToCart(product: any) {
     });
   }
 
+  nextStep(){
+    this.addOrder();
+    this.toLinePay();
+  }
 }

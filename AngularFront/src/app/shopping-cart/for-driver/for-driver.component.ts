@@ -69,6 +69,7 @@ export class ForDriverComponent {
   }
 
   addOrder(): void {
+    console.log(this.newOrder);
     this.OrderPageService.addOrder(this.newOrder).subscribe({
       next: (response) => {
         console.log('訂單新增成功:', response);

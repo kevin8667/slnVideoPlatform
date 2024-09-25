@@ -65,7 +65,7 @@
         <div class="address">
           <div class="textLeftValueLeft">
             <span class="down-Text">收件人</span>
-            <input type="text" class="down-Value w233" [(ngModel)]="deliveryName")]>
+            <input type="text" class="down-Value w233" [(ngModel)]="deliveryName">
           </div>
           <div class="textLeftValueLeft">
             <span class="down-Text">地址</span>
@@ -74,9 +74,8 @@
           </div>
         </div>
         <div>
-          <!-- [routerLink]="['/shoppingCart/order']" -->
-          <button class="yellow-button" (click)="toLinePay()">下一步</button>
-          <!-- <button [routerLink]="['/shoppingCart/finish']">回首頁</button> -->
+          <button class="yellow-button" (click)="nextStep()">下一步</button>
+          <!-- <button (click)="addOrder()">新增訂單</button> -->
         </div>
       </div>
   </div>
