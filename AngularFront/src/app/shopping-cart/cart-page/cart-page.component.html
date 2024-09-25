@@ -13,17 +13,17 @@
           </tr>
           <tr *ngFor="let item of sc" (click)="selectItem(item)" [class.selected]="item === selectedItem">
               <!-- 照片 -->
-              <td class="text_center" width="10%">
+              <td class="text_center" width="10%" style="font-size: large;">
                   <div class="pic" style="position:relative;"><a><img src={{item.imagePath}}/></a></div>
               </td>
               <!-- 商品名稱 -->
-              <td width="37%" class="text_center">
+              <td width="37%" class="text_center" style="font-size: large;">
                   <div class="blue">{{ item.videoName }}</div>
               </td>
 
               <!-- 預期是要放select -->
               <!-- <td class="text_center">{{ item.planName }}</td> -->
-              <td class="text_center">
+              <td class="text_center" style="font-size: large;">
                 <select [(ngModel)]="item.planId" (change)="updatePlan(item)" style="border-radius: 2px;">
                   <option *ngFor="let plan of plans" [value]="plan.planId">{{ plan.planName }}</option>
                 </select>
@@ -31,18 +31,18 @@
 
 
               <!-- 數量 -->
-              <td class="text_center">
+              <td class="text_center" style="font-size: large;">
                   <input type="text" id="amount_3001643" style="width:50px;text-align:center;vertical-align:top;height:25px;" value="1" disabled>
-                  <div style="color: red;">已達到最大數量</div>
+                  <div style="color: red;">最大上限</div>
               </td>
 
               <!-- 小計 -->
-              <td class="t_red t_bold text_center">
+              <td class="t_red t_bold text_center" style="font-size: large;">
                   <span id="subtotal_3001643">{{ item.price }}</span>元
               </td>
 
               <!-- 管理 -->
-              <td class="text_center">
+              <td class="text_center" style="font-size: large;">
                   <div class="info">
                       <!-- <a >修改</a> -->
                       <a (click)="deleteShoppingCart(item.shoppingCartId)">刪除</a>

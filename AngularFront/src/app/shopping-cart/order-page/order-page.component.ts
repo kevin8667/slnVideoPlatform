@@ -1,6 +1,7 @@
 import { OrderPageService } from './order-page.service';
 import { Component, OnInit } from '@angular/core';
 import { OrderPage } from './order-page.model';
+import { CartPageService } from '../cart-page/cart-page.service';
 
 @Component({
   selector: 'app-order-page',
@@ -10,11 +11,15 @@ import { OrderPage } from './order-page.model';
 export class OrderPageComponent {
   orders: OrderPage[] = [];
   filterMemberId: number = 2;
+  cartPageService: any;
 
-  constructor(private OrderPageService: OrderPageService) { }
+  constructor(private OrderPageService: OrderPageService,
+    private cartPageServices: CartPageService,
+  ) { }
 
   ngOnInit(): void {
     this.loadOrders();
+    this.cartPageServices.userId$.subscribe((user: { memberId: number; }) => this.filterMemberId=user.memberId);
   }
 
   loadOrders(): void {

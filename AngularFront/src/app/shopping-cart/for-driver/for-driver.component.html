@@ -5,24 +5,26 @@
   <div class="table-container">
     <table class="general-table">
       <tr>
-        <th class="text_center" width="15%">訂單編號</th>
-        <th class="text_center" width="20%">收件人</th>
-        <th class="text_center" width="35%">收件地址</th>
-        <th class="text_center" width="15%">付款狀態</th>
-        <th class="text_center" width="15%">運送狀態</th>
+        <th class="text_center" width="15%" style="background-color: #99b6b7; color: #fff; font-size: large;">訂單編號</th>
+        <th class="text_center" width="20%" style="background-color: #99b6b7; color: #fff; font-size: large;">收件人</th>
+        <th class="text_center" width="35%" style="background-color: #99b6b7; color: #fff; font-size: large;">收件地址</th>
+        <th class="text_center" width="15%" style="background-color: #99b6b7; color: #fff; font-size: large;">付款狀態</th>
+        <th class="text_center" width="15%" style="background-color: #99b6b7; color: #fff; font-size: large;">運送狀態</th>
       </tr>
 
-      <tr *ngFor="let order of orders" >
+      <tr *ngFor="let order of orders.reverse()" >
 
-        <td class="text_center">{{ order.couponId }}</td>
-        <td class="text_center">{{ order.deliveryName }}</td>
-        <td class="text_center">{{ order.deliveryAddress }}</td>
-        <td class="text_center">{{ order.payments }}</td>
-        <td class="text_center">{{ order.deliverys }}</td>
+        <td class="text_center" style="font-size: large;">{{ order.couponId }}</td>
+        <td class="text_center" style="font-size: large;">{{ order.deliveryName }}</td>
+        <td class="text_center" style="font-size: large;">{{ order.deliveryAddress }}</td>
+        <td class="text_center" style="font-size: large;">{{ order.payments }}</td>
+        <td class="text_center" style="font-size: large;">{{ order.deliverys }}</td>
       </tr>
     </table>
   </div>
 </div>
+
+<!-- <button (click)="addOrder()">新增訂單</button> -->
 
 
 
