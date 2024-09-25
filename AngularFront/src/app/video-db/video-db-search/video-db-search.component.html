@@ -61,8 +61,8 @@
                             </div>
                         </div>
                       </a>
-                        <div *ngIf="userID===1">
-                          <div *ngIf="userID ===1">
+                        <div *ngIf="userID==1">
+                          <div *ngIf="userID ==1">
                             <button type="button" pButton label="編輯" (click)="editVideo(video.videoId)" class="p-button-primary custom-edit-btn" style="margin-right: 10px;"></button>
                             <button type="button" pButton label="刪除" (click)="onConfirmDelete(video.videoId,video.videoName)" class="p-button-secondary custom-delete-btn"></button>
                           </div>

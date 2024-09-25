@@ -87,6 +87,9 @@ export class VideoDbSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    this.videoDbService.user$.subscribe((data) => (this.userID = data));
+
     // 初始化篩選器選項
     this.types = [
       { typeName: '電影', typeId: 1 },
