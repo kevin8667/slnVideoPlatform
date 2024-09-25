@@ -86,6 +86,7 @@ namespace VdbAPI.Controllers
             int? typeId,
             string? summary,
             [FromQuery(Name = "genreNames")] List<string>? genreNames,
+            [FromQuery(Name = "keywords")] List<string>? keywords,
             string? seriesName,
             string? seasonName)
         {
@@ -94,6 +95,8 @@ namespace VdbAPI.Controllers
                 .Include(v => v.Series)
                 .Include(v => v.Season)
                 .Include(v => v.Type)
+                .Include(v => v.KeywordForVideoLists) // 加入對多對多表的 Include
+                    .ThenInclude(k => k.Keyword)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(videoName))
@@ -124,6 +127,12 @@ namespace VdbAPI.Controllers
             if (!string.IsNullOrEmpty(seasonName))
             {
                 query = query.Where(v => v.Season.SeasonName.Contains(seasonName));
+            }
+
+            if (keywords != null && keywords.Any())
+            {
+                query = query.Where(v => v.KeywordForVideoLists
+                                        .Any(kv => keywords.Contains(kv.Keyword.Keyword)));
             }
 
             var videoListDTOs = await query

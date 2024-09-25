@@ -1,3 +1,7 @@
+<header>
+  <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css">
+</header>
+
 <div class="container-fluid mb-3 d-flex justify-content-center" style="background-image: linear-gradient(#6C757D, rgba(255, 255, 255, 0));">
     <h1 style="color: rgb(0, 0, 0); margin-top: 10px;">本月主題：不朽經典</h1>
 </div>
@@ -54,15 +58,14 @@
     </p-carousel>
 </div>
 
-<!-- Categories Start -->
 <div class="container-fluid pt-5">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="pr-3" style="color: Black;">影片類型</span></h2>
     <div class="row px-xl-5 pb-3">
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '動作' }" queryParamsHandling="merge">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '動作' }" queryParamsHandling="merge">
                 <div class="cat-item d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-1.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/action.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">動作</h3>
@@ -71,10 +74,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '驚悚' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-2.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/thriller.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">驚悚</h3>
@@ -83,10 +86,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '劇情' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-3.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/drama.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">劇情</h3>
@@ -95,10 +98,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '喜劇' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-4.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/comedy.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">喜劇</h3>
@@ -107,10 +110,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '科幻' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-4.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/sci-fi.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">科幻</h3>
@@ -119,10 +122,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '恐怖' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-3.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/horror.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">恐怖</h3>
@@ -131,10 +134,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '愛情' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-2.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/romance.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">愛情</h3>
@@ -143,10 +146,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '冒險' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-1.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/survival.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">冒險</h3>
@@ -155,10 +158,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '動畫' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-2.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/animation.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">動畫</h3>
@@ -167,10 +170,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '奇幻' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-1.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/fantasy.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">奇幻</h3>
@@ -179,10 +182,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '歷史' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-4.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/historical.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">歷史</h3>
@@ -191,10 +194,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '紀錄' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-3.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/documentary.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">紀錄</h3>
@@ -204,229 +207,54 @@
         </div>
     </div>
 </div>
-<!-- Categories End -->
 
-<!-- Products Start -->
 <div class="container-fluid pt-5 pb-3">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">熱門文章</span></h2>
-    <!-- <div class="row px-xl-5">
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-1.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-2.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-3.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                        <small class="far fa-star text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-4.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="far fa-star text-primary mr-1"></small>
-                        <small class="far fa-star text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-5.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-6.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-7.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                        <small class="far fa-star text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="img/product-8.jpg" alt="">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="fa fa-star text-primary mr-1"></small>
-                        <small class="far fa-star text-primary mr-1"></small>
-                        <small class="far fa-star text-primary mr-1"></small>
-                        <small>(99)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-</div>
-<!-- Products End -->
+  <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4" style="color: black;">
+    <span>熱門文章</span>
+  </h2>
 
+  <!-- 使用 *ngIf 判斷是否有文章 -->
+  <div *ngIf="popularArticle && popularArticle.length > 0" class="grid article-list">
+    <!-- 使用 *ngFor 迭代顯示文章 -->
+    <div *ngFor="let article of popularArticle" class="col-12 sm:col-6 md:col-4 lg:col-3">
+      <div class="p-card p-component article-item-grid">
+        <div class="card-content-grid">
+          <div class="card-image-grid">
+            <img
+              (click)="navToArticle(article.articleId)"
+              class="article-cover-grid"
+              [src]="
+                getFirstImageSrc(article.articleContent) ||
+                '/assets/images/defaultImg.png'
+              "
+              [alt]="article.title"
+            />
+          </div>
+          <div class="card-body-grid">
+            <a routerLink="{{ article.articleId }}">
+              <div class="p-card-title-grid">{{ article.title }}</div>
+            </a>
+            <div class="p-card-subtitle-grid">
+              <p-tag class="label-tag" value="{{ article.themeName }}" />
+              {{ article.nickName }}
+            </div>
+            <a routerLink="{{ article.articleId }}">
+              <p [ngStyle]="{ color: '#2D9CDB', 'font-weight': 'bold' }">
+                {{ truncateText(article.articleContent, 55) }}
+              </p>
+            </a>
+
+            <p>
+              <i class="pi pi-comments"></i> 回覆數: {{ article.replyCount }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 如果沒有文章，顯示提示信息 -->
+  <div *ngIf="!popularArticle || popularArticle.length === 0" class="no-articles">
+    沒有文章可顯示。
+  </div>
+</div>

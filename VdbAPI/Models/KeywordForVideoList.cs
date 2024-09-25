@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VdbAPI.Models;
 
@@ -14,6 +15,6 @@ public partial class KeywordForVideoList
     public int? VideoId { get; set; }
 
     public virtual KeywordList Keyword { get; set; }
-
+    [JsonIgnore]
     public virtual VideoList Video { get; set; }
 }

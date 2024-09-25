@@ -13,6 +13,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddtoplaylistComponent } from '../addtoplaylist/addtoplaylist.component';
 import { RatingDTO } from '../interfaces/ratingDTO';
 import { ChangeDetectorRef } from '@angular/core';
+import { KeywordDTO } from '../interfaces/keyword';
 
 
 @Component({
@@ -58,7 +59,7 @@ export class VideoDetailComponent implements OnInit{
 
   isShowing:boolean = false;
 
-  keywords:string[] = ["黑手黨","犯罪"]
+  keywords:KeywordDTO[] = []
 
   newShoppingCart = {
     memberId : 0,
@@ -66,32 +67,11 @@ export class VideoDetailComponent implements OnInit{
     videoId: 1
   };
 
-  actors : any[]=[
-    {
-      name:"馬龍·白蘭度",
-      imagePath:"/assets/img/Marlon.jpg"
-    },
-    {
-      name:"艾爾·帕西諾",
-      imagePath:"/assets/img/Alfredo.jpg"
-    },
-    {
-      name:"詹姆士·肯恩",
-      imagePath:"/assets/img/James.jpg"
-    },
-    {
-      name:"勞勃·杜瓦",
-      imagePath:"/assets/img/Robert.jpg"
-    },
-    {
-      name:"黛安·基頓",
-      imagePath:"/assets/img/Diane.jpg"
-    },
-    {
-      name:"約翰·卡佐爾",
-      imagePath:"/assets/img/John.jpg"
-    }
-  ]
+  actors : any[]=[]
+
+  displayKeywordDialog: boolean = false;
+  newKeyword: string = '';
+  filteredKeywords: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -180,10 +160,22 @@ export class VideoDetailComponent implements OnInit{
         //     }
         // })
 
+        this.videoService.getActorsByVideo(videoID).subscribe(data=>{
+          if(data){
+            this.actors= data;
+          }
+        })
+
+        this.videoService.getKeywordByVideo(videoID).subscribe(data=>{
+          if(data){
+            console.log(data);
+            this.keywords = data;
+          }
+        })
+
         this.videoService.getImagesByVideoID(videoID).subscribe(images=>{
           if(images){
             this.images=images;
-            console.log(images);
           }
 
         })
@@ -349,12 +341,53 @@ export class VideoDetailComponent implements OnInit{
     console.log(this.trailerVisibility)
   }
 
-  onAddKeyword() {
-    // 在這裡寫新增關鍵字的邏輯，比如打開一個彈出框
-    console.log('Add new keyword clicked');
-    // 可以調用對話框或者處理其他邏輯
+  showKeywordDialog() {
+    this.displayKeywordDialog = true;
+    this.loadKeywordsForVideo();
   }
 
+  searchKeywords(event: any) {
+    const query = event.query;
+    this.videoService.searchKeywords(query).subscribe(data => {
+      this.filteredKeywords = data.map(keyword => ({ label: keyword, value: keyword }));
+    });
+  }
+
+  loadKeywordsForVideo() {
+    this.videoService.getKeywordByVideo(this.videoIDForFunctions.toString()).subscribe(data=>{
+      this.keywords = data as any;
+    })
+  }
+
+  addKeyword() {
+    if (this.newKeyword && typeof this.newKeyword === 'string') { // 確認 newKeyword 是字串
+      console.log('Adding keyword:', this.newKeyword); // 確認是否為純字串
+
+      this.videoService.addKeyword(this.videoIDForFunctions.toString(), this.newKeyword).subscribe(
+        () => {
+          this.loadKeywordsForVideo();
+          this.newKeyword = '';
+          this.messageService.add({ severity: 'success', summary: '成功', detail: '關鍵字已新增' });
+        },
+        (error) => {
+          if (error.status === 409) {
+            this.messageService.add({ severity: 'warn', summary: '失敗', detail: '關鍵字已存在' });
+          } else {
+            this.messageService.add({ severity: 'error', summary: '錯誤', detail: '關鍵字新增失敗' });
+          }
+        }
+      );
+    } else {
+      console.error('newKeyword is not a string or is empty.');
+    }
+  }
+
+  removeKeyword(keywordId: number) {
+    this.videoService.deleteKeywordFromVideo(this.videoIDForFunctions.toString(),keywordId).subscribe(() => {
+      this.loadKeywordsForVideo();
+      this.messageService.add({ severity: 'success', summary: '成功', detail: '關鍵字已移除' });
+    });
+  }
 
   postRating()
   {
@@ -404,4 +437,6 @@ export class VideoDetailComponent implements OnInit{
   onBookTicket(){
     this.router.navigate(['/ticket'], {queryParams:{videoID:this.video.videoId}});
   }
+
+
 }

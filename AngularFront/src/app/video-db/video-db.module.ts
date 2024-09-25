@@ -36,12 +36,11 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PanelModule } from 'primeng/panel';
 import { FieldsetModule } from 'primeng/fieldset';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-
-
-
 import { AddtoplaylistComponent } from './addtoplaylist/addtoplaylist.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
+import { TagModule } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -85,7 +84,9 @@ import { MessageService } from 'primeng/api';
     CheckboxModule,
     PanelModule,
     FieldsetModule,
-    InputTextareaModule
+    InputTextareaModule,
+    TagModule,
+    DialogModule
   ],
   providers: [DialogService, MessageService],
 })
