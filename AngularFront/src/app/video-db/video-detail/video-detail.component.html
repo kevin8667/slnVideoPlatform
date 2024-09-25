@@ -145,8 +145,8 @@
         <p><strong>簡介:</strong> {{video.summary}}</p>
       </div>
       <div>
-        <p><strong>導演:</strong> </p>
-        <p><strong>主演:</strong> 馬龍‧白蘭度 </p>
+        <p><strong>導演:</strong> {{mainDirectorName}}</p>
+        <p><strong>主演:</strong> {{mainActorName}} </p>
 
       </div>
 
@@ -165,14 +165,30 @@
     <h2>主要演員</h2>
     <div class="actors-container p-d-flex p-flex-wrap p-jc-start">
       <div *ngFor="let actor of actors" class="actor-card p-mr-2 p-mb-3">
-        <img [src]="actor.actorImgPath" alt="{{ actor.actorName }}">
+        <a style="text-decoration: none;" routerLink="/person/{{actor.actorId}}">
+        <img *ngIf="actor.actorImgPath" [src]="actor.actorImgPath" alt="{{ actor.actorName }}">
+        <img *ngIf="actor.actorImgPath===null" src="/assets/img/NoImage.jpg" alt="{{ actor.actorName }}">
         <p>{{ actor.actorName }}</p>
+        </a>
       </div>
     </div>
   </div>
 
+  <div class="p-col-12 p-md-9">
+    <h2>主要導演</h2>
+    <div class="actors-container p-d-flex p-flex-wrap p-jc-start">
+      <div *ngFor="let director of directors" class="actor-card p-mr-2 p-mb-3">
+        <a style="text-decoration: none;" routerLink="/person/{{director.directorId}}">
+        <img *ngIf="director.directorImgPath" [src]="director.directorImgPath" alt="{{ director.directorName }}">
+        <img *ngIf="director.directorImgPath===null" src="/assets/img/NoImage.jpg" alt="{{ director.directorName }}">
+        <p>{{ director.directorName }}</p>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- 下方: Carousel -->
+  <h2>作品圖庫</h2>
   <div class="p-col-12 p-md-9">
     <div class="carousel-container p-mt-3">
       <p-carousel [value]="images" [numVisible]="1" [circular]="true" [autoplayInterval]="3500">
@@ -252,16 +268,22 @@
   <div class="p-fluid">
     <div class="p-field">
       <label for="keyword">新增關鍵字</label>
-      <input type="text" pInputText [(ngModel)]="newKeyword" placeholder="輸入關鍵字..." />
+      <p-autoComplete 
+        [(ngModel)]="newKeyword"
+        [suggestions]="filteredKeywords"
+        (completeMethod)="searchKeywords($event)"
+        [forceSelection]="false"
+        placeholder="輸入關鍵字...">
+      </p-autoComplete>
     </div>
     <button type="button" pButton label="新增" (click)="addKeyword()"></button>
   </div>
-
+  
   <h3>目前關鍵字</h3>
-  <ul>
-    <li *ngFor="let keyword of keywords">
-      {{keyword.keyword}} <!-- 顯示關鍵字 -->
-      <button type="button" pButton icon="pi pi-trash" class="p-button-danger" (click)="removeKeyword(keyword.keywordId)"></button>
+  <ul class="keyword-list">
+    <li *ngFor="let keyword of keywords" class="keyword-item">
+      <span>{{ keyword.keyword }}</span>
+      <button type="button" pButton icon="pi pi-trash" class="p-button-text p-button-danger delete-btn" (click)="removeKeyword(keyword.keywordId)"></button>
     </li>
   </ul>
 
