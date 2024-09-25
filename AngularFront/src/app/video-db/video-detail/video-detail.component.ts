@@ -362,7 +362,7 @@ export class VideoDetailComponent implements OnInit{
   addKeyword() {
     if (this.newKeyword && typeof this.newKeyword === 'string') { // 確認 newKeyword 是字串
       console.log('Adding keyword:', this.newKeyword); // 確認是否為純字串
-  
+
       this.videoService.addKeyword(this.videoIDForFunctions.toString(), this.newKeyword).subscribe(
         () => {
           this.loadKeywordsForVideo();

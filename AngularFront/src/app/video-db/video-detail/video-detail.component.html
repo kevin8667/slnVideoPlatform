@@ -80,10 +80,10 @@
           <h3 style="margin-bottom: 10px;">關鍵字</h3>
           <div class="p-d-flex p-flex-wrap align-items-center">
             <span *ngFor="let keyword of keywords" class="keyword-badge p-m-1" style="margin-right: 5px; ">
-              <a 
+              <a
                 style="text-decoration-line: none; color: white;"
-                [routerLink]="['/video-db/search']" 
-                [queryParams]="{ keywords: keyword.keyword}" 
+                [routerLink]="['/video-db/search']"
+                [queryParams]="{ keywords: keyword.keyword}"
                 queryParamsHandling="">
                 {{ keyword.keyword}}
               </a>
@@ -139,7 +139,7 @@
           </ng-template>
       </p-toast>
       <p-toast position="top-center" key="global"></p-toast>
-       
+
 
         <p><strong>語言:</strong> {{ video.lang }}</p>
         <p><strong>簡介:</strong> {{video.summary}}</p>
@@ -149,7 +149,7 @@
         <p><strong>主演:</strong> 馬龍‧白蘭度 </p>
 
       </div>
-      
+
       <div class="flex ">
 
 
@@ -256,7 +256,7 @@
     </div>
     <button type="button" pButton label="新增" (click)="addKeyword()"></button>
   </div>
-  
+
   <h3>目前關鍵字</h3>
   <ul>
     <li *ngFor="let keyword of keywords">

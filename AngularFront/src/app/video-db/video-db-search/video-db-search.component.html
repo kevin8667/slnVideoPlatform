@@ -12,7 +12,7 @@
     </div>
     <div style="margin-bottom: 25px;">
       <span class="p-float-label" style="width: 200px;">
-        <p-chips [(ngModel)]="inputKeyword" inputId="float-label"></p-chips>
+        <p-chips [(ngModel)]="inputKeyword" (ngModelChange)="onKeywordChange($event)" inputId="float-label"></p-chips>
         <label for="float-label">影片關鍵字</label>
       </span>
     </div>
@@ -38,12 +38,12 @@
     <div>
       <button type="button" pButton label="搜尋" (click)="searchVideos()" class="p-button-primary"></button>
     </div>
-    
+
   </div>
 
     <!-- 右側電影卡片列表 -->
     <div class="movie-list">
-      
+
       <button *ngIf="userID===1" type="button" pButton label="新增影片" (click)="newVideo()" class="p-button-primary custom-edit-btn"></button>
         <p-dataView #dv [value]="videos" [rows]="pageSize" [paginator]="true"  [rowsPerPageOptions]="pageSizeOptions" [totalRecords]="totalRecords" paginatorDropdownAppendTo="body"  layout="grid" >
             <!-- 網格佈局 -->

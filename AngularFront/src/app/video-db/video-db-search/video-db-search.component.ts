@@ -44,7 +44,7 @@ interface AutoCompleteCompleteEvent {
 export class VideoDbSearchComponent implements OnInit {
 
   inputName: string = '';
-  inputKeyword: string[] | undefined;
+  inputKeyword: string[] =[];
   types: VideoType[] | undefined;
   selectedType: VideoType | undefined;
 
@@ -52,6 +52,7 @@ export class VideoDbSearchComponent implements OnInit {
   selectedGenres : string[] =[];
   urlGenre:string[] |null = null;
 
+  urlVideoName?:string |null;
   videoName: string | null = null;
   typeId: number | null = null;
   summary: string | null = null;
@@ -86,47 +87,43 @@ export class VideoDbSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // 初始化篩選器選項
     this.types = [
       { typeName: '電影', typeId: 1 },
       { typeName: '影集', typeId: 2 }
     ];
 
     this.genreNames = [];
-
     this.selectedGenres = [];
+    this.inputKeyword = [];
+    this.inputName = ''; // 初始化為空
 
-
-    this.videoDbService.getGenresApi().subscribe((genres)=>{
-      this.genres=genres;
+    // 獲取後端的類型數據
+    this.videoDbService.getGenresApi().subscribe((genres) => {
+      this.genres = genres;
     });
 
-    this.videoDbService.user$.subscribe((data) => (this.userID = data));
-
+    // 訂閱 URL 查詢參數
     this.route.queryParams.subscribe(params => {
-      this.videoName = params['videoName'] || null;
+      // 初始化時從 URL 查詢參數設置篩選器狀態
+      this.inputName = params['videoName'] || '';
       this.typeId = params['typeId'] ? +params['typeId'] : null;
-      this.summary = params['summary'] || null;
-
-
+      this.summary = params['summary'] || '';
 
       // 解析逗號分隔的 genreNames 字符串為數組
       this.genreNames = params['genreNames'] ? params['genreNames'].split(',') : [];
-
       this.keywords = params['keywords'] ? params['keywords'].split(',') : [];
-      console.log(this.keywords)
 
-      //console.log("類型："+this.genreNames);
+      // 設置選中的類型和關鍵字
       this.urlGenre = this.genreNames;
       this.selectedGenres = this.genreNames;
-      //console.log(this.selectedGenres);
+      this.inputKeyword = this.keywords;
 
       this.seriesName = params['seriesName'] || null;
       this.seasonName = params['seasonName'] || null;
 
-
-           // 如果有任何查詢參數存在，則執行搜索
-      if (this.videoName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || (this.keywords && this.keywords.length > 0) || this.seriesName || this.seasonName) {
-        // 執行搜索操作
+      // 如果有查詢參數存在，則進行搜尋
+      if (this.inputName || this.typeId || this.summary || (this.genreNames && this.genreNames.length > 0) || (this.keywords && this.keywords.length > 0)) {
         this.searchVideos();
       }
     });
@@ -148,7 +145,11 @@ export class VideoDbSearchComponent implements OnInit {
   }
 
 
+  onKeywordChange(keywords: string[]) {
 
+    // 過濾掉重複的關鍵字
+    this.inputKeyword = [...new Set(keywords.map(keyword => keyword.trim()))];
+  }
 
   searchVideoByFilters() {
     this.videoName = this.inputName;
@@ -161,20 +162,26 @@ export class VideoDbSearchComponent implements OnInit {
   }
 
   searchVideos(): void {
-
+    // 查詢前將當前篩選器狀態更新到 URL
     this.router.navigate([], {
       queryParams: {
-        'videoName': null,
+        'videoName': this.inputName || null,  // 若為空則傳遞 null
+        'typeId': this.selectedType?.typeId || null,
+        'genreNames': this.selectedGenres.length > 0 ? this.selectedGenres.join(',') : null,
+        'keywords': this.inputKeyword.length > 0 ? this.inputKeyword.join(',') : null,
+        'seriesName': this.seriesName || null,
+        'seasonName': this.seasonName || null,
       },
-      queryParamsHandling: 'merge'
-    })
+      queryParamsHandling: 'merge' // 合併查詢參數而不是替換
+    });
 
+    // 執行查詢
     this.videoDbService.getSearchVideoApi(
-      this.videoName,
-      this.typeId,
+      this.inputName,
+      this.selectedType?.typeId || null,
       this.summary,
       this.selectedGenres,
-      this.keywords,
+      this.inputKeyword,
       this.seriesName,
       this.seasonName
     ).subscribe((response) => {

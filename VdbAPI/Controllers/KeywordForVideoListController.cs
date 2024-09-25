@@ -116,7 +116,7 @@ namespace VdbAPI.Controllers
         }
 
         [HttpPost("AddKeywordToVideo/{videoId}")]
-        public async Task<IActionResult> AddKeywordToVideo(int videoId, string keyword)
+        public async Task<IActionResult> AddKeywordToVideo(int videoId, [FromForm] string keyword)
         {
 
             if (string.IsNullOrEmpty(keyword))

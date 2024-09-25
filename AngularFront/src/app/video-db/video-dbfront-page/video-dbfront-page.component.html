@@ -62,10 +62,10 @@
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="pr-3" style="color: Black;">影片類型</span></h2>
     <div class="row px-xl-5 pb-3">
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '動作' }" queryParamsHandling="merge">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '動作' }" queryParamsHandling="merge">
                 <div class="cat-item d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-1.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/action.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">動作</h3>
@@ -74,10 +74,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '驚悚' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-2.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/thriller.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">驚悚</h3>
@@ -86,10 +86,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '劇情' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-3.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/drama.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">劇情</h3>
@@ -98,10 +98,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '喜劇' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-4.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/comedy.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                         <h3 style="margin-bottom: 0;">喜劇</h3>
@@ -110,10 +110,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '科幻' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-4.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/sci-fi.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">科幻</h3>
@@ -122,10 +122,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '恐怖' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-3.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/horror.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">恐怖</h3>
@@ -134,10 +134,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '愛情' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-2.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/romance.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">愛情</h3>
@@ -146,10 +146,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '冒險' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-1.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/survival.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">冒險</h3>
@@ -158,10 +158,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '動畫' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-2.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/animation.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">動畫</h3>
@@ -170,10 +170,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '奇幻' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-1.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/fantasy.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">奇幻</h3>
@@ -182,10 +182,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '歷史' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-4.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/historical.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">歷史</h3>
@@ -194,10 +194,10 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" [routerLink]="['/video-db/search']" [queryParams]="{ genreNames: '紀錄' }" queryParamsHandling="merge">
                 <div class="cat-item img-zoom d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="img/cat-3.jpg" alt="">
+                    <div class="overflow-hidden" style="width: 120px; height: 100px;">
+                        <img class="img-fluid" src="/assets/img/documentary.png" alt="">
                     </div>
                     <div class="flex-fill pl-3">
                       <h3 style="margin-bottom: 0;">紀錄</h3>
