@@ -122,7 +122,6 @@ export class NewVideoComponent implements OnInit {
     mainGenreId: 1,
     isShowing:true,
     runningTime:"02:08:00",
-    releaseDate:"07/24/2024",
     lang: "英文",
     summary:"動作愛情片",
     ageRating:"限制級",
