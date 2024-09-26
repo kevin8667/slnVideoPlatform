@@ -34,7 +34,7 @@ export class NewVideoComponent implements OnInit {
 
   uploadedImages:  (File | undefined)[] = [];
   uploadedThumbnail!: File;  // 儲存縮圖
-  uploadedBg!: File; 
+  uploadedBg!: File;
 
   types = [
     { typeName: '電影', typeId: 1 },
@@ -117,10 +117,16 @@ export class NewVideoComponent implements OnInit {
   completeForm()
   {
   this.videoForm.patchValue({
-    videoName: "TEST",
+    videoName: "死侍與金鋼狼",
     typeId: 1,
     mainGenreId: 1,
-    lang: "TEST"
+    isShowing:true,
+    runningTime:"02:08:00",
+    releaseDate:"07/24/2024",
+    lang: "英文",
+    summary:"動作愛情片",
+    ageRating:"限制級",
+    trailerUrl:"https://www.youtube.com/embed/2D7wACIdDhM?si=dzgTR8BlD5Rd8is9"
   });
   }
 

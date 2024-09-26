@@ -170,19 +170,19 @@ export class VideoDbSearchComponent implements OnInit {
       return;
     }
     this.newKeyword = value;
-  
+
     // 避免加入空白關鍵字
     if (this.newKeyword.trim() === '') {
       this.filteredKeywords = []; // 清空過濾建議
       return;
     }
-  
+
     // 防止重複
     if (this.keywords.includes(this.newKeyword)) {
       this.messageService.add({ severity: 'warn', summary: '重複', detail: '關鍵字已存在' });
       return;
     }
-  
+
     // 搜索關鍵字的建議
     this.searchKeywords({ query: this.newKeyword });
   }
@@ -267,8 +267,11 @@ export class VideoDbSearchComponent implements OnInit {
         key: 'global',
         severity: 'success',
         summary: '已成功刪除!',
-        detail: `刪除目標： ${this.videoNameForDelete}`
+        detail: `刪除影片： ${this.videoNameForDelete}`
       });
+      setTimeout(() => {
+        this.searchVideos();
+      }, 2000);
     }
 
     // setInterval(() => {
