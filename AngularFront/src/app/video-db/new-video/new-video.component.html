@@ -20,7 +20,7 @@
 
               <!-- 類型 ID -->
               <div class="p-field">
-                <label for="typeId">類型 ID</label>
+                <label for="typeId">類型</label>
                 <p-dropdown
                   [options]="types"
                   optionLabel="typeName"
@@ -31,8 +31,8 @@
               </div>
 
               <!-- 系列 ID -->
-              <div class="p-field">
-                <label for="seriesId">系列 ID</label>
+              <div class="p-field" *ngIf="this.videoForm.value.typeId===2">
+                <label for="seriesId">系列</label>
                 <input
                   id="seriesId"
                   type="number"
@@ -43,18 +43,21 @@
 
               <!-- 主要類型 ID -->
               <div class="p-field">
-                <label for="mainGenreId">主要類型 ID</label>
-                <input
+                <label for="mainGenreId">主要類型</label>
+                <p-dropdown
                   id="mainGenreId"
-                  type="number"
-                  pInputText
                   formControlName="mainGenreId"
-                />
+                  [options]="genres"
+                  optionLabel="genreName"
+                  optionValue="genreId"
+                  placeholder="選擇影片內容類型"
+                >
+                </p-dropdown>
               </div>
 
               <!-- 季數 ID -->
-              <div class="p-field">
-                <label for="seasonId">季數 ID</label>
+              <div class="p-field" *ngIf="this.videoForm.value.typeId===2">
+                <label for="seasonId">季數</label>
                 <input
                   id="seasonId"
                   type="number"
@@ -64,7 +67,7 @@
               </div>
 
               <!-- 集數 -->
-              <div class="p-field">
+              <div class="p-field" *ngIf="this.videoForm.value.typeId===2">
                 <label for="episode">集數</label>
                 <input
                   id="episode"
@@ -145,6 +148,7 @@
                   type="text"
                   pInputText
                   formControlName="trailerUrl"
+                  placeholder="請輸入嵌入用url"
                 />
               </div>
             </p-fieldset>
@@ -178,6 +182,32 @@
                   ></p-image>
                 </div>
               </div>
+
+              <div class="p-field">
+                <label for="bgImage">上傳背景圖</label>
+                <p-fileUpload
+                  name="bgImage"
+                  accept="image/*"
+                  (onSelect)="onBackgroundSelect($event)"
+                  mode="basic"
+                  [auto]="false"
+                  uploadStyleClass = "upload-btn"
+                  #bgUpload
+                  [customUpload]="true"
+                ></p-fileUpload>
+                <div *ngIf="bgPreview" class="image-container">
+                  <p-image
+                    [src]="bgPreview"
+                    alt="背景圖預覽"
+                    class="bg-preview"
+                    [preview]="true"
+                    width=" 100%"
+                    height="200px"
+                    object-fit="cover"
+                  ></p-image>
+                </div>
+              </div>
+              
 
               <!-- 圖片上傳 -->
               <!-- 單一上傳按鈕 -->
@@ -217,4 +247,6 @@
         </div>
       </form>
     </p-panel>
+
   </div>
+  <p-toast position="top-center" key="global"></p-toast>

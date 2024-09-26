@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { VideoDBService } from '../../video-db.service';
 import { Video } from '../interfaces/video';
 import { Genre } from '../interfaces/genre';
@@ -44,7 +44,9 @@ interface AutoCompleteCompleteEvent {
 export class VideoDbSearchComponent implements OnInit {
 
   inputName: string = '';
+  newKeyword:string='';
   inputKeyword: string[] =[];
+  filteredKeywords: any[] = [];
   types: VideoType[] | undefined;
   selectedType: VideoType | undefined;
 
@@ -84,9 +86,13 @@ export class VideoDbSearchComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private dialogService: DialogService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
+
+    this.videoDbService.user$.subscribe((data) => (this.userID = data));
+
     // 初始化篩選器選項
     this.types = [
       { typeName: '電影', typeId: 1 },
@@ -144,11 +150,52 @@ export class VideoDbSearchComponent implements OnInit {
     return this.selectedGenres.includes(genreName);
   }
 
+  searchKeywords(event: any) {
+    const query = event.query;
+    this.videoDbService.searchKeywords(query).subscribe(data => {
+      setTimeout(() => {
+        if (Array.isArray(data)) {
+          this.filteredKeywords = data; // 確保 data 是陣列
+        } else {
+          this.filteredKeywords = []; // 如果 data 不是陣列，則設定為空陣列
+        }
+      }, 0);
+    });
+  }
 
-  onKeywordChange(keywords: string[]) {
 
-    // 過濾掉重複的關鍵字
-    this.inputKeyword = [...new Set(keywords.map(keyword => keyword.trim()))];
+  onKeywordChange(value: string) {
+
+    if (typeof value !== 'string') {
+      return;
+    }
+    this.newKeyword = value;
+
+    // 避免加入空白關鍵字
+    if (this.newKeyword.trim() === '') {
+      this.filteredKeywords = []; // 清空過濾建議
+      return;
+    }
+
+    // 防止重複
+    if (this.keywords.includes(this.newKeyword)) {
+      this.messageService.add({ severity: 'warn', summary: '重複', detail: '關鍵字已存在' });
+      return;
+    }
+
+    // 搜索關鍵字的建議
+    this.searchKeywords({ query: this.newKeyword });
+  }
+
+  addKeyword() {
+    console.log(this.newKeyword);
+    if (this.newKeyword && !this.keywords.includes(this.newKeyword)) {
+      this.keywords.push(this.newKeyword); // 新增關鍵字到列表
+      console.log(this.keywords)
+      this.newKeyword = ''; // 清除輸入框
+    } else {
+      this.messageService.add({ severity: 'warn', summary: '重複', detail: '關鍵字已存在' });
+    }
   }
 
   searchVideoByFilters() {
@@ -220,8 +267,11 @@ export class VideoDbSearchComponent implements OnInit {
         key: 'global',
         severity: 'success',
         summary: '已成功刪除!',
-        detail: `刪除目標： ${this.videoNameForDelete}`
+        detail: `刪除影片： ${this.videoNameForDelete}`
       });
+      setTimeout(() => {
+        this.searchVideos();
+      }, 2000);
     }
 
     // setInterval(() => {

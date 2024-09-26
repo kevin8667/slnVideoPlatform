@@ -253,44 +253,100 @@ namespace VdbAPI.Controllers
         }
 
         [HttpPost("uploadImages")]
-        public async Task<IActionResult> UploadImages([FromForm] IFormFile thumbnail, [FromForm] List<IFormFile> images)
+        public async Task<IActionResult> UploadImages([FromForm] UploadImagesDTO uploadImagesDto)
         {
             // 處理縮圖圖片
             string thumbnailPath = string.Empty;
-            if (thumbnail != null)
+            if (uploadImagesDto.Thumbnail != null)
             {
-                var filePath = Path.Combine("wwwroot/assets/img", thumbnail.FileName);
+                var filePath = Path.Combine("wwwroot/assets/img", uploadImagesDto.Thumbnail.FileName);
                 using (var stream = System.IO.File.Create(filePath))
                 {
-                    await thumbnail.CopyToAsync(stream);
+                    await uploadImagesDto.Thumbnail.CopyToAsync(stream);
                 }
 
                 // 複製到 Angular 專案的 assets 目錄
-                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", thumbnail.FileName);
+                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", uploadImagesDto.Thumbnail.FileName);
                 System.IO.File.Copy(filePath, angularAssetsPath, overwrite: true);
 
-                thumbnailPath = "/assets/img/" + thumbnail.FileName;
+                thumbnailPath = "/assets/img/" + uploadImagesDto.Thumbnail.FileName;
+            }
+
+            // 處理背景圖片
+            string bgPath = string.Empty;
+            if (uploadImagesDto.Background != null)
+            {
+                var bgFilePath = Path.Combine("wwwroot/assets/img", uploadImagesDto.Background.FileName);
+                using (var stream = System.IO.File.Create(bgFilePath))
+                {
+                    await uploadImagesDto.Background.CopyToAsync(stream);
+                }
+
+                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", uploadImagesDto.Background.FileName);
+                System.IO.File.Copy(bgFilePath, angularAssetsPath, overwrite: true);
+                bgPath = "/assets/img/" + uploadImagesDto.Background.FileName;
             }
 
             // 處理其他圖片
             List<string> imagePaths = new List<string>();
-            foreach (var image in images)
+            if (uploadImagesDto.Images != null)
             {
-                var filePath = Path.Combine("wwwroot/assets/img", image.FileName);
-                using (var stream = System.IO.File.Create(filePath))
+                foreach (var image in uploadImagesDto.Images)
                 {
-                    await image.CopyToAsync(stream);
+                    var filePath = Path.Combine("wwwroot/assets/img", image.FileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+
+                    // 複製到 Angular 專案的 assets 目錄
+                    var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", image.FileName);
+                    System.IO.File.Copy(filePath, angularAssetsPath, overwrite: true);
+
+                    imagePaths.Add("/assets/img/" + image.FileName);
                 }
-
-                // 複製到 Angular 專案的 assets 目錄
-                var angularAssetsPath = Path.Combine("../AngularFront/src/assets/img", image.FileName);
-                System.IO.File.Copy(filePath, angularAssetsPath, overwrite: true);
-
-                imagePaths.Add("/assets/img/" + image.FileName);
             }
-            
 
-            return Ok(new { thumbnailPath, imagePaths });
+            return Ok(new { thumbnailPath, bgPath, imagePaths });
+        }
+
+
+        [HttpPut("updateVideo/{videoId}")]
+        public async Task<IActionResult> UpdateVideo(int videoId, [FromBody] VideoCreateDTO videoDTO)
+        {
+            var existingVideo = await _context.VideoLists.FindAsync(videoId);
+            if (existingVideo == null)
+            {
+                return NotFound("Video not found");
+            }
+
+            TimeSpan parsedTime;
+            if (!string.IsNullOrEmpty(videoDTO.RunningTime))
+            {
+                parsedTime = TimeSpan.Parse(videoDTO.RunningTime);
+            }
+            else
+            {
+                parsedTime = TimeSpan.Zero;
+            }
+
+            // 更新影片基本資料
+            existingVideo.VideoName = videoDTO.VideoName;
+            existingVideo.TypeId = videoDTO.TypeId;
+            existingVideo.SeriesId = videoDTO.SeriesId;
+            existingVideo.MainGenreId = videoDTO.MainGenreId;
+            existingVideo.RunningTime = parsedTime;
+            existingVideo.IsShowing = videoDTO.IsShowing;
+            existingVideo.ReleaseDate = videoDTO.ReleaseDate;
+            existingVideo.Lang = videoDTO.Lang;
+            existingVideo.Summary = videoDTO.Summary;
+            existingVideo.AgeRating = videoDTO.AgeRating;
+            existingVideo.TrailerUrl = videoDTO.TrailerUrl;
+            existingVideo.ThumbnailPath = videoDTO.ThumbnailPath;  // 更新縮圖路徑
+            existingVideo.Bgpath = videoDTO.Bgpath;  // 更新背景圖片路徑
+
+            await _context.SaveChangesAsync();
+            return Ok("影片資料更新成功");
         }
 
         // DELETE: api/VideoList/5

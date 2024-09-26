@@ -12,8 +12,15 @@
     </div>
     <div style="margin-bottom: 25px;">
       <span class="p-float-label" style="width: 200px;">
-        <p-chips [(ngModel)]="inputKeyword" (ngModelChange)="onKeywordChange($event)" inputId="float-label"></p-chips>
-        <label for="float-label">影片關鍵字</label>
+        <p-autoComplete [(ngModel)]="newKeyword" 
+                        [suggestions]="filteredKeywords" 
+                        (completeMethod)="searchKeywords($event)" 
+                        [multiple]="true" 
+                        (ngModelChange)="onKeywordChange($event)"
+                        (keydown.enter)="addKeyword()"
+                        inputId="auto-complete">
+        </p-autoComplete>
+        <label for="auto-complete">影片關鍵字</label>
       </span>
     </div>
     <div style="margin-bottom: 25px;">
@@ -61,8 +68,8 @@
                             </div>
                         </div>
                       </a>
-                        <div *ngIf="userID===1">
-                          <div *ngIf="userID ===1">
+                        <div *ngIf="userID==1">
+                          <div *ngIf="userID ==1">
                             <button type="button" pButton label="編輯" (click)="editVideo(video.videoId)" class="p-button-primary custom-edit-btn" style="margin-right: 10px;"></button>
                             <button type="button" pButton label="刪除" (click)="onConfirmDelete(video.videoId,video.videoName)" class="p-button-secondary custom-delete-btn"></button>
                           </div>

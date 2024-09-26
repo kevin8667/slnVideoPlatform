@@ -68,6 +68,10 @@ export class VideoDetailComponent implements OnInit{
   };
 
   actors : any[]=[]
+  directors :any[]=[]
+
+  mainActorName:string='';
+  mainDirectorName:string='';
 
   displayKeywordDialog: boolean = false;
   newKeyword: string = '';
@@ -163,6 +167,16 @@ export class VideoDetailComponent implements OnInit{
         this.videoService.getActorsByVideo(videoID).subscribe(data=>{
           if(data){
             this.actors= data;
+            this.mainActorName = this.actors[0].actorName;
+          }
+        })
+
+        this.videoService.getDirectorsByVideoId(videoID).subscribe(data=>{
+          if(data){
+            this.directors= data;
+            console.log(data)
+            this.mainDirectorName=this.directors[0].directorName;
+            console.log(this.mainDirectorName)
           }
         })
 

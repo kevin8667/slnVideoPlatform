@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { RatingDTO } from './video-db/interfaces/ratingDTO';
 import { data } from 'jquery';
 import { KeywordDTO } from './video-db/interfaces/keyword';
+import { Director } from './video-db/interfaces/director';
 
 @Injectable({
   providedIn: 'root'
@@ -236,6 +237,11 @@ export class VideoDBService {
 
   }
 
+  getDirectorsByVideoId(videoId: string) {
+    const url = `https://localhost:7193/api/DirectorForVideoLists/GetDirectorsByVideoId/${videoId}`;
+    return this.httpClient.get<Director[]>(url);
+  }
+  
   createVideo(video:CreateVideoDTO): Observable<Video> {
 
     const apiUrl = 'https://your-api-url/api/videos';
