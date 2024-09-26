@@ -363,7 +363,7 @@ export class VideoDetailComponent implements OnInit{
   searchKeywords(event: any) {
     const query = event.query;
     this.videoService.searchKeywords(query).subscribe(data => {
-      this.filteredKeywords = data.map(keyword => ({ label: keyword, value: keyword }));
+      this.filteredKeywords = data
     });
   }
 
@@ -374,13 +374,14 @@ export class VideoDetailComponent implements OnInit{
   }
 
   addKeyword() {
+
     if (this.newKeyword && typeof this.newKeyword === 'string') { // 確認 newKeyword 是字串
       console.log('Adding keyword:', this.newKeyword); // 確認是否為純字串
 
       this.videoService.addKeyword(this.videoIDForFunctions.toString(), this.newKeyword).subscribe(
         () => {
           this.loadKeywordsForVideo();
-          this.newKeyword = '';
+          //this.newKeyword = '';
           this.messageService.add({ severity: 'success', summary: '成功', detail: '關鍵字已新增' });
         },
         (error) => {
